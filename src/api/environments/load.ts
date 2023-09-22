@@ -46,7 +46,7 @@ async function loadEnvironment(
   } catch (error) {
     console.log(error)
 
-    if (shouldThrow) {
+    if (shouldThrow || shouldThrow === undefined) {
       throw error
     }
   }
