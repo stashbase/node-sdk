@@ -1,17 +1,18 @@
 import { AxiosInstance } from 'axios'
 
-export class EnvironmentsAPI {
-  constructor(
-    private readonly client: AxiosInstance,
-    private readonly args: { project: string } // Receive the project name
-  ) {}
-
-  async list(): Promise<any[]> {
+function environmentsAPI(client: AxiosInstance, accessToken: string) {
+  async function list(args: { project: string }) {
     try {
-      const response = await this.client.get<any[]>(`/projects/${this.args.project}/environments`)
+      const response = await client.get<any[]>(`/projects/${args.project}/environments`)
       return response.data
     } catch (error) {
       throw error
     }
   }
+
+  return {
+    list,
+  }
 }
+
+export default environmentsAPI
