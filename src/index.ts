@@ -1,23 +1,13 @@
 import { createApiClient } from './api/client'
-import { ProjectsAPI } from './api/projects'
+import projectsAPI from './api/projects'
 
-class EnvEaseSDK {
-  private readonly projectsAPI: ProjectsAPI
+// Create an SDK object that encapsulates functionality
+export function createEnvEase(accessToken: string) {
+  const client = createApiClient(accessToken)
 
-  constructor(private readonly accessToken: string) {
-    const client = createApiClient(accessToken)
-    this.projectsAPI = new ProjectsAPI(client)
-  }
+  const projects = projectsAPI(client, accessToken)
 
-  get projects(): ProjectsAPI {
-    return this.projectsAPI
+  return {
+    projects,
   }
 }
-
-// Usage Example
-// const sdk = new EnvEaseSDK('YOUR_ACCESS_TOKEN')
-// sdk.projects.list().then((projects) => {
-//   console.log('Projects:', projects)
-// })
-//
-export default EnvEaseSDK
