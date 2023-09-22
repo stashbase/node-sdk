@@ -1,15 +1,17 @@
 import { AxiosInstance } from 'axios'
-import { EnvironmentsAPI } from './environments'
+import environmentsAPI from './environments'
 
 function projectsAPI(client: AxiosInstance, accessToken: string) {
-  // Define methods that use the project name and access token
+  const environments = environmentsAPI(client, accessToken)
+
   function list(): any {
+    //TODO:
     return accessToken
-    // return listEnvironmentsInternal(client, projectName)
   }
 
   return {
     list,
+    environments,
   }
 }
 
