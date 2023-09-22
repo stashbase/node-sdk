@@ -5,7 +5,7 @@ import projectsAPI from './api/projects'
 export function createEnvEase(accessToken: string) {
   const client = createApiClient(accessToken)
 
-  const projects = projectsAPI(client, accessToken)
+  const projects = projectsAPI(client)
 
   return {
     projects,
