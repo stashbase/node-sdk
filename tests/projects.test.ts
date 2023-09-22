@@ -1,11 +1,11 @@
 // tests/projects.test.ts
 import { test } from 'vitest'
-import EnvEaseSDK from '../src'
+import { createEnvEase } from '../src'
 
-test('List environments in projects', async () => {
-  const sdk = new EnvEaseSDK('YOUR_ACCESS_TOKEN')
+test('List projects', async () => {
+  const envEase = createEnvEase('AccessToken')
 
-  const projects = await sdk.projects.environments({ project: 'YOUR_PROJECT_NAME' }).list()
+  const projects = envEase.projects.list()
 
   console.log(projects)
 
