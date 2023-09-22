@@ -1,12 +1,12 @@
 import { AxiosInstance } from 'axios'
-import environmentsAPI from './environments'
+import environmentsAPI from './environments/api'
 
-function projectsAPI(client: AxiosInstance, accessToken: string) {
-  const environments = environmentsAPI(client, accessToken)
+function projectsAPI(client: AxiosInstance) {
+  const environments = environmentsAPI(client)
 
   function list(): any {
-    //TODO:
-    return accessToken
+    // TODO:
+    return ''
   }
 
   return {
