@@ -5,9 +5,11 @@ import { createEnvEase } from '../src'
 test('List projects', async () => {
   const envEase = createEnvEase('AccessToken')
 
-  const projects = envEase.projects.list()
+  // const projects = envEase.projects.list()
+  // console.log(projects)
+  const environments = await envEase.projects.environments.list({ project: 'hero-hub-api' })
 
-  console.log(projects)
+  console.log(environments)
 
   // Write your assertions here to test the results
   // For example:
