@@ -7,6 +7,7 @@ export function printLoadedEnvTable(envSecrets: Record<string, string>) {
     wordWrap: true,
     style: {
       compact: true,
+      head: ['cyan'],
     },
   })
 
