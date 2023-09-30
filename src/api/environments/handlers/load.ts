@@ -27,6 +27,13 @@ async function loadEnvironment(
     const { data } = await client.get<{ name: string; secrets: SecretKeyValueRecord }>(`/load`)
     const { name, secrets } = data
 
+    if (Object.keys(secrets).length === 0) {
+      console.log(`\nLoaded environment: ${name}`)
+      console.log(`No secrets found`)
+
+      return
+    }
+
     const dotenv = {
       parsed: secrets,
     }
