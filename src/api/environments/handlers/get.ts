@@ -2,6 +2,8 @@ import { printLoadedEnvTable } from '../../../utils/table'
 import { HttpClient } from '../../../http/client'
 import { ApiResponse } from '../../../http/response'
 import Unauthorized from '../../../http/errors/unauthorized'
+import { getCustomError } from '../../../http/errors/getError'
+import { createApiErrorFromResponse } from '../../../http/errors/base'
 
 type SecretKeyValueRecord = Record<string, string>
 
@@ -36,15 +38,11 @@ async function getEnvironment(
     }
 
     return { data: environment, error: null }
-  } catch (error) {
-    if (error instanceof Unauthorized) {
-      console.log(error)
-      return { data: null, error: { code: error.code } }
-    }
+  } catch (error: any) {
+    console.log('Error: ', error?.error)
+    const apiError = createApiErrorFromResponse(error)
 
-    // if (shouldThrow || shouldThrow === undefined) {
-    throw error
-    // }
+    return { data: null, error: apiError }
   }
 }
 
