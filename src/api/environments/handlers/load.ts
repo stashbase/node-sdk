@@ -11,7 +11,7 @@ export interface LoadEnvironmentOpts {
   printTable?: boolean
 }
 
-type LoadEnvironmentError = ApiError<'unauthorized' | 'token_expired'>
+type LoadEnvironmentError = ApiError<'unauthorized' | 'invalid_token' | 'token_expired'>
 
 async function loadEnvironment(
   client: HttpClient,
