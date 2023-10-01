@@ -1,6 +1,7 @@
 import { AxiosInstance } from 'axios'
 import dotenvExpand from 'dotenv-expand'
 import { printLoadedEnvTable } from '../../../utils/table'
+import { HttpClient } from '../../../http/client'
 
 interface Secret {
   key: string
@@ -16,15 +17,17 @@ export interface LoadEnvironmentOpts {
 }
 
 async function loadEnvironment(
-  client: AxiosInstance,
-  // environmentToken: string,
+  client: HttpClient,
   options?: LoadEnvironmentOpts
 ): Promise<undefined> {
   const printTable = options?.printTable
   const shouldThrow = options?.shouldThrow
 
   try {
-    const { data } = await client.get<{ name: string; secrets: SecretKeyValueRecord }>(`/load`)
+    const data = await client.get<{ name: string; secrets: SecretKeyValueRecord }>({
+      path: '/load',
+    })
+
     const { name, secrets } = data
 
     if (Object.keys(secrets).length === 0) {
@@ -46,6 +49,7 @@ async function loadEnvironment(
       printLoadedEnvTable(secrets)
     }
   } catch (error) {
+    console.log('\nFailed to load environment')
     console.log(error)
 
     if (shouldThrow || shouldThrow === undefined) {

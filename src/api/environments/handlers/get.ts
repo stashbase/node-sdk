@@ -1,5 +1,7 @@
-import { AxiosInstance } from 'axios'
 import { printLoadedEnvTable } from '../../../utils/table'
+import { HttpClient } from '../../../http/client'
+import { ApiResponse } from '../../../http/response'
+import Unauthorized from '../../../http/errors/unauthorized'
 
 type SecretKeyValueRecord = Record<string, string>
 
@@ -13,13 +15,15 @@ interface GetEnvironmentData {
 }
 
 async function getEnvironment(
-  client: AxiosInstance,
+  client: HttpClient,
   options?: GetEnvironmentOpts
-): Promise<GetEnvironmentData> {
+): Promise<ApiResponse<GetEnvironmentData>> {
   const printTable = options?.printTable
 
   try {
-    const { data } = await client.get<{ name: string; secrets: SecretKeyValueRecord }>(`/load`)
+    const data = await client.get<{ name: string; secrets: SecretKeyValueRecord }>({
+      path: '/load',
+    })
     const { name, secrets } = data
 
     if (printTable) {
@@ -31,9 +35,12 @@ async function getEnvironment(
       secrets,
     }
 
-    return environment
+    return { data: environment, error: null }
   } catch (error) {
-    console.log(error)
+    if (error instanceof Unauthorized) {
+      console.log(error)
+      return { data: null, error: { code: error.code } }
+    }
 
     // if (shouldThrow || shouldThrow === undefined) {
     throw error
