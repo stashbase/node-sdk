@@ -9,7 +9,12 @@ import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
 import { getSecret } from './handlers/secrets/get'
 
 function environmentsAPI(httpClient: HttpClient) {
-  // load and inject environment variables
+  /**
+   * @summary Load environment
+   * @description Load environment and inject the secrets to the process
+   * @param key options Options
+   * @returns null
+   * */
   async function load(options?: LoadEnvironmentOpts) {
     if (options?.enabled === false) {
       return { data: null, error: null }
@@ -18,6 +23,12 @@ function environmentsAPI(httpClient: HttpClient) {
     return await loadEnvironment(httpClient, options)
   }
 
+  /**
+   * @summary Get environment
+   * @description Environment
+   * @param key options Options (return secrets)
+   * @returns Environment data
+   * */
   async function get(options?: GetEnvironmentOpts) {
     return await getEnvironment(httpClient, options)
   }
