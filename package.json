@@ -5,12 +5,14 @@
   "main": "index.js",
   "scripts": {
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "build": "tsup src/index.ts --format cjs,esm --dts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "tsup": "^7.2.0",
     "typescript": "^5.2.2",
     "vitest": "^0.34.5"
   },
