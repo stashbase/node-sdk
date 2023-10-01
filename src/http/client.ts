@@ -3,7 +3,7 @@ const baseURL: string = 'http://0.0.0.0:8080/api/v1/sdk/'
 type BasePath = 'environments' | 'projects'
 
 export type HttpClient = {
-  get: <T>(args: { path: string }) => Promise<T>
+  get: <T>(args: { path: string; query?: { [key: string]: string } }) => Promise<T>
   post: <T>(args: { path: string; data: { [key: string]: any } | any[] }) => Promise<T>
 }
 
@@ -25,8 +25,18 @@ export function createHttpClient(args: {
     'User-Agent': 'EnvEase SDK/0.0.1',
   }
 
-  async function get<T>(args: { path: string }): Promise<T> {
-    const url = `${baseURL}${basePath}${args.path ?? ''}`
+  async function get<T>(args: { path: string; query?: { [key: string]: string } }): Promise<T> {
+    let url = `${baseURL}${basePath}${args.path ?? ''}`
+
+    if (args.query) {
+      const query = args.query
+
+      let queryString = Object.keys(query)
+        .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(query[k]))
+        .join('&')
+
+      url += '?' + queryString
+    }
 
     try {
       const response = await fetch(url, {

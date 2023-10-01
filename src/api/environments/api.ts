@@ -3,6 +3,7 @@ import { GetEnvironmentOpts, getEnvironment } from './handlers/get'
 import { deleteEnvironmentSecrets } from './handlers/secrets/delete'
 import { HttpClient } from '../../http/client'
 import { ApiError } from '../../http/response'
+import { ListSecretsOpts, listSecrets } from './handlers/secrets/list'
 
 function environmentsAPI(httpClient: HttpClient) {
   // load and inject environment variables
@@ -28,6 +29,10 @@ function environmentsAPI(httpClient: HttpClient) {
 }
 
 function envSecretsAPI(httpClient: HttpClient) {
+  async function list(options?: ListSecretsOpts) {
+    return await listSecrets(httpClient, options)
+  }
+
   async function remove(keys: string[]) {
     if (keys.length === 0) {
       const error: ApiError<'no_keys'> = { code: 'no_keys' }
@@ -39,6 +44,7 @@ function envSecretsAPI(httpClient: HttpClient) {
   }
 
   return {
+    list,
     remove,
   }
 }
