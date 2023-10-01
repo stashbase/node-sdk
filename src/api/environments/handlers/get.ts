@@ -13,6 +13,7 @@ export interface GetEnvironmentOpts {
 interface Environment {
   projectName: string
   type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
+  locked: boolean
   name: string
   createdAt: string
   description: string | null
