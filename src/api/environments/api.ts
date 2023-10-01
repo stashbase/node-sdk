@@ -5,6 +5,7 @@ import { HttpClient } from '../../http/client'
 import { ApiError } from '../../http/response'
 import { ListSecretsOpts, listSecrets } from './handlers/secrets/list'
 import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
+import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
 
 function environmentsAPI(httpClient: HttpClient) {
   // load and inject environment variables
@@ -44,6 +45,25 @@ function envSecretsAPI(httpClient: HttpClient) {
     return await createSecrets(httpClient, data)
   }
 
+  async function update(data: UpdateSecretsData) {
+    if (data?.length === 0) {
+      const error: ApiError<'no_values_provided'> = { code: 'no_values_provided' }
+
+      return { data: null, error }
+    }
+
+    // validate
+    for (const obj of data) {
+      if (obj.newKey === undefined && obj.value === undefined && obj.description === undefined) {
+        const error: ApiError<'missing_properties'> = { code: 'missing_properties' }
+
+        return { data: null, error }
+      }
+    }
+
+    return await updateSecrets(httpClient, data)
+  }
+
   async function remove(keys: string[]) {
     if (keys.length === 0) {
       const error: ApiError<'no_keys'> = { code: 'no_keys' }
@@ -57,6 +77,7 @@ function envSecretsAPI(httpClient: HttpClient) {
   return {
     list,
     create,
+    update,
     remove,
   }
 }
