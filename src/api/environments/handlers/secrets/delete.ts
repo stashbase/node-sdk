@@ -14,7 +14,7 @@ async function deleteEnvironmentSecrets(
 ): Promise<ApiResponse<DeleteSecretsResponseData, DeleteSecretsError>> {
   try {
     const data = await client.post<DeleteSecretsResponseData>({
-      path: '/delete',
+      path: '/secrets/delete',
       data: {
         keys,
       },

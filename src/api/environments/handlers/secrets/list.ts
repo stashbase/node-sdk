@@ -18,7 +18,7 @@ async function listSecrets(
 
   try {
     const secrets = await envClient.get<SecretsData>({
-      path: '/list',
+      path: '/secrets/list',
       query: returnDescription ? { description: 'true' } : undefined,
     })
 
