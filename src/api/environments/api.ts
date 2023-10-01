@@ -1,25 +1,23 @@
-import { AxiosInstance } from 'axios'
 import { LoadEnvironmentOpts, loadEnvironment } from './handlers/load'
 import { GetEnvironmentOpts, getEnvironment } from './handlers/get'
 import { deleteEnvironmentSecret } from './handlers/secrets/delete'
+import { HttpClient } from '../../http/client'
 
-// access only selected environment with environment token
-// client with env token
-function environmentsAPI(envClient: AxiosInstance) {
+function environmentsAPI(httpClient: HttpClient) {
   // load and inject environment variables
   async function load(options?: LoadEnvironmentOpts) {
     if (options?.enabled === false) {
       return
     }
 
-    return await loadEnvironment(envClient, options)
+    return await loadEnvironment(httpClient, options)
   }
 
   async function get(options?: GetEnvironmentOpts) {
-    return await getEnvironment(envClient, options)
+    return await getEnvironment(httpClient, options)
   }
 
-  const secrets = envSecretsAPI(envClient)
+  const secrets = envSecretsAPI(httpClient)
 
   return {
     load,
@@ -28,9 +26,9 @@ function environmentsAPI(envClient: AxiosInstance) {
   }
 }
 
-function envSecretsAPI(envClient: AxiosInstance) {
+function envSecretsAPI(httpClient: HttpClient) {
   async function remove(keys: string[]) {
-    return await deleteEnvironmentSecret(envClient, keys)
+    return await deleteEnvironmentSecret(httpClient, keys)
   }
 
   return {
