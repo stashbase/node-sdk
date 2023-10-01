@@ -1,0 +1,18 @@
+export type ApiError = {
+  code: string
+  // message: string
+  // details: string
+  // hint: string
+}
+
+interface ResponseSuccess<T> {
+  error: null
+  data: T
+}
+interface ResponseFailure {
+  error: ApiError
+  data: null
+  // For backward compatibility: body === data
+}
+
+export type ApiResponse<T> = ResponseSuccess<T> | ResponseFailure
