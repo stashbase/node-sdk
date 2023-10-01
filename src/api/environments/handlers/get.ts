@@ -14,7 +14,7 @@ interface EnvironmentData {
   secrets: SecretKeyValueRecord
 }
 
-type GetEnvironmentError = ApiError<'unauthorized'>
+type GetEnvironmentError = ApiError<'unauthorized' | 'token_expired'>
 
 async function getEnvironment(
   client: HttpClient,

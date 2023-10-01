@@ -7,7 +7,7 @@ function environmentsAPI(httpClient: HttpClient) {
   // load and inject environment variables
   async function load(options?: LoadEnvironmentOpts) {
     if (options?.enabled === false) {
-      return
+      return { data: null, error: null }
     }
 
     return await loadEnvironment(httpClient, options)

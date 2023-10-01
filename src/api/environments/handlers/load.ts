@@ -1,27 +1,23 @@
-import { AxiosInstance } from 'axios'
 import dotenvExpand from 'dotenv-expand'
 import { printLoadedEnvTable } from '../../../utils/table'
 import { HttpClient } from '../../../http/client'
-
-interface Secret {
-  key: string
-  value: string
-}
+import { ApiError, ApiResponse } from '../../../http/response'
+import { createApiErrorFromResponse } from '../../../http/errors/base'
 
 type SecretKeyValueRecord = Record<string, string>
 
 export interface LoadEnvironmentOpts {
   enabled?: boolean
-  shouldThrow?: boolean
   printTable?: boolean
 }
+
+type LoadEnvironmentError = ApiError<'unauthorized' | 'token_expired'>
 
 async function loadEnvironment(
   client: HttpClient,
   options?: LoadEnvironmentOpts
-): Promise<undefined> {
+): Promise<ApiResponse<null, LoadEnvironmentError>> {
   const printTable = options?.printTable
-  const shouldThrow = options?.shouldThrow
 
   try {
     const data = await client.get<{ name: string; secrets: SecretKeyValueRecord }>({
@@ -34,7 +30,7 @@ async function loadEnvironment(
       console.log(`\nLoaded environment: ${name}`)
       console.log(`No secrets found`)
 
-      return
+      return { data: null, error: null }
     }
 
     const dotenv = {
@@ -48,13 +44,19 @@ async function loadEnvironment(
     if (printTable) {
       printLoadedEnvTable(secrets)
     }
+
+    return { data: null, error: null }
   } catch (error) {
     console.log('\nFailed to load environment')
     console.log(error)
 
-    if (shouldThrow || shouldThrow === undefined) {
-      throw error
-    }
+    const apiError = createApiErrorFromResponse<LoadEnvironmentError>(error)
+
+    return { data: null, error: apiError }
+
+    // if (shouldThrow || shouldThrow === undefined) {
+    //   throw error
+    // }
   }
 }
 
