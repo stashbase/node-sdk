@@ -15,5 +15,5 @@ export function createApiErrorFromResponse<T>(responseData: any): T {
   }
 
   // If no error data is present, return a default APIError
-  return <T>{ code: 'internal_error' }
+  return <T>{ code: 'server_error' }
 }
