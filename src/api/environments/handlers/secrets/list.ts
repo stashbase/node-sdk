@@ -8,7 +8,9 @@ export interface ListSecretsOpts {
 
 type SecretsData = Array<{ key: string; value: string; description?: string }>
 
-type ListSecretsError = ApiError<'unauthorized' | 'invalid_token' | 'token_expired'>
+type ListSecretsError = ApiError<
+  'unauthorized' | 'invalid_token' | 'token_expired' | 'invalid_grant'
+>
 
 async function listSecrets(
   envClient: HttpClient,

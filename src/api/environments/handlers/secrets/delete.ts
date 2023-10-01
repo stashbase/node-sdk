@@ -2,7 +2,9 @@ import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
 import { ApiError, ApiResponse } from '../../../../http/response'
 
-type DeleteSecretsError = ApiError<'unauthorized' | 'invalid_token' | 'token_expired'>
+type DeleteSecretsError = ApiError<
+  'unauthorized' | 'invalid_token' | 'token_expired' | 'invalid_grant'
+>
 type DeleteSecretsResponseData = {
   deletedCount: number
   notFound?: string[]
