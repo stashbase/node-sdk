@@ -46,10 +46,22 @@ function envSecretsAPI(httpClient: HttpClient) {
     return getSecret(httpClient, key)
   }
 
+  /**
+   * @summary Retrieve all secrets
+   * @description Secrets
+   * @param options Options
+   * @returns Array of secrets
+   * */
   async function list(options?: ListSecretsOpts) {
     return await listSecrets(httpClient, options)
   }
 
+  /**
+   * @summary Create secrets
+   * @description Secrets
+   * @param data Array of secrets
+   * @returns createdCount, duplicateKeys
+   * */
   async function create(data: CreateSecretsData) {
     if (data?.length === 0) {
       const error: ApiError<'no_values_provided'> = { code: 'no_values_provided' }
@@ -60,6 +72,12 @@ function envSecretsAPI(httpClient: HttpClient) {
     return await createSecrets(httpClient, data)
   }
 
+  /**
+   * @summary Update secrets
+   * @description Secrets
+   * @param data Array of secrets to update
+   * @returns updatedCount, notFoundKeys
+   * */
   async function update(data: UpdateSecretsData) {
     if (data?.length === 0) {
       const error: ApiError<'no_values_provided'> = { code: 'no_values_provided' }
@@ -79,6 +97,12 @@ function envSecretsAPI(httpClient: HttpClient) {
     return await updateSecrets(httpClient, data)
   }
 
+  /**
+   * @summary Remove secrets
+   * @description Secrets
+   * @param keys Keys to remove
+   * @returns deletedCount, notFound
+   * */
   async function remove(keys: string[]) {
     if (keys.length === 0) {
       const error: ApiError<'no_keys'> = { code: 'no_keys' }
