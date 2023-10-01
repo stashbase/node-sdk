@@ -1,5 +1,5 @@
 import dotenvExpand from 'dotenv-expand'
-import { printLoadedEnvTable } from '../../../utils/table'
+import { printSecretsTable } from '../../../utils/table'
 import { HttpClient } from '../../../http/client'
 import { ApiError, ApiResponse } from '../../../http/response'
 import { createApiErrorFromResponse } from '../../../http/errors/base'
@@ -42,7 +42,7 @@ async function loadEnvironment(
     console.log(`\nLoaded environment: ${name}`)
 
     if (printTable) {
-      printLoadedEnvTable(secrets)
+      printSecretsTable({ secretsObj: secrets })
     }
 
     return { data: null, error: null }
