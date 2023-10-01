@@ -1,8 +1,6 @@
 import { printLoadedEnvTable } from '../../../utils/table'
 import { HttpClient } from '../../../http/client'
-import { ApiResponse } from '../../../http/response'
-import Unauthorized from '../../../http/errors/unauthorized'
-import { getCustomError } from '../../../http/errors/getError'
+import { ApiError, ApiResponse } from '../../../http/response'
 import { createApiErrorFromResponse } from '../../../http/errors/base'
 
 type SecretKeyValueRecord = Record<string, string>
@@ -16,10 +14,12 @@ interface GetEnvironmentData {
   secrets: SecretKeyValueRecord
 }
 
+type GetEnvironmentError = ApiError<'unauthorized'>
+
 async function getEnvironment(
   client: HttpClient,
   options?: GetEnvironmentOpts
-): Promise<ApiResponse<GetEnvironmentData>> {
+): Promise<ApiResponse<GetEnvironmentData, GetEnvironmentError>> {
   const printTable = options?.printTable
 
   try {
@@ -40,7 +40,7 @@ async function getEnvironment(
     return { data: environment, error: null }
   } catch (error: any) {
     console.log('Error: ', error?.error)
-    const apiError = createApiErrorFromResponse(error)
+    const apiError = createApiErrorFromResponse<GetEnvironmentError>(error)
 
     return { data: null, error: apiError }
   }
