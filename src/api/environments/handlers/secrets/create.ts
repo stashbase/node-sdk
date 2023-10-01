@@ -8,7 +8,7 @@ type CreateSecretsResponseData = {
 }
 
 type CreateSecretsError = ApiError<
-  'no_values_provided' | 'unauthorized' | 'invalid_token' | 'token_expired'
+  'no_values_provided' | 'unauthorized' | 'invalid_token' | 'token_expired' | 'invalid_grant'
 >
 
 export type CreateSecretsData = Array<{
