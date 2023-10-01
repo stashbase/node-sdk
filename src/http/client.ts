@@ -45,7 +45,7 @@ export function createHttpClient(args: {
       })
 
       if (!response.ok) {
-        if (response.status === 500) {
+        if (response.status === 500 || response.status === 404) {
           throw new Error('Internal Server Error')
         } else {
           // TODO: errors
@@ -79,8 +79,14 @@ export function createHttpClient(args: {
       })
 
       if (!response.ok) {
-        const errorData = await response.json() // Parse error response
-        throw errorData // Throw the entire error response object
+        if (response.status === 500 || response.status === 404) {
+          throw new Error('Internal Server Error')
+        } else {
+          // TODO: errors
+          const errorData = await response.json() // Parse error response
+          console.error(errorData)
+          throw errorData // Throw the entire error response object
+        }
       }
 
       const responseData = await response.json()
