@@ -6,6 +6,7 @@ import { ApiError } from '../../http/response'
 import { ListSecretsOpts, listSecrets } from './handlers/secrets/list'
 import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
 import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
+import { getSecret } from './handlers/secrets/get'
 
 function environmentsAPI(httpClient: HttpClient) {
   // load and inject environment variables
@@ -31,6 +32,20 @@ function environmentsAPI(httpClient: HttpClient) {
 }
 
 function envSecretsAPI(httpClient: HttpClient) {
+  /**
+   * @summary Retrieve single secret
+   * @description Secret
+   * @param key Secret key
+   * @returns Result object
+   * */
+  async function get(key: string) {
+    if (key?.length < 2) {
+      const error: ApiError<'invalid_key'> = { code: 'invalid_key' }
+      return { data: null, error }
+    }
+    return getSecret(httpClient, key)
+  }
+
   async function list(options?: ListSecretsOpts) {
     return await listSecrets(httpClient, options)
   }
@@ -75,6 +90,7 @@ function envSecretsAPI(httpClient: HttpClient) {
   }
 
   return {
+    get,
     list,
     create,
     update,
