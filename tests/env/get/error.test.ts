@@ -6,7 +6,7 @@ test('Test unauthorized error', async () => {
   const envApi = createEnvApi('')
 
   const { data, error } = await envApi.get({
-    printTable: false,
+    secrets: true,
   })
   if (error) {
     console.log('Got an error')
