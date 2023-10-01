@@ -1,3 +1,5 @@
+import fetchWithRetry from './retry'
+
 const baseURL: string = 'http://0.0.0.0:8080/api/v1/sdk/'
 
 type BasePath = 'environments' | 'projects'
@@ -42,12 +44,13 @@ export function createHttpClient(args: {
     }
 
     try {
-      const response = await fetch(url, {
+      const response = await fetchWithRetry(url, {
         method: 'GET',
         headers,
       })
 
       if (!response.ok) {
+        console.log('HERE')
         if (response.status === 500 || response.status === 404) {
           throw new Error('Internal Server Error')
         } else {
@@ -111,7 +114,7 @@ async function postOrPatch<T>(args: {
   const url = `${baseURL}${basePath}${path ?? ''}`
 
   try {
-    const response = await fetch(url, {
+    const response = await fetchWithRetry(url, {
       method,
       headers,
       body: JSON.stringify(data),
