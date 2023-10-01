@@ -9,7 +9,7 @@ export interface GetEnvironmentOpts {
   printTable?: boolean
 }
 
-interface GetEnvironmentData {
+interface EnvironmentData {
   name: string
   secrets: SecretKeyValueRecord
 }
@@ -19,7 +19,7 @@ type GetEnvironmentError = ApiError<'unauthorized'>
 async function getEnvironment(
   client: HttpClient,
   options?: GetEnvironmentOpts
-): Promise<ApiResponse<GetEnvironmentData, GetEnvironmentError>> {
+): Promise<ApiResponse<EnvironmentData, GetEnvironmentError>> {
   const printTable = options?.printTable
 
   try {
@@ -32,7 +32,7 @@ async function getEnvironment(
       printLoadedEnvTable(secrets)
     }
 
-    const environment: GetEnvironmentData = {
+    const environment: EnvironmentData = {
       name,
       secrets,
     }
