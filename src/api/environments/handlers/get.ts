@@ -1,9 +1,8 @@
-import { printSecretsTable } from '../../../utils/table'
 import { HttpClient } from '../../../http/client'
 import { ApiError, ApiResponse } from '../../../http/response'
 import { createApiErrorFromResponse } from '../../../http/errors/base'
+import { SecretsApiError } from '../errors/secrets'
 
-// type SecretKeyValueRecord = Record<string, string>
 type Secret = { key: string; value: string; description?: string }
 
 export interface GetEnvironmentOpts {
@@ -20,7 +19,7 @@ interface Environment {
   secrets?: Secret[]
 }
 
-type GetEnvironmentError = ApiError<'unauthorized' | 'invalid_token' | 'token_expired'>
+type GetEnvironmentError = ApiError<SecretsApiError>
 
 async function getEnvironment(
   client: HttpClient,
@@ -34,8 +33,6 @@ async function getEnvironment(
       path: '/',
       query: returnSecrets ? { secrets: 'true' } : undefined,
     })
-
-    const { secrets } = data
 
     // if (printTable) {
     //   printSecretsTable({ array: secrets })
