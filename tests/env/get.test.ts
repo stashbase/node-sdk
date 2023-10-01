@@ -16,4 +16,4 @@ test('Get specific env with env token and return variables with name', async () 
     console.log(name)
     console.log(secrets)
   }
-} )
+})
