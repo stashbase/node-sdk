@@ -1,15 +1,14 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiError, ApiResponse } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { SecretsApiError } from '../../errors/secrets'
 
 type CreateSecretsResponseData = {
   createdCount: number
   duplicateKeys?: string[]
 }
 
-type CreateSecretsError = ApiError<
-  'no_values_provided' | 'unauthorized' | 'invalid_token' | 'token_expired' | 'invalid_grant'
->
+type CreateSecretsError = ApiError<SecretsApiError | 'no_values_provided'>
 
 export type CreateSecretsData = Array<{
   key: string
