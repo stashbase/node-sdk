@@ -1,31 +1,32 @@
 import { HttpClient } from '../../../../http/client'
+import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { ApiError, ApiResponse } from '../../../../http/response'
 
-async function deleteEnvironmentSecret(
+type DeleteSecretsError = ApiError<'unauthorized' | 'invalid_token' | 'token_expired'>
+type DeleteSecretsResponseData = {
+  deletedCount: number
+  notFound?: string[]
+}
+
+async function deleteEnvironmentSecrets(
   client: HttpClient,
   keys: string[]
-): Promise<{ notFound?: string[] }> {
+): Promise<ApiResponse<DeleteSecretsResponseData, DeleteSecretsError>> {
   try {
-    // const { data } = await client.post<{
-    //   notFound?: string[]
-    // }>(`/delete`, {
-    //   keys,
-    // })
-    //
-
-    const data = await client.post<{ notFound?: string[] }>({
+    const data = await client.post<DeleteSecretsResponseData>({
       path: '/delete',
       data: {
         keys,
       },
     })
-    return data
-  } catch (error) {
-    console.log(error)
 
-    // if (shouldThrow || shouldThrow === undefined) {
-    throw error
-    // }
+    return { data, error: null }
+  } catch (error: any) {
+    console.log('Error: ', error?.error)
+    const apiError = createApiErrorFromResponse<DeleteSecretsError>(error)
+
+    return { data: null, error: apiError }
   }
 }
 
-export { deleteEnvironmentSecret }
+export { deleteEnvironmentSecrets }
