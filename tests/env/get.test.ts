@@ -3,12 +3,17 @@ import { assert, test } from 'vitest'
 import { createEnvApi } from '../../src'
 
 test('Get specific env with env token and return variables with name', async () => {
-  const envApi = createEnvApi('-YSbVSq5kzmc1EgzAO9SThUXFQLjb6R1')
+  const envApi = createEnvApi('')
 
-  const { name, secrets } = await envApi.get({
+  const { data, error } = await envApi.get({
     printTable: false,
   })
-
-  console.log(name)
-  console.log(secrets)
+  if (error) {
+    console.log('Got an error')
+    console.log(error.code)
+  } else {
+    const { name, secrets } = data
+    console.log(name)
+    console.log(secrets)
+  }
 })
