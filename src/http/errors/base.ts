@@ -1,11 +1,10 @@
 import { ApiError } from '../response'
 
-export function createApiErrorFromResponse(responseData: any): ApiError {
+export function createApiErrorFromResponse<T>(responseData: any): T {
   if (responseData && responseData.error) {
-    const err: ApiError = { code: responseData.error.code }
-    return err
+    return <T>{ code: responseData.error.code }
   }
 
   // If no error data is present, return a default APIError
-  return { code: 'internal_error' }
+  return <T>{ code: 'internal_error' }
 }
