@@ -1,5 +1,5 @@
 export type ApiError<T> = {
-  code: T | 'internal_error'
+  code: T | 'internal_error' | 'bad_request'
   // message: string
   // details: string
   // hint: strinG
