@@ -1,10 +1,10 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
 import { ApiError, ApiResponse } from '../../../../http/response'
+import { SecretsApiError } from '../../errors/secrets'
 
-type DeleteSecretsError = ApiError<
-  'unauthorized' | 'invalid_token' | 'token_expired' | 'invalid_grant'
->
+type DeleteSecretsError = ApiError<SecretsApiError>
+
 type DeleteSecretsResponseData = {
   deletedCount: number
   notFound?: string[]

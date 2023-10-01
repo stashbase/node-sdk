@@ -3,6 +3,7 @@ import { printSecretsTable } from '../../../utils/table'
 import { HttpClient } from '../../../http/client'
 import { ApiError, ApiResponse } from '../../../http/response'
 import { createApiErrorFromResponse } from '../../../http/errors/base'
+import { SecretsApiError } from '../errors/secrets'
 
 type SecretKeyValueRecord = Record<string, string>
 
@@ -11,7 +12,7 @@ export interface LoadEnvironmentOpts {
   printTable?: boolean
 }
 
-type LoadEnvironmentError = ApiError<'unauthorized' | 'invalid_token' | 'token_expired'>
+type LoadEnvironmentError = ApiError<SecretsApiError>
 
 async function loadEnvironment(
   client: HttpClient,

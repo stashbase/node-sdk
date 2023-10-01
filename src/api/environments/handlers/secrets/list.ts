@@ -1,6 +1,7 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiError, ApiResponse } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { SecretsApiError } from '../../errors/secrets'
 
 export interface ListSecretsOpts {
   description?: boolean
@@ -8,9 +9,7 @@ export interface ListSecretsOpts {
 
 type SecretsData = Array<{ key: string; value: string; description?: string }>
 
-type ListSecretsError = ApiError<
-  'unauthorized' | 'invalid_token' | 'token_expired' | 'invalid_grant'
->
+type ListSecretsError = ApiError<SecretsApiError>
 
 async function listSecrets(
   envClient: HttpClient,
