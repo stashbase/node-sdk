@@ -1,17 +1,23 @@
-import { printLoadedEnvTable } from '../../../utils/table'
+import { printSecretsTable } from '../../../utils/table'
 import { HttpClient } from '../../../http/client'
 import { ApiError, ApiResponse } from '../../../http/response'
 import { createApiErrorFromResponse } from '../../../http/errors/base'
 
-type SecretKeyValueRecord = Record<string, string>
+// type SecretKeyValueRecord = Record<string, string>
+type Secret = { key: string; value: string; description?: string }
 
 export interface GetEnvironmentOpts {
-  printTable?: boolean
+  secrets?: boolean
+  // printTable?: boolean
 }
 
-interface EnvironmentData {
+interface Environment {
+  projectName: string
+  type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
   name: string
-  secrets: SecretKeyValueRecord
+  createdAt: string
+  description: string | null
+  secrets?: Secret[]
 }
 
 type GetEnvironmentError = ApiError<'unauthorized' | 'invalid_token' | 'token_expired'>
@@ -19,25 +25,23 @@ type GetEnvironmentError = ApiError<'unauthorized' | 'invalid_token' | 'token_ex
 async function getEnvironment(
   client: HttpClient,
   options?: GetEnvironmentOpts
-): Promise<ApiResponse<EnvironmentData, GetEnvironmentError>> {
-  const printTable = options?.printTable
+): Promise<ApiResponse<Environment, GetEnvironmentError>> {
+  // const printTable = options?.printTable
+  const returnSecrets = options?.secrets
 
   try {
-    const data = await client.get<{ name: string; secrets: SecretKeyValueRecord }>({
-      path: '/load',
+    const data = await client.get<Environment>({
+      path: '/',
+      query: returnSecrets ? { secrets: 'true' } : undefined,
     })
-    const { name, secrets } = data
 
-    if (printTable) {
-      printLoadedEnvTable(secrets)
-    }
+    const { secrets } = data
 
-    const environment: EnvironmentData = {
-      name,
-      secrets,
-    }
+    // if (printTable) {
+    //   printSecretsTable({ array: secrets })
+    // }
 
-    return { data: environment, error: null }
+    return { data: data, error: null }
   } catch (error: any) {
     console.log('Error: ', error?.error)
     const apiError = createApiErrorFromResponse<GetEnvironmentError>(error)
