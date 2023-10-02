@@ -29,7 +29,7 @@ function environmentsAPI(httpClient: HttpClient) {
    * @param key options Options (return secrets)
    * @returns Environment data
    * */
-  async function get(options?: GetEnvironmentOpts) {
+  async function get(name: string, options?: GetEnvironmentOpts) {
     return await getEnvironment(httpClient, options)
   }
 

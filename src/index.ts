@@ -1,5 +1,7 @@
 import environmentsAPI from './api/environments/api'
 import { projectsAPI } from './api/workspace/projects/api'
+import { environmentsAPI as envApi } from './api/workspace/environments/api'
+
 import { createHttpClient } from './http/client'
 
 // Create an SDK object that encapsulates functionality
@@ -8,9 +10,11 @@ export function createEnvEase(workspaceToken: string) {
   const client = createHttpClient({ basePath: '', authorization: { workspaceToken } })
 
   const projects = projectsAPI(client)
+  const environments = envApi(client)
 
   return {
     projects,
+    environments,
   }
 }
 
