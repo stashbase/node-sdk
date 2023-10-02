@@ -1,9 +1,13 @@
-export type ApiError<T> = {
-  code: T | 'invalid_token' | 'token_expired' | 'invalid_grant' | 'server_error' | 'bad_request'
-  // message: string
-  // details: string
-  // hint: strinG
-}
+export type ApiError<T = void> = T extends void
+  ? {
+      code: 'invalid_token' | 'token_expired' | 'invalid_grant' | 'server_error' | 'bad_request'
+    }
+  : {
+      code: T | 'invalid_token' | 'token_expired' | 'invalid_grant' | 'server_error' | 'bad_request'
+      // message: string
+      // details: string
+      // hint: strinG
+    }
 
 interface ResponseSuccess<T> {
   error: null
@@ -15,4 +19,5 @@ interface ResponseFailure<K> {
   // For backward compatibility: body === data
 }
 
-export type ApiResponse<T, K extends { code: string }> = ResponseSuccess<T> | ResponseFailure<K>
+// export type ApiResponse<T, K extends { code: string }> = ResponseSuccess<T> | ResponseFailure<K>
+export type ApiResponse<T, K = void> = ResponseSuccess<T> | ResponseFailure<K>
