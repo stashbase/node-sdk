@@ -1,6 +1,6 @@
-import { HttpClient } from '../../../http/client'
-import { createApiErrorFromResponse } from '../../../http/errors/base'
-import { ApiError, ApiResponse } from '../../../http/response'
+import { HttpClient } from '../../../../http/client'
+import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { ApiError, ApiResponse } from '../../../../http/response'
 
 type Project = {
   createdAt: string

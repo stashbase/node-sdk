@@ -1,5 +1,5 @@
-import { HttpClient } from '../../http/client'
-import { ApiError } from '../../http/response'
+import { HttpClient } from '../../../http/client'
+import { ApiError } from '../../../http/response'
 import { CreateProjectData, createProject } from './handlers/create'
 import { deleteProjects } from './handlers/delete'
 import { getProject } from './handlers/get'
