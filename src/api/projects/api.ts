@@ -1,5 +1,7 @@
 import { HttpClient } from '../../http/client'
+import { ApiError } from '../../http/response'
 import { CreateProjectData, createProject } from './handlers/create'
+import { deleteProjects } from './handlers/delete'
 import { getProject } from './handlers/get'
 import { ListProjectsOpts, listProjects } from './handlers/list'
 
@@ -34,9 +36,26 @@ export function projectsAPI(httpClient: HttpClient) {
     return await createProject(httpClient, data)
   }
 
+  /**
+   * @summary Remove one or multipe projects
+   * @description Project
+   * @param key Project names
+   * @returns deletedCount, notFound
+   * */
+  async function remove(names: string[]) {
+    if (names.length === 0) {
+      const error: ApiError<'invalid_input'> = { code: 'invalid_input' }
+
+      return { data: null, error }
+    }
+
+    return await deleteProjects(httpClient, names)
+  }
+
   return {
     get,
     list,
     create,
+    remove,
   }
 }
