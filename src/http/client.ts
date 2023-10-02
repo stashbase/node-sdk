@@ -1,6 +1,6 @@
 import fetchWithRetry from './retry'
 
-const baseURL: string = 'http://0.0.0.0:8080/api/v1/sdk/'
+const baseURL: string = 'http://0.0.0.0:8080/api/v1/sdk'
 
 type BasePath = 'environments' | 'projects' | ''
 
@@ -38,7 +38,7 @@ export function createHttpClient(args: {
   }
 
   async function get<T>(args: { path: string; query?: { [key: string]: string } }): Promise<T> {
-    let url = `${baseURL}${basePath}${args.path ?? ''}`
+    let url = `${baseURL}${basePath === '' ? '' : `/${basePath}`}${args.path ?? ''}`
 
     if (args.query) {
       const query = args.query
