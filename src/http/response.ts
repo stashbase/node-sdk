@@ -1,5 +1,5 @@
 export type ApiError<T> = {
-  code: T | 'server_error' | 'bad_request'
+  code: T | 'invalid_token' | 'token_expired' | 'invalid_grant' | 'server_error' | 'bad_request'
   // message: string
   // details: string
   // hint: strinG

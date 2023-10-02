@@ -1,17 +1,17 @@
 import environmentsAPI from './api/environments/api'
-import { createEnvApiClient } from './api/environments/client'
+import { projectsAPI } from './api/projects/api'
 import { createHttpClient } from './http/client'
 
 // Create an SDK object that encapsulates functionality
 // ROOT
-export function createEnvEase(accessToken: string) {
-  //   const client = (accessToken)
-  //
-  //   const projects = projectsAPI(client)
-  //
-  //   return {
-  //     projects,
-  //   }
+export function createEnvEase(workspaceToken: string) {
+  const client = createHttpClient({ basePath: '', authorization: { workspaceToken } })
+
+  const projects = projectsAPI(client)
+
+  return {
+    projects,
+  }
 }
 
 // only for env with env token

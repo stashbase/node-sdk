@@ -2,7 +2,7 @@ import fetchWithRetry from './retry'
 
 const baseURL: string = 'http://0.0.0.0:8080/api/v1/sdk/'
 
-type BasePath = 'environments' | 'projects'
+type BasePath = 'environments' | 'projects' | ''
 
 type RequestWithData = { path: string; data: { [key: string]: any } | any[] }
 
@@ -17,15 +17,22 @@ export function createHttpClient(args: {
   version?: string
   authorization: {
     envToken?: string
+    workspaceToken?: string
   }
 }): HttpClient {
   const {
     basePath,
-    authorization: { envToken },
+    authorization: { envToken, workspaceToken },
   } = args
 
+  let token = envToken
+    ? `EnvToken ${envToken}`
+    : workspaceToken
+    ? `WorkspaceToken ${workspaceToken}`
+    : ''
+
   const headers = {
-    Authorization: envToken ? `EnvToken ${envToken}` : '', // TODO: auth
+    Authorization: token,
     'Content-Type': 'application/json',
     'User-Agent': 'EnvEase SDK/0.0.1',
   }
@@ -50,7 +57,6 @@ export function createHttpClient(args: {
       })
 
       if (!response.ok) {
-        console.log('HERE')
         if (response.status === 500 || response.status === 404) {
           throw new Error('Internal Server Error')
         } else {
