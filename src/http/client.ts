@@ -136,6 +136,11 @@ async function postOrPatch<T>(args: {
       }
     }
 
+    if (response.status === 204) {
+      console.log('No content')
+      return null as T
+    }
+
     const responseData = await response.json()
     return responseData as T
   } catch (error) {
