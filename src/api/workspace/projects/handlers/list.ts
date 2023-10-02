@@ -23,7 +23,7 @@ export async function listProjects(
 ): Promise<ApiResponse<Array<Project>, ListProjectsError>> {
   try {
     const data = await client.get<Array<Project>>({
-      path: `projects`,
+      path: `/projects`,
     })
 
     return { data: data, error: null }
