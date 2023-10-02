@@ -1,5 +1,5 @@
 import environmentsAPI from './api/environments/api'
-import { projectsAPI } from './api/projects/api'
+import { projectsAPI } from './api/workspace/projects/api'
 import { createHttpClient } from './http/client'
 
 // Create an SDK object that encapsulates functionality
