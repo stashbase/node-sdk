@@ -15,7 +15,7 @@ async function deleteProjects(
 ): Promise<ApiResponse<DeleteProjectsResponseData, DeleteProjectsError>> {
   try {
     const data = await client.post<DeleteProjectsResponseData>({
-      path: 'projects/delete',
+      path: '/projects/delete',
       data: {
         names,
       },

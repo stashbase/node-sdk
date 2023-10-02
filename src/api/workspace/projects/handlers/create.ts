@@ -17,7 +17,7 @@ export async function createProject(
 ): Promise<ApiResponse<CreateProjectResponseData, CreateSecretsError>> {
   try {
     await envClient.post<CreateProjectResponseData>({
-      path: 'projects',
+      path: '/projects',
       data,
     })
 

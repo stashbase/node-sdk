@@ -16,7 +16,7 @@ export async function getProject(
 ): Promise<ApiResponse<Project, GetProjectError>> {
   try {
     const data = await client.get<Project>({
-      path: `projects/${name}`,
+      path: `/projects/${name}`,
     })
 
     return { data: data, error: null }
