@@ -1,5 +1,6 @@
 import { HttpClient } from '../../../http/client'
 import { GetEnvironmentArgs, GetEnvironmentOpts, getEnvironment } from './handlers/get'
+import { ListEnvironmentArgs, listEnvironments } from './handlers/list'
 
 export function environmentsAPI(httpClient: HttpClient) {
   /**
@@ -13,7 +14,18 @@ export function environmentsAPI(httpClient: HttpClient) {
     return await getEnvironment(httpClient, args, options)
   }
 
+  /**
+   * @summary List environments
+   * @description Environment
+   * @param args project;
+   * @returns Environment array
+   * */
+  async function list(args: ListEnvironmentArgs) {
+    return await listEnvironments(httpClient, args)
+  }
+
   return {
     get,
+    list,
   }
 }
