@@ -1,5 +1,6 @@
 import { HttpClient } from '../../../http/client'
 import { CreateEnvironmentArgs, createEnvironment } from './handlers/create'
+import { DeleteEnvironmentArgs, deleteEnvironment } from './handlers/delete'
 import { GetEnvironmentArgs, GetEnvironmentOpts, getEnvironment } from './handlers/get'
 import { ListEnvironmentArgs, listEnvironments } from './handlers/list'
 
@@ -35,9 +36,20 @@ export function environmentsAPI(httpClient: HttpClient) {
     return await createEnvironment(httpClient, args)
   }
 
+  /**
+   * @summary Create environment
+   * @description Environment
+   * @param args create argumens;
+   * @returns null
+   * */
+  async function remove(args: DeleteEnvironmentArgs) {
+    return await deleteEnvironment(httpClient, args)
+  }
+
   return {
     get,
     list,
     create,
+    remove,
   }
 }
