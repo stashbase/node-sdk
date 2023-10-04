@@ -5,14 +5,14 @@ import { SecretsApiError } from '../../errors/secrets'
 
 type UpdateSecretsResponseData = {
   updatedCount: number
-  notFoundKeys?: string[]
+  notFoundKeys?: Array<Uppercase<string>>
 }
 
 type UpdateSecretsError = ApiError<SecretsApiError | 'no_values_provided' | 'missing_properties'>
 
 export type UpdateSecretsData = Array<{
-  key: string
-  newKey?: string
+  key: Uppercase<string>
+  newKey?: Uppercase<string>
   value?: string
   description?: string | null
 }>
