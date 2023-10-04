@@ -72,7 +72,7 @@ export function secretsAPI(httpClient: HttpClient) {
       return { data: null, error: namesError }
     }
 
-    const invalidKey = args.data.find((obj) => !isValidSecretKey(obj.key))
+    const invalidKey = args.data.find(({ key }) => !isValidSecretKey(key))
 
     if (invalidKey) {
       const error: ApiError<'invalid_key'> = { code: 'invalid_key' }
@@ -99,20 +99,24 @@ export function secretsAPI(httpClient: HttpClient) {
     }
 
     // validate
-    for (const obj of data) {
-      if (obj.newKey === undefined && obj.value === undefined && obj.description === undefined) {
+    for (const { key, newKey, value, description } of data) {
+      if (!isValidSecretKey(key)) {
+        const error: ApiError<'invalid_key'> = { code: 'invalid_key' }
+        return { data: null, error }
+      }
+
+      if (newKey !== undefined) {
+        if (!isValidSecretKey(newKey)) {
+          const error: ApiError<'invalid_new_key'> = { code: 'invalid_new_key' }
+          return { data: null, error }
+        }
+      }
+
+      if (newKey === undefined && value === undefined && description === undefined) {
         const error: ApiError<'missing_properties'> = { code: 'missing_properties' }
 
         return { data: null, error }
       }
-    }
-
-    const invalidKey = data.find((obj) => !isValidSecretKey(obj.key))
-
-    if (invalidKey) {
-      const error: ApiError<'invalid_key'> = { code: 'invalid_key' }
-
-      return { data: null, error }
     }
 
     return await updateSecrets(httpClient, args)
