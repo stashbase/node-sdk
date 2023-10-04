@@ -13,8 +13,7 @@ type CreateSecretsError = ApiError<
 
 export interface CreateSecretsArgs {
   project: string
-  // environment name
-  name: string
+  environment: string
   data: CreateSecretsData
 }
 
@@ -29,10 +28,10 @@ async function createSecrets(
   args: CreateSecretsArgs
 ): Promise<ApiResponse<CreateSecretsResponseData, CreateSecretsError>> {
   try {
-    const { project, name, data } = args
+    const { project, environment, data } = args
 
     const secrets = await envClient.post<CreateSecretsResponseData>({
-      path: `/projects/${project}/environments/${name}/secrets`,
+      path: `/projects/${project}/environments/${environment}/secrets`,
       data,
     })
 

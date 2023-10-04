@@ -10,17 +10,17 @@ type GetSecretResponse = Promise<ApiResponse<Secret, GetSecretError>>
 export interface GetSecretArgs {
   project: string
   // environment name
-  name: string
+  environment: string
   // secret key
   key: string
 }
 
 async function getSecret(envClient: HttpClient, args: GetSecretArgs): GetSecretResponse {
-  const { project, name, key } = args
+  const { project, environment, key } = args
 
   try {
     const secrets = await envClient.get<Secret>({
-      path: `/projects/${project}/environments/${name}/secrets/${key}`,
+      path: `/projects/${project}/environments/${environment}/secrets/${key}`,
     })
 
     return { data: secrets, error: null }

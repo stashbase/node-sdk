@@ -7,7 +7,7 @@ describe('Get secret', () => {
 
     const { data, error } = await envEase.secrets.get({
       project: 'hero-hub',
-      name: 'vercel',
+      environment: 'vercel',
       key: 'JWT_KEY',
     })
 

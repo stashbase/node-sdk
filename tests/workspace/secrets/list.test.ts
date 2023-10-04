@@ -7,7 +7,7 @@ describe('List secrets', () => {
 
     const { data, error } = await envEase.secrets.list({
       project: 'hero-hub',
-      name: 'vercel',
+      environment: 'vercel',
       description: true,
     })
 
