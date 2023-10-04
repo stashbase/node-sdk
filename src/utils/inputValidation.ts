@@ -23,4 +23,12 @@ function isAlphanumericWithUnderscores(inputString: string): boolean {
 const isValidEnvironmentName = (environmentName: string) =>
   isAlphanumericWithUnderscores(environmentName)
 
-export { isValidProjectName, isValidEnvironmentName }
+function isAlphanumericUppercaseWithUnderscore(inputString: string): boolean {
+  const pattern = /[^A-Z0-9_]/
+
+  return !pattern.test(inputString)
+}
+
+const isValidSecretKey = (key: string) => isAlphanumericUppercaseWithUnderscore(key)
+
+export { isValidProjectName, isValidEnvironmentName, isValidSecretKey }
