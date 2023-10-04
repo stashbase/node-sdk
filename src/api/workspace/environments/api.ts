@@ -3,6 +3,7 @@ import { CreateEnvironmentArgs, createEnvironment } from './handlers/create'
 import { DeleteEnvironmentArgs, deleteEnvironment } from './handlers/delete'
 import { GetEnvironmentArgs, GetEnvironmentOpts, getEnvironment } from './handlers/get'
 import { ListEnvironmentArgs, listEnvironments } from './handlers/list'
+import { RenameEnvironmentArgs, renameEnvironment } from './handlers/rename'
 
 export function environmentsAPI(httpClient: HttpClient) {
   /**
@@ -46,10 +47,21 @@ export function environmentsAPI(httpClient: HttpClient) {
     return await deleteEnvironment(httpClient, args)
   }
 
+  /**
+   * @summary Rename environment
+   * @description Environment
+   * @param args rename argumens;
+   * @returns null
+   * */
+  async function rename(args: RenameEnvironmentArgs) {
+    return await renameEnvironment(httpClient, args)
+  }
+
   return {
     get,
     list,
     create,
+    rename,
     remove,
   }
 }
