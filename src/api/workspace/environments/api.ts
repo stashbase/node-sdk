@@ -9,7 +9,7 @@ import { LockEnvironmentArgs, lockUnlockEnvironment } from './handlers/lock'
 import { RenameEnvironmentArgs, renameEnvironment } from './handlers/rename'
 import { UpdateEnvironmentTypeArgs, updateEnvironmentType } from './handlers/updateType'
 
-const checkValidProjectEnv = (
+export const checkValidProjectEnv = (
   projectName: string,
   environmentName: string
 ): ApiError<'invalid_project_name' | 'invalid_environment_name'> | undefined => {
