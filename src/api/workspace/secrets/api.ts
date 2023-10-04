@@ -1,5 +1,7 @@
 import { HttpClient } from '../../../http/client'
 import { ApiError } from '../../../http/response'
+import { isValidSecretKey } from '../../../utils/inputValidation'
+import { checkValidProjectEnv } from '../environments/api'
 import { CreateSecretsArgs, createSecrets } from './handlers/create'
 import { DeleteSecretsArgs, deleteSecrets } from './handlers/delete'
 import { GetSecretArgs, getSecret } from './handlers/get'
@@ -15,6 +17,20 @@ export function secretsAPI(httpClient: HttpClient) {
    * @returns Secret object
    * */
   async function get(args: GetSecretArgs) {
+    const { project, environment, key } = args
+
+    const namesError = checkValidProjectEnv(project, environment)
+
+    if (namesError) {
+      return { data: null, error: namesError }
+    }
+
+    if (!isValidSecretKey(key)) {
+      const error: ApiError<'invalid_key'> = { code: 'invalid_key' }
+
+      return { data: null, error }
+    }
+
     return await getSecret(httpClient, args)
   }
   /**
@@ -25,6 +41,14 @@ export function secretsAPI(httpClient: HttpClient) {
    * @returns Array of secrets
    * */
   async function list(args: ListSecretsArgs) {
+    const { project, environment } = args
+
+    const namesError = checkValidProjectEnv(project, environment)
+
+    if (namesError) {
+      return { data: null, error: namesError }
+    }
+
     return await listSecrets(httpClient, args)
   }
 
@@ -35,8 +59,23 @@ export function secretsAPI(httpClient: HttpClient) {
    * @returns createdCount, duplicateKeys
    * */
   async function create(args: CreateSecretsArgs) {
+    const { project, environment } = args
+
     if (args?.data?.length === 0) {
       const error: ApiError<'no_values_provided'> = { code: 'no_values_provided' }
+
+      return { data: null, error }
+    }
+    const namesError = checkValidProjectEnv(project, environment)
+
+    if (namesError) {
+      return { data: null, error: namesError }
+    }
+
+    const invalidKey = args.data.find((obj) => !isValidSecretKey(obj.key))
+
+    if (invalidKey) {
+      const error: ApiError<'invalid_key'> = { code: 'invalid_key' }
 
       return { data: null, error }
     }
@@ -68,6 +107,14 @@ export function secretsAPI(httpClient: HttpClient) {
       }
     }
 
+    const invalidKey = data.find((obj) => !isValidSecretKey(obj.key))
+
+    if (invalidKey) {
+      const error: ApiError<'invalid_key'> = { code: 'invalid_key' }
+
+      return { data: null, error }
+    }
+
     return await updateSecrets(httpClient, args)
   }
 
@@ -82,6 +129,14 @@ export function secretsAPI(httpClient: HttpClient) {
 
     if (keys.length === 0) {
       const error: ApiError<'no_keys_provided'> = { code: 'no_keys_provided' }
+
+      return { data: null, error }
+    }
+
+    const invalidKey = keys.find((key) => !isValidSecretKey(key))
+
+    if (invalidKey) {
+      const error: ApiError<'invalid_key'> = { code: 'invalid_key' }
 
       return { data: null, error }
     }
