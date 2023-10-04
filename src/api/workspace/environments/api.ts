@@ -3,6 +3,7 @@ import { CreateEnvironmentArgs, createEnvironment } from './handlers/create'
 import { DeleteEnvironmentArgs, deleteEnvironment } from './handlers/delete'
 import { GetEnvironmentArgs, GetEnvironmentOpts, getEnvironment } from './handlers/get'
 import { ListEnvironmentArgs, listEnvironments } from './handlers/list'
+import { LockEnvironmentArgs, lockUnlockEnvironment } from './handlers/lock'
 import { RenameEnvironmentArgs, renameEnvironment } from './handlers/rename'
 
 export function environmentsAPI(httpClient: HttpClient) {
@@ -57,11 +58,33 @@ export function environmentsAPI(httpClient: HttpClient) {
     return await renameEnvironment(httpClient, args)
   }
 
+  /**
+   * @summary Lock environment
+   * @description Environment
+   * @param args lock argumens;
+   * @returns null
+   * */
+  async function lock(args: LockEnvironmentArgs) {
+    return await lockUnlockEnvironment(httpClient, args, true)
+  }
+
+  /**
+   * @summary Unlock environment
+   * @description Environment
+   * @param args lock argumens;
+   * @returns null
+   * */
+  async function unlock(args: LockEnvironmentArgs) {
+    return await lockUnlockEnvironment(httpClient, args, false)
+  }
+
   return {
     get,
     list,
     create,
     rename,
+    lock,
+    unlock,
     remove,
   }
 }
