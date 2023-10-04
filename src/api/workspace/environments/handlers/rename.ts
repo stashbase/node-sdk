@@ -10,7 +10,10 @@ export interface RenameEnvironmentArgs {
 }
 
 type RenameEnvironmentError = ApiError<
-  'project_not_found' | 'environment_not_found' | 'environment_already_exists'
+  | 'project_not_found'
+  | 'environment_not_found'
+  | 'environment_already_exists'
+  | 'environment_locked'
 >
 
 async function renameEnvironment(
