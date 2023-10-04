@@ -8,13 +8,19 @@ const isValidProjectName = (projectName: string) => isAlphanumericWithHyphens(pr
 
 //
 
-function isAlphanumericWithHyphensAndUnderscores(inputString: string): boolean {
-  const pattern = /[^a-zA-Z0-9-_]/
+// function isAlphanumericWithHyphensAndUnderscores(inputString: string): boolean {
+//   const pattern = /[^a-zA-Z0-9-_]/
+//
+//   return !pattern.test(inputString)
+// }
+
+function isAlphanumericWithUnderscores(inputString: string): boolean {
+  const pattern = /[^a-zA-Z0-9_]/
 
   return !pattern.test(inputString)
 }
 
 const isValidEnvironmentName = (environmentName: string) =>
-  isAlphanumericWithHyphensAndUnderscores(environmentName)
+  isAlphanumericWithUnderscores(environmentName)
 
-export { isValidProjectName }
+export { isValidProjectName, isValidEnvironmentName }
