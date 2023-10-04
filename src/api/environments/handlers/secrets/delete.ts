@@ -7,12 +7,12 @@ type DeleteSecretsError = ApiError<SecretsApiError>
 
 type DeleteSecretsResponseData = {
   deletedCount: number
-  notFound?: string[]
+  notFound?: Array<Uppercase<string>>
 }
 
 async function deleteEnvironmentSecrets(
   client: HttpClient,
-  keys: string[]
+  keys: Uppercase<string>[]
 ): Promise<ApiResponse<DeleteSecretsResponseData, DeleteSecretsError>> {
   try {
     const data = await client.post<DeleteSecretsResponseData>({

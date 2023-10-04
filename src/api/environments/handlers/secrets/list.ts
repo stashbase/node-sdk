@@ -7,7 +7,7 @@ export interface ListSecretsOpts {
   description?: boolean
 }
 
-type SecretsData = Array<{ key: string; value: string; description?: string }>
+type SecretsData = Array<{ key: Uppercase<string>; value: string; description?: string }>
 
 type ListSecretsError = ApiError<SecretsApiError>
 

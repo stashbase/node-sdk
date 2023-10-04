@@ -3,9 +3,9 @@ import { ApiError, ApiResponse } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
 import { SecretsApiError } from '../../errors/secrets'
 
-type Secret = { key: string; value: string; description?: string }
+type Secret = { key: Uppercase<string>; value: string; description?: string }
 
-type GetSecretError = ApiError<SecretsApiError | 'not_found' | 'invalid_key'>
+type GetSecretError = ApiError<SecretsApiError | 'secret_not_found'>
 type GetSecretResponse = Promise<ApiResponse<Secret, GetSecretError>>
 
 async function getSecret(envClient: HttpClient, key: string): GetSecretResponse {

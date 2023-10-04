@@ -5,13 +5,13 @@ import { SecretsApiError } from '../../errors/secrets'
 
 type CreateSecretsResponseData = {
   createdCount: number
-  duplicateKeys?: string[]
+  duplicateKeys?: Array<Uppercase<string>>
 }
 
 type CreateSecretsError = ApiError<SecretsApiError | 'no_values_provided'>
 
 export type CreateSecretsData = Array<{
-  key: string
+  key: Uppercase<string>
   value: string
   description?: string
 }>
