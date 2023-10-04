@@ -8,6 +8,8 @@ type RequestWithData = { path: string; data: { [key: string]: any } | any[] }
 
 export type HttpClient = {
   get: <T>(args: { path: string; query?: { [key: string]: string } }) => Promise<T>
+  del: <T>(args: { path: string; query?: { [key: string]: string } }) => Promise<T>
+
   post: <T>(args: RequestWithData) => Promise<T>
   patch: <T>(args: RequestWithData) => Promise<T>
 }
@@ -101,7 +103,54 @@ export function createHttpClient(args: {
     })
   }
 
+  async function del<T>(args: { path: string; query?: { [key: string]: string } }): Promise<T> {
+    let url = `${baseURL}${basePath === '' ? '' : `/${basePath}`}${args.path ?? ''}`
+
+    if (args.query) {
+      const query = args.query
+
+      let queryString = Object.keys(query)
+        .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(query[k]))
+        .join('&')
+
+      url += '?' + queryString
+    }
+
+    try {
+      const response = await fetchWithRetry(url, {
+        method: 'DELETE',
+        headers,
+      })
+
+      if (!response.ok) {
+        if (response.status === 500 || response.status === 404) {
+          throw new Error('Internal Server Error')
+        } else {
+          // TODO: errors
+          const errorData = await response.json() // Parse error response
+          throw errorData // Throw the entire error response object
+        }
+      }
+
+      if (response.status === 204) {
+        console.log('No content')
+        return null as T
+      }
+
+      const data = await response.json()
+      return data as T
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('A network-related error occurred:', error.message)
+        throw error
+      } else {
+        throw error
+      }
+    }
+  }
+
   return {
+    del,
     get,
     post,
     patch,
