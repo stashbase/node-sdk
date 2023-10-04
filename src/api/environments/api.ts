@@ -29,7 +29,7 @@ function environmentsAPI(httpClient: HttpClient) {
    * @param key options Options (return secrets)
    * @returns Environment data
    * */
-  async function get(name: string, options?: GetEnvironmentOpts) {
+  async function get(options?: GetEnvironmentOpts) {
     return await getEnvironment(httpClient, options)
   }
 
@@ -114,7 +114,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param keys Keys to remove
    * @returns deletedCount, notFound
    * */
-  async function remove(keys: string[]) {
+  async function remove(keys: Uppercase<string>[]) {
     if (keys.length === 0) {
       const error: ApiError<'no_keys'> = { code: 'no_keys' }
 
