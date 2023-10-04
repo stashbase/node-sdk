@@ -1,4 +1,6 @@
 import { HttpClient } from '../../../http/client'
+import { ApiError } from '../../../http/response'
+import { isValidEnvironmentName, isValidProjectName } from '../../../utils/inputValidation'
 import { CreateEnvironmentArgs, createEnvironment } from './handlers/create'
 import { DeleteEnvironmentArgs, deleteEnvironment } from './handlers/delete'
 import { GetEnvironmentArgs, GetEnvironmentOpts, getEnvironment } from './handlers/get'
@@ -6,6 +8,23 @@ import { ListEnvironmentArgs, listEnvironments } from './handlers/list'
 import { LockEnvironmentArgs, lockUnlockEnvironment } from './handlers/lock'
 import { RenameEnvironmentArgs, renameEnvironment } from './handlers/rename'
 import { UpdateEnvironmentTypeArgs, updateEnvironmentType } from './handlers/updateType'
+
+const checkValidProjectEnv = (
+  projectName: string,
+  environmentName: string
+): ApiError<'invalid_project_name' | 'invalid_environment_name'> | undefined => {
+  if (!isValidProjectName(projectName) || projectName.length < 2) {
+    const error: ApiError<'invalid_project_name'> = { code: 'invalid_project_name' }
+
+    return error
+  }
+
+  if (!isValidEnvironmentName(environmentName) || environmentName.length < 2) {
+    const error: ApiError<'invalid_environment_name'> = { code: 'invalid_environment_name' }
+
+    return error
+  }
+}
 
 export function environmentsAPI(httpClient: HttpClient) {
   /**
@@ -16,6 +35,14 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @returns Environment data
    * */
   async function get(args: GetEnvironmentArgs, options?: GetEnvironmentOpts) {
+    const { environment, project } = args
+
+    const namesError = checkValidProjectEnv(project, environment)
+
+    if (namesError) {
+      return { data: null, error: namesError }
+    }
+
     return await getEnvironment(httpClient, args, options)
   }
 
@@ -26,6 +53,12 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @returns Environment array
    * */
   async function list(args: ListEnvironmentArgs) {
+    if (!isValidProjectName(args.project) || args.project.length < 2) {
+      const error: ApiError<'invalid_project_name'> = { code: 'invalid_project_name' }
+
+      return { data: null, error }
+    }
+
     return await listEnvironments(httpClient, args)
   }
 
@@ -36,6 +69,14 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @returns null
    * */
   async function create(args: CreateEnvironmentArgs) {
+    const { project } = args
+
+    if (!isValidProjectName(project) || project.length < 2) {
+      const error: ApiError<'invalid_project_name'> = { code: 'invalid_project_name' }
+
+      return { data: null, error }
+    }
+
     return await createEnvironment(httpClient, args)
   }
 
@@ -46,6 +87,14 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @returns null
    * */
   async function remove(args: DeleteEnvironmentArgs) {
+    const { environment, project } = args
+
+    const namesError = checkValidProjectEnv(project, environment)
+
+    if (namesError) {
+      return { data: null, error: namesError }
+    }
+
     return await deleteEnvironment(httpClient, args)
   }
 
@@ -56,6 +105,20 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @returns null
    * */
   async function rename(args: RenameEnvironmentArgs) {
+    const { project, newName, name } = args
+
+    const namesError = checkValidProjectEnv(project, name)
+
+    if (namesError) {
+      return { data: null, error: namesError }
+    }
+
+    if (!isValidEnvironmentName(newName) || newName.length < 2) {
+      const error: ApiError<'invalid_new_project_name'> = { code: 'invalid_new_project_name' }
+
+      return { data: null, error }
+    }
+
     return await renameEnvironment(httpClient, args)
   }
 
@@ -66,6 +129,14 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @returns null
    * */
   async function updateType(args: UpdateEnvironmentTypeArgs) {
+    const { project, name } = args
+
+    const namesError = checkValidProjectEnv(project, name)
+
+    if (namesError) {
+      return { data: null, error: namesError }
+    }
+
     return await updateEnvironmentType(httpClient, args)
   }
 
@@ -76,6 +147,14 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @returns null
    * */
   async function lock(args: LockEnvironmentArgs) {
+    const { project, name } = args
+
+    const namesError = checkValidProjectEnv(project, name)
+
+    if (namesError) {
+      return { data: null, error: namesError }
+    }
+
     return await lockUnlockEnvironment(httpClient, args, true)
   }
 
@@ -86,6 +165,14 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @returns null
    * */
   async function unlock(args: LockEnvironmentArgs) {
+    const { project, name } = args
+
+    const namesError = checkValidProjectEnv(project, name)
+
+    if (namesError) {
+      return { data: null, error: namesError }
+    }
+
     return await lockUnlockEnvironment(httpClient, args, false)
   }
 
