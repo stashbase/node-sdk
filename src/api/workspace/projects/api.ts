@@ -1,5 +1,6 @@
 import { HttpClient } from '../../../http/client'
 import { ApiError } from '../../../http/response'
+import { isValidProjectName } from '../../../utils/inputValidation'
 import { CreateProjectData, createProject } from './handlers/create'
 import { deleteProjects } from './handlers/delete'
 import { getProject } from './handlers/get'
@@ -13,6 +14,11 @@ export function projectsAPI(httpClient: HttpClient) {
    * @returns Project object
    * */
   async function get(projectName: string) {
+    if (!isValidProjectName(projectName)) {
+      const error: ApiError<'invalid_name_format'> = { code: 'invalid_name_format' }
+      return { data: null, error }
+    }
+
     return await getProject(httpClient, projectName)
   }
 
@@ -33,6 +39,16 @@ export function projectsAPI(httpClient: HttpClient) {
    * @returns null
    * */
   async function create(data: CreateProjectData) {
+    const { name } = data
+    const valid = isValidProjectName(name)
+    console.log({ valid })
+
+    if (!valid) {
+      const error: ApiError<'invalid_name_format'> = { code: 'invalid_name_format' }
+
+      return { data: null, error }
+    }
+
     return await createProject(httpClient, data)
   }
 
@@ -45,6 +61,14 @@ export function projectsAPI(httpClient: HttpClient) {
   async function remove(names: string[]) {
     if (names.length === 0) {
       const error: ApiError<'invalid_input'> = { code: 'invalid_input' }
+
+      return { data: null, error }
+    }
+
+    const invalidName = names.find((name) => !isValidProjectName(name))
+
+    if (invalidName) {
+      const error: ApiError<'invalid_name_format'> = { code: 'invalid_name_format' }
 
       return { data: null, error }
     }
