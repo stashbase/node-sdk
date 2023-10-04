@@ -7,8 +7,7 @@ type ListSecretsError = ApiError<'project_not_found' | 'environment_not_found'>
 
 export interface ListSecretsArgs {
   project: string
-  // environment name
-  name: string
+  environment: string
   description?: boolean
 }
 
@@ -21,12 +20,12 @@ async function listSecrets(
   args: ListSecretsArgs
   // options?: ListSecretsOpts
 ): Promise<ApiResponse<SecretsData, ListSecretsError>> {
-  const { project, name } = args
+  const { project, environment } = args
   const returnDescription = args?.description
 
   try {
     const secrets = await envClient.get<SecretsData>({
-      path: `/projects/${project}/environments/${name}/secrets`,
+      path: `/projects/${project}/environments/${environment}/secrets`,
       query: returnDescription ? { description: 'true' } : undefined,
     })
 
