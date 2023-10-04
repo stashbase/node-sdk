@@ -13,13 +13,13 @@ export const checkValidProjectEnv = (
   projectName: string,
   environmentName: string
 ): ApiError<'invalid_project_name' | 'invalid_environment_name'> | undefined => {
-  if (!isValidProjectName(projectName) || projectName.length < 2) {
+  if (!isValidProjectName(projectName)) {
     const error: ApiError<'invalid_project_name'> = { code: 'invalid_project_name' }
 
     return error
   }
 
-  if (!isValidEnvironmentName(environmentName) || environmentName.length < 2) {
+  if (!isValidEnvironmentName(environmentName)) {
     const error: ApiError<'invalid_environment_name'> = { code: 'invalid_environment_name' }
 
     return error
@@ -53,7 +53,7 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @returns Environment array
    * */
   async function list(args: ListEnvironmentArgs) {
-    if (!isValidProjectName(args.project) || args.project.length < 2) {
+    if (!isValidProjectName(args.project)) {
       const error: ApiError<'invalid_project_name'> = { code: 'invalid_project_name' }
 
       return { data: null, error }
@@ -71,7 +71,7 @@ export function environmentsAPI(httpClient: HttpClient) {
   async function create(args: CreateEnvironmentArgs) {
     const { project } = args
 
-    if (!isValidProjectName(project) || project.length < 2) {
+    if (!isValidProjectName(project)) {
       const error: ApiError<'invalid_project_name'> = { code: 'invalid_project_name' }
 
       return { data: null, error }
@@ -113,7 +113,7 @@ export function environmentsAPI(httpClient: HttpClient) {
       return { data: null, error: namesError }
     }
 
-    if (!isValidEnvironmentName(newName) || newName.length < 2) {
+    if (!isValidEnvironmentName(newName)) {
       const error: ApiError<'invalid_new_project_name'> = { code: 'invalid_new_project_name' }
 
       return { data: null, error }
