@@ -5,6 +5,7 @@ import { GetEnvironmentArgs, GetEnvironmentOpts, getEnvironment } from './handle
 import { ListEnvironmentArgs, listEnvironments } from './handlers/list'
 import { LockEnvironmentArgs, lockUnlockEnvironment } from './handlers/lock'
 import { RenameEnvironmentArgs, renameEnvironment } from './handlers/rename'
+import { UpdateEnvironmentTypeArgs, updateEnvironmentType } from './handlers/updateType'
 
 export function environmentsAPI(httpClient: HttpClient) {
   /**
@@ -59,6 +60,16 @@ export function environmentsAPI(httpClient: HttpClient) {
   }
 
   /**
+   * @summary Change environment typ
+   * @description Environment
+   * @param args updateType argumens;
+   * @returns null
+   * */
+  async function updateType(args: UpdateEnvironmentTypeArgs) {
+    return await updateEnvironmentType(httpClient, args)
+  }
+
+  /**
    * @summary Lock environment
    * @description Environment
    * @param args lock argumens;
@@ -83,6 +94,7 @@ export function environmentsAPI(httpClient: HttpClient) {
     list,
     create,
     rename,
+    updateType,
     lock,
     unlock,
     remove,
