@@ -2,7 +2,7 @@ import { HttpClient } from '../../../../http/client'
 import { ApiError, ApiResponse } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
 
-type SecretsData = Array<{ key: string; value: string; description?: string }>
+type SecretsData = Array<{ key: Uppercase<string>; value: string; description?: string }>
 type ListSecretsError = ApiError<'project_not_found' | 'environment_not_found'>
 
 export interface ListSecretsArgs {

@@ -2,7 +2,7 @@ import { HttpClient } from '../../../../http/client'
 import { ApiError, ApiResponse } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
 
-type Secret = { key: string; value: string; description: string | null }
+type Secret = { key: Uppercase<string>; value: string; description: string | null }
 
 type GetSecretError = ApiError<'project_not_found' | 'environment_not_found' | 'secret_not_found'>
 type GetSecretResponse = Promise<ApiResponse<Secret, GetSecretError>>
@@ -12,7 +12,7 @@ export interface GetSecretArgs {
   // environment name
   environment: string
   // secret key
-  key: string
+  key: Uppercase<string>
 }
 
 async function getSecret(envClient: HttpClient, args: GetSecretArgs): GetSecretResponse {

@@ -4,7 +4,7 @@ import { createApiErrorFromResponse } from '../../../../http/errors/base'
 
 type UpdateSecretsResponseData = {
   updatedCount: number
-  notFoundKeys?: string[]
+  notFoundKeys?: Array<Uppercase<string>>
 }
 
 type UpdateSecretsError = ApiError<
@@ -14,15 +14,15 @@ type UpdateSecretsError = ApiError<
 export interface UpdateSecretsArgs {
   project: string
   environment: string
-  data: UpdateSecretsData
+  data: Array<UpdateSecretData>
 }
 
-export type UpdateSecretsData = Array<{
-  key: string
-  newKey?: string
+export type UpdateSecretData = {
+  key: Uppercase<string>
+  newKey?: Uppercase<string>
   value?: string
   description?: string | null
-}>
+}
 
 async function updateSecrets(
   envClient: HttpClient,

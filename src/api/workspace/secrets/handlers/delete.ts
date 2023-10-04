@@ -6,13 +6,13 @@ type DeleteSecretsError = ApiError<'project_not_found' | 'environment_not_found'
 
 type DeleteSecretsResponseData = {
   deletedCount: number
-  notFound?: string[]
+  notFound?: Array<Uppercase<string>>
 }
 
 export interface DeleteSecretsArgs {
   project: string
   environment: string
-  keys: string[]
+  keys: Array<Uppercase<string>>
 }
 
 async function deleteSecrets(
