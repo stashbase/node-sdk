@@ -7,7 +7,9 @@ export interface DeleteEnvironmentArgs {
   environment: string
 }
 
-type DeleteEnvironmentError = ApiError<'project_not_found' | 'environment_not_found'>
+type DeleteEnvironmentError = ApiError<
+  'project_not_found' | 'environment_not_found' | 'environment_locked'
+>
 
 async function deleteEnvironment(
   client: HttpClient,
