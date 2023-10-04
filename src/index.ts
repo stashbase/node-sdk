@@ -1,6 +1,7 @@
 import environmentsAPI from './api/environments/api'
 import { projectsAPI } from './api/workspace/projects/api'
 import { environmentsAPI as envApi } from './api/workspace/environments/api'
+import { secretsAPI } from './api/workspace/secrets/api'
 
 import { createHttpClient } from './http/client'
 
@@ -11,10 +12,12 @@ export function createEnvEase(workspaceToken: string) {
 
   const projects = projectsAPI(client)
   const environments = envApi(client)
+  const secrets = secretsAPI(client)
 
   return {
     projects,
     environments,
+    secrets,
   }
 }
 
