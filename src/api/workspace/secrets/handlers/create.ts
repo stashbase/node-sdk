@@ -4,7 +4,7 @@ import { createApiErrorFromResponse } from '../../../../http/errors/base'
 
 type CreateSecretsResponseData = {
   createdCount: number
-  duplicateKeys?: string[]
+  duplicateKeys?: Array<Uppercase<string>>
 }
 
 type CreateSecretsError = ApiError<
@@ -14,14 +14,14 @@ type CreateSecretsError = ApiError<
 export interface CreateSecretsArgs {
   project: string
   environment: string
-  data: CreateSecretsData
+  data: Array<CreateSecretData>
 }
 
-export type CreateSecretsData = Array<{
-  key: string
+export type CreateSecretData = {
+  key: Uppercase<string>
   value: string
   description?: string
-}>
+}
 
 async function createSecrets(
   envClient: HttpClient,
