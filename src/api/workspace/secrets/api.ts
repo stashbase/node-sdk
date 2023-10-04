@@ -3,6 +3,7 @@ import { ApiError } from '../../../http/response'
 import { CreateSecretsArgs, createSecrets } from './handlers/create'
 import { GetSecretArgs, getSecret } from './handlers/get'
 import { ListSecretsArgs, listSecrets } from './handlers/list'
+import { UpdateSecretsArgs, updateSecrets } from './handlers/update'
 
 export function secretsAPI(httpClient: HttpClient) {
   /**
@@ -42,9 +43,37 @@ export function secretsAPI(httpClient: HttpClient) {
     return await createSecrets(httpClient, args)
   }
 
+  /**
+   * @summary Update secrets
+   * @description Secrets
+   * @param args project, environment name, data
+   * @returns updatedCount, notFoundKeys
+   * */
+  async function update(args: UpdateSecretsArgs) {
+    const { data } = args
+
+    if (data?.length === 0) {
+      const error: ApiError<'no_values_provided'> = { code: 'no_values_provided' }
+
+      return { data: null, error }
+    }
+
+    // validate
+    for (const obj of data) {
+      if (obj.newKey === undefined && obj.value === undefined && obj.description === undefined) {
+        const error: ApiError<'missing_properties'> = { code: 'missing_properties' }
+
+        return { data: null, error }
+      }
+    }
+
+    return await updateSecrets(httpClient, args)
+  }
+
   return {
     get,
     list,
     create,
+    update,
   }
 }
