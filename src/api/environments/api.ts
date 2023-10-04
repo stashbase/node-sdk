@@ -7,6 +7,7 @@ import { ListSecretsOpts, listSecrets } from './handlers/secrets/list'
 import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
 import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
 import { getSecret } from './handlers/secrets/get'
+import { isValidSecretKey } from '../../utils/inputValidation'
 
 function environmentsAPI(httpClient: HttpClient) {
   /**
@@ -50,7 +51,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @returns Result object
    * */
   async function get(key: string) {
-    if (key?.length < 2) {
+    if (!isValidSecretKey(key)) {
       const error: ApiError<'invalid_key'> = { code: 'invalid_key' }
       return { data: null, error }
     }
@@ -80,6 +81,13 @@ function envSecretsAPI(httpClient: HttpClient) {
       return { data: null, error }
     }
 
+    const invalidKey = data.find(({ key }) => !isValidSecretKey(key))
+
+    if (invalidKey) {
+      const error: ApiError<'invalid_key'> = { code: 'invalid_key' }
+      return { data: null, error }
+    }
+
     return await createSecrets(httpClient, data)
   }
 
@@ -97,8 +105,20 @@ function envSecretsAPI(httpClient: HttpClient) {
     }
 
     // validate
-    for (const obj of data) {
-      if (obj.newKey === undefined && obj.value === undefined && obj.description === undefined) {
+    for (const { key, newKey, value, description } of data) {
+      if (!isValidSecretKey(key)) {
+        const error: ApiError<'invalid_key'> = { code: 'invalid_key' }
+        return { data: null, error }
+      }
+
+      if (newKey !== undefined) {
+        if (!isValidSecretKey(newKey)) {
+          const error: ApiError<'invalid_new_key'> = { code: 'invalid_new_key' }
+          return { data: null, error }
+        }
+      }
+
+      if (newKey === undefined && value === undefined && description === undefined) {
         const error: ApiError<'missing_properties'> = { code: 'missing_properties' }
 
         return { data: null, error }
@@ -118,6 +138,13 @@ function envSecretsAPI(httpClient: HttpClient) {
     if (keys.length === 0) {
       const error: ApiError<'no_keys'> = { code: 'no_keys' }
 
+      return { data: null, error }
+    }
+
+    const invalidKey = keys.find((key) => !isValidSecretKey(key))
+
+    if (invalidKey) {
+      const error: ApiError<'invalid_key'> = { code: 'invalid_key' }
       return { data: null, error }
     }
 
