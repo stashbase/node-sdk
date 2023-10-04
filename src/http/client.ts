@@ -4,7 +4,7 @@ const baseURL: string = 'http://0.0.0.0:8080/api/v1/sdk'
 
 type BasePath = 'environments' | 'projects' | ''
 
-type RequestWithData = { path: string; data: { [key: string]: any } | any[] }
+type RequestWithData = { path: string; data?: { [key: string]: any } | any[] }
 
 export type HttpClient = {
   get: <T>(args: { path: string; query?: { [key: string]: string } }) => Promise<T>
@@ -37,7 +37,7 @@ export function createHttpClient(args: {
     Authorization: token,
     'Content-Type': 'application/json',
     'User-Agent': 'EnvEase SDK/0.0.1',
-  }
+  } as Record<string, string>
 
   async function get<T>(args: { path: string; query?: { [key: string]: string } }): Promise<T> {
     let url = `${baseURL}${basePath === '' ? '' : `/${basePath}`}${args.path ?? ''}`
@@ -80,7 +80,10 @@ export function createHttpClient(args: {
     }
   }
 
-  async function post<T>(args: { path: string; data: { [key: string]: any } | any[] }): Promise<T> {
+  async function post<T>(args: {
+    path: string
+    data?: { [key: string]: any } | any[]
+  }): Promise<T> {
     return await postOrPatch<T>({
       method: 'POST',
       headers,
@@ -92,11 +95,17 @@ export function createHttpClient(args: {
 
   async function patch<T>(args: {
     path: string
-    data: { [key: string]: any } | any[]
+    data?: { [key: string]: any } | any[]
   }): Promise<T> {
+    let reqHeaders = headers
+
+    if (!args.data) {
+      delete reqHeaders['Content-Type']
+    }
+
     return await postOrPatch<T>({
       method: 'PATCH',
-      headers,
+      headers: reqHeaders,
       basePath,
       path: args.path,
       data: args.data,
@@ -162,7 +171,7 @@ async function postOrPatch<T>(args: {
   headers: Record<string, string>
   basePath: string
   path: string
-  data: { [key: string]: any } | any[]
+  data?: { [key: string]: any } | any[]
 }): Promise<T> {
   const { method, basePath, headers, path, data } = args
 
@@ -172,7 +181,7 @@ async function postOrPatch<T>(args: {
     const response = await fetchWithRetry(url, {
       method,
       headers,
-      body: JSON.stringify(data),
+      body: data ? JSON.stringify(data) : undefined,
     })
 
     if (!response.ok) {
