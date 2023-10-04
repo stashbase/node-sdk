@@ -14,7 +14,7 @@ export function projectsAPI(httpClient: HttpClient) {
    * @returns Project object
    * */
   async function get(projectName: string) {
-    if (!isValidProjectName(projectName)) {
+    if (!isValidProjectName(projectName) || projectName.length < 2) {
       const error: ApiError<'invalid_name_format'> = { code: 'invalid_name_format' }
       return { data: null, error }
     }
@@ -43,7 +43,7 @@ export function projectsAPI(httpClient: HttpClient) {
     const valid = isValidProjectName(name)
     console.log({ valid })
 
-    if (!valid) {
+    if (!valid || name.length < 2) {
       const error: ApiError<'invalid_name_format'> = { code: 'invalid_name_format' }
 
       return { data: null, error }
@@ -66,8 +66,9 @@ export function projectsAPI(httpClient: HttpClient) {
     }
 
     const invalidName = names.find((name) => !isValidProjectName(name))
+    const tooShortName = names.find((name) => name.length < 2)
 
-    if (invalidName) {
+    if (invalidName || tooShortName !== undefined) {
       const error: ApiError<'invalid_name_format'> = { code: 'invalid_name_format' }
 
       return { data: null, error }
