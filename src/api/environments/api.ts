@@ -8,6 +8,7 @@ import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
 import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
 import { getSecret } from './handlers/secrets/get'
 import { isValidSecretKey } from '../../utils/inputValidation'
+import { setSecrets } from './handlers/secrets/set'
 
 function environmentsAPI(httpClient: HttpClient) {
   /**
@@ -92,6 +93,29 @@ function envSecretsAPI(httpClient: HttpClient) {
   }
 
   /**
+   * @summary Set secrets
+   * @description Secrets
+   * @param data Array of secrets
+   * @returns null
+   * */
+  async function set(data: CreateSecretsData) {
+    if (data?.length === 0) {
+      const error: ApiError<'no_values_provided'> = { code: 'no_values_provided' }
+
+      return { data: null, error }
+    }
+
+    const invalidKey = data.find(({ key }) => !isValidSecretKey(key))
+
+    if (invalidKey) {
+      const error: ApiError<'invalid_key'> = { code: 'invalid_key' }
+      return { data: null, error }
+    }
+
+    return await setSecrets(httpClient, data)
+  }
+
+  /**
    * @summary Update secrets
    * @description Secrets
    * @param data Array of secrets to update
@@ -155,6 +179,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     get,
     list,
     create,
+    set,
     update,
     remove,
   }
