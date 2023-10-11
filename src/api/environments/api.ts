@@ -8,7 +8,7 @@ import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
 import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
 import { getSecret } from './handlers/secrets/get'
 import { isValidSecretKey } from '../../utils/inputValidation'
-import { setSecrets } from './handlers/secrets/set'
+import { SetSecretsData, setSecrets } from './handlers/secrets/set'
 
 function environmentsAPI(httpClient: HttpClient) {
   /**
@@ -98,7 +98,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param data Array of secrets
    * @returns null
    * */
-  async function set(data: CreateSecretsData) {
+  async function set(data: SetSecretsData) {
     if (data?.length === 0) {
       const error: ApiError<'no_values_provided'> = { code: 'no_values_provided' }
 
