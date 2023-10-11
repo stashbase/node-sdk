@@ -6,7 +6,7 @@ test('Create new secrets (add them to environment)', async () => {
 
   const { data, error } = await envApi.secrets.create([
     {
-      key: 'Some key',
+      key: 'KEY',
       value: 'Some value',
       description: 'This is description for this and this',
     },
