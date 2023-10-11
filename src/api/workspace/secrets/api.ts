@@ -6,6 +6,7 @@ import { CreateSecretsArgs, createSecrets } from './handlers/create'
 import { DeleteSecretsArgs, deleteSecrets } from './handlers/delete'
 import { GetSecretArgs, getSecret } from './handlers/get'
 import { ListSecretsArgs, listSecrets } from './handlers/list'
+import { SetSecretsArgs, setSecrets } from './handlers/set'
 import { UpdateSecretsArgs, updateSecrets } from './handlers/update'
 
 export function secretsAPI(httpClient: HttpClient) {
@@ -84,6 +85,37 @@ export function secretsAPI(httpClient: HttpClient) {
   }
 
   /**
+   * @summary Set secrets
+   * @description Secrets
+   * @param args project, environment, data
+   * @returns null
+   * */
+  async function set(args: SetSecretsArgs) {
+    const { project, environment } = args
+
+    if (args?.data?.length === 0) {
+      const error: ApiError<'no_values_provided'> = { code: 'no_values_provided' }
+
+      return { data: null, error }
+    }
+    const namesError = checkValidProjectEnv(project, environment)
+
+    if (namesError) {
+      return { data: null, error: namesError }
+    }
+
+    const invalidKey = args.data.find(({ key }) => !isValidSecretKey(key))
+
+    if (invalidKey) {
+      const error: ApiError<'invalid_key'> = { code: 'invalid_key' }
+
+      return { data: null, error }
+    }
+
+    return await setSecrets(httpClient, args)
+  }
+
+  /**
    * @summary Update secrets
    * @description Secrets
    * @param args project, environment, data
@@ -152,6 +184,7 @@ export function secretsAPI(httpClient: HttpClient) {
     get,
     list,
     create,
+    set,
     update,
     remove,
   }
