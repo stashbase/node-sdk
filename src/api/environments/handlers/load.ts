@@ -21,7 +21,11 @@ async function loadEnvironment(
   const printTable = options?.printTable
 
   try {
-    const data = await client.get<{ name: string; secrets: SecretKeyValueRecord }>({
+    const data = await client.get<{
+      name: string
+      type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
+      secrets: SecretKeyValueRecord
+    }>({
       path: '/load',
     })
 
@@ -40,7 +44,7 @@ async function loadEnvironment(
 
     dotenvExpand.expand(dotenv)
 
-    console.log(`\nLoaded environment: ${name}`)
+    console.log(`\nLoaded environment: ${name} (${data?.type})`)
 
     if (printTable) {
       printSecretsTable({ secretsObj: secrets })
