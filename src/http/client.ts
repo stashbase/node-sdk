@@ -175,7 +175,8 @@ async function postOrPatch<T>(args: {
 }): Promise<T> {
   const { method, basePath, headers, path, data } = args
 
-  const url = `${baseURL}/${basePath}${path ?? ''}`
+  const url = `${baseURL}${basePath == '' ? '' : basePath}${path ?? ''}`
+  console.log(url)
 
   try {
     const response = await fetchWithRetry(url, {
