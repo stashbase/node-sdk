@@ -2,17 +2,13 @@ import { test } from 'vitest'
 import { createEnvApi } from '../../../src'
 
 test('Update env secrets', async () => {
-  const envApi = createEnvApi('-YSbVSq5kzmc1EgzAO9SThUXFQLjb6R1')
+  const envApi = createEnvApi('duIwyuCWOhJYpWQM3zmcGm0uGAJanqBS')
 
   const { data, error } = await envApi.secrets.update([
     {
-      key: 'UPDATED_KEY',
+      key: 'NEW_APP_URL',
       description: 'THidhoihsdofhais',
-    },
-    {
-      key: 'SOme key',
-      newKey: 'NEW_KEY',
-      description: '123',
+      newKey: 'APP_URL',
     },
   ])
 
