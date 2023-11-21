@@ -34,6 +34,6 @@ describe('Get single project', () => {
     console.log(error)
 
     assert.equal(data, null)
-    assert.equal(error?.code, 'invalid_token')
+    assert.equal(error?.code, 'unauthorized')
   })
 })
