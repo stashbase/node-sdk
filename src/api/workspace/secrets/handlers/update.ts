@@ -1,6 +1,7 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiError, ApiResponse } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { AtLeastOne } from '../../../../utils/types'
 
 type UpdateSecretsResponseData = {
   updatedCount: number
@@ -19,10 +20,11 @@ export interface UpdateSecretsArgs {
 
 export type UpdateSecretData = {
   key: Uppercase<string>
-  newKey?: Uppercase<string>
-  value?: string
-  description?: string | null
-}
+} & AtLeastOne<{
+  newKey: Uppercase<string>
+  value: string
+  description: string | null
+}>
 
 async function updateSecrets(
   envClient: HttpClient,
