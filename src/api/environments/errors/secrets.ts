@@ -1,1 +1,1 @@
-export type SecretsApiError = 'unauthorized' | 'invalid_token' | 'token_expired' | 'invalid_grant'
+export type SecretsApiError = 'project_not_found' | 'environment_not_found' | 'secret_not_found'
