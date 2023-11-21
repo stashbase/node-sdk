@@ -2,26 +2,20 @@ import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
 import { ApiError, ApiResponse } from '../../../../http/response'
 
-type DeleteProjectsError = ApiError
+type DeleteProjectsError = ApiError<'project_not_found'>
 
-type DeleteProjectsResponseData = {
-  deletedCount: number
-  notFound?: string[]
-}
+type DeleteProjectsResponseData = null
 
-async function deleteProjects(
+async function deleteProject(
   client: HttpClient,
-  names: string[]
+  name: string
 ): Promise<ApiResponse<DeleteProjectsResponseData, DeleteProjectsError>> {
   try {
-    const data = await client.post<DeleteProjectsResponseData>({
-      path: '/projects/delete',
-      data: {
-        names,
-      },
+    const data = await client.del<DeleteProjectsResponseData>({
+      path: `/projects/${name}`,
     })
 
-    return { data, error: null }
+    return { data: null, error: null }
   } catch (error: any) {
     const apiError = createApiErrorFromResponse<DeleteProjectsError>(error)
 
@@ -29,4 +23,4 @@ async function deleteProjects(
   }
 }
 
-export { deleteProjects }
+export { deleteProject }

@@ -2,7 +2,7 @@ import { HttpClient } from '../../../http/client'
 import { ApiError } from '../../../http/response'
 import { isValidProjectName } from '../../../utils/inputValidation'
 import { CreateProjectData, createProject } from './handlers/create'
-import { deleteProjects } from './handlers/delete'
+import { deleteProject } from './handlers/delete'
 import { getProject } from './handlers/get'
 import { ListProjectsOpts, listProjects } from './handlers/list'
 
@@ -54,19 +54,13 @@ export function projectsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Remove one or multipe projects
+   * @summary Remove project
    * @description Project
-   * @param key Project names
-   * @returns deletedCount, notFound
+   * @param key Project name
+   * @returns null
    * */
-  async function remove(names: string[]) {
-    if (names.length === 0) {
-      const error: ApiError<'invalid_input'> = { code: 'invalid_input' }
-
-      return { data: null, error }
-    }
-
-    const invalidName = names.find((name) => !isValidProjectName(name))
+  async function remove(name: string) {
+    const invalidName = !isValidProjectName(name)
 
     if (invalidName) {
       const error: ApiError<'invalid_name'> = { code: 'invalid_name' }
@@ -74,7 +68,7 @@ export function projectsAPI(httpClient: HttpClient) {
       return { data: null, error }
     }
 
-    return await deleteProjects(httpClient, names)
+    return await deleteProject(httpClient, name)
   }
 
   return {
