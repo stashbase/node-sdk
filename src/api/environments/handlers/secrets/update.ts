@@ -2,6 +2,7 @@ import { HttpClient } from '../../../../http/client'
 import { ApiError, ApiResponse } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
 import { SecretsApiError } from '../../errors/secrets'
+import { AtLeastOne } from '../../../../utils/types'
 
 type UpdateSecretsResponseData = {
   updatedCount: number
@@ -12,10 +13,12 @@ type UpdateSecretsError = ApiError<SecretsApiError | 'no_values_provided' | 'mis
 
 export type UpdateSecretsData = Array<{
   key: Uppercase<string>
-  newKey?: Uppercase<string>
-  value?: string
-  description?: string | null
-}>
+}> &
+  AtLeastOne<{
+    newKey?: Uppercase<string>
+    value?: string
+    description?: string | null
+  }>
 
 async function updateSecrets(
   envClient: HttpClient,
