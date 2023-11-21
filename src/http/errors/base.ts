@@ -1,6 +1,10 @@
 import { ApiError } from '../response'
 
-export function createApiErrorFromResponse<T>(responseData: any): T {
+export function createApiErrorFromResponse<T>(responseData: {
+  code?: string
+  statusCode?: number
+  error: ApiError<unknown>
+}): T {
   // validation error = bad request
   if (
     responseData &&
