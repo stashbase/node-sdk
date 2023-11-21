@@ -6,8 +6,17 @@ type SecretsData = Array<{ key: Uppercase<string>; value: string; description?: 
 type ListSecretsError = ApiError<'project_not_found' | 'environment_not_found'>
 
 export interface ListSecretsArgs {
+  /**
+   * project name
+   * */
   project: string
+  /**
+   * environment name
+   * */
   environment: string
+  /**
+   * return secret description
+   * */
   description?: boolean
 }
 
