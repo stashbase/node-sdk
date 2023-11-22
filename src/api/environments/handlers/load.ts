@@ -3,7 +3,6 @@ import { printSecretsTable } from '../../../utils/table'
 import { HttpClient } from '../../../http/client'
 import { ApiError, ApiResponse } from '../../../http/response'
 import { createApiErrorFromResponse } from '../../../http/errors/base'
-import { EnvironmentApiError } from '../errors'
 
 type SecretKeyValueRecord = Record<string, string>
 
@@ -12,7 +11,8 @@ export interface LoadEnvironmentOpts {
   printTable?: boolean
 }
 
-type LoadEnvironmentError = ApiError<EnvironmentApiError>
+// type LoadEnvironmentError = ApiError<EnvironmentApiError>
+type LoadEnvironmentError = ApiError
 
 async function loadEnvironment(
   client: HttpClient,
