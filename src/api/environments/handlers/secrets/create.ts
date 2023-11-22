@@ -1,14 +1,13 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiError, ApiResponse } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
-import { SecretsApiError } from '../../errors/secrets'
 
 type CreateSecretsResponseData = {
   createdCount: number
   duplicateKeys?: Array<Uppercase<string>>
 }
 
-type CreateSecretsError = ApiError<SecretsApiError | 'no_values_provided'>
+type CreateSecretsError = ApiError
 
 export type CreateSecretsData = Array<{
   key: Uppercase<string>
