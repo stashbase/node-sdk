@@ -1,7 +1,6 @@
 import { HttpClient } from '../../../http/client'
 import { ApiError, ApiResponse } from '../../../http/response'
 import { createApiErrorFromResponse } from '../../../http/errors/base'
-import { EnvironmentApiError } from '../errors'
 
 type Secret = { key: string; value: string; description?: string }
 
@@ -20,7 +19,8 @@ interface Environment {
   secrets?: Secret[]
 }
 
-type GetEnvironmentError = ApiError<EnvironmentApiError>
+// type GetEnvironmentError = ApiError<EnvironmentApiError>
+type GetEnvironmentError = ApiError
 
 async function getEnvironment(
   client: HttpClient,
