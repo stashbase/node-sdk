@@ -1,7 +1,6 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiError, ApiResponse } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
-import { SecretsApiError } from '../../errors/secrets'
 import { AtLeastOne } from '../../../../utils/types'
 
 type UpdateSecretsResponseData = {
@@ -9,7 +8,7 @@ type UpdateSecretsResponseData = {
   notFoundKeys?: Array<Uppercase<string>>
 }
 
-type UpdateSecretsError = ApiError<SecretsApiError | 'no_values_provided' | 'missing_properties'>
+type UpdateSecretsError = ApiError<'no_values_provided' | 'missing_properties'>
 
 export type UpdateSecretsData = Array<{
   key: Uppercase<string>
