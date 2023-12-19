@@ -8,9 +8,15 @@ type UpdateSecretsResponseData = {
   notFoundKeys?: Array<Uppercase<string>>
 }
 
-type UpdateSecretsError = ApiError<
-  'no_values_provided' | 'missing_properties' | 'project_not_found' | 'environment_not_found'
->
+type UpdateSecretsError =
+  | ApiError<
+      | 'no_values_provided'
+      | 'missing_properties'
+      | 'project_not_found'
+      | 'environment_not_found'
+      | 'duplicate_new_keys'
+    >
+  | ApiError<'new_keys_already_exist', { keys: Uppercase<string> }>
 
 export interface UpdateSecretsArgs {
   project: string
