@@ -17,7 +17,7 @@ export interface SetSecretsArgs {
 export type SetSecretData = {
   key: Uppercase<string>
   value: string
-  description?: string
+  description?: string | null
 }
 
 async function setSecrets(
