@@ -9,7 +9,7 @@ type SetSecretsError = ApiError<'no_values_provided'>
 export type SetSecretsData = Array<{
   key: Uppercase<string>
   value: string
-  description?: string
+  description?: string | null
 }>
 
 async function setSecrets(
