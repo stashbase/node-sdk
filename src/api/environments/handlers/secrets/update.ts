@@ -10,14 +10,15 @@ type UpdateSecretsResponseData = {
 
 type UpdateSecretsError = ApiError<'no_values_provided' | 'missing_properties'>
 
-export type UpdateSecretsData = Array<{
-  key: Uppercase<string>
-}> &
-  AtLeastOne<{
-    newKey?: Uppercase<string>
-    value?: string
-    description?: string | null
+export type UpdateSecretsData = Array<
+  {
+    key: Uppercase<string>
+  } & AtLeastOne<{
+    newKey: Uppercase<string>
+    value: string
+    description: string | null
   }>
+>
 
 async function updateSecrets(
   envClient: HttpClient,
