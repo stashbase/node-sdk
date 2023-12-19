@@ -1,12 +1,18 @@
-export type ApiError<T = void> = T extends void
+/**
+ * Api error with the specified code and optional details.
+ * @param code - The error code.
+ * @param details - Optional details for the error.
+ */
+export type ApiError<T = void, K extends string | object | void = void> = T extends void
   ? {
       code: 'unauthorized' | 'token_expired' | 'invalid_grant' | 'server_error' | 'bad_request'
     }
   : {
       code: T | 'unauthorized' | 'token_expired' | 'invalid_grant' | 'server_error' | 'bad_request'
+      details?: K
       // message: string
       // details: string
-      // hint: strinG
+      // hint: strin
     }
 
 interface ResponseSuccess<T> {
