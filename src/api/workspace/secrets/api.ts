@@ -151,6 +151,13 @@ export function secretsAPI(httpClient: HttpClient) {
       }
     }
 
+    const newKeys = data?.filter((s) => s.newKey).map((s) => s.newKey)
+    const uniqueNewKeys = new Set(newKeys)
+
+    if (uniqueNewKeys.size < newKeys.length) {
+      const error: ApiError<'duplicate_new_keys'> = { code: 'duplicate_new_keys' }
+    }
+
     return await updateSecrets(httpClient, args)
   }
 
