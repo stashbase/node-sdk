@@ -129,7 +129,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     }
 
     // validate
-    for (const { key, newKey, value, description } of data) {
+    for (const [index, { key, newKey, value, description }] of data.entries()) {
       if (!isValidSecretKey(key)) {
         const error: ApiError<'invalid_key'> = { code: 'invalid_key' }
         return { data: null, error }
@@ -145,6 +145,13 @@ function envSecretsAPI(httpClient: HttpClient) {
       if (newKey === undefined && value === undefined && description === undefined) {
         const error: ApiError<'missing_properties'> = { code: 'missing_properties' }
 
+        return { data: null, error }
+      }
+
+      const duplicateNewKey = data.some((d, i) => i !== index && d.newKey === newKey)
+
+      if (duplicateNewKey) {
+        const error: ApiError<'duplicate_new_keys'> = { code: 'duplicate_new_keys' }
         return { data: null, error }
       }
     }
