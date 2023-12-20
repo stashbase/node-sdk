@@ -16,7 +16,18 @@ type UpdateSecretsError =
       | 'environment_not_found'
       | 'duplicate_new_keys'
     >
-  | ApiError<'new_keys_already_exist', { keys: Uppercase<string> }>
+  | AlreadyExistApiError
+
+type AlreadyExistApiError = ApiError<
+  'new_keys_already_exist',
+  {
+    /**
+     * @summary Secret key that already exist
+     * @returns Uppercase Uppercase<string>
+     * */
+    alreadyExist: Uppercase<string>
+  }
+>
 
 export interface UpdateSecretsArgs {
   project: string
