@@ -8,7 +8,20 @@ type UpdateSecretsResponseData = {
   notFoundKeys?: Array<Uppercase<string>>
 }
 
-type UpdateSecretsError = ApiError<'no_values_provided' | 'missing_properties'>
+type UpdateSecretsError =
+  | ApiError<'no_values_provided' | 'missing_properties' | 'duplicate_new_keys'>
+  | AlreadyExistApiError
+
+type AlreadyExistApiError = ApiError<
+  'new_keys_already_exist',
+  {
+    /**
+     * @summary Secret key that already exist
+     * @returns Uppercase Uppercase<string>
+     * */
+    alreadyExist: Uppercase<string>
+  }
+>
 
 export type UpdateSecretsData = Array<
   {
