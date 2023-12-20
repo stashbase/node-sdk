@@ -131,7 +131,7 @@ export function secretsAPI(httpClient: HttpClient) {
     }
 
     // validate
-    for (const { key, newKey, value, description } of data) {
+    for (const [index, { key, newKey, value, description }] of data.entries()) {
       if (!isValidSecretKey(key)) {
         const error: ApiError<'invalid_key'> = { code: 'invalid_key' }
         return { data: null, error }
@@ -149,13 +149,13 @@ export function secretsAPI(httpClient: HttpClient) {
 
         return { data: null, error }
       }
-    }
 
-    const newKeys = data?.filter((s) => s.newKey).map((s) => s.newKey)
-    const uniqueNewKeys = new Set(newKeys)
+      const duplicateNewKey = data.some((d, i) => i !== index && d.newKey === newKey)
 
-    if (uniqueNewKeys.size < newKeys.length) {
-      const error: ApiError<'duplicate_new_keys'> = { code: 'duplicate_new_keys' }
+      if (duplicateNewKey) {
+        const error: ApiError<'duplicate_new_keys'> = { code: 'duplicate_new_keys' }
+        return { data: null, error }
+      }
     }
 
     return await updateSecrets(httpClient, args)
