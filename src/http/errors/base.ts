@@ -11,11 +11,14 @@ export function createApiErrorFromResponse<T>(responseData: {
     responseData?.code === 'FST_ERR_VALIDATION' &&
     responseData?.statusCode === 400
   ) {
-    return <T>{ code: 'bad_request', details: responseData?.error?.details }
+    return <T>{ code: 'bad_request' }
   }
 
   if (responseData && responseData.error) {
-    return <T>{ code: responseData.error.code, details: responseData.error.details }
+    return <T>{
+      code: responseData?.error?.code,
+      details: responseData?.error?.details ?? undefined,
+    }
   }
 
   // If no error data is present, return a default APIErroR
