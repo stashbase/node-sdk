@@ -37,7 +37,8 @@ export function createHttpClient(args: {
   }
 
   if (workspaceToken) {
-    headers['x-admin-token'] = workspaceToken
+    // headers['x-admin-token'] = workspaceToken
+    headers['x-workspace-token'] = workspaceToken
   }
 
   async function get<T>(args: { path: string; query?: { [key: string]: string } }): Promise<T> {
