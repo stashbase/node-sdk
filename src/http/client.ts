@@ -27,17 +27,18 @@ export function createHttpClient(args: {
     authorization: { envToken, workspaceToken },
   } = args
 
-  let token = envToken
-    ? `EnvToken ${envToken}`
-    : workspaceToken
-    ? `WorkspaceToken ${workspaceToken}`
-    : ''
-
   const headers = {
-    Authorization: token,
     'Content-Type': 'application/json',
     'User-Agent': 'EnvEase SDK/0.0.1',
   } as Record<string, string>
+
+  if (envToken) {
+    headers['x-env-token'] = envToken
+  }
+
+  if (workspaceToken) {
+    headers['x-admin-token'] = workspaceToken
+  }
 
   async function get<T>(args: { path: string; query?: { [key: string]: string } }): Promise<T> {
     let url = `${baseURL}${basePath === '' ? '' : `/${basePath}`}${args.path ?? ''}`
