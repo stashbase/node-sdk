@@ -14,7 +14,7 @@ function environmentsAPI(httpClient: HttpClient) {
   /**
    * @summary Load environment
    * @description Load environment and inject the secrets to the process
-   * @param key options Options
+   * @param key options print keys or key-values table with the secrets
    * @returns null
    * */
   async function load(options?: LoadEnvironmentOpts) {
