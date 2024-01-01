@@ -1,11 +1,6 @@
 import Table from 'cli-table3'
 
-export function printSecretsTable(args: {
-  secretsObj?: Record<string, string>
-  array?: Array<{ key: string; value: string }>
-}) {
-  const { array, secretsObj } = args
-
+function printKeyValueTable(secretsObj: Record<string, string>) {
   const table = new Table({
     head: ['Key', 'Value'],
     // colWidths: [40, 40],
@@ -16,15 +11,31 @@ export function printSecretsTable(args: {
     },
   })
 
-  if (secretsObj) {
-    for (const [key, value] of Object.entries(secretsObj)) {
-      table.push([key, value])
-    }
-  } else if (array) {
-    for (const { key, value } of array) {
-      table.push([key, value])
-    }
+  for (const [key, value] of Object.entries(secretsObj)) {
+    table.push([key, value])
   }
 
   console.log(table.toString())
+}
+
+function printKeyTable(secretsObj: Record<string, string>) {
+  const table = new Table({
+    head: ['Key'],
+    wordWrap: true,
+    style: {
+      compact: true,
+      head: ['cyan'],
+    },
+  })
+
+  for (const [key, _] of Object.entries(secretsObj)) {
+    table.push([key])
+  }
+
+  console.log(table.toString())
+}
+
+export const printSecretsTable = {
+  keys: printKeyTable,
+  keyValues: printKeyValueTable,
 }
