@@ -8,7 +8,8 @@ type SecretKeyValueRecord = Record<string, string>
 
 export interface LoadEnvironmentOpts {
   enabled?: boolean
-  printTable?: boolean
+  // printTable?: boolean
+  print?: 'key-value' | 'key' | 'none'
 }
 
 // type LoadEnvironmentError = ApiError<EnvironmentApiError>
@@ -18,7 +19,7 @@ async function loadEnvironment(
   client: HttpClient,
   options?: LoadEnvironmentOpts
 ): Promise<ApiResponse<null, LoadEnvironmentError>> {
-  const printTable = options?.printTable
+  const printType = options?.print
 
   try {
     const data = await client.get<{
@@ -46,12 +47,16 @@ async function loadEnvironment(
 
     console.log(`\nLoaded environment: ${name} (${data?.type})`)
 
-    if (printTable) {
-      printSecretsTable({ secretsObj: secrets })
+    if (printType === 'key' || printType === 'key-value') {
+      if (printType === 'key') {
+        printSecretsTable.keys(secrets)
+      } else {
+        printSecretsTable.keyValues(secrets)
+      }
     }
 
     return { data: null, error: null }
-  } catch (error) {
+  } catch (error: any) {
     console.log('\nFailed to load environment')
     console.log(error)
 
