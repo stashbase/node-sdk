@@ -9,6 +9,7 @@ import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
 import { getSecret } from './handlers/secrets/get'
 import { isValidSecretKey } from '../../utils/inputValidation'
 import { SetSecretsData, setSecrets } from './handlers/secrets/set'
+import { loadEnvironmentOrThrow } from './handlers/loadOrThrow'
 
 function environmentsAPI(httpClient: HttpClient) {
   /**
@@ -26,6 +27,20 @@ function environmentsAPI(httpClient: HttpClient) {
   }
 
   /**
+   * @summary Load environment
+   * @description Load environment and inject the secrets to the process, throws an error if it fails
+   * @param key options print keys or key-values table with the secrets
+   * @returns null
+   * */
+  async function loadOrThrow(options?: LoadEnvironmentOpts) {
+    if (options?.enabled === false) {
+      return { data: null, error: null }
+    }
+
+    return await loadEnvironmentOrThrow(httpClient, options)
+  }
+
+  /**
    * @summary Get environment
    * @description Environment
    * @param key options Options (return secrets)
@@ -39,6 +54,7 @@ function environmentsAPI(httpClient: HttpClient) {
 
   return {
     load,
+    loadOrThrow,
     get,
     secrets,
   }
