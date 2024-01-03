@@ -5,7 +5,7 @@ test('Load specific env with env token and inject the variables into the process
   const envApi = createEnvApi('-YSbVSq5kzmc1EgzAO9SThUXFQLjb6R1')
 
   await envApi.load({
-    printTable: true,
+    print: 'key-value',
   })
 
   console.log(process.env.JWT_SECRET_KEY)
