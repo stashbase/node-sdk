@@ -4,7 +4,7 @@ import { ApiError, ApiResponse } from '../../../../http/response'
 
 type CreateProjectResponseData = null
 
-type CreateSecretsError = ApiError<'project_already_exists'>
+type CreateSecretsError = ApiError<'project_already_exists' | 'project_limit_reached'>
 
 export type CreateProjectData = {
   name: string
