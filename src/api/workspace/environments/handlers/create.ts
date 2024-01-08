@@ -10,7 +10,9 @@ export interface CreateEnvironmentArgs {
   type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
 }
 
-type CreateEnvironmentError = ApiError<'project_not_found' | 'environment_already_exists'>
+type CreateEnvironmentError = ApiError<
+  'project_not_found' | 'environment_already_exists' | 'environment_limit_reached'
+>
 
 async function createEnvironment(
   client: HttpClient,
