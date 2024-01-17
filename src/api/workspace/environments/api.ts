@@ -3,6 +3,7 @@ import { ApiError } from '../../../http/response'
 import { isValidEnvironmentName, isValidProjectName } from '../../../utils/inputValidation'
 import { CreateEnvironmentArgs, createEnvironment } from './handlers/create'
 import { DeleteEnvironmentArgs, deleteEnvironment } from './handlers/delete'
+import { DuplicateEnvironmentArgs, duplicateEnvironment } from './handlers/duplicate'
 import { GetEnvironmentArgs, GetEnvironmentOpts, getEnvironment } from './handlers/get'
 import { ListEnvironmentArgs, listEnvironments } from './handlers/list'
 import { LockEnvironmentArgs, lockUnlockEnvironment } from './handlers/lock'
@@ -123,6 +124,38 @@ export function environmentsAPI(httpClient: HttpClient) {
   }
 
   /**
+   * @summary Duplicate environment
+   * @description Environment
+   * @param args duplicate argumens;
+   * @returns null
+   * */
+  async function duplicate(args: DuplicateEnvironmentArgs) {
+    const { project, duplicateName, name } = args
+
+    const namesError = checkValidProjectEnv(project, name)
+
+    if (namesError) {
+      return { data: null, error: namesError }
+    }
+
+    if (!isValidEnvironmentName(duplicateName)) {
+      const error: ApiError<'invalid_environment_name'> = { code: 'invalid_environment_name' }
+
+      return { data: null, error }
+    }
+
+    if (name === duplicateName) {
+      const error: ApiError<'duplicate_environment_name'> = {
+        code: 'duplicate_environment_name',
+      }
+
+      return { data: null, error }
+    }
+
+    return await duplicateEnvironment(httpClient, args)
+  }
+
+  /**
    * @summary Change environment typ
    * @description Environment
    * @param args updateType argumens;
@@ -181,6 +214,7 @@ export function environmentsAPI(httpClient: HttpClient) {
     list,
     create,
     rename,
+    duplicate,
     updateType,
     lock,
     unlock,
