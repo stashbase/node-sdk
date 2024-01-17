@@ -5,9 +5,9 @@ function isAlphanumericWithHyphens(inputString: string): boolean {
 }
 
 function isAlphanumericWithHyphensAndUnderscores(inputString: string): boolean {
-  const pattern = /[^a-zA-Z0-9-]/
+  const pattern = /^[a-zA-Z0-9_-]*$/
 
-  return !pattern.test(inputString)
+  return pattern.test(inputString)
 }
 
 const isValidProjectName = (projectName: string) =>
@@ -30,6 +30,7 @@ function isAlphanumericWithUnderscores(inputString: string): boolean {
 const isValidEnvironmentName = (environmentName: string) =>
   isAlphanumericWithHyphensAndUnderscores(environmentName) && environmentName.length >= 2
 
+//
 function isAlphanumericUppercaseWithUnderscore(inputString: string): boolean {
   const pattern = /[^A-Z0-9_]/
 
