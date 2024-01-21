@@ -168,7 +168,13 @@ export function secretsAPI(httpClient: HttpClient) {
    * @returns deletedCount, notFound
    * */
   async function remove(args: DeleteSecretsArgs) {
-    const { keys } = args
+    const { keys, project, environment } = args
+
+    const namesError = checkValidProjectEnv(project, environment)
+
+    if (namesError) {
+      return { data: null, error: namesError }
+    }
 
     if (keys.length === 0) {
       const error: ApiError<'no_keys_provided'> = { code: 'no_keys_provided' }
