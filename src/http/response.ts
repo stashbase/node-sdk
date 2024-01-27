@@ -5,13 +5,18 @@
  */
 export type ApiError<T = void, K extends string | object | void = void> = T extends void
   ? {
-      code: 'unauthorized' | 'token_expired' | 'missing_permission' | 'server_error' | 'bad_request'
+      code:
+        | 'unauthorized'
+        | 'api_key_expired'
+        | 'missing_permission'
+        | 'server_error'
+        | 'bad_request'
     }
   : {
       code:
         | T
         | 'unauthorized'
-        | 'token_expired'
+        | 'api_key_expired'
         | 'missing_permission'
         | 'server_error'
         | 'bad_request'

@@ -7,8 +7,11 @@ import { createHttpClient } from './http/client'
 
 // Create an SDK object that encapsulates functionality
 // ROOT
-export function createEnvEase(workspaceToken: string) {
-  const client = createHttpClient({ basePath: '', authorization: { workspaceToken } })
+export function createEnvEase(workspaceApiKey: string) {
+  const client = createHttpClient({
+    basePath: '',
+    authorization: { workspaceApiKey },
+  })
 
   const projects = projectsAPI(client)
   const environments = envApi(client)
@@ -22,9 +25,12 @@ export function createEnvEase(workspaceToken: string) {
 }
 
 // only for env with env token
-export function createEnvApi(envToken: string) {
-  console.log(envToken)
-  const client = createHttpClient({ basePath: 'environments', authorization: { envToken } })
+export function createEnvApi(envApiKey: string) {
+  console.log(envApiKey)
+  const client = createHttpClient({
+    basePath: 'environments',
+    authorization: { envApiKey },
+  })
 
   return environmentsAPI(client)
 }
