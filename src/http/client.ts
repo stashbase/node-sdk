@@ -18,13 +18,13 @@ export function createHttpClient(args: {
   basePath: BasePath
   version?: string
   authorization: {
-    envToken?: string
-    workspaceToken?: string
+    envApiKey?: string
+    workspaceApiKey?: string
   }
 }): HttpClient {
   const {
     basePath,
-    authorization: { envToken, workspaceToken },
+    authorization: { envApiKey, workspaceApiKey },
   } = args
 
   const headers = {
@@ -32,13 +32,13 @@ export function createHttpClient(args: {
     'User-Agent': 'EnvEase SDK/0.0.1',
   } as Record<string, string>
 
-  if (envToken) {
-    headers['x-env-token'] = envToken
+  if (envApiKey) {
+    headers['x-env-key'] = envApiKey
   }
 
-  if (workspaceToken) {
+  if (workspaceApiKey) {
     // headers['x-admin-token'] = workspaceToken
-    headers['x-workspace-token'] = workspaceToken
+    headers['x-workspace-key'] = workspaceApiKey
   }
 
   async function get<T>(args: { path: string; query?: { [key: string]: string } }): Promise<T> {
