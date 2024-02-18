@@ -22,6 +22,12 @@ export type Event = {
   created: number
 
   /**
+   * @summary Test mode
+   * @description Whether the event triggered in test mode
+   */
+  testMode: boolean
+
+  /**
    * @summary Event data
    */
   data: {
