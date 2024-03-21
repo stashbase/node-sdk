@@ -1,7 +1,6 @@
-function isAlphanumericWithHyphens(inputString: string): boolean {
-  const pattern = /[^a-zA-Z0-9-]/
-
-  return !pattern.test(inputString)
+export function containsMaxOneDash(str: string) {
+  // return /^(?!-$)(?!.*--)[^-]*(?:-(?!$)[^-]*)?$/.test(str);
+  return /^(?!-)(?!.*--)[^-]*(?:-(?!$)[^-]*)?$/.test(str)
 }
 
 function isAlphanumericWithHyphensAndUnderscores(inputString: string): boolean {
@@ -10,8 +9,9 @@ function isAlphanumericWithHyphensAndUnderscores(inputString: string): boolean {
   return pattern.test(inputString)
 }
 
+// TODO: validate max length
 const isValidProjectName = (projectName: string) =>
-  isAlphanumericWithHyphens(projectName) && projectName.length >= 2
+  isAlphanumericWithHyphensAndUnderscores(projectName) && projectName.length >= 2
 
 //
 
@@ -20,15 +20,23 @@ const isValidProjectName = (projectName: string) =>
 //
 //   return !pattern.test(inputString)
 // }
-
-function isAlphanumericWithUnderscores(inputString: string): boolean {
-  const pattern = /[^a-zA-Z0-9_]/
-
-  return !pattern.test(inputString)
-}
+//
+// function isAlphanumericWithHyphens(inputString: string): boolean {
+//   const pattern = /[^a-zA-Z0-9-]/
+//
+//   return !pattern.test(inputString)
+// }
+//
+// function isAlphanumericWithUnderscores(inputString: string): boolean {
+//   const pattern = /[^a-zA-Z0-9_]/
+//
+//   return !pattern.test(inputString)
+// }
 
 const isValidEnvironmentName = (environmentName: string) =>
-  isAlphanumericWithHyphensAndUnderscores(environmentName) && environmentName.length >= 2
+  environmentName.length >= 2 &&
+  containsMaxOneDash(environmentName) &&
+  isAlphanumericWithHyphensAndUnderscores(environmentName)
 
 //
 function isAlphanumericUppercaseWithUnderscore(inputString: string): boolean {
