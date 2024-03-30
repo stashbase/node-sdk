@@ -164,7 +164,9 @@ function envSecretsAPI(httpClient: HttpClient) {
         return { data: null, error }
       }
 
-      const duplicateNewKey = data.some((d, i) => i !== index && d.newKey === newKey)
+      const duplicateNewKey = data.some(
+        (d, i) => i !== index && d.newKey === newKey && d?.newKey !== undefined
+      )
 
       if (duplicateNewKey) {
         const error: ApiError<'duplicate_new_keys'> = { code: 'duplicate_new_keys' }
