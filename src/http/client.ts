@@ -47,7 +47,7 @@ export function createHttpClient(args: {
     if (args.query) {
       const query = args.query
 
-      let queryString = Object.keys(query)
+      const queryString = Object.keys(query)
         .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(query[k]))
         .join('&')
 
@@ -99,7 +99,7 @@ export function createHttpClient(args: {
     path: string
     data?: { [key: string]: any } | any[]
   }): Promise<T> {
-    let reqHeaders = headers
+    const reqHeaders = headers
 
     if (!args.data) {
       delete reqHeaders['Content-Type']
@@ -120,7 +120,7 @@ export function createHttpClient(args: {
     if (args.query) {
       const query = args.query
 
-      let queryString = Object.keys(query)
+      const queryString = Object.keys(query)
         .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(query[k]))
         .join('&')
 
