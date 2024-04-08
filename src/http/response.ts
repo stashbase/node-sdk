@@ -6,6 +6,7 @@
 export type ApiError<T = void, K extends string | object | void = void> = T extends void
   ? {
       code:
+        | 'too_many_requests'
         | 'unauthorized'
         | 'api_key_expired'
         | 'missing_permission'
@@ -15,6 +16,7 @@ export type ApiError<T = void, K extends string | object | void = void> = T exte
   : {
       code:
         | T
+        | 'too_many_requests'
         | 'unauthorized'
         | 'api_key_expired'
         | 'missing_permission'
