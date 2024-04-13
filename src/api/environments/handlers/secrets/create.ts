@@ -7,7 +7,7 @@ type CreateSecretsResponseData = {
   duplicateKeys?: Array<Uppercase<string>>
 }
 
-type CreateSecretsError = ApiError
+type CreateSecretsError = ApiError<'duplicate_keys'>
 
 export type CreateSecretsData = Array<{
   key: Uppercase<string>
@@ -27,7 +27,6 @@ async function createSecrets(
 
     return { data: secrets, error: null }
   } catch (error: any) {
-    console.log('Error: ', error?.error)
     const apiError = createApiErrorFromResponse<CreateSecretsError>(error)
 
     return { data: null, error: apiError }
