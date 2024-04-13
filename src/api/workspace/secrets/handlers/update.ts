@@ -15,6 +15,7 @@ type UpdateSecretsError =
       | 'project_not_found'
       | 'environment_not_found'
       | 'duplicate_new_keys'
+      | 'duplicate_keys'
     >
   | AlreadyExistApiError
 
