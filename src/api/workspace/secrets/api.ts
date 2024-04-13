@@ -150,7 +150,16 @@ export function secretsAPI(httpClient: HttpClient) {
         return { data: null, error }
       }
 
-      const duplicateNewKey = data.some((d, i) => i !== index && d.newKey === newKey)
+      const duplicateKey = data.some((d, i) => i !== index && d.key === key && key !== undefined)
+
+      if (duplicateKey) {
+        const error: ApiError<'duplicate_keys'> = { code: 'duplicate_keys' }
+        return { data: null, error }
+      }
+
+      const duplicateNewKey = data.some(
+        (d, i) => i !== index && d.newKey === newKey && newKey !== undefined
+      )
 
       if (duplicateNewKey) {
         const error: ApiError<'duplicate_new_keys'> = { code: 'duplicate_new_keys' }
