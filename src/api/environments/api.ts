@@ -105,6 +105,15 @@ function envSecretsAPI(httpClient: HttpClient) {
       return { data: null, error }
     }
 
+    const duplicateKey = data?.some((d, i) =>
+      data?.some((d2, j) => d.key === d2.key && d.key !== undefined && i !== j)
+    )
+
+    if (duplicateKey) {
+      const error: ApiError<'duplicate_keys'> = { code: 'duplicate_keys' }
+      return { data: null, error }
+    }
+
     return await createSecrets(httpClient, data)
   }
 

@@ -8,7 +8,7 @@ type CreateSecretsResponseData = {
 }
 
 type CreateSecretsError = ApiError<
-  'no_values_provided' | 'project_not_found' | 'environment_not_found'
+  'no_values_provided' | 'project_not_found' | 'environment_not_found' | 'duplicate_keys'
 >
 
 export interface CreateSecretsArgs {
