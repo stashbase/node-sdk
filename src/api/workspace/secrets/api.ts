@@ -60,9 +60,9 @@ export function secretsAPI(httpClient: HttpClient) {
    * @returns createdCount, duplicateKeys
    * */
   async function create(args: CreateSecretsArgs) {
-    const { project, environment } = args
+    const { project, environment, data } = args
 
-    if (args?.data?.length === 0) {
+    if (data?.length === 0) {
       const error: ApiError<'no_values_provided'> = { code: 'no_values_provided' }
 
       return { data: null, error }
@@ -73,11 +73,20 @@ export function secretsAPI(httpClient: HttpClient) {
       return { data: null, error: namesError }
     }
 
-    const invalidKey = args.data.find(({ key }) => !isValidSecretKey(key))
+    const invalidKey = data.find(({ key }) => !isValidSecretKey(key))
 
     if (invalidKey) {
       const error: ApiError<'invalid_secret_key_format'> = { code: 'invalid_secret_key_format' }
 
+      return { data: null, error }
+    }
+
+    const duplicateKey = data?.some((d, i) =>
+      data?.some((d2, j) => d.key === d2.key && d.key !== undefined && i !== j)
+    )
+
+    if (duplicateKey) {
+      const error: ApiError<'duplicate_keys'> = { code: 'duplicate_keys' }
       return { data: null, error }
     }
 
