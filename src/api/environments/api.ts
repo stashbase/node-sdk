@@ -9,7 +9,6 @@ import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
 import { getSecret } from './handlers/secrets/get'
 import { isValidSecretKey } from '../../utils/inputValidation'
 import { SetSecretsData, setSecrets } from './handlers/secrets/set'
-import { loadEnvironmentOrThrow } from './handlers/loadOrThrow'
 
 function environmentsAPI(httpClient: HttpClient) {
   /**
@@ -37,7 +36,11 @@ function environmentsAPI(httpClient: HttpClient) {
       return { data: null, error: null }
     }
 
-    return await loadEnvironmentOrThrow(httpClient, options)
+    const { error } = await loadEnvironment(httpClient, options)
+
+    if (error) {
+      throw new Error(error.code)
+    }
   }
 
   /**
