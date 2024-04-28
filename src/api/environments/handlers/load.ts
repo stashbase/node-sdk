@@ -4,7 +4,7 @@ import { HttpClient } from '../../../http/client'
 import { ApiError, ApiResponse } from '../../../http/response'
 import { createApiErrorFromResponse } from '../../../http/errors/base'
 
-type SecretKeyValueRecord = Record<string, string>
+type SecretKeyValues = Array<{ key: string; value: string }>
 
 export interface LoadEnvironmentOpts {
   enabled?: boolean
@@ -25,22 +25,27 @@ async function loadEnvironment(
     const data = await client.get<{
       name: string
       type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
-      secrets: SecretKeyValueRecord
+      secrets: SecretKeyValues
     }>({
       path: '/load',
     })
 
     const { name, secrets } = data
 
-    if (Object.keys(secrets).length === 0) {
+    if (secrets.length === 0) {
       console.log(`\nLoaded environment: ${name}`)
       console.log(`No secrets found`)
 
       return { data: null, error: null }
     }
 
+    const secretsObj = (secrets ?? []).reduce((obj: { [key: string]: string }, item) => {
+      obj[item.key] = item.value
+      return obj
+    }, {})
+
     const dotenv = {
-      parsed: secrets,
+      parsed: secretsObj,
     }
 
     dotenvExpand.expand(dotenv)

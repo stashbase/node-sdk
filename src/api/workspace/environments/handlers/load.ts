@@ -4,7 +4,7 @@ import { printSecretsTable } from '../../../../utils/table'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
 import { ApiError, ApiResponse } from '../../../../http/response'
 
-type SecretKeyValueRecord = Record<string, string>
+type SecretKeyValues = Array<{ key: string; value: string }>
 
 export interface LoadEnvironmentArgs {
   project: string
@@ -19,7 +19,7 @@ type LoadEnvironmentError = ApiError
 type loadEnvironmentResponse = {
   name: string
   type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
-  secrets: SecretKeyValueRecord
+  secrets: SecretKeyValues
 }
 
 async function loadEnvironment(
@@ -35,15 +35,20 @@ async function loadEnvironment(
 
     const { name, secrets } = data
 
-    if (Object.keys(secrets).length === 0) {
+    if (secrets.length === 0) {
       console.log(`\nLoaded environment: ${name} (${data?.type})`)
       console.log(`No secrets found`)
 
       return { data: null, error: null }
     }
 
+    const secretsObj = (secrets ?? []).reduce((obj: { [key: string]: string }, item) => {
+      obj[item.key] = item.value
+      return obj
+    }, {})
+
     const dotenv = {
-      parsed: secrets,
+      parsed: secretsObj,
     }
 
     dotenvExpand.expand(dotenv)
