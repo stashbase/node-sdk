@@ -6,6 +6,7 @@ import { DeleteEnvironmentArgs, deleteEnvironment } from './handlers/delete'
 import { DuplicateEnvironmentArgs, duplicateEnvironment } from './handlers/duplicate'
 import { GetEnvironmentArgs, GetEnvironmentOpts, getEnvironment } from './handlers/get'
 import { ListEnvironmentArgs, listEnvironments } from './handlers/list'
+import { LoadEnvironmentArgs, loadEnvironment } from './handlers/load'
 import { LockEnvironmentArgs, lockUnlockEnvironment } from './handlers/lock'
 import { RenameEnvironmentArgs, renameEnvironment } from './handlers/rename'
 import { UpdateEnvironmentTypeArgs, updateEnvironmentType } from './handlers/updateType'
@@ -45,6 +46,39 @@ export function environmentsAPI(httpClient: HttpClient) {
     }
 
     return await getEnvironment(httpClient, args, options)
+  }
+
+  /**
+   * @summary Load environment
+   * @description Load environment (print name and type) and inject the secrets to the process, throws an error if it fails
+   * @param key options print keys or key-values table with the secrets
+   * @returns null
+   * */
+  async function loadOrThrow(args: LoadEnvironmentArgs) {
+    if (args?.enabled === false) {
+      return { data: null, error: null }
+    }
+
+    const response = await loadEnvironment(httpClient, args)
+
+    // throws only error code
+    if (response.error) {
+      throw new Error(response.error.code)
+    }
+  }
+
+  /**
+   * @summary Load environment
+   * @description Load environment (print name and type) and inject the secrets to the process
+   * @param key options print keys or key-values table with the secrets
+   * @returns null
+   * */
+  async function load(args: LoadEnvironmentArgs) {
+    if (args?.enabled === false) {
+      return { data: null, error: null }
+    }
+
+    return await loadEnvironment(httpClient, args)
   }
 
   /**
@@ -219,6 +253,8 @@ export function environmentsAPI(httpClient: HttpClient) {
 
   return {
     get,
+    load,
+    loadOrThrow,
     list,
     create,
     rename,
