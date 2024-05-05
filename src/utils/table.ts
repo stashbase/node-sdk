@@ -1,6 +1,6 @@
 import Table from 'cli-table3'
 
-function printKeyValueTable(secretsObj: Record<string, string>) {
+function printKeyValueTable(secrets: Array<{ key: string; value: string }>) {
   const table = new Table({
     head: ['Key', 'Value'],
     // colWidths: [40, 40],
@@ -11,14 +11,14 @@ function printKeyValueTable(secretsObj: Record<string, string>) {
     },
   })
 
-  for (const [key, value] of Object.entries(secretsObj)) {
+  for (const { key, value } of secrets) {
     table.push([key, value])
   }
 
   console.log(table.toString())
 }
 
-function printKeyTable(secretsObj: Record<string, string>) {
+function printKeyTable(secrets: Array<{ key: string; value: string }>) {
   const table = new Table({
     head: ['Key'],
     wordWrap: true,
@@ -28,7 +28,7 @@ function printKeyTable(secretsObj: Record<string, string>) {
     },
   })
 
-  for (const [key, _] of Object.entries(secretsObj)) {
+  for (const { key } of secrets) {
     table.push([key])
   }
 
