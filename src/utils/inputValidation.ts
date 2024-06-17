@@ -3,6 +3,14 @@ export function containsMaxOneDash(str: string) {
   return /^(?!-)(?!.*--)[^-]*(?:-(?!$)[^-]*)?$/.test(str)
 }
 
+export const startsWithNumber = (str: string) => {
+  if (/^[0-9]/.test(str)) {
+    return true
+  }
+
+  return false
+}
+
 function isAlphanumericWithHyphensAndUnderscores(inputString: string): boolean {
   const pattern = /^[a-zA-Z0-9_-]*$/
 
@@ -46,6 +54,6 @@ function isAlphanumericUppercaseWithUnderscore(inputString: string): boolean {
 }
 
 const isValidSecretKey = (key: string) =>
-  isAlphanumericUppercaseWithUnderscore(key) && key.length >= 2
+  isAlphanumericUppercaseWithUnderscore(key) && !startsWithNumber(key) && key.length >= 2
 
 export { isValidProjectName, isValidEnvironmentName, isValidSecretKey }
