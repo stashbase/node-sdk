@@ -27,7 +27,7 @@ export function secretsAPI(httpClient: HttpClient) {
     }
 
     if (!isValidSecretKey(key)) {
-      const error: ApiError<'invalid_secret_key_format'> = { code: 'invalid_secret_key_format' }
+      const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
 
       return { data: null, error }
     }
@@ -76,7 +76,7 @@ export function secretsAPI(httpClient: HttpClient) {
     const invalidKey = data.find(({ key }) => !isValidSecretKey(key))
 
     if (invalidKey) {
-      const error: ApiError<'invalid_secret_key_format'> = { code: 'invalid_secret_key_format' }
+      const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
 
       return { data: null, error }
     }
@@ -116,7 +116,7 @@ export function secretsAPI(httpClient: HttpClient) {
     const invalidKey = args.data.find(({ key }) => !isValidSecretKey(key))
 
     if (invalidKey) {
-      const error: ApiError<'invalid_secret_key_format'> = { code: 'invalid_secret_key_format' }
+      const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
 
       return { data: null, error }
     }
@@ -142,7 +142,7 @@ export function secretsAPI(httpClient: HttpClient) {
     // validate
     for (const [index, { key, newKey, value, description }] of data.entries()) {
       if (!isValidSecretKey(key)) {
-        const error: ApiError<'invalid_secret_key_format'> = { code: 'invalid_secret_key_format' }
+        const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
         return { data: null, error }
       }
 
@@ -203,7 +203,7 @@ export function secretsAPI(httpClient: HttpClient) {
     const invalidKey = keys.find((key) => !isValidSecretKey(key))
 
     if (invalidKey) {
-      const error: ApiError<'invalid_secret_key_format'> = { code: 'invalid_secret_key_format' }
+      const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
 
       return { data: null, error }
     }
