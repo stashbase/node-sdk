@@ -54,6 +54,9 @@ function isAlphanumericUppercaseWithUnderscore(inputString: string): boolean {
 }
 
 const isValidSecretKey = (key: string) =>
-  isAlphanumericUppercaseWithUnderscore(key) && !startsWithNumber(key) && key.length >= 2
+  key.length >= 2 &&
+  key.length < 255 &&
+  isAlphanumericUppercaseWithUnderscore(key) &&
+  !startsWithNumber(key)
 
 export { isValidProjectName, isValidEnvironmentName, isValidSecretKey }
