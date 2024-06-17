@@ -72,7 +72,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * */
   async function get(key: string) {
     if (!isValidSecretKey(key)) {
-      const error: ApiError<'invalid_secret_key_format'> = { code: 'invalid_secret_key_format' }
+      const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
       return { data: null, error }
     }
     return getSecret(httpClient, key)
@@ -104,7 +104,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     const invalidKey = data.find(({ key }) => !isValidSecretKey(key))
 
     if (invalidKey) {
-      const error: ApiError<'invalid_secret_key_format'> = { code: 'invalid_secret_key_format' }
+      const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
       return { data: null, error }
     }
 
@@ -136,7 +136,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     const invalidKey = data.find(({ key }) => !isValidSecretKey(key))
 
     if (invalidKey) {
-      const error: ApiError<'invalid_secret_key_format'> = { code: 'invalid_secret_key_format' }
+      const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
       return { data: null, error }
     }
 
@@ -159,7 +159,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     // validate
     for (const [index, { key, newKey, value, description }] of data.entries()) {
       if (!isValidSecretKey(key)) {
-        const error: ApiError<'invalid_secret_key_format'> = { code: 'invalid_secret_key_format' }
+        const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
         return { data: null, error }
       }
 
@@ -205,7 +205,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     const invalidKey = keys.find((key) => !isValidSecretKey(key))
 
     if (invalidKey) {
-      const error: ApiError<'invalid_secret_key_format'> = { code: 'invalid_secret_key_format' }
+      const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
       return { data: null, error }
     }
 
