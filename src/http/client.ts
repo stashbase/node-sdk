@@ -1,6 +1,6 @@
 import fetchWithRetry from './retry'
 
-const baseURL: string = 'http://0.0.0.0:8080/api/v1/sdk'
+const baseURL: string = 'http://0.0.0.0:5000/v1/sdk'
 
 type BasePath = 'environments' | 'projects' | ''
 
