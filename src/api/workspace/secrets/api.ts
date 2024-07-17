@@ -1,6 +1,10 @@
 import { HttpClient } from '../../../http/client'
 import { ApiError } from '../../../http/response'
-import { isValidSecretKey } from '../../../utils/inputValidation'
+import {
+  isValidSecretKey,
+  validateCreateSecretsInput,
+  validateSetSecretsInput,
+} from '../../../utils/inputValidation'
 import { checkValidProjectEnv } from '../environments/api'
 import { CreateSecretsArgs, createSecrets } from './handlers/create'
 import { DeleteSecretsArgs, deleteSecrets } from './handlers/delete'
@@ -62,32 +66,16 @@ export function secretsAPI(httpClient: HttpClient) {
   async function create(args: CreateSecretsArgs) {
     const { project, environment, data } = args
 
-    if (data?.length === 0) {
-      const error: ApiError<'no_values_provided'> = { code: 'no_values_provided' }
-
-      return { data: null, error }
-    }
     const namesError = checkValidProjectEnv(project, environment)
 
     if (namesError) {
       return { data: null, error: namesError }
     }
 
-    const invalidKey = data.find(({ key }) => !isValidSecretKey(key))
+    const validationError = validateCreateSecretsInput(data)
 
-    if (invalidKey) {
-      const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
-
-      return { data: null, error }
-    }
-
-    const duplicateKey = data?.some((d, i) =>
-      data?.some((d2, j) => d.key === d2.key && d.key !== undefined && i !== j)
-    )
-
-    if (duplicateKey) {
-      const error: ApiError<'duplicate_keys'> = { code: 'duplicate_keys' }
-      return { data: null, error }
+    if (validationError) {
+      return { data: null, error: validationError }
     }
 
     return await createSecrets(httpClient, args)
@@ -100,25 +88,18 @@ export function secretsAPI(httpClient: HttpClient) {
    * @returns null
    * */
   async function set(args: SetSecretsArgs) {
-    const { project, environment } = args
+    const { project, environment, data } = args
 
-    if (args?.data?.length === 0) {
-      const error: ApiError<'no_values_provided'> = { code: 'no_values_provided' }
-
-      return { data: null, error }
-    }
     const namesError = checkValidProjectEnv(project, environment)
 
     if (namesError) {
       return { data: null, error: namesError }
     }
 
-    const invalidKey = args.data.find(({ key }) => !isValidSecretKey(key))
+    const validationError = validateSetSecretsInput(data)
 
-    if (invalidKey) {
-      const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
-
-      return { data: null, error }
+    if (validationError) {
+      return { data: null, error: validationError }
     }
 
     return await setSecrets(httpClient, args)
