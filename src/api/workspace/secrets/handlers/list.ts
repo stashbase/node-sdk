@@ -18,6 +18,10 @@ export interface ListSecretsArgs {
    * return secret description
    * */
   description?: boolean
+  /**
+   * expand all refered secrets to their values
+   * */
+  expandRefs?: boolean
 }
 
 // export interface ListSecretsOpts {
@@ -32,10 +36,20 @@ async function listSecrets(
   const { project, environment } = args
   const returnDescription = args?.description
 
+  const query: Record<string, string> = {}
+
+  if (returnDescription) {
+    query['description'] = 'true'
+  }
+
+  if (args?.expandRefs) {
+    query['expand-refs'] = 'true'
+  }
+
   try {
     const secrets = await envClient.get<SecretsData>({
       path: `/projects/${project}/environments/${environment}/secrets`,
-      query: returnDescription ? { description: 'true' } : undefined,
+      query,
     })
 
     return { data: secrets, error: null }
