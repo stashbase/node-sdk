@@ -10,6 +10,7 @@ export interface LoadEnvironmentOpts {
   enabled?: boolean
   // printTable?: boolean
   print?: 'key-value' | 'key' | 'none'
+  expandRefs?: boolean
 }
 
 // type LoadEnvironmentError = ApiError<EnvironmentApiError>
@@ -28,6 +29,7 @@ async function loadEnvironment(
       secrets: SecretKeyValues
     }>({
       path: '/load',
+      query: options?.expandRefs ? { 'expand-refs': 'true' } : undefined,
     })
 
     const { name, secrets } = data
