@@ -4,7 +4,7 @@ import { createApiErrorFromResponse } from '../../../../http/errors/base'
 
 type SetSecretsResponseData = null
 
-type SetSecretsError = ApiError<'no_values_provided'>
+type SetSecretsError = ApiError<'no_values_provided'> | ApiError<'self_referencing_secrets'>
 
 export type SetSecretsData = Array<{
   key: Uppercase<string>
