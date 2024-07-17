@@ -106,7 +106,7 @@ export const validateSetSecretsInput = (
 
   const allKeys: string[] = []
 
-  const keysWithSelfReference = new Map<string, null>()
+  const keysWithSelfReference = new Set<string>()
 
   for (const { key, value, description: _ } of data) {
     const trimmedKey = key.trim()
@@ -119,7 +119,7 @@ export const validateSetSecretsInput = (
     const hasSelfReference = secretHasSelfReference(key, value)
 
     if (hasSelfReference) {
-      keysWithSelfReference.set(key, null)
+      keysWithSelfReference.add(key)
     }
 
     allKeys.push(trimmedKey)
