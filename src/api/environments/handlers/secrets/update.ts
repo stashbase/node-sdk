@@ -9,7 +9,12 @@ type UpdateSecretsResponseData = {
 }
 
 type UpdateSecretsError =
-  | ApiError<'no_values_provided' | 'missing_properties' | 'duplicate_new_keys'>
+  | ApiError<
+      | 'no_values_provided'
+      | 'missing_properties'
+      | 'duplicate_new_keys'
+      | 'self_referencing_secrets'
+    >
   | AlreadyExistApiError
 
 type AlreadyExistApiError = ApiError<
