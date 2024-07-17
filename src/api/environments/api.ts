@@ -11,6 +11,7 @@ import {
   isValidSecretKey,
   validateCreateSecretsInput,
   validateSetSecretsInput,
+  validateUpdateSecretsInput,
 } from '../../utils/inputValidation'
 import { SetSecretsData, setSecrets } from './handlers/secrets/set'
 
@@ -131,40 +132,46 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @returns updatedCount, notFoundKeys
    * */
   async function update(data: UpdateSecretsData) {
-    if (data?.length === 0) {
-      const error: ApiError<'no_values_provided'> = { code: 'no_values_provided' }
+    // if (data?.length === 0) {
+    //   const error: ApiError<'no_values_provided'> = { code: 'no_values_provided' }
+    //
+    //   return { data: null, error }
+    // }
+    //
+    // // validate
+    // for (const [index, { key, newKey, value, description }] of data.entries()) {
+    //   if (!isValidSecretKey(key)) {
+    //     const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
+    //     return { data: null, error }
+    //   }
+    //
+    //   if (newKey !== undefined) {
+    //     if (!isValidSecretKey(newKey)) {
+    //       const error: ApiError<'invalid_new_key'> = { code: 'invalid_new_key' }
+    //       return { data: null, error }
+    //     }
+    //   }
+    //
+    //   if (newKey === undefined && value === undefined && description === undefined) {
+    //     const error: ApiError<'missing_properties'> = { code: 'missing_properties' }
+    //
+    //     return { data: null, error }
+    //   }
+    //
+    //   const duplicateNewKey = data.some(
+    //     (d, i) => i !== index && d.newKey === newKey && d?.newKey !== undefined
+    //   )
+    //
+    //   if (duplicateNewKey) {
+    //     const error: ApiError<'duplicate_new_keys'> = { code: 'duplicate_new_keys' }
+    //     return { data: null, error }
+    //   }
+    // }
 
-      return { data: null, error }
-    }
+    const validationError = validateUpdateSecretsInput(data)
 
-    // validate
-    for (const [index, { key, newKey, value, description }] of data.entries()) {
-      if (!isValidSecretKey(key)) {
-        const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
-        return { data: null, error }
-      }
-
-      if (newKey !== undefined) {
-        if (!isValidSecretKey(newKey)) {
-          const error: ApiError<'invalid_new_key'> = { code: 'invalid_new_key' }
-          return { data: null, error }
-        }
-      }
-
-      if (newKey === undefined && value === undefined && description === undefined) {
-        const error: ApiError<'missing_properties'> = { code: 'missing_properties' }
-
-        return { data: null, error }
-      }
-
-      const duplicateNewKey = data.some(
-        (d, i) => i !== index && d.newKey === newKey && d?.newKey !== undefined
-      )
-
-      if (duplicateNewKey) {
-        const error: ApiError<'duplicate_new_keys'> = { code: 'duplicate_new_keys' }
-        return { data: null, error }
-      }
+    if (validationError) {
+      return { data: null, error: validationError }
     }
 
     return await updateSecrets(httpClient, data)
