@@ -11,6 +11,7 @@ export interface LoadEnvironmentArgs {
   environment: string
   // optional
   enabled?: boolean
+  expandRefs?: boolean
   print?: 'key-value' | 'key' | 'none'
 }
 
@@ -31,6 +32,7 @@ async function loadEnvironment(
   try {
     const data = await client.get<loadEnvironmentResponse>({
       path: `/projects/${project}/environments/${environment}/load`,
+      query: args.expandRefs ? { 'expand-refs': 'true' } : undefined,
     })
 
     const { name, secrets } = data
