@@ -16,6 +16,7 @@ type UpdateSecretsError =
       | 'environment_not_found'
       | 'duplicate_new_keys'
       | 'duplicate_keys'
+      | 'self_referencing_secrets'
     >
   | AlreadyExistApiError
 
