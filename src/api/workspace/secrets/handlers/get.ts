@@ -13,6 +13,7 @@ export interface GetSecretArgs {
   environment: string
   // secret key
   key: Uppercase<string>
+  expandRefs?: boolean
 }
 
 async function getSecret(envClient: HttpClient, args: GetSecretArgs): GetSecretResponse {
@@ -21,6 +22,7 @@ async function getSecret(envClient: HttpClient, args: GetSecretArgs): GetSecretR
   try {
     const secrets = await envClient.get<Secret>({
       path: `/projects/${project}/environments/${environment}/secrets/${key}`,
+      query: args.expandRefs ? { 'expand-refs': 'true' } : undefined,
     })
 
     return { data: secrets, error: null }

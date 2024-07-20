@@ -7,7 +7,7 @@ type CreateSecretsResponseData = {
   duplicateKeys?: Array<Uppercase<string>>
 }
 
-type CreateSecretsError = ApiError<'duplicate_keys'>
+type CreateSecretsError = ApiError<'duplicate_keys'> | ApiError<'self_referencing_secrets'>
 
 export type CreateSecretsData = Array<{
   key: Uppercase<string>

@@ -4,6 +4,7 @@ import { createApiErrorFromResponse } from '../../../../http/errors/base'
 
 export interface ListSecretsOpts {
   description?: boolean
+  expandRefs?: boolean
 }
 
 type SecretsData = Array<{ key: Uppercase<string>; value: string; description?: string }>
@@ -15,11 +16,22 @@ async function listSecrets(
   options?: ListSecretsOpts
 ): Promise<ApiResponse<SecretsData, ListSecretsError>> {
   const returnDescription = options?.description
+  const expandRefs = options?.expandRefs
+
+  const query: Record<string, string> = {}
+
+  if (expandRefs) {
+    query['expand-refs'] = 'true'
+  }
+
+  if (returnDescription) {
+    query['description'] = 'true'
+  }
 
   try {
     const secrets = await envClient.get<SecretsData>({
       path: '/secrets/list',
-      query: returnDescription ? { description: 'true' } : undefined,
+      query,
     })
 
     return { data: secrets, error: null }
