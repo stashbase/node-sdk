@@ -75,12 +75,12 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param key Secret key
    * @returns Result object
    * */
-  async function get(key: string) {
+  async function get(key: string, expandRefs = false) {
     if (!isValidSecretKey(key)) {
       const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
       return { data: null, error }
     }
-    return getSecret(httpClient, key)
+    return getSecret(httpClient, key, expandRefs)
   }
 
   /**
