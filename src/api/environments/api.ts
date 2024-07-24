@@ -1,5 +1,5 @@
 import { LoadEnvironmentOpts, loadEnvironment } from './handlers/load'
-import { GetEnvironmentOpts, getEnvironment } from './handlers/get'
+import { getEnvironment } from './handlers/get'
 import { deleteEnvironmentSecrets } from './handlers/secrets/delete'
 import { HttpClient } from '../../http/client'
 import { ApiError } from '../../http/response'
@@ -51,11 +51,10 @@ function environmentsAPI(httpClient: HttpClient) {
   /**
    * @summary Get environment
    * @description Environment
-   * @param key options Options (return secrets)
    * @returns Environment data
    * */
-  async function get(options?: GetEnvironmentOpts) {
-    return await getEnvironment(httpClient, options)
+  async function get() {
+    return await getEnvironment(httpClient)
   }
 
   const secrets = envSecretsAPI(httpClient)
