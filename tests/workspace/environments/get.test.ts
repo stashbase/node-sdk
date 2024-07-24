@@ -3,17 +3,12 @@ import { createEnvEase } from '../../../src'
 
 describe('Get environment', () => {
   test('OK', async () => {
-    const envEase = createEnvEase('xPKDa2Xq0zWmfES1nLDoG45qZtR1z2qL')
+    const envEase = createEnvEase('')
 
-    const { data, error } = await envEase.environments.get(
-      {
-        project: 'hero-hub',
-        environment: 'vercel',
-      },
-      {
-        secrets: true,
-      }
-    )
+    const { data, error } = await envEase.environments.get({
+      project: 'hero-hub',
+      environment: 'vercel',
+    })
 
     console.log(data)
     console.log(error)
