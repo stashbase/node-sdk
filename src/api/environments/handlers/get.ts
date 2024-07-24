@@ -2,13 +2,6 @@ import { HttpClient } from '../../../http/client'
 import { ApiError, ApiResponse } from '../../../http/response'
 import { createApiErrorFromResponse } from '../../../http/errors/base'
 
-type Secret = { key: string; value: string; description?: string }
-
-export interface GetEnvironmentOpts {
-  secrets?: boolean
-  // printTable?: boolean
-}
-
 interface Environment {
   projectName: string
   type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
@@ -16,23 +9,19 @@ interface Environment {
   name: string
   createdAt: string
   description: string | null
-  secrets?: Secret[]
 }
 
 // type GetEnvironmentError = ApiError<EnvironmentApiError>
 type GetEnvironmentError = ApiError
 
 async function getEnvironment(
-  client: HttpClient,
-  options?: GetEnvironmentOpts
+  client: HttpClient
 ): Promise<ApiResponse<Environment, GetEnvironmentError>> {
   // const printTable = options?.printTable
-  const returnSecrets = options?.secrets
 
   try {
     const data = await client.get<Environment>({
       path: '/',
-      query: returnSecrets ? { secrets: 'true' } : undefined,
     })
 
     // if (printTable) {
