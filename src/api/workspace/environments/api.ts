@@ -4,7 +4,7 @@ import { isValidEnvironmentName, isValidProjectName } from '../../../utils/input
 import { CreateEnvironmentArgs, createEnvironment } from './handlers/create'
 import { DeleteEnvironmentArgs, deleteEnvironment } from './handlers/delete'
 import { DuplicateEnvironmentArgs, duplicateEnvironment } from './handlers/duplicate'
-import { GetEnvironmentArgs, GetEnvironmentOpts, getEnvironment } from './handlers/get'
+import { GetEnvironmentArgs, getEnvironment } from './handlers/get'
 import { ListEnvironmentArgs, listEnvironments } from './handlers/list'
 import { LoadEnvironmentArgs, loadEnvironment } from './handlers/load'
 import { LockEnvironmentArgs, lockUnlockEnvironment } from './handlers/lock'
@@ -33,10 +33,9 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @summary Get environment
    * @description Environment
    * @param args project, environment;
-   * @param options Options (return secrets);
    * @returns Environment data
    * */
-  async function get(args: GetEnvironmentArgs, options?: GetEnvironmentOpts) {
+  async function get(args: GetEnvironmentArgs) {
     const { environment, project } = args
 
     const namesError = checkValidProjectEnv(project, environment)
@@ -45,7 +44,7 @@ export function environmentsAPI(httpClient: HttpClient) {
       return { data: null, error: namesError }
     }
 
-    return await getEnvironment(httpClient, args, options)
+    return await getEnvironment(httpClient, args)
   }
 
   /**

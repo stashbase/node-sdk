@@ -2,12 +2,6 @@ import { HttpClient } from '../../../../http/client'
 import { ApiError, ApiResponse } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
 
-type Secret = { key: string; value: string; description?: string }
-
-export interface GetEnvironmentOpts {
-  secrets?: boolean
-}
-
 export interface GetEnvironmentArgs {
   project: string
   environment: string
@@ -20,23 +14,19 @@ interface Environment {
   name: string
   createdAt: string
   description: string | null
-  secrets?: Secret[]
 }
 
 type GetEnvironmentError = ApiError<'project_not_found' | 'environment_not_found'>
 
 async function getEnvironment(
   client: HttpClient,
-  args: GetEnvironmentArgs,
-  options?: GetEnvironmentOpts
+  args: GetEnvironmentArgs
 ): Promise<ApiResponse<Environment, GetEnvironmentError>> {
   const { project, environment } = args
-  const returnSecrets = options?.secrets
 
   try {
     const data = await client.get<Environment>({
       path: `/projects/${project}/environments/${environment}`,
-      query: returnSecrets ? { secrets: 'true' } : undefined,
     })
 
     return { data: data, error: null }
