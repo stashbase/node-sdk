@@ -3,6 +3,7 @@ import { ApiError } from '../../../http/response'
 import {
   isValidSecretKey,
   validateCreateSecretsInput,
+  validateSecretKeys,
   validateSetSecretsInput,
   validateUpdateSecretsInput,
 } from '../../../utils/inputValidation'
@@ -193,12 +194,14 @@ export function secretsAPI(httpClient: HttpClient) {
       return { data: null, error }
     }
 
-    const invalidKey = keys.find((key) => !isValidSecretKey(key))
+    const { invalidSecretKeys } = validateSecretKeys(keys)
 
-    if (invalidKey) {
-      const error: ApiError<'invalid_secret_key'> = {
-        code: 'invalid_secret_key',
-        details: undefined,
+    if (invalidSecretKeys.length > 0) {
+      const error: ApiError<'invalid_secret_keys', { secretKeys: Array<string> }> = {
+        code: 'invalid_secret_keys',
+        details: {
+          secretKeys: invalidSecretKeys,
+        },
       }
 
       return { data: null, error }
