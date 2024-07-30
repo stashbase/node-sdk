@@ -1,19 +1,6 @@
 import { ApiError } from '../response'
 
-export function createApiErrorFromResponse<T = ApiError<any, any> | undefined>(responseData: {
-  code?: string
-  statusCode?: number
-  error: T
-}): T {
-  // validation error = bad request
-  if (responseData && responseData?.statusCode === 400) {
-    return <T>{ code: 'bad_request' }
-  }
-
-  if (responseData?.statusCode === 429) {
-    return <T>{ code: 'too_many_requests', details: responseData?.message ?? undefined }
-  }
-
+export function createApiErrorFromResponse<T>(responseData: { error: ApiError<any, any> }): T {
   if (responseData && responseData.error) {
     return <T>{
       code: responseData?.error?.code,
@@ -21,6 +8,5 @@ export function createApiErrorFromResponse<T = ApiError<any, any> | undefined>(r
     }
   }
 
-  // If no error data is present, return a default APIErroR
   return <T>{ code: 'server_error' }
 }
