@@ -1,3 +1,11 @@
+type SharedApiErrorCode =
+  | 'too_many_requests'
+  | 'unauthorized'
+  | 'api_key_expired'
+  | 'missing_permission'
+  | 'server_error'
+  | 'bad_request'
+
 /**
  * Api error with the specified code and optional details.
  * @param code - The error code.
@@ -5,23 +13,10 @@
  */
 export type ApiError<T = void, K extends string | object | void = void> = T extends void
   ? {
-      code:
-        | 'too_many_requests'
-        | 'unauthorized'
-        | 'api_key_expired'
-        | 'missing_permission'
-        | 'server_error'
-        | 'bad_request'
+      code: SharedApiErrorCode
     }
   : {
-      code:
-        | T
-        | 'too_many_requests'
-        | 'unauthorized'
-        | 'api_key_expired'
-        | 'missing_permission'
-        | 'server_error'
-        | 'bad_request'
+      code: SharedApiErrorCode
       details?: K
       // message: string
       // details: string
