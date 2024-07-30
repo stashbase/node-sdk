@@ -1,6 +1,7 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
+import { ApiResponse } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { ListSecretsError } from '../../../../types/errors/secrets'
 
 export interface ListSecretsOpts {
   description?: boolean
@@ -8,8 +9,6 @@ export interface ListSecretsOpts {
 }
 
 type SecretsData = Array<{ key: Uppercase<string>; value: string; description?: string }>
-
-type ListSecretsError = ApiError
 
 async function listSecrets(
   envClient: HttpClient,

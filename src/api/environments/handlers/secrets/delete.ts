@@ -1,8 +1,7 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
-import { ApiError, ApiResponse } from '../../../../http/response'
-
-type DeleteSecretsError = ApiError<'secret_not_found'>
+import { ApiResponse } from '../../../../http/response'
+import { DeleteSecretsError } from '../../../../types/errors/secrets'
 
 type DeleteSecretsResponseData = {
   deletedCount: number
