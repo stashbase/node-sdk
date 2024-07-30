@@ -1,5 +1,6 @@
 import { UpdateSecretData } from '../api/workspace/secrets/handlers/update'
 import { ApiError } from '../http/response'
+import { SecretKey } from '../types/secretKey'
 
 export function containsMaxOneDash(str: string) {
   // return /^(?!-$)(?!.*--)[^-]*(?:-(?!$)[^-]*)?$/.test(str);
@@ -92,8 +93,10 @@ interface SetSecretsItem {
 }
 
 type ValidateSetSecretsInputRes =
-  | ApiError<'invalid_secret_key' | 'duplicate_keys' | 'no_values_provided'>
-  | ApiError<'self_referencing_secrets'>
+  | ApiError<'no_values_provided'>
+  | ApiError<'invalid_secret_keys', { secretKeys: Array<string> }>
+  | ApiError<'duplicate_secrets', { duplicateSecrets: Array<string> }>
+  | ApiError<'self_referencing_secrets', { secrets: Array<string> }>
   | null
 
 // return api error
@@ -101,20 +104,18 @@ export const validateSetSecretsInput = (
   data: Array<SetSecretsItem>
 ): ValidateSetSecretsInputRes => {
   if (data?.length === 0) {
-    return { code: 'no_values_provided' }
+    return { code: 'no_values_provided', details: undefined }
   }
-
-  const allKeys: string[] = []
-
+  const invalidSecretKeys = new Set<string>()
   const keysWithSelfReference = new Set<string>()
+
+  const keyOccurrences = new Map<string, number>()
 
   for (const { key, value, description: _ } of data) {
     const trimmedKey = key.trim()
-    const isValidKey = isValidSecretKey(trimmedKey)
+    const isValid = isValidSecretKey(trimmedKey)
 
-    if (!isValidKey) {
-      return { code: 'invalid_secret_key' }
-    }
+    if (isValid) invalidSecretKeys.add(key)
 
     const hasSelfReference = secretHasSelfReference(key, value)
 
@@ -122,18 +123,32 @@ export const validateSetSecretsInput = (
       keysWithSelfReference.add(key)
     }
 
-    allKeys.push(trimmedKey)
+    const keyOccurrenceCount = keyOccurrences.get(key)
+
+    if (keyOccurrenceCount !== undefined) {
+      keyOccurrences.set(key, keyOccurrenceCount + 1)
+    } else {
+      keyOccurrences.set(key, 1)
+    }
   }
 
-  const allUniqueKeys = new Set(allKeys)
+  if (invalidSecretKeys.size > 0) {
+    return { code: 'invalid_secret_keys', details: { secretKeys: Array.from(invalidSecretKeys) } }
+  }
 
-  if (allUniqueKeys.size !== allKeys.length) {
-    return { code: 'duplicate_keys' }
+  const duplicateSecretKeys = Array.from(keyOccurrences.entries())
+    .filter(([, count]) => count > 1)
+    ?.map(([key]) => key)
+
+  if (duplicateSecretKeys?.length > 0) {
+    return { code: 'duplicate_secrets', details: { duplicateSecrets: duplicateSecretKeys } }
   }
 
   if (keysWithSelfReference.size > 0) {
-    // return secretsError.selfReferencingSecrets([...keysWithSelfReference.keys()])
-    return { code: 'self_referencing_secrets' }
+    return {
+      code: 'self_referencing_secrets',
+      details: { secrets: Array.from(keysWithSelfReference) },
+    }
   }
 
   return null
