@@ -112,10 +112,8 @@ export const validateSetSecretsInput = (
   const keyOccurrences = new Map<string, number>()
 
   for (const { key, value, description: _ } of data) {
-    const trimmedKey = key.trim()
-    const isValid = isValidSecretKey(trimmedKey)
-
-    if (isValid) invalidSecretKeys.add(key)
+    const isValid = isValidSecretKey(key)
+    if (!isValid) invalidSecretKeys.add(key)
 
     const hasSelfReference = secretHasSelfReference(key, value)
 
