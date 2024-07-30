@@ -15,7 +15,7 @@ export type ApiErrorDetails = Record<string, { [key: string]: object }>
  */
 export type ApiError<T extends string, D = undefined | ApiErrorDetails> = {
   code: SharedApiErrorCode | T
-  details?: D
+  details: D
 }
 
 interface ResponseSuccess<T> {
