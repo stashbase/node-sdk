@@ -30,7 +30,7 @@ async function listEnvironments(
 
   try {
     const data = await client.get<Array<Environment>>({
-      path: `/projects/${project}/environments`,
+      path: `/v1/projects/${project}/environments`,
     })
 
     return { data: data, error: null }

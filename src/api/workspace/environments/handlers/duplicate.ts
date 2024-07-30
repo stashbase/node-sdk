@@ -24,7 +24,7 @@ async function duplicateEnvironment(
 
   try {
     const data = await client.post<null>({
-      path: `/projects/${project}/environments/${name}/duplicate`,
+      path: `/v1/projects/${project}/environments/${name}/duplicate`,
       data: { name: duplicateName },
     })
 

@@ -12,7 +12,7 @@ async function deleteProject(
 ): Promise<ApiResponse<DeleteProjectsResponseData, DeleteProjectsError>> {
   try {
     const data = await client.del<DeleteProjectsResponseData>({
-      path: `/projects/${name}`,
+      path: `/v1/projects/${name}`,
     })
 
     return { data: null, error: null }

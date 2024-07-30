@@ -31,7 +31,7 @@ async function loadEnvironment(
 
   try {
     const data = await client.get<loadEnvironmentResponse>({
-      path: `/projects/${project}/environments/${environment}/load`,
+      path: `/v1/projects/${project}/environments/${environment}/load`,
       query: args.expandRefs ? { 'expand-refs': 'true' } : undefined,
     })
 

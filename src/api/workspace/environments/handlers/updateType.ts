@@ -21,7 +21,7 @@ async function updateEnvironmentType(
 
   try {
     const data = await client.patch<null>({
-      path: `/projects/${project}/environments/${name}/type`,
+      path: `/v1/projects/${project}/environments/${name}/type`,
       data: { type },
     })
 
