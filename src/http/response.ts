@@ -6,6 +6,9 @@ type SharedApiErrorCode =
   | 'server_error'
   | 'bad_request'
 
+export type ProjectNotFoundError = ApiError<'project_not_found'>
+export type EnvironmentNotFoundError = ApiError<'environment_not_found'>
+
 export type ApiErrorDetails = Record<string, { [key: string]: object }>
 
 /**
