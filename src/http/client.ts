@@ -62,7 +62,7 @@ export function createHttpClient(args: {
       })
 
       if (!response.ok) {
-        if (response.status === 500 || response.status === 404) {
+        if (response.status === 500) {
           throw new Error('Internal Server Error')
         } else {
           // TODO: errors
@@ -151,7 +151,7 @@ export function createHttpClient(args: {
       })
 
       if (!response.ok) {
-        if (response.status === 500 || response.status === 404) {
+        if (response.status === 500) {
           throw new Error('Internal Server Error')
         } else {
           // TODO: errors
@@ -207,7 +207,7 @@ async function requestWithData<T>(args: {
     })
 
     if (!response.ok) {
-      if (response.status === 500 || response.status === 404) {
+      if (response.status === 500) {
         throw new Error('Internal Server Error')
       } else {
         const errorData = await response.json() // Parse error response
