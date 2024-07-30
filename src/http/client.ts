@@ -10,6 +10,7 @@ export type HttpClient = {
   get: <T>(args: { path: string; query?: { [key: string]: string } }) => Promise<T>
   del: <T>(args: { path: string; query?: { [key: string]: string } }) => Promise<T>
 
+  put: <T>(args: RequestWithData) => Promise<T>
   post: <T>(args: RequestWithData) => Promise<T>
   patch: <T>(args: RequestWithData) => Promise<T>
 }
@@ -114,6 +115,22 @@ export function createHttpClient(args: {
     })
   }
 
+  async function put<T>(args: { path: string; data?: { [key: string]: any } | any[] }): Promise<T> {
+    const reqHeaders = headers
+
+    if (!args.data) {
+      delete reqHeaders['Content-Type']
+    }
+
+    return await requestWithData<T>({
+      method: 'PATCH',
+      headers: reqHeaders,
+      basePath,
+      path: args.path,
+      data: args.data,
+    })
+  }
+
   async function del<T>(args: { path: string; query?: { [key: string]: string } }): Promise<T> {
     let url = `${baseURL}${basePath === '' ? '' : `/${basePath}`}${args.path ?? ''}`
 
@@ -163,13 +180,14 @@ export function createHttpClient(args: {
   return {
     del,
     get,
+    put,
     post,
     patch,
   }
 }
 
 async function requestWithData<T>(args: {
-  method: 'POST' | 'PATCH'
+  method: 'POST' | 'PATCH' | 'PUT'
   headers: Record<string, string>
   basePath: string
   path: string
