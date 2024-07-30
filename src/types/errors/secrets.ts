@@ -1,19 +1,16 @@
 import { SecretKey } from '../secretKey'
-import { ApiError, EnvironmentNotFoundError, ProjectNotFoundError } from '../../http/response'
-
-type SharedSecretsError = ProjectNotFoundError | EnvironmentNotFoundError
+import { ApiError, SharedApiErrorCode } from '../../http/response'
 
 export type CreateSecretsError =
-  | SharedSecretsError
   | InvalidSecretKeysError
   | DuplicateSecretsError
   | SelfReferencingSecretsError
 
-export type DeleteSecretsError = SharedSecretsError | InvalidSecretKeysError
+export type DeleteSecretsError = InvalidSecretKeysError
 
 export type GetSecretError = ApiError<'secret_not_found'>
 
-export type ListSecretsError = SharedSecretsError
+export type ListSecretsError = ApiError<SharedApiErrorCode, undefined>
 
 export type SetSecretsError =
   | NoValuesProvidedError
@@ -22,7 +19,6 @@ export type SetSecretsError =
   | SelfReferencingSecretsError
 
 export type UpdateSecretsError =
-  | SharedSecretsError
   | NoValuesProvidedError
   | InvalidSecretKeysError
   | DuplicateSecretsError
