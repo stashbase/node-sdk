@@ -6,10 +6,11 @@ import {
   ProjectNotFoundError,
 } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { SecretKey } from '../../../../types/secretKey'
 
 type CreateSecretsResponseData = {
   createdCount: number
-  duplicateKeys?: Array<Uppercase<string>>
+  duplicateKeys?: Array<SecretKey>
 }
 
 // type CreateSecretsError = ApiError<
@@ -19,9 +20,9 @@ type CreateSecretsResponseData = {
 type CreateSecretsError =
   | ProjectNotFoundError
   | EnvironmentNotFoundError
-  | ApiError<'duplicate_secrets', { duplicateSecrets: Array<Uppercase<string>> }>
-  | ApiError<'invalid_secret_keys', { secretKeys: Array<Uppercase<string>> }>
-  | ApiError<'self_referencing_secrets', { secrets: Array<Uppercase<string>> }>
+  | ApiError<'duplicate_secrets', { duplicateSecrets: Array<SecretKey> }>
+  | ApiError<'invalid_secret_keys', { secretKeys: Array<SecretKey> }>
+  | ApiError<'self_referencing_secrets', { secrets: Array<SecretKey> }>
 
 export interface CreateSecretsArgs {
   project: string
