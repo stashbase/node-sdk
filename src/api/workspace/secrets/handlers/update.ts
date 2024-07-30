@@ -1,5 +1,10 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
+import {
+  ApiError,
+  ApiResponse,
+  EnvironmentNotFoundError,
+  ProjectNotFoundError,
+} from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
 import { AtLeastOne } from '../../../../utils/types'
 
@@ -9,27 +14,16 @@ type UpdateSecretsResponseData = {
 }
 
 type UpdateSecretsError =
-  | ApiError<
-      | 'no_values_provided'
-      | 'missing_properties'
-      | 'project_not_found'
-      | 'environment_not_found'
-      | 'duplicate_new_keys'
-      | 'duplicate_keys'
-      | 'self_referencing_secrets'
-    >
-  | AlreadyExistApiError
-
-type AlreadyExistApiError = ApiError<
-  'new_keys_already_exist',
-  {
-    /**
-     * @summary Secret key that already exist
-     * @returns Uppercase Uppercase<string>
-     * */
-    alreadyExist: Uppercase<string>
-  }
->
+  | ProjectNotFoundError
+  | EnvironmentNotFoundError
+  | ApiError<'no_values_provided'>
+  | ApiError<'missing_properties_to_update', { secretKeys: Array<Uppercase<string>> }>
+  | ApiError<'invalid_secret_keys', { secretKeys: Array<Uppercase<string>> }>
+  | ApiError<'invalid_new_secret_keys', { newSecretKeys: Array<Uppercase<string>> }>
+  | ApiError<'duplicate_secrets', { duplicateSecrets: Array<Uppercase<string>> }>
+  | ApiError<'duplicate_new_secrets', { duplicateSecrets: Array<Uppercase<string>> }>
+  | ApiError<'self_referencing_secrets', { secrets: Array<Uppercase<string>> }>
+  | ApiError<'new_key_secrets_already_exist', { conflictingSecrets: Array<Uppercase<string>> }>
 
 export interface UpdateSecretsArgs {
   project: string
