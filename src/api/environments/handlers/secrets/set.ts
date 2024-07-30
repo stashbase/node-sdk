@@ -1,10 +1,9 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
+import { ApiResponse } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { SetSecretsError } from '../../../../types/errors/secrets'
 
 type SetSecretsResponseData = null
-
-type SetSecretsError = ApiError<'no_values_provided'> | ApiError<'self_referencing_secrets'>
 
 export type SetSecretsData = Array<{
   key: Uppercase<string>
