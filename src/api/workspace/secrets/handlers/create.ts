@@ -7,9 +7,14 @@ type CreateSecretsResponseData = {
   duplicateKeys?: Array<Uppercase<string>>
 }
 
-type CreateSecretsError = ApiError<
-  'no_values_provided' | 'project_not_found' | 'environment_not_found' | 'duplicate_keys'
->
+// type CreateSecretsError = ApiError<
+//   'no_values_provided' | 'project_not_found' | 'environment_not_found' | 'duplicate_keys'
+// >
+
+type CreateSecretsError =
+  | ApiError<'duplicate_secrets', { duplicateSecrets: Array<Uppercase<string>> }>
+  | ApiError<'invalid_secret_keys', { secretKeys: Array<Uppercase<string>> }>
+  | ApiError<'self_referencing_secrets', { secrets: Array<Uppercase<string>> }>
 
 export interface CreateSecretsArgs {
   project: string
