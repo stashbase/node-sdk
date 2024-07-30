@@ -6,22 +6,17 @@ type SharedApiErrorCode =
   | 'server_error'
   | 'bad_request'
 
+export type ApiErrorDetails = Record<string, { [key: string]: object }>
+
 /**
  * Api error with the specified code and optional details.
  * @param code - The error code.
  * @param details - Optional details for the error.
  */
-export type ApiError<T = void, K extends string | object | void = void> = T extends void
-  ? {
-      code: SharedApiErrorCode
-    }
-  : {
-      code: SharedApiErrorCode
-      details?: K
-      // message: string
-      // details: string
-      // hint: strin
-    }
+export type ApiError<T extends string, D = undefined | ApiErrorDetails> = {
+  code: SharedApiErrorCode | T
+  details?: D
+}
 
 interface ResponseSuccess<T> {
   error: null
@@ -34,4 +29,4 @@ interface ResponseFailure<K> {
 }
 
 // export type ApiResponse<T, K extends { code: string }> = ResponseSuccess<T> | ResponseFailure<K>
-export type ApiResponse<T, K = void> = ResponseSuccess<T> | ResponseFailure<K>
+export type ApiResponse<T, K = undefined> = ResponseSuccess<T> | ResponseFailure<K>
