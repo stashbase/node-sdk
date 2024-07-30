@@ -1,11 +1,16 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import {
+  ApiResponse,
+  EnvironmentNotFoundError,
+  ProjectNotFoundError,
+} from '../../../../http/response'
 import { SecretKey } from '../../../../types/secretKey'
+import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { GetSecretError as SharedGetSecretsError } from '../../../../types/errors/secrets'
 
 type Secret = { key: SecretKey; value: string; description: string | null }
 
-type GetSecretError = ApiError<'project_not_found' | 'environment_not_found' | 'secret_not_found'>
+type GetSecretError = ProjectNotFoundError | EnvironmentNotFoundError | SharedGetSecretsError
 type GetSecretResponse = Promise<ApiResponse<Secret, GetSecretError>>
 
 export interface GetSecretArgs {

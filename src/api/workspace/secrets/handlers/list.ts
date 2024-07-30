@@ -1,12 +1,11 @@
 import { HttpClient } from '../../../../http/client'
 import {
-  ApiError,
   ApiResponse,
   EnvironmentNotFoundError,
   ProjectNotFoundError,
 } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
 import { SecretKey } from '../../../../types/secretKey'
+import { createApiErrorFromResponse } from '../../../../http/errors/base'
 
 type SecretsData = Array<{ key: SecretKey; value: string; description?: string }>
 type ListSecretsError = ProjectNotFoundError | EnvironmentNotFoundError
