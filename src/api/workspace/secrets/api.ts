@@ -1,5 +1,5 @@
 import { HttpClient } from '../../../http/client'
-import { ApiError } from '../../../http/response'
+import { ApiError, apiError } from '../../../http/response'
 import {
   isValidSecretKey,
   validateCreateSecretsInput,
@@ -32,7 +32,10 @@ export function secretsAPI(httpClient: HttpClient) {
     }
 
     if (!isValidSecretKey(key)) {
-      const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
+      const error: ApiError<'invalid_secret_key', undefined> = {
+        code: 'invalid_secret_key',
+        details: undefined,
+      }
 
       return { data: null, error }
     }
@@ -185,7 +188,7 @@ export function secretsAPI(httpClient: HttpClient) {
     }
 
     if (keys.length === 0) {
-      const error: ApiError<'no_keys_provided'> = { code: 'no_keys_provided' }
+      const error: ApiError<'no_keys_provided'> = { code: 'no_keys_provided', details: undefined }
 
       return { data: null, error }
     }
@@ -193,7 +196,10 @@ export function secretsAPI(httpClient: HttpClient) {
     const invalidKey = keys.find((key) => !isValidSecretKey(key))
 
     if (invalidKey) {
-      const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
+      const error: ApiError<'invalid_secret_key'> = {
+        code: 'invalid_secret_key',
+        details: undefined,
+      }
 
       return { data: null, error }
     }
