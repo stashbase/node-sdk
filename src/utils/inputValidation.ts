@@ -157,94 +157,142 @@ export const validateSetSecretsInput = (
 export const validateCreateSecretsInput = validateSetSecretsInput
 
 type ValidateUpdateSecretsInputRes =
-  | ApiError<
-      | 'invalid_secret_key'
-      | 'duplicate_keys'
-      | 'duplicate_new_keys'
-      | 'no_values_provided'
-      | 'missing_properties'
-    >
-  | ApiError<'self_referencing_secrets'>
+  | ApiError<'no_values_provided'>
+  | ApiError<'missing_properties_to_update', { secretKeys: Array<string> }>
+  | ApiError<'invalid_secret_keys', { secretKeys: Array<string> }>
+  | ApiError<'invalid_new_secret_keys', { newSecretKeys: Array<string> }>
+  | ApiError<'duplicate_secrets', { duplicateSecrets: Array<string> }>
+  | ApiError<'duplicate_new_secrets', { duplicateSecrets: Array<string> }>
+  | ApiError<'self_referencing_secrets', { secrets: Array<string> }>
   | null
 
 export const validateUpdateSecretsInput = (
   data: UpdateSecretData[]
 ): ValidateUpdateSecretsInputRes => {
   if (data.length === 0) {
-    return { code: 'no_values_provided' }
+    return { code: 'no_values_provided', details: undefined }
   }
 
-  const newKeys: string[] = []
-  const keys: string[] = []
+  const keyOccurrences = new Map<string, number>()
+  const newKeyOccurrences = new Map<string, number>()
 
   const newKeysWithSelfReference = new Set<string>()
   const keysWithSelfReference = new Set<string>()
 
-  for (const secret of data) {
-    if (
-      !isValidSecretKey(secret.key) ||
-      (secret.newKey !== undefined && !isValidSecretKey(secret.newKey))
-    ) {
-      return { code: 'invalid_secret_key' }
+  const invalidSecretKeys = new Set<string>()
+  const invalidNewSecretKeys = new Set<string>()
+
+  const missingPropertiesToUpdateKeys = new Set<string>()
+
+  for (const { key, newKey, value, description } of data) {
+    if (newKey === undefined && value === undefined && description === undefined) {
+      missingPropertiesToUpdateKeys.add(key)
     }
 
-    if (
-      secret.newKey === undefined &&
-      secret.value === undefined &&
-      secret.description === undefined
-    ) {
-      return { code: 'missing_properties' }
+    if (!isValidSecretKey(key)) {
+      invalidSecretKeys.add(key)
     }
 
-    keys.push(secret.key)
-    if (secret.newKey !== undefined) {
-      newKeys.push(secret.newKey)
+    if (newKey !== undefined && !isValidSecretKey(newKey)) {
+      invalidNewSecretKeys.add(key)
     }
 
-    if (secret.value) {
-      if (secret.key) {
-        const hasSelfReference = secretHasSelfReference(secret.key, secret.value)
+    if (value) {
+      if (key) {
+        const hasSelfReference = secretHasSelfReference(key, value)
 
         if (hasSelfReference) {
-          keysWithSelfReference.add(secret.key)
+          keysWithSelfReference.add(key)
         }
       }
 
-      if (secret.newKey) {
-        const hasSelfReference = secretHasSelfReference(secret.newKey, secret.value)
+      if (newKey) {
+        const hasSelfReference = secretHasSelfReference(newKey, value)
 
         if (hasSelfReference) {
-          newKeysWithSelfReference.add(secret.newKey)
+          newKeysWithSelfReference.add(newKey)
         }
       }
     }
+
+    const keyOccurrenceCount = keyOccurrences.get(key)
+
+    if (keyOccurrenceCount !== undefined) {
+      keyOccurrences.set(key, keyOccurrenceCount + 1)
+    } else {
+      keyOccurrences.set(key, 1)
+    }
+
+    if (newKey === undefined) continue
+
+    const newKeyOccurrenceCount = newKeyOccurrences.get(newKey)
+
+    if (newKeyOccurrenceCount !== undefined) {
+      newKeyOccurrences.set(newKey, newKeyOccurrenceCount + 1)
+    } else {
+      newKeyOccurrences.set(newKey, 1)
+    }
   }
 
-  // NOTE: key duplicates
-  const duplicateKeysInput = keys.filter((item, index) => keys.indexOf(item) !== index)
-  const uniqueDuplicateKeys = new Set(duplicateKeysInput)
-
-  if (uniqueDuplicateKeys.size > 0) {
-    return { code: 'duplicate_keys' }
+  // NOTE: missing properties to update
+  if (missingPropertiesToUpdateKeys.size > 0) {
+    return {
+      code: 'missing_properties_to_update',
+      details: { secretKeys: Array.from(missingPropertiesToUpdateKeys) },
+    }
   }
 
-  // NOTE: new key duplicates
-  const duplicateNewKeysInput = newKeys.filter((item, index) => newKeys.indexOf(item) !== index)
-  const uniqueNewDuplicateKeys = new Set(duplicateNewKeysInput)
-
-  if (uniqueNewDuplicateKeys.size > 0) {
-    return { code: 'duplicate_new_keys' }
+  // NOTE: invalid keys
+  if (invalidSecretKeys.size > 0) {
+    return { code: 'invalid_secret_keys', details: { secretKeys: Array.from(invalidSecretKeys) } }
   }
 
+  // NOTE: invalid new secret keys
+  if (invalidNewSecretKeys.size > 0) {
+    return {
+      code: 'invalid_new_secret_keys',
+      details: { newSecretKeys: Array.from(invalidNewSecretKeys) },
+    }
+  }
+
+  // NOTE: duplicate secrets
+  const duplicateSecretKeys = Array.from(keyOccurrences.entries())
+    .filter(([_, count]) => count > 1)
+    ?.map(([key]) => key)
+
+  if (duplicateSecretKeys?.length > 0) {
+    return { code: 'duplicate_secrets', details: { duplicateSecrets: duplicateSecretKeys } }
+  }
+
+  // NOTE: duplicate new secrets
+  const duplicateNewSecrets = Array.from(newKeyOccurrences.entries())
+    .filter(([_, count]) => count > 1)
+    ?.map(([key]) => key)
+
+  if (duplicateNewSecrets?.length > 0) {
+    return {
+      code: 'duplicate_new_secrets',
+      details: { duplicateSecrets: duplicateNewSecrets },
+    }
+  }
+
+  // NOTE: self-referencing secrets
   if (keysWithSelfReference.size > 0) {
-    // selfReferencingSecrets([...newKeysWithSelfReference.keys()])
-    return { code: 'self_referencing_secrets' }
+    return {
+      code: 'self_referencing_secrets',
+      details: { secrets: Array.from(keysWithSelfReference) },
+    }
   }
 
+  // NOTE: self-referencing new secrets
   if (newKeysWithSelfReference.size > 0) {
-    // selfReferencingSecrets([...newKeysWithSelfReference.keys()])
-    return { code: 'self_referencing_secrets' }
+    return {
+      code: 'self_referencing_secrets',
+      details: { secrets: Array.from(newKeysWithSelfReference) },
+    }
   }
+
+  return null
 
   return null
 }
