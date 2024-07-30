@@ -6,15 +6,16 @@ import {
   ProjectNotFoundError,
 } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { SecretKey } from '../../../../types/secretKey'
 
 type DeleteSecretsError =
   | ProjectNotFoundError
   | EnvironmentNotFoundError
-  | ApiError<'invalid_secret_keys', { secretKeys: Array<Uppercase<string>> }>
+  | ApiError<'invalid_secret_keys', { secretKeys: Array<SecretKey> }>
 
 type DeleteSecretsResponseData = {
   deletedCount: number
-  notFound?: Array<Uppercase<string>>
+  notFound?: Array<SecretKey>
 }
 
 export interface DeleteSecretsArgs {
