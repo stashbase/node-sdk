@@ -44,7 +44,7 @@ function environmentsAPI(httpClient: HttpClient) {
     const { error } = await loadEnvironment(httpClient, options)
 
     if (error) {
-      throw new Error(error.code)
+      throw new Error(error)
     }
   }
 
