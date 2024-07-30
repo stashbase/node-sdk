@@ -86,7 +86,7 @@ export function createHttpClient(args: {
     path: string
     data?: { [key: string]: any } | any[]
   }): Promise<T> {
-    return await postOrPatch<T>({
+    return await requestWithData<T>({
       method: 'POST',
       headers,
       basePath,
@@ -105,7 +105,7 @@ export function createHttpClient(args: {
       delete reqHeaders['Content-Type']
     }
 
-    return await postOrPatch<T>({
+    return await requestWithData<T>({
       method: 'PATCH',
       headers: reqHeaders,
       basePath,
@@ -168,7 +168,7 @@ export function createHttpClient(args: {
   }
 }
 
-async function postOrPatch<T>(args: {
+async function requestWithData<T>(args: {
   method: 'POST' | 'PATCH'
   headers: Record<string, string>
   basePath: string
