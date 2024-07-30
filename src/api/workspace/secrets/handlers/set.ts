@@ -4,9 +4,10 @@ import { createApiErrorFromResponse } from '../../../../http/errors/base'
 
 type SetSecretsResponseData = null
 
-type CreateSecretsError = ApiError<
-  'no_values_provided' | 'project_not_found' | 'environment_not_found'
->
+type SetSecretsError =
+  | ApiError<'invalid_secret_keys', { secretKeys: Array<Uppercase<string>> }>
+  | ApiError<'duplicate_secrets', { duplicateSecrets: Array<Uppercase<string>> }>
+  | ApiError<'self_referencing_secrets', { secrets: Array<Uppercase<string>> }>
 
 export interface SetSecretsArgs {
   project: string
@@ -23,7 +24,7 @@ export type SetSecretData = {
 async function setSecrets(
   envClient: HttpClient,
   args: SetSecretsArgs
-): Promise<ApiResponse<SetSecretsResponseData, CreateSecretsError>> {
+): Promise<ApiResponse<SetSecretsResponseData, SetSecretsError>> {
   try {
     const { project, environment, data } = args
 
@@ -34,7 +35,7 @@ async function setSecrets(
 
     return { data: null, error: null }
   } catch (error: any) {
-    const apiError = createApiErrorFromResponse<CreateSecretsError>(error)
+    const apiError = createApiErrorFromResponse<SetSecretsError>(error)
 
     return { data: null, error: apiError }
   }
