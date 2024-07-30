@@ -6,6 +6,7 @@ import { SecretKey } from '../../../../types/secretKey'
 type SetSecretsResponseData = null
 
 type SetSecretsError =
+  | ApiError<'no_values_provided'>
   | ApiError<'invalid_secret_keys', { secretKeys: Array<SecretKey> }>
   | ApiError<'duplicate_secrets', { duplicateSecrets: Array<SecretKey> }>
   | ApiError<'self_referencing_secrets', { secrets: Array<SecretKey> }>
