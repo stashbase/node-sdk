@@ -6,11 +6,7 @@ export function createApiErrorFromResponse<T>(responseData: {
   error: ApiError<unknown>
 }): T {
   // validation error = bad request
-  if (
-    responseData &&
-    responseData?.code === 'FST_ERR_VALIDATION' &&
-    responseData?.statusCode === 400
-  ) {
+  if (responseData && responseData?.statusCode === 400) {
     return <T>{ code: 'bad_request' }
   }
 
