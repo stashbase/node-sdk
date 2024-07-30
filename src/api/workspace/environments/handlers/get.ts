@@ -26,7 +26,7 @@ async function getEnvironment(
 
   try {
     const data = await client.get<Environment>({
-      path: `/projects/${project}/environments/${environment}`,
+      path: `/v1/projects/${project}/environments/${environment}`,
     })
 
     return { data: data, error: null }

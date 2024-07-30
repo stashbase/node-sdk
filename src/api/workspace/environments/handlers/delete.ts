@@ -19,7 +19,7 @@ async function deleteEnvironment(
 
   try {
     const data = await client.del<null>({
-      path: `/projects/${project}/environments/${args.environment}`,
+      path: `/v1/projects/${project}/environments/${args.environment}`,
     })
 
     return { data: data, error: null }

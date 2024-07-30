@@ -22,7 +22,7 @@ async function createEnvironment(
 
   try {
     const data = await client.post<null>({
-      path: `/projects/${project}/environments`,
+      path: `/v1/projects/${project}/environments`,
       data: { ...args, project: undefined },
     })
 

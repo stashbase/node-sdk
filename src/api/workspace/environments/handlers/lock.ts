@@ -20,7 +20,7 @@ async function lockUnlockEnvironment(
 
   try {
     const data = await client.patch<null>({
-      path: `/projects/${project}/environments/${name}/${lock ? 'lock' : 'unlock'}`,
+      path: `/v1/projects/${project}/environments/${name}/${lock ? 'lock' : 'unlock'}`,
     })
 
     return { data: data, error: null }
