@@ -1,23 +1,26 @@
 import { ApiError, SharedApiError } from '../../http/response'
 
 export type CreateSecretsError =
+  | SharedApiError
   | InvalidSecretKeysError
   | DuplicateSecretsError
   | SelfReferencingSecretsError
 
-export type DeleteSecretsError = InvalidSecretKeysError
+export type DeleteSecretsError = SharedApiError | InvalidSecretKeysError
 
-export type GetSecretError = ApiError<'secret_not_found'>
+export type GetSecretError = SharedApiError | ApiError<'secret_not_found'>
 
 export type ListSecretsError = SharedApiError
 
 export type SetSecretsError =
+  | SharedApiError
   | NoValuesProvidedError
   | InvalidSecretKeysError
   | DuplicateSecretsError
   | SelfReferencingSecretsError
 
 export type UpdateSecretsError =
+  | SharedApiError
   | NoValuesProvidedError
   | InvalidSecretKeysError
   | DuplicateSecretsError
