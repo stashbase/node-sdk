@@ -1,8 +1,9 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiError, ApiResponse } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { SecretKey } from '../../../../types/secretKey'
 
-type Secret = { key: Uppercase<string>; value: string; description: string | null }
+type Secret = { key: SecretKey; value: string; description: string | null }
 
 type GetSecretError = ApiError<'project_not_found' | 'environment_not_found' | 'secret_not_found'>
 type GetSecretResponse = Promise<ApiResponse<Secret, GetSecretError>>

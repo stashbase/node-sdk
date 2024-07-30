@@ -7,6 +7,7 @@ import {
 } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
 import { AtLeastOne } from '../../../../utils/types'
+import { SecretKey } from '../../../../types/secretKey'
 
 type UpdateSecretsResponseData = {
   updatedCount: number
@@ -17,13 +18,13 @@ type UpdateSecretsError =
   | ProjectNotFoundError
   | EnvironmentNotFoundError
   | ApiError<'no_values_provided'>
-  | ApiError<'missing_properties_to_update', { secretKeys: Array<Uppercase<string>> }>
-  | ApiError<'invalid_secret_keys', { secretKeys: Array<Uppercase<string>> }>
-  | ApiError<'invalid_new_secret_keys', { newSecretKeys: Array<Uppercase<string>> }>
-  | ApiError<'duplicate_secrets', { duplicateSecrets: Array<Uppercase<string>> }>
-  | ApiError<'duplicate_new_secrets', { duplicateSecrets: Array<Uppercase<string>> }>
-  | ApiError<'self_referencing_secrets', { secrets: Array<Uppercase<string>> }>
-  | ApiError<'new_key_secrets_already_exist', { conflictingSecrets: Array<Uppercase<string>> }>
+  | ApiError<'missing_properties_to_update', { secretKeys: Array<SecretKey> }>
+  | ApiError<'invalid_secret_keys', { secretKeys: Array<SecretKey> }>
+  | ApiError<'invalid_new_secret_keys', { newSecretKeys: Array<SecretKey> }>
+  | ApiError<'duplicate_secrets', { duplicateSecrets: Array<SecretKey> }>
+  | ApiError<'duplicate_new_secrets', { duplicateSecrets: Array<SecretKey> }>
+  | ApiError<'self_referencing_secrets', { secrets: Array<SecretKey> }>
+  | ApiError<'new_key_secrets_already_exist', { conflictingSecrets: Array<SecretKey> }>
 
 export interface UpdateSecretsArgs {
   project: string
@@ -32,7 +33,7 @@ export interface UpdateSecretsArgs {
 }
 
 export type UpdateSecretData = {
-  key: Uppercase<string>
+  key: SecretKey
 } & AtLeastOne<{
   newKey: Uppercase<string>
   value: string

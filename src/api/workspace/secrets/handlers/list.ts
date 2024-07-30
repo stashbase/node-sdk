@@ -6,8 +6,9 @@ import {
   ProjectNotFoundError,
 } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { SecretKey } from '../../../../types/secretKey'
 
-type SecretsData = Array<{ key: Uppercase<string>; value: string; description?: string }>
+type SecretsData = Array<{ key: SecretKey; value: string; description?: string }>
 type ListSecretsError = ProjectNotFoundError | EnvironmentNotFoundError
 
 export interface ListSecretsArgs {
