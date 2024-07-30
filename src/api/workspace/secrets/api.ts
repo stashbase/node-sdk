@@ -1,5 +1,5 @@
 import { HttpClient } from '../../../http/client'
-import { ApiError, apiError } from '../../../http/response'
+import { ApiError } from '../../../http/response'
 import {
   isValidSecretKey,
   validateCreateSecretsInput,
