@@ -1,6 +1,5 @@
 import { HttpClient } from '../../../../http/client'
 import {
-  ApiError,
   ApiResponse,
   EnvironmentNotFoundError,
   ProjectNotFoundError,
@@ -8,23 +7,14 @@ import {
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
 import { AtLeastOne } from '../../../../utils/types'
 import { SecretKey } from '../../../../types/secretKey'
+import { UpdateSecretsError as SharedUpdateSecretsError } from '../../../../types/errors/secrets'
 
 type UpdateSecretsResponseData = {
   updatedCount: number
   notFoundKeys?: Array<Uppercase<string>>
 }
 
-type UpdateSecretsError =
-  | ProjectNotFoundError
-  | EnvironmentNotFoundError
-  | ApiError<'no_values_provided'>
-  | ApiError<'invalid_secret_keys', { secretKeys: Array<string> }>
-  | ApiError<'missing_properties_to_update', { secretKeys: Array<string> }>
-  | ApiError<'invalid_new_secret_keys', { newSecretKeys: Array<string> }>
-  | ApiError<'duplicate_secrets', { duplicateSecrets: Array<SecretKey> }>
-  | ApiError<'duplicate_new_secrets', { duplicateSecrets: Array<SecretKey> }>
-  | ApiError<'self_referencing_secrets', { secrets: Array<SecretKey> }>
-  | ApiError<'new_key_secrets_already_exist', { conflictingSecrets: Array<SecretKey> }>
+type UpdateSecretsError = ProjectNotFoundError | EnvironmentNotFoundError | SharedUpdateSecretsError
 
 export interface UpdateSecretsArgs {
   project: string
