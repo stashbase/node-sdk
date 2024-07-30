@@ -16,7 +16,10 @@ export function projectsAPI(httpClient: HttpClient) {
   async function get(projectName: string) {
     if (!isValidProjectName(projectName)) {
       // const error: ApiError<'invalid_name_format'> = { code: 'invalid_name_format' }
-      const error: ApiError<'invalid_name'> = { code: 'invalid_name' }
+      const error: ApiError<'invalid_project_name', undefined> = {
+        code: 'invalid_project_name',
+        details: undefined,
+      }
       return { data: null, error }
     }
 
@@ -42,10 +45,12 @@ export function projectsAPI(httpClient: HttpClient) {
   async function create(data: CreateProjectData) {
     const { name } = data
     const valid = isValidProjectName(name)
-    console.log({ valid })
 
     if (!valid) {
-      const error: ApiError<'invalid_name'> = { code: 'invalid_name' }
+      const error: ApiError<'invalid_project_name'> = {
+        code: 'invalid_project_name',
+        details: undefined,
+      }
 
       return { data: null, error }
     }
@@ -59,16 +64,19 @@ export function projectsAPI(httpClient: HttpClient) {
    * @param key Project name
    * @returns null
    * */
-  async function remove(name: string) {
-    const invalidName = !isValidProjectName(name)
+  async function remove(projectName: string) {
+    const invalidName = !isValidProjectName(projectName)
 
     if (invalidName) {
-      const error: ApiError<'invalid_name'> = { code: 'invalid_name' }
+      const error: ApiError<'invalid_project_name'> = {
+        code: 'invalid_project_name',
+        details: undefined,
+      }
 
       return { data: null, error }
     }
 
-    return await deleteProject(httpClient, name)
+    return await deleteProject(httpClient, projectName)
   }
 
   return {
