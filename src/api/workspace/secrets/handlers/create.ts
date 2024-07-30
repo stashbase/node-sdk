@@ -1,5 +1,10 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
+import {
+  ApiError,
+  ApiResponse,
+  EnvironmentNotFoundError,
+  ProjectNotFoundError,
+} from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
 
 type CreateSecretsResponseData = {
@@ -12,6 +17,8 @@ type CreateSecretsResponseData = {
 // >
 
 type CreateSecretsError =
+  | ProjectNotFoundError
+  | EnvironmentNotFoundError
   | ApiError<'duplicate_secrets', { duplicateSecrets: Array<Uppercase<string>> }>
   | ApiError<'invalid_secret_keys', { secretKeys: Array<Uppercase<string>> }>
   | ApiError<'self_referencing_secrets', { secrets: Array<Uppercase<string>> }>
