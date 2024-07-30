@@ -10,6 +10,7 @@ import { getSecret } from './handlers/secrets/get'
 import {
   isValidSecretKey,
   validateCreateSecretsInput,
+  validateSecretKeys,
   validateSetSecretsInput,
   validateUpdateSecretsInput,
 } from '../../utils/inputValidation'
@@ -76,7 +77,11 @@ function envSecretsAPI(httpClient: HttpClient) {
    * */
   async function get(key: string, expandRefs = false) {
     if (!isValidSecretKey(key)) {
-      const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
+      const error: ApiError<'invalid_secret_key'> = {
+        code: 'invalid_secret_key',
+        details: undefined,
+      }
+
       return { data: null, error }
     }
     return getSecret(httpClient, key, expandRefs)
@@ -184,15 +189,24 @@ function envSecretsAPI(httpClient: HttpClient) {
    * */
   async function remove(keys: Uppercase<string>[]) {
     if (keys.length === 0) {
-      const error: ApiError<'no_keys'> = { code: 'no_keys' }
+      const error: ApiError<'no_keys_provided'> = {
+        code: 'no_keys_provided',
+        details: undefined,
+      }
 
       return { data: null, error }
     }
 
-    const invalidKey = keys.find((key) => !isValidSecretKey(key))
+    const { invalidSecretKeys } = validateSecretKeys(keys)
 
-    if (invalidKey) {
-      const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
+    if (invalidSecretKeys.length > 0) {
+      const error: ApiError<'invalid_secret_keys', { secretKeys: Array<string> }> = {
+        code: 'invalid_secret_keys',
+        details: {
+          secretKeys: invalidSecretKeys,
+        },
+      }
+
       return { data: null, error }
     }
 
