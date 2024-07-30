@@ -1,15 +1,15 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
 import { SecretKey } from '../../../../types/secretKey'
+import {
+  ApiResponse,
+  EnvironmentNotFoundError,
+  ProjectNotFoundError,
+} from '../../../../http/response'
+import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { SetSecretsError as SharedSetSecretsError } from '../../../../types/errors/secrets'
 
 type SetSecretsResponseData = null
-
-type SetSecretsError =
-  | ApiError<'no_values_provided'>
-  | ApiError<'invalid_secret_keys', { secretKeys: Array<string> }>
-  | ApiError<'duplicate_secrets', { duplicateSecrets: Array<SecretKey> }>
-  | ApiError<'self_referencing_secrets', { secrets: Array<SecretKey> }>
+type SetSecretsError = ProjectNotFoundError | EnvironmentNotFoundError | SharedSetSecretsError
 
 export interface SetSecretsArgs {
   project: string

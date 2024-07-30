@@ -1,17 +1,14 @@
 import { HttpClient } from '../../../../http/client'
 import {
-  ApiError,
   ApiResponse,
   EnvironmentNotFoundError,
   ProjectNotFoundError,
 } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { DeleteSecretsError as SharedDeleteSecretsError } from '../../../../types/errors/secrets'
 import { SecretKey } from '../../../../types/secretKey'
 
-type DeleteSecretsError =
-  | ProjectNotFoundError
-  | EnvironmentNotFoundError
-  | ApiError<'invalid_secret_keys', { secretKeys: Array<string> }>
+type DeleteSecretsError = ProjectNotFoundError | EnvironmentNotFoundError | SharedDeleteSecretsError
 
 type DeleteSecretsResponseData = {
   deletedCount: number

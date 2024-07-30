@@ -1,12 +1,12 @@
 import { HttpClient } from '../../../../http/client'
 import {
-  ApiError,
   ApiResponse,
   EnvironmentNotFoundError,
   ProjectNotFoundError,
 } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
 import { SecretKey } from '../../../../types/secretKey'
+import { CreateSecretsError as SharedCreateSecretsError } from '../../../../types/errors/secrets'
 
 type CreateSecretsResponseData = {
   createdCount: number
@@ -17,12 +17,7 @@ type CreateSecretsResponseData = {
 //   'no_values_provided' | 'project_not_found' | 'environment_not_found' | 'duplicate_keys'
 // >
 
-type CreateSecretsError =
-  | ProjectNotFoundError
-  | EnvironmentNotFoundError
-  | ApiError<'invalid_secret_keys', { secretKeys: Array<string> }>
-  | ApiError<'duplicate_secrets', { duplicateSecrets: Array<SecretKey> }>
-  | ApiError<'self_referencing_secrets', { secrets: Array<SecretKey> }>
+type CreateSecretsError = ProjectNotFoundError | EnvironmentNotFoundError | SharedCreateSecretsError
 
 export interface CreateSecretsArgs {
   project: string
