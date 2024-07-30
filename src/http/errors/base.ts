@@ -1,9 +1,9 @@
 import { ApiError } from '../response'
 
-export function createApiErrorFromResponse<T>(responseData: {
+export function createApiErrorFromResponse<T = ApiError<any, any> | undefined>(responseData: {
   code?: string
   statusCode?: number
-  error: ApiError<unknown>
+  error: T
 }): T {
   // validation error = bad request
   if (responseData && responseData?.statusCode === 400) {
