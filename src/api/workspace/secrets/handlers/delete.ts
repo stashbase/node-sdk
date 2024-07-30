@@ -11,7 +11,7 @@ import { SecretKey } from '../../../../types/secretKey'
 type DeleteSecretsError =
   | ProjectNotFoundError
   | EnvironmentNotFoundError
-  | ApiError<'invalid_secret_keys', { secretKeys: Array<SecretKey> }>
+  | ApiError<'invalid_secret_keys', { secretKeys: Array<string> }>
 
 type DeleteSecretsResponseData = {
   deletedCount: number
