@@ -20,8 +20,8 @@ type CreateSecretsResponseData = {
 type CreateSecretsError =
   | ProjectNotFoundError
   | EnvironmentNotFoundError
+  | ApiError<'invalid_secret_keys', { secretKeys: Array<string> }>
   | ApiError<'duplicate_secrets', { duplicateSecrets: Array<SecretKey> }>
-  | ApiError<'invalid_secret_keys', { secretKeys: Array<SecretKey> }>
   | ApiError<'self_referencing_secrets', { secrets: Array<SecretKey> }>
 
 export interface CreateSecretsArgs {

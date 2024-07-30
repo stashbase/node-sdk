@@ -18,9 +18,9 @@ type UpdateSecretsError =
   | ProjectNotFoundError
   | EnvironmentNotFoundError
   | ApiError<'no_values_provided'>
-  | ApiError<'missing_properties_to_update', { secretKeys: Array<SecretKey> }>
-  | ApiError<'invalid_secret_keys', { secretKeys: Array<SecretKey> }>
-  | ApiError<'invalid_new_secret_keys', { newSecretKeys: Array<SecretKey> }>
+  | ApiError<'invalid_secret_keys', { secretKeys: Array<string> }>
+  | ApiError<'missing_properties_to_update', { secretKeys: Array<string> }>
+  | ApiError<'invalid_new_secret_keys', { newSecretKeys: Array<string> }>
   | ApiError<'duplicate_secrets', { duplicateSecrets: Array<SecretKey> }>
   | ApiError<'duplicate_new_secrets', { duplicateSecrets: Array<SecretKey> }>
   | ApiError<'self_referencing_secrets', { secrets: Array<SecretKey> }>
