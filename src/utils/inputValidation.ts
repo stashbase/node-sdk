@@ -293,8 +293,18 @@ export const validateUpdateSecretsInput = (
   }
 
   return null
+}
 
-  return null
+export const validateSecretKeys = (data: Array<string>): { invalidSecretKeys: Array<string> } => {
+  const invalidSecretKeys = new Set<string>()
+
+  for (const key of data) {
+    if (!isValidSecretKey(key)) {
+      invalidSecretKeys.add(key)
+    }
+  }
+
+  return { invalidSecretKeys: Array.from(invalidSecretKeys) }
 }
 
 const isValidSecretKey = (key: string) =>
