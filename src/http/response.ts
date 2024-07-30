@@ -1,10 +1,10 @@
-export type SharedApiErrorCode =
-  | 'too_many_requests'
-  | 'unauthorized'
-  | 'api_key_expired'
-  | 'missing_permission'
-  | 'server_error'
-  | 'bad_request'
+export type SharedApiError =
+  | ApiError<'api_key_expired', { expiredAt: string }>
+  | ApiError<'missing_permission', { requiredPermission: string }>
+  | ApiError<'too_many_requests'>
+  | ApiError<'unauthorized'>
+  | ApiError<'server_error'>
+// | ApiError<'bad_request'>
 
 export type ProjectNotFoundError = ApiError<'project_not_found'>
 export type EnvironmentNotFoundError = ApiError<'environment_not_found'>
@@ -17,7 +17,7 @@ export type ApiErrorDetails = Record<string, { [key: string]: object }>
  * @param details - Optional details for the error.
  */
 export type ApiError<T extends string, D = undefined | ApiErrorDetails> = {
-  code: SharedApiErrorCode | T
+  code: T
   details: D
 }
 
