@@ -1,4 +1,4 @@
-type SharedApiErrorCode =
+export type SharedApiErrorCode =
   | 'too_many_requests'
   | 'unauthorized'
   | 'api_key_expired'
