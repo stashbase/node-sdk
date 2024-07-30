@@ -1,4 +1,4 @@
-import { ApiError, SharedApiErrorCode } from '../../http/response'
+import { ApiError, SharedApiError } from '../../http/response'
 
 export type CreateSecretsError =
   | InvalidSecretKeysError
@@ -9,7 +9,7 @@ export type DeleteSecretsError = InvalidSecretKeysError
 
 export type GetSecretError = ApiError<'secret_not_found'>
 
-export type ListSecretsError = ApiError<SharedApiErrorCode, undefined>
+export type ListSecretsError = SharedApiError
 
 export type SetSecretsError =
   | NoValuesProvidedError
