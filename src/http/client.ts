@@ -1,6 +1,6 @@
 import fetchWithRetry from './retry'
 
-const baseURL: string = 'http://0.0.0.0:5000/v1/sdk'
+const baseURL: string = 'http://0.0.0.0:5000'
 
 type BasePath = 'environments' | 'projects' | ''
 
@@ -33,12 +33,12 @@ export function createHttpClient(args: {
   } as Record<string, string>
 
   if (envApiKey) {
-    headers['x-env-key'] = envApiKey
+    headers['x-api-key'] = envApiKey
   }
 
   if (workspaceApiKey) {
     // headers['x-admin-token'] = workspaceToken
-    headers['x-workspace-key'] = workspaceApiKey
+    headers['x-api-key'] = workspaceApiKey
   }
 
   async function get<T>(args: { path: string; query?: { [key: string]: string } }): Promise<T> {
