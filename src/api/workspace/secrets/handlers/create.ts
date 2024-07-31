@@ -39,7 +39,7 @@ async function createSecrets(
     const { project, environment, data } = args
 
     const secrets = await envClient.post<CreateSecretsResponseData>({
-      path: `/projects/${project}/environments/${environment}/secrets`,
+      path: `/v1/projects/${project}/environments/${environment}/secrets`,
       data,
     })
 

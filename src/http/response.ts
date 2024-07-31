@@ -1,10 +1,30 @@
 export type SharedApiError =
-  | ApiError<'api_key_expired', { expiredAt: string }>
-  | ApiError<'missing_permission', { requiredPermission: string }>
-  | ApiError<'too_many_requests'>
-  | ApiError<'unauthorized'>
-  | ApiError<'server_error'>
-// | ApiError<'bad_request'>
+  | ApiKeyExpiredError
+  | MissingPermissionError
+  | TooManyRequestsError
+  | UnauthorizedError
+  | ServerError
+
+type MissingPermissionError = ApiError<
+  'missing_permission',
+  {
+    requiredPermissions?: string[]
+    userWorkspaceRole?: {
+      current: string
+      allowed: string[]
+    }
+    projectRole?: {
+      current: string
+      allowed: string[]
+    }
+  }
+>
+
+type ApiKeyExpiredError = ApiError<'api_key_expired', { expiredAt: string }>
+
+type TooManyRequestsError = ApiError<'too_many_requests'>
+type UnauthorizedError = ApiError<'unauthorized'>
+type ServerError = ApiError<'server_error'>
 
 export type ProjectNotFoundError = ApiError<'project_not_found'>
 export type EnvironmentNotFoundError = ApiError<'environment_not_found'>
