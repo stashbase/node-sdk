@@ -1,5 +1,14 @@
 import { UpdateSecretData } from '../api/workspace/secrets/handlers/update'
 import { ApiError } from '../http/response'
+import {
+  DuplicateNewSecretsError,
+  DuplicateSecretsError,
+  InvalidNewSecretKeysError,
+  InvalidSecretKeysError,
+  MissingPropertiesToUpdateError,
+  NoValuesProvidedError,
+  SelfReferencingSecretsError,
+} from '../types/errors/secrets'
 import { SecretKey } from '../types/secretKey'
 
 export function containsMaxOneDash(str: string) {
@@ -93,10 +102,10 @@ interface SetSecretsItem {
 }
 
 type ValidateSetSecretsInputRes =
-  | ApiError<'no_values_provided'>
-  | ApiError<'invalid_secret_keys', { secretKeys: Array<string> }>
-  | ApiError<'duplicate_secrets', { duplicateSecrets: Array<string> }>
-  | ApiError<'self_referencing_secrets', { secrets: Array<string> }>
+  | NoValuesProvidedError
+  | InvalidSecretKeysError
+  | DuplicateSecretsError
+  | SelfReferencingSecretsError
   | null
 
 // return api error
@@ -131,7 +140,8 @@ export const validateSetSecretsInput = (
   }
 
   if (invalidSecretKeys.size > 0) {
-    return { code: 'invalid_secret_keys', details: { secretKeys: Array.from(invalidSecretKeys) } }
+    const secretKeys = Array.from(invalidSecretKeys)
+    return { code: 'invalid_secret_keys', details: { secretKeys } }
   }
 
   const duplicateSecretKeys = Array.from(keyOccurrences.entries())
@@ -139,13 +149,16 @@ export const validateSetSecretsInput = (
     ?.map(([key]) => key)
 
   if (duplicateSecretKeys?.length > 0) {
-    return { code: 'duplicate_secrets', details: { duplicateSecrets: duplicateSecretKeys } }
+    const secretKeys = duplicateSecretKeys
+    return { code: 'duplicate_secrets', details: { secretKeys } }
   }
 
   if (keysWithSelfReference.size > 0) {
+    const secretKeys = Array.from(keysWithSelfReference)
+
     return {
       code: 'self_referencing_secrets',
-      details: { secrets: Array.from(keysWithSelfReference) },
+      details: { secretKeys },
     }
   }
 
@@ -155,13 +168,13 @@ export const validateSetSecretsInput = (
 export const validateCreateSecretsInput = validateSetSecretsInput
 
 type ValidateUpdateSecretsInputRes =
-  | ApiError<'no_values_provided'>
-  | ApiError<'missing_properties_to_update', { secretKeys: Array<string> }>
-  | ApiError<'invalid_secret_keys', { secretKeys: Array<string> }>
-  | ApiError<'invalid_new_secret_keys', { newSecretKeys: Array<string> }>
-  | ApiError<'duplicate_secrets', { duplicateSecrets: Array<string> }>
-  | ApiError<'duplicate_new_secrets', { duplicateSecrets: Array<string> }>
-  | ApiError<'self_referencing_secrets', { secrets: Array<string> }>
+  | NoValuesProvidedError
+  | MissingPropertiesToUpdateError
+  | InvalidSecretKeysError
+  | InvalidNewSecretKeysError
+  | DuplicateSecretsError
+  | DuplicateNewSecretsError
+  | SelfReferencingSecretsError
   | null
 
 export const validateUpdateSecretsInput = (
@@ -242,14 +255,17 @@ export const validateUpdateSecretsInput = (
 
   // NOTE: invalid keys
   if (invalidSecretKeys.size > 0) {
-    return { code: 'invalid_secret_keys', details: { secretKeys: Array.from(invalidSecretKeys) } }
+    const secretKeys = Array.from(invalidSecretKeys)
+    return { code: 'invalid_secret_keys', details: { secretKeys } }
   }
 
   // NOTE: invalid new secret keys
   if (invalidNewSecretKeys.size > 0) {
+    const secretKeys = Array.from(invalidNewSecretKeys)
+
     return {
       code: 'invalid_new_secret_keys',
-      details: { newSecretKeys: Array.from(invalidNewSecretKeys) },
+      details: { secretKeys },
     }
   }
 
@@ -259,7 +275,8 @@ export const validateUpdateSecretsInput = (
     ?.map(([key]) => key)
 
   if (duplicateSecretKeys?.length > 0) {
-    return { code: 'duplicate_secrets', details: { duplicateSecrets: duplicateSecretKeys } }
+    const secretKeys = duplicateSecretKeys
+    return { code: 'duplicate_secrets', details: { secretKeys } }
   }
 
   // NOTE: duplicate new secrets
@@ -270,23 +287,27 @@ export const validateUpdateSecretsInput = (
   if (duplicateNewSecrets?.length > 0) {
     return {
       code: 'duplicate_new_secrets',
-      details: { duplicateSecrets: duplicateNewSecrets },
+      details: { secretKeys: duplicateNewSecrets },
     }
   }
 
   // NOTE: self-referencing secrets
   if (keysWithSelfReference.size > 0) {
+    const secretKeys = Array.from(keysWithSelfReference)
+
     return {
       code: 'self_referencing_secrets',
-      details: { secrets: Array.from(keysWithSelfReference) },
+      details: { secretKeys },
     }
   }
 
   // NOTE: self-referencing new secrets
   if (newKeysWithSelfReference.size > 0) {
+    const secretKeys = Array.from(newKeysWithSelfReference)
+
     return {
       code: 'self_referencing_secrets',
-      details: { secrets: Array.from(newKeysWithSelfReference) },
+      details: { secretKeys },
     }
   }
 
