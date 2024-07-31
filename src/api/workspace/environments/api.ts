@@ -16,13 +16,19 @@ export const checkValidProjectEnv = (
   environmentName: string
 ): ApiError<'invalid_project_name' | 'invalid_environment_name'> | undefined => {
   if (!isValidProjectName(projectName)) {
-    const error: ApiError<'invalid_project_name'> = { code: 'invalid_project_name' }
+    const error: ApiError<'invalid_project_name'> = {
+      code: 'invalid_project_name',
+      details: undefined,
+    }
 
     return error
   }
 
   if (!isValidEnvironmentName(environmentName)) {
-    const error: ApiError<'invalid_environment_name'> = { code: 'invalid_environment_name' }
+    const error: ApiError<'invalid_environment_name'> = {
+      code: 'invalid_environment_name',
+      details: undefined,
+    }
 
     return error
   }
