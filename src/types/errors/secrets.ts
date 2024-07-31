@@ -1,5 +1,9 @@
 import { ApiError, SharedApiError } from '../../http/response'
 
+export type SecretsErrorDetails = {
+  secretKeys: Array<string>
+}
+
 export type CreateSecretsError =
   | SharedApiError
   | InvalidSecretKeysError
@@ -26,15 +30,12 @@ export type UpdateSecretsError =
   | DuplicateSecretsError
   | DuplicateNewSecretsError
   | SelfReferencingSecretsError
-  | ApiError<'invalid_new_secret_keys', { newSecretKeys: Array<string> }>
-  | ApiError<'missing_properties_to_update', { secretKeys: Array<string> }>
-  | ApiError<'new_key_secrets_already_exist', { conflictingSecrets: Array<string> }>
+  | ApiError<'invalid_new_secret_keys', SecretsErrorDetails>
+  | ApiError<'missing_properties_to_update', SecretsErrorDetails>
+  | ApiError<'new_key_secrets_already_exist', SecretsErrorDetails>
 
 type NoValuesProvidedError = ApiError<'no_values_provided'>
-type InvalidSecretKeysError = ApiError<'invalid_secret_keys', { secretKeys: Array<string> }>
-type DuplicateSecretsError = ApiError<'duplicate_secrets', { duplicateSecrets: Array<string> }>
-type SelfReferencingSecretsError = ApiError<'self_referencing_secrets', { secrets: Array<string> }>
-type DuplicateNewSecretsError = ApiError<
-  'duplicate_new_secrets',
-  { duplicateSecrets: Array<string> }
->
+type InvalidSecretKeysError = ApiError<'invalid_secret_keys', SecretsErrorDetails>
+type DuplicateSecretsError = ApiError<'duplicate_secrets', SecretsErrorDetails>
+type SelfReferencingSecretsError = ApiError<'self_referencing_secrets', SecretsErrorDetails>
+type DuplicateNewSecretsError = ApiError<'duplicate_new_secrets', SecretsErrorDetails>
