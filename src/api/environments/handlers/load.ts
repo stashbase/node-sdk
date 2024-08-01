@@ -2,7 +2,12 @@ import dotenvExpand from 'dotenv-expand'
 import { printSecretsTable } from '../../../utils/table'
 import { HttpClient } from '../../../http/client'
 import { createApiErrorFromResponse } from '../../../errors'
-import { ApiError, ApiResponse, responseFailure, responseSuccess } from '../../../http/response'
+import {
+  ApiResponse,
+  SharedApiError,
+  responseFailure,
+  responseSuccess,
+} from '../../../http/response'
 
 type SecretKeyValues = Array<{ key: string; value: string }>
 
@@ -14,7 +19,7 @@ export interface LoadEnvironmentOpts {
 }
 
 // type LoadEnvironmentError = ApiError<EnvironmentApiError>
-type LoadEnvironmentError = ApiError
+type LoadEnvironmentError = SharedApiError
 
 async function loadEnvironment(
   client: HttpClient,
