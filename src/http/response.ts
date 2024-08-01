@@ -22,7 +22,10 @@ type MissingPermissionError = ApiError<
 
 type ApiKeyExpiredError = ApiError<'api_key_expired', { expiredAt: string }>
 
-type TooManyRequestsError = ApiError<'too_many_requests'>
+type TooManyRequestsError = ApiError<
+  'too_many_requests',
+  { retryAfter: { seconds: number; unixTimestamp: number } }
+>
 type UnauthorizedError = ApiError<'unauthorized'>
 type ServerError = ApiError<'server_error'>
 
