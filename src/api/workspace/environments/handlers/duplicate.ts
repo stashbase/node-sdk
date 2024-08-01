@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiError, ApiResponse } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { createApiErrorFromResponse } from '../../../../errors'
 
 export type DuplicateEnvironmentArgs = {
   project: string
@@ -29,9 +29,8 @@ async function duplicateEnvironment(
     })
 
     return { data: data, error: null }
-  } catch (error: any) {
+  } catch (error) {
     const apiError = createApiErrorFromResponse<DulicateEnvironmentError>(error)
-
     return { data: null, error: apiError }
   }
 }

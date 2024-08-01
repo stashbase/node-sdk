@@ -23,11 +23,8 @@ async function deleteEnvironment(
     })
 
     return { data: data, error: null }
-  } catch (error: any) {
-    console.log(error)
-
+  } catch (error) {
     const apiError = createApiErrorFromResponse<DeleteEnvironmentError>(error)
-
     return { data: null, error: apiError }
   }
 }

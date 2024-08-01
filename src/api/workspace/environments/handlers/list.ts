@@ -34,10 +34,8 @@ async function listEnvironments(
     })
 
     return { data: data, error: null }
-  } catch (error: any) {
-    console.log('Error: ', error)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<ListEnvironmentsError>(error)
-
     return { data: null, error: apiError }
   }
 }

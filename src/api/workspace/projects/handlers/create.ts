@@ -22,10 +22,8 @@ export async function createProject(
     })
 
     return { data: null, error: null }
-  } catch (error: any) {
-    console.log('Error: ', error?.error)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<CreateSecretsError>(error)
-
     return { data: null, error: apiError }
   }
 }

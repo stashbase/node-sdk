@@ -21,10 +21,8 @@ async function deleteEnvironmentSecrets(
     })
 
     return { data, error: null }
-  } catch (error: any) {
-    console.log('Error: ', error?.error)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<DeleteSecretsError>(error)
-
     return { data: null, error: apiError }
   }
 }

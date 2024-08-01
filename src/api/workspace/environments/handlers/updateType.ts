@@ -26,9 +26,8 @@ async function updateEnvironmentType(
     })
 
     return { data: data, error: null }
-  } catch (error: any) {
+  } catch (error) {
     const apiError = createApiErrorFromResponse<UpdateEnvironmentTypeError>(error)
-
     return { data: null, error: apiError }
   }
 }

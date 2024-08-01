@@ -16,9 +16,8 @@ async function deleteProject(
     })
 
     return { data: null, error: null }
-  } catch (error: any) {
+  } catch (error) {
     const apiError = createApiErrorFromResponse<DeleteProjectsError>(error)
-
     return { data: null, error: apiError }
   }
 }
