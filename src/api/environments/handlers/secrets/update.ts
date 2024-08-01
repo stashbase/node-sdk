@@ -1,8 +1,8 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiResponse, responseSuccess } from '../../../../http/response'
 import { AtLeastOne } from '../../../../utils/types'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { UpdateSecretsError } from '../../../../types/errors/secrets'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
 type UpdateSecretsResponseData = {
   updatedCount: number
@@ -32,7 +32,7 @@ async function updateSecrets(
     return responseSuccess(secrets)
   } catch (error) {
     const apiError = createApiErrorFromResponse<UpdateSecretsError>(error)
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

@@ -1,7 +1,7 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiResponse, responseSuccess } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ListSecretsError } from '../../../../types/errors/secrets'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
 export interface ListSecretsOpts {
   description?: boolean
@@ -36,7 +36,7 @@ async function listSecrets(
     return responseSuccess(secrets)
   } catch (error) {
     const apiError = createApiErrorFromResponse<ListSecretsError>(error)
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

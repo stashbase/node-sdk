@@ -19,6 +19,7 @@ import {
   invalidSecretKeysError,
   noValuesProvidedError,
 } from '../../errors/secrets'
+import { responseFailure } from '../../http/response'
 
 function environmentsAPI(httpClient: HttpClient) {
   /**
@@ -29,7 +30,7 @@ function environmentsAPI(httpClient: HttpClient) {
    * */
   async function load(options?: LoadEnvironmentOpts) {
     if (options?.enabled === false) {
-      return { data: null, error: null }
+      return { data: null, error: null, ok: null }
     }
 
     return await loadEnvironment(httpClient, options)
@@ -43,7 +44,7 @@ function environmentsAPI(httpClient: HttpClient) {
    * */
   async function loadOrThrow(options?: LoadEnvironmentOpts) {
     if (options?.enabled === false) {
-      return { data: null, error: null }
+      return { data: null, error: null, ok: null }
     }
 
     const { error } = await loadEnvironment(httpClient, options)
@@ -82,7 +83,7 @@ function envSecretsAPI(httpClient: HttpClient) {
   async function get(key: string, expandRefs = false) {
     if (!isValidSecretKey(key)) {
       const error = invalidSecretKeyError()
-      return { data: null, error }
+      return responseFailure(error)
     }
     return getSecret(httpClient, key, expandRefs)
   }
@@ -107,7 +108,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     const validationError = validateCreateSecretsInput(data)
 
     if (validationError) {
-      return { data: null, error: validationError }
+      return responseFailure(validationError)
     }
 
     return await createSecrets(httpClient, data)
@@ -123,7 +124,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     const validationError = validateSetSecretsInput(data)
 
     if (validationError) {
-      return { data: null, error: validationError }
+      return responseFailure(validationError)
     }
 
     return await setSecrets(httpClient, data)
@@ -175,7 +176,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     const validationError = validateUpdateSecretsInput(data)
 
     if (validationError) {
-      return { data: null, error: validationError }
+      return responseFailure(validationError)
     }
 
     return await updateSecrets(httpClient, data)
@@ -197,7 +198,7 @@ function envSecretsAPI(httpClient: HttpClient) {
 
     if (invalidSecretKeys.length > 0) {
       const error = invalidSecretKeysError(invalidSecretKeys)
-      return { data: null, error }
+      return responseFailure(error)
     }
 
     return await deleteEnvironmentSecrets(httpClient, keys)
