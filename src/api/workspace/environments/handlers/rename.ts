@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiError, ApiResponse, responseSuccess } from '../../../../http/response'
+import { ApiError, ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
 export interface RenameEnvironmentArgs {
   project: string
@@ -31,7 +31,7 @@ async function renameEnvironment(
     return responseSuccess(data)
   } catch (error) {
     const apiError = createApiErrorFromResponse<RenameEnvironmentError>(error)
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

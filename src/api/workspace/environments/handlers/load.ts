@@ -2,7 +2,12 @@ import dotenvExpand from 'dotenv-expand'
 import { HttpClient } from '../../../../http/client'
 import { printSecretsTable } from '../../../../utils/table'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiResponse, SharedApiError } from '../../../../http/response'
+import {
+  ApiResponse,
+  SharedApiError,
+  responseFailure,
+  responseSuccess,
+} from '../../../../http/response'
 
 type SecretKeyValues = Array<{ key: string; value: string }>
 
@@ -41,7 +46,7 @@ async function loadEnvironment(
       console.log(`\nLoaded environment: ${name} (${data?.type})`)
       console.log(`No secrets found`)
 
-      return { data: null, error: null }
+      return { data: null, error: null, ok: true }
     }
 
     const secretsObj = (secrets ?? []).reduce((obj: { [key: string]: string }, item) => {
@@ -67,11 +72,10 @@ async function loadEnvironment(
       }
     }
 
-    return { data: null, error: null }
+    return responseSuccess(null)
   } catch (error) {
     const apiError = createApiErrorFromResponse<LoadEnvironmentError>(error)
-    return { data: null, error: apiError }
-    //
+    return responseFailure(apiError)
   }
 }
 

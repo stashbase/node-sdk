@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiError, ApiResponse, responseSuccess } from '../../../../http/response'
+import { ApiError, ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
 export interface LockEnvironmentArgs {
   project: string
@@ -26,7 +26,7 @@ async function lockUnlockEnvironment(
     return responseSuccess(data)
   } catch (error) {
     const apiError = createApiErrorFromResponse<LockEnvironmentError>(error)
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

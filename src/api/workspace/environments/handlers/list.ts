@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiError, ApiResponse, responseSuccess } from '../../../../http/response'
+import { ApiError, ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
 // ???
 // export interface GetEnvironmentOpts {
@@ -36,7 +36,7 @@ async function listEnvironments(
     return responseSuccess(data)
   } catch (error) {
     const apiError = createApiErrorFromResponse<ListEnvironmentsError>(error)
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

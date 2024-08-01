@@ -4,6 +4,7 @@ import {
   noValuesProvidedError,
 } from '../../../errors/secrets'
 import { HttpClient } from '../../../http/client'
+import { responseFailure } from '../../../http/response'
 import {
   isValidSecretKey,
   validateCreateSecretsInput,
@@ -33,12 +34,12 @@ export function secretsAPI(httpClient: HttpClient) {
     const namesError = checkValidProjectEnv(project, environment)
 
     if (namesError) {
-      return { data: null, error: namesError }
+      return responseFailure(namesError)
     }
 
     if (!isValidSecretKey(key)) {
       const error = invalidSecretKeyError()
-      return { data: null, error }
+      return responseFailure(error)
     }
 
     return await getSecret(httpClient, args)
@@ -56,7 +57,7 @@ export function secretsAPI(httpClient: HttpClient) {
     const namesError = checkValidProjectEnv(project, environment)
 
     if (namesError) {
-      return { data: null, error: namesError }
+      return responseFailure(namesError)
     }
 
     return await listSecrets(httpClient, args)
@@ -74,13 +75,13 @@ export function secretsAPI(httpClient: HttpClient) {
     const namesError = checkValidProjectEnv(project, environment)
 
     if (namesError) {
-      return { data: null, error: namesError }
+      return responseFailure(namesError)
     }
 
     const validationError = validateCreateSecretsInput(data)
 
     if (validationError) {
-      return { data: null, error: validationError }
+      return responseFailure(validationError)
     }
 
     return await createSecrets(httpClient, args)
@@ -98,13 +99,13 @@ export function secretsAPI(httpClient: HttpClient) {
     const namesError = checkValidProjectEnv(project, environment)
 
     if (namesError) {
-      return { data: null, error: namesError }
+      return responseFailure(namesError)
     }
 
     const validationError = validateSetSecretsInput(data)
 
     if (validationError) {
-      return { data: null, error: validationError }
+      return responseFailure(validationError)
     }
 
     return await setSecrets(httpClient, args)
@@ -167,7 +168,7 @@ export function secretsAPI(httpClient: HttpClient) {
     const validationError = validateUpdateSecretsInput(data)
 
     if (validationError) {
-      return { data: null, error: validationError }
+      return responseFailure(validationError)
     }
 
     return await updateSecrets(httpClient, args)
@@ -185,19 +186,19 @@ export function secretsAPI(httpClient: HttpClient) {
     const namesError = checkValidProjectEnv(project, environment)
 
     if (namesError) {
-      return { data: null, error: namesError }
+      return responseFailure(namesError)
     }
 
     if (keys.length === 0) {
       const error = noValuesProvidedError()
-      return { data: null, error }
+      return responseFailure(error)
     }
 
     const { invalidSecretKeys } = validateSecretKeys(keys)
 
     if (invalidSecretKeys.length > 0) {
       const error = invalidSecretKeysError(invalidSecretKeys)
-      return { data: null, error }
+      return responseFailure(error)
     }
 
     return await deleteSecrets(httpClient, args)

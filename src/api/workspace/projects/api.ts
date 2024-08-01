@@ -1,6 +1,6 @@
 import { invalidProjectNameError } from '../../../errors'
 import { HttpClient } from '../../../http/client'
-import { ApiError } from '../../../http/response'
+import { responseFailure } from '../../../http/response'
 import { isValidProjectName } from '../../../utils/inputValidation'
 import { CreateProjectData, createProject } from './handlers/create'
 import { deleteProject } from './handlers/delete'
@@ -17,7 +17,7 @@ export function projectsAPI(httpClient: HttpClient) {
   async function get(projectName: string) {
     if (!isValidProjectName(projectName)) {
       const error = invalidProjectNameError
-      return { data: null, error }
+      return responseFailure(error)
     }
 
     return await getProject(httpClient, projectName)
@@ -45,7 +45,7 @@ export function projectsAPI(httpClient: HttpClient) {
 
     if (!valid) {
       const error = invalidProjectNameError
-      return { data: null, error }
+      return responseFailure(error)
     }
 
     return await createProject(httpClient, data)
@@ -62,7 +62,7 @@ export function projectsAPI(httpClient: HttpClient) {
 
     if (invalidName) {
       const error = invalidProjectNameError
-      return { data: null, error }
+      return responseFailure(error)
     }
 
     return await deleteProject(httpClient, projectName)

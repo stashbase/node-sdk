@@ -1,6 +1,11 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiResponse, SharedApiError, responseSuccess } from '../../../../http/response'
+import {
+  ApiResponse,
+  SharedApiError,
+  responseFailure,
+  responseSuccess,
+} from '../../../../http/response'
 
 // TODO:
 export type ListProjectsOpts = {
@@ -29,6 +34,6 @@ export async function listProjects(
     return responseSuccess(data)
   } catch (error) {
     const apiError = createApiErrorFromResponse<ListProjectsError>(error)
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }

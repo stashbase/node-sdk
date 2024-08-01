@@ -4,6 +4,7 @@ import {
   EnvironmentNotFoundError,
   ProjectNotFoundError,
   SharedApiError,
+  responseFailure,
   responseSuccess,
 } from '../../../../http/response'
 import { SecretKey } from '../../../../types/secretKey'
@@ -62,7 +63,7 @@ async function listSecrets(
     return responseSuccess(secrets)
   } catch (error) {
     const apiError = createApiErrorFromResponse<ListSecretsError>(error)
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

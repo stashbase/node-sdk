@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiError, ApiResponse, responseSuccess } from '../../../../http/response'
+import { ApiError, ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
 export interface UpdateEnvironmentTypeArgs {
   project: string
@@ -28,7 +28,7 @@ async function updateEnvironmentType(
     return responseSuccess(data)
   } catch (error) {
     const apiError = createApiErrorFromResponse<UpdateEnvironmentTypeError>(error)
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

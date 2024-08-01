@@ -3,6 +3,7 @@ import {
   ApiResponse,
   EnvironmentNotFoundError,
   ProjectNotFoundError,
+  responseFailure,
   responseSuccess,
 } from '../../../../http/response'
 import { SecretKey } from '../../../../types/secretKey'
@@ -35,7 +36,7 @@ async function getSecret(envClient: HttpClient, args: GetSecretArgs): GetSecretR
     return responseSuccess(secrets)
   } catch (error) {
     const apiError = createApiErrorFromResponse<GetSecretError>(error)
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

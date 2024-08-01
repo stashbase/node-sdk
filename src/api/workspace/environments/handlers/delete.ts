@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiError, ApiResponse, responseSuccess } from '../../../../http/response'
+import { ApiError, ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
 export interface DeleteEnvironmentArgs {
   project: string
@@ -25,7 +25,7 @@ async function deleteEnvironment(
     return responseSuccess(data)
   } catch (error) {
     const apiError = createApiErrorFromResponse<DeleteEnvironmentError>(error)
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 
