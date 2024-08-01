@@ -1,10 +1,19 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiError, ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import {
+  ApiResponse,
+  SharedApiError,
+  responseFailure,
+  responseSuccess,
+} from '../../../../http/response'
+import {
+  ProjectAlreadyExistsError,
+  ProjectLimitReachedError,
+} from '../../../../types/errors/projects'
 
 type CreateProjectResponseData = null
 
-type CreateSecretsError = ApiError<'project_already_exists' | 'project_limit_reached'>
+type CreateSecretsError = SharedApiError | ProjectAlreadyExistsError | ProjectLimitReachedError
 
 export type CreateProjectData = {
   name: string

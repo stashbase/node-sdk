@@ -4,6 +4,8 @@ import { printSecretsTable } from '../../../../utils/table'
 import { createApiErrorFromResponse } from '../../../../errors'
 import {
   ApiResponse,
+  EnvironmentNotFoundError,
+  ProjectNotFoundError,
   SharedApiError,
   responseFailure,
   responseSuccess,
@@ -20,7 +22,7 @@ export interface LoadEnvironmentArgs {
   print?: 'key-value' | 'key' | 'none'
 }
 
-type LoadEnvironmentError = SharedApiError
+type LoadEnvironmentError = SharedApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
 type loadEnvironmentResponse = {
   name: string

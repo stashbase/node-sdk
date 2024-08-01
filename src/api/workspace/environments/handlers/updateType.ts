@@ -1,6 +1,14 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiError, ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import {
+  ApiResponse,
+  EnvironmentNotFoundError,
+  ProjectNotFoundError,
+  SharedApiError,
+  responseFailure,
+  responseSuccess,
+} from '../../../../http/response'
+import { EnvironmentLockedError } from '../../../../types/errors/environments'
 
 export interface UpdateEnvironmentTypeArgs {
   project: string
@@ -9,9 +17,11 @@ export interface UpdateEnvironmentTypeArgs {
   type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
 }
 
-type UpdateEnvironmentTypeError = ApiError<
-  'project_not_found' | 'environment_not_found' | 'environment_locked'
->
+type UpdateEnvironmentTypeError =
+  | SharedApiError
+  | ProjectNotFoundError
+  | EnvironmentNotFoundError
+  | EnvironmentLockedError
 
 async function updateEnvironmentType(
   client: HttpClient,

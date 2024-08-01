@@ -1,6 +1,17 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiError, ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import {
+  ApiResponse,
+  EnvironmentNotFoundError,
+  ProjectNotFoundError,
+  SharedApiError,
+  responseFailure,
+  responseSuccess,
+} from '../../../../http/response'
+import {
+  EnvironmentAlreadyExistsError,
+  EnvironmentLockedError,
+} from '../../../../types/errors/environments'
 
 export interface RenameEnvironmentArgs {
   project: string
@@ -9,12 +20,12 @@ export interface RenameEnvironmentArgs {
   newName: string
 }
 
-type RenameEnvironmentError = ApiError<
-  | 'project_not_found'
-  | 'environment_not_found'
-  | 'environment_already_exists'
-  | 'environment_locked'
->
+type RenameEnvironmentError =
+  | SharedApiError
+  | ProjectNotFoundError
+  | EnvironmentNotFoundError
+  | EnvironmentAlreadyExistsError
+  | EnvironmentLockedError
 
 async function renameEnvironment(
   client: HttpClient,

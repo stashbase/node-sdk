@@ -1,6 +1,16 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiError, ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import {
+  ApiResponse,
+  ProjectNotFoundError,
+  SharedApiError,
+  responseFailure,
+  responseSuccess,
+} from '../../../../http/response'
+import {
+  EnvironmentAlreadyExistsError,
+  EnvironmentLimitReachedError,
+} from '../../../../types/errors/environments'
 
 export interface CreateEnvironmentArgs {
   project: string
@@ -10,9 +20,11 @@ export interface CreateEnvironmentArgs {
   type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
 }
 
-type CreateEnvironmentError = ApiError<
-  'project_not_found' | 'environment_already_exists' | 'environment_limit_reached'
->
+type CreateEnvironmentError =
+  | SharedApiError
+  | ProjectNotFoundError
+  | EnvironmentAlreadyExistsError
+  | EnvironmentLimitReachedError
 
 async function createEnvironment(
   client: HttpClient,

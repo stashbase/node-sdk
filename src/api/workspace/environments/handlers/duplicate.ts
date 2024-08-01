@@ -1,6 +1,17 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiError, ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import {
+  ApiResponse,
+  EnvironmentNotFoundError,
+  ProjectNotFoundError,
+  SharedApiError,
+  responseFailure,
+  responseSuccess,
+} from '../../../../http/response'
+import {
+  EnvironmentAlreadyExistsError,
+  EnvironmentLockedError,
+} from '../../../../types/errors/environments'
 
 export type DuplicateEnvironmentArgs = {
   project: string
@@ -9,12 +20,12 @@ export type DuplicateEnvironmentArgs = {
   duplicateName: string
 }
 
-type DulicateEnvironmentError = ApiError<
-  | 'project_not_found'
-  | 'environment_not_found'
-  | 'environment_already_exists'
-  | 'environment_locked'
->
+type DulicateEnvironmentError =
+  | SharedApiError
+  | ProjectNotFoundError
+  | EnvironmentNotFoundError
+  | EnvironmentAlreadyExistsError
+  | EnvironmentLockedError
 
 async function duplicateEnvironment(
   client: HttpClient,
