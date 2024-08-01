@@ -68,3 +68,11 @@ export const responseSuccess = <T>(data: T): ResponseSuccess<T> => {
     data,
   }
 }
+
+export const responseFailure = <K>(error: K): ResponseFailure<K> => {
+  return {
+    ok: false,
+    data: null,
+    error,
+  }
+}
