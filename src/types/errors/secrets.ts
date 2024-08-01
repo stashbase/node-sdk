@@ -18,14 +18,14 @@ export type ListSecretsError = SharedApiError
 
 export type SetSecretsError =
   | SharedApiError
-  | NoValuesProvidedError
+  | NoDataProvided
   | InvalidSecretKeysError
   | DuplicateSecretsError
   | SelfReferencingSecretsError
 
 export type UpdateSecretsError =
   | SharedApiError
-  | NoValuesProvidedError
+  | NoDataProvided
   | InvalidSecretKeysError
   | DuplicateSecretsError
   | DuplicateNewSecretsError
@@ -34,7 +34,7 @@ export type UpdateSecretsError =
   | MissingPropertiesToUpdateError
   | NewKeySecretsAlreadyExistError
 
-export type NoValuesProvidedError = ApiError<'no_values_provided'>
+export type NoDataProvided = ApiError<'no_data_provided'>
 export type InvalidSecretKeysError = ApiError<'invalid_secret_keys', SecretsErrorDetails>
 export type InvalidSecretKeyError = ApiError<'invalid_secret_key', undefined>
 export type DuplicateSecretsError = ApiError<'duplicate_secrets', SecretsErrorDetails>

@@ -6,7 +6,7 @@ import {
   InvalidSecretKeyError,
   InvalidSecretKeysError,
   MissingPropertiesToUpdateError,
-  NoValuesProvidedError,
+  NoDataProvided,
   SecretsErrorDetails,
   SelfReferencingSecretsError,
 } from '../types/errors/secrets'
@@ -93,9 +93,9 @@ export const duplicateNewSecretsError = (secretKeys: Array<string>): DuplicateNe
     },
   })
 
-export const noValuesProvidedError = (): NoValuesProvidedError =>
+export const noDataProvidedError = (): NoDataProvided =>
   createSecretsError({
     details: undefined,
-    code: 'no_values_provided',
+    code: 'no_data_provided',
     message: 'At least one data item must be provided.',
   })

@@ -17,7 +17,7 @@ import { SetSecretsData, setSecrets } from './handlers/secrets/set'
 import {
   invalidSecretKeyError,
   invalidSecretKeysError,
-  noValuesProvidedError,
+  noDataProvidedError,
 } from '../../errors/secrets'
 import { responseFailure } from '../../http/response'
 
@@ -190,7 +190,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * */
   async function remove(keys: Uppercase<string>[]) {
     if (keys.length === 0) {
-      const error = noValuesProvidedError()
+      const error = noDataProvidedError()
       return responseFailure(error)
     }
 
