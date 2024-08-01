@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiError, ApiResponse } from '../../../../http/response'
+import { ApiError, ApiResponse, responseSuccess } from '../../../../http/response'
 
 type CreateProjectResponseData = null
 
@@ -21,7 +21,7 @@ export async function createProject(
       data,
     })
 
-    return { data: null, error: null }
+    return responseSuccess(null)
   } catch (error) {
     const apiError = createApiErrorFromResponse<CreateSecretsError>(error)
     return { data: null, error: apiError }

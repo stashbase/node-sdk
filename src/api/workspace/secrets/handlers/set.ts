@@ -4,6 +4,7 @@ import {
   ApiResponse,
   EnvironmentNotFoundError,
   ProjectNotFoundError,
+  responseSuccess,
 } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { SetSecretsError as SharedSetSecretsError } from '../../../../types/errors/secrets'
@@ -35,7 +36,7 @@ async function setSecrets(
       data,
     })
 
-    return { data: null, error: null }
+    return responseSuccess(null)
   } catch (error) {
     const apiError = createApiErrorFromResponse<SetSecretsError>(error)
     return { data: null, error: apiError }

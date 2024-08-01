@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiError, ApiResponse } from '../../../../http/response'
+import { ApiError, ApiResponse, responseSuccess } from '../../../../http/response'
 
 export interface GetEnvironmentArgs {
   project: string
@@ -29,7 +29,7 @@ async function getEnvironment(
       path: `/v1/projects/${project}/environments/${environment}`,
     })
 
-    return { data: data, error: null }
+    return responseSuccess(data)
   } catch (error) {
     const apiError = createApiErrorFromResponse<GetEnvironmentError>(error)
     return { data: null, error: apiError }

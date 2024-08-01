@@ -1,5 +1,5 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiResponse } from '../../../../http/response'
+import { ApiResponse, responseSuccess } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { DeleteSecretsError } from '../../../../types/errors/secrets'
 
@@ -20,7 +20,7 @@ async function deleteEnvironmentSecrets(
       },
     })
 
-    return { data, error: null }
+    return responseSuccess(data)
   } catch (error) {
     const apiError = createApiErrorFromResponse<DeleteSecretsError>(error)
     return { data: null, error: apiError }

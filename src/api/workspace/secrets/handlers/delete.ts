@@ -3,6 +3,7 @@ import {
   ApiResponse,
   EnvironmentNotFoundError,
   ProjectNotFoundError,
+  responseSuccess,
 } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { DeleteSecretsError as SharedDeleteSecretsError } from '../../../../types/errors/secrets'
@@ -35,7 +36,7 @@ async function deleteSecrets(
       },
     })
 
-    return { data, error: null }
+    return responseSuccess(data)
   } catch (error) {
     const apiError = createApiErrorFromResponse<DeleteSecretsError>(error)
     return { data: null, error: apiError }

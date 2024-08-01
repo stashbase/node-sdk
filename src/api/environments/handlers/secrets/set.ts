@@ -1,5 +1,5 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiResponse } from '../../../../http/response'
+import { ApiResponse, responseSuccess } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { SetSecretsError } from '../../../../types/errors/secrets'
 
@@ -21,7 +21,7 @@ async function setSecrets(
       data,
     })
 
-    return { data: null, error: null }
+    return responseSuccess(null)
   } catch (error) {
     const apiError = createApiErrorFromResponse<SetSecretsError>(error)
     return { data: null, error: apiError }
