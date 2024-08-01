@@ -68,10 +68,8 @@ async function loadEnvironment(
     }
 
     return { data: null, error: null }
-  } catch (error: any) {
-    console.log('\nFailed to load environment')
+  } catch (error) {
     const apiError = createApiErrorFromResponse<LoadEnvironmentError>(error)
-
     return { data: null, error: apiError }
     //
   }

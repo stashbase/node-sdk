@@ -27,9 +27,8 @@ async function createEnvironment(
     })
 
     return { data: data, error: null }
-  } catch (error: any) {
+  } catch (error) {
     const apiError = createApiErrorFromResponse<CreateEnvironmentError>(error)
-
     return { data: null, error: apiError }
   }
 }
