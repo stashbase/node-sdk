@@ -3,6 +3,7 @@ import {
   DuplicateNewSecretsError,
   DuplicateSecretsError,
   InvalidNewSecretKeysError,
+  InvalidSecretKeyError,
   InvalidSecretKeysError,
   MissingPropertiesToUpdateError,
   NoValuesProvidedError,
@@ -34,6 +35,13 @@ export const invalidSecretKeysError = (secretKeys: Array<string>): InvalidSecret
     details: {
       secretKeys,
     },
+  })
+
+export const invalidSecretKeyError = (): InvalidSecretKeyError =>
+  createSecretsError({
+    code: 'invalid_secret_key',
+    message: secretKeyFormatErrorMessage,
+    details: undefined,
   })
 
 export const duplicateSecretsError = (secretKeys: Array<string>): DuplicateSecretsError =>
