@@ -191,7 +191,7 @@ function envSecretsAPI(httpClient: HttpClient) {
   async function remove(keys: Uppercase<string>[]) {
     if (keys.length === 0) {
       const error = noValuesProvidedError()
-      return { data: null, error }
+      return responseFailure(error)
     }
 
     const { invalidSecretKeys } = validateSecretKeys(keys)
