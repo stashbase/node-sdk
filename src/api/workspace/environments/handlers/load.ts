@@ -2,7 +2,7 @@ import dotenvExpand from 'dotenv-expand'
 import { HttpClient } from '../../../../http/client'
 import { printSecretsTable } from '../../../../utils/table'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiError, ApiResponse } from '../../../../http/response'
+import { ApiResponse, SharedApiError } from '../../../../http/response'
 
 type SecretKeyValues = Array<{ key: string; value: string }>
 
@@ -15,7 +15,7 @@ export interface LoadEnvironmentArgs {
   print?: 'key-value' | 'key' | 'none'
 }
 
-type LoadEnvironmentError = ApiError
+type LoadEnvironmentError = SharedApiError
 
 type loadEnvironmentResponse = {
   name: string
