@@ -60,3 +60,11 @@ interface ResponseFailure<K> {
 
 // export type ApiResponse<T, K extends { code: string }> = ResponseSuccess<T> | ResponseFailure<K>
 export type ApiResponse<T, K = undefined> = ResponseSuccess<T> | ResponseFailure<K>
+
+export const responseSuccess = <T>(data: T): ResponseSuccess<T> => {
+  return {
+    ok: true,
+    error: null,
+    data,
+  }
+}
