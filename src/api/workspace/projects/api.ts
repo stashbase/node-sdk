@@ -1,3 +1,4 @@
+import { invalidProjectNameError } from '../../../errors'
 import { HttpClient } from '../../../http/client'
 import { ApiError } from '../../../http/response'
 import { isValidProjectName } from '../../../utils/inputValidation'
@@ -15,11 +16,7 @@ export function projectsAPI(httpClient: HttpClient) {
    * */
   async function get(projectName: string) {
     if (!isValidProjectName(projectName)) {
-      // const error: ApiError<'invalid_name_format'> = { code: 'invalid_name_format' }
-      const error: ApiError<'invalid_project_name', undefined> = {
-        code: 'invalid_project_name',
-        details: undefined,
-      }
+      const error = invalidProjectNameError
       return { data: null, error }
     }
 
@@ -47,11 +44,7 @@ export function projectsAPI(httpClient: HttpClient) {
     const valid = isValidProjectName(name)
 
     if (!valid) {
-      const error: ApiError<'invalid_project_name'> = {
-        code: 'invalid_project_name',
-        details: undefined,
-      }
-
+      const error = invalidProjectNameError
       return { data: null, error }
     }
 
@@ -68,11 +61,7 @@ export function projectsAPI(httpClient: HttpClient) {
     const invalidName = !isValidProjectName(projectName)
 
     if (invalidName) {
-      const error: ApiError<'invalid_project_name'> = {
-        code: 'invalid_project_name',
-        details: undefined,
-      }
-
+      const error = invalidProjectNameError
       return { data: null, error }
     }
 
