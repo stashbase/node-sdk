@@ -2,7 +2,6 @@ import { LoadEnvironmentOpts, loadEnvironment } from './handlers/load'
 import { getEnvironment } from './handlers/get'
 import { deleteEnvironmentSecrets } from './handlers/secrets/delete'
 import { HttpClient } from '../../http/client'
-import { ApiError } from '../../http/response'
 import { ListSecretsOpts, listSecrets } from './handlers/secrets/list'
 import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
 import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
@@ -15,6 +14,11 @@ import {
   validateUpdateSecretsInput,
 } from '../../utils/inputValidation'
 import { SetSecretsData, setSecrets } from './handlers/secrets/set'
+import {
+  invalidSecretKeyError,
+  invalidSecretKeysError,
+  noValuesProvidedError,
+} from '../../errors/secrets'
 
 function environmentsAPI(httpClient: HttpClient) {
   /**
@@ -77,11 +81,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * */
   async function get(key: string, expandRefs = false) {
     if (!isValidSecretKey(key)) {
-      const error: ApiError<'invalid_secret_key'> = {
-        code: 'invalid_secret_key',
-        details: undefined,
-      }
-
+      const error = invalidSecretKeyError()
       return { data: null, error }
     }
     return getSecret(httpClient, key, expandRefs)
@@ -189,24 +189,14 @@ function envSecretsAPI(httpClient: HttpClient) {
    * */
   async function remove(keys: Uppercase<string>[]) {
     if (keys.length === 0) {
-      const error: ApiError<'no_keys_provided'> = {
-        code: 'no_keys_provided',
-        details: undefined,
-      }
-
+      const error = noValuesProvidedError()
       return { data: null, error }
     }
 
     const { invalidSecretKeys } = validateSecretKeys(keys)
 
     if (invalidSecretKeys.length > 0) {
-      const error: ApiError<'invalid_secret_keys', { secretKeys: Array<string> }> = {
-        code: 'invalid_secret_keys',
-        details: {
-          secretKeys: invalidSecretKeys,
-        },
-      }
-
+      const error = invalidSecretKeysError(invalidSecretKeys)
       return { data: null, error }
     }
 
