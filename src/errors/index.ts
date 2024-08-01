@@ -1,5 +1,17 @@
 import { ApiError, ApiErrorDetails } from '../http/response'
 
+export function createApiErrorFromResponse<T>(responseData: { error: ApiError<any, any> }): T {
+  if (responseData && responseData.error) {
+    return <T>{
+      code: responseData?.error?.code,
+      details: responseData?.error?.details ?? undefined,
+      message: responseData?.error?.message,
+    }
+  }
+
+  return <T>{ code: 'server_error', message: 'Something went wrong. Please try again later.' }
+}
+
 export const createApiError = <T extends string, D = undefined | ApiErrorDetails>(args: {
   code: T
   message: string
