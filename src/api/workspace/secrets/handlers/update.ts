@@ -4,7 +4,7 @@ import {
   EnvironmentNotFoundError,
   ProjectNotFoundError,
 } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { createApiErrorFromResponse } from '../../../../errors'
 import { AtLeastOne } from '../../../../utils/types'
 import { SecretKey } from '../../../../types/secretKey'
 import { UpdateSecretsError as SharedUpdateSecretsError } from '../../../../types/errors/secrets'
