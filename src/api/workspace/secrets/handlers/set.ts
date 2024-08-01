@@ -5,7 +5,7 @@ import {
   EnvironmentNotFoundError,
   ProjectNotFoundError,
 } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { createApiErrorFromResponse } from '../../../../errors'
 import { SetSecretsError as SharedSetSecretsError } from '../../../../types/errors/secrets'
 
 type SetSecretsResponseData = null

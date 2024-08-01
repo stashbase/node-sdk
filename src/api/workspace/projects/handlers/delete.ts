@@ -1,5 +1,5 @@
 import { HttpClient } from '../../../../http/client'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiError, ApiResponse } from '../../../../http/response'
 
 type DeleteProjectsError = ApiError<'project_not_found'>

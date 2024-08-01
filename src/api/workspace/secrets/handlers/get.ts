@@ -5,7 +5,7 @@ import {
   ProjectNotFoundError,
 } from '../../../../http/response'
 import { SecretKey } from '../../../../types/secretKey'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { createApiErrorFromResponse } from '../../../../errors'
 import { GetSecretError as SharedGetSecretsError } from '../../../../types/errors/secrets'
 
 type Secret = { key: SecretKey; value: string; description: string | null }

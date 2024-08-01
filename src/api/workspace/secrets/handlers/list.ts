@@ -6,7 +6,7 @@ import {
   SharedApiError,
 } from '../../../../http/response'
 import { SecretKey } from '../../../../types/secretKey'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { createApiErrorFromResponse } from '../../../../errors'
 
 type SecretsData = Array<{ key: SecretKey; value: string; description?: string }>
 type ListSecretsError = SharedApiError | ProjectNotFoundError | EnvironmentNotFoundError

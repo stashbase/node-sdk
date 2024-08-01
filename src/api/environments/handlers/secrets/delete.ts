@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../../http/client'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
 import { ApiResponse } from '../../../../http/response'
+import { createApiErrorFromResponse } from '../../../../errors'
 import { DeleteSecretsError } from '../../../../types/errors/secrets'
 
 type DeleteSecretsResponseData = {

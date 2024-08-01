@@ -1,7 +1,7 @@
 import dotenvExpand from 'dotenv-expand'
 import { HttpClient } from '../../../../http/client'
 import { printSecretsTable } from '../../../../utils/table'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiError, ApiResponse } from '../../../../http/response'
 
 type SecretKeyValues = Array<{ key: string; value: string }>

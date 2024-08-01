@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiResponse } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { createApiErrorFromResponse } from '../../../../errors'
 import { GetSecretError } from '../../../../types/errors/secrets'
 
 type Secret = { key: Uppercase<string>; value: string; description?: string }

@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../../http/client'
+import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiError, ApiResponse } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
 
 export interface CreateEnvironmentArgs {
   project: string
