@@ -47,10 +47,12 @@ export type ApiError<T extends string, D = undefined | ApiErrorDetails> = {
 }
 
 interface ResponseSuccess<T> {
+  ok: true
   error: null
   data: T
 }
 interface ResponseFailure<K> {
+  ok: false
   error: K
   data: null
   // For backward compatibility: body === data
