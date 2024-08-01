@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../http/client'
 import { createApiErrorFromResponse } from '../../../errors'
-import { ApiError, ApiResponse } from '../../../http/response'
+import { ApiError, ApiResponse, responseSuccess } from '../../../http/response'
 
 interface Environment {
   projectName: string
@@ -28,7 +28,7 @@ async function getEnvironment(
     //   printSecretsTable({ array: secrets })
     // }
 
-    return { data: data, error: null }
+    return responseSuccess(data)
   } catch (error: any) {
     console.log('Error: ', error?.error)
     const apiError = createApiErrorFromResponse<GetEnvironmentError>(error)

@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiError, ApiResponse } from '../../../../http/response'
+import { ApiError, ApiResponse, responseSuccess } from '../../../../http/response'
 
 type DeleteProjectsError = ApiError<'project_not_found'>
 
@@ -15,7 +15,7 @@ async function deleteProject(
       path: `/v1/projects/${name}`,
     })
 
-    return { data: null, error: null }
+    return responseSuccess(null)
   } catch (error) {
     const apiError = createApiErrorFromResponse<DeleteProjectsError>(error)
     return { data: null, error: apiError }

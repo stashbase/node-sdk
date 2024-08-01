@@ -1,5 +1,5 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiResponse } from '../../../../http/response'
+import { ApiResponse, responseSuccess } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { GetSecretError } from '../../../../types/errors/secrets'
 
@@ -18,7 +18,7 @@ async function getSecret(
       query: expandRefs ? { 'expand-refs': 'true' } : undefined,
     })
 
-    return { data: secrets, error: null }
+    return responseSuccess(secrets)
   } catch (error) {
     const apiError = createApiErrorFromResponse<GetSecretError>(error)
     return { data: null, error: apiError }
