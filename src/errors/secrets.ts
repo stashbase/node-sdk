@@ -87,7 +87,7 @@ export const invalidNewSecretKeysError = (secretKeys: Array<string>): InvalidNew
 export const duplicateNewSecretsError = (secretKeys: Array<string>): DuplicateNewSecretsError =>
   createSecretsError({
     code: 'duplicate_new_secrets',
-    message: secretKeyFormatErrorMessage,
+    message: 'Found new duplicate secrets.',
     details: {
       secretKeys,
     },
