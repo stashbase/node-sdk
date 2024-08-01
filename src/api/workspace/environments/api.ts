@@ -68,7 +68,7 @@ export function environmentsAPI(httpClient: HttpClient) {
 
     // throws only error code
     if (response.error) {
-      throw new Error(response.error.code)
+      throw new Error(response?.error)
     }
   }
 
