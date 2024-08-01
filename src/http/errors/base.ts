@@ -9,5 +9,5 @@ export function createApiErrorFromResponse<T>(responseData: { error: ApiError<an
     }
   }
 
-  return <T>{ code: 'server_error' }
+  return <T>{ code: 'server_error', message: 'Something went wrong. Please try again later.' }
 }
