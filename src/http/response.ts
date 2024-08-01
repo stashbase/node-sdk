@@ -38,10 +38,12 @@ export type ApiErrorDetails = Record<string, { [key: string]: object }>
  * Api error with the specified code and optional details.
  * @param code - The error code.
  * @param details - Optional details for the error.
+ * @param message - Message describing the error.
  */
 export type ApiError<T extends string, D = undefined | ApiErrorDetails> = {
   code: T
   details: D
+  message: string
 }
 
 interface ResponseSuccess<T> {
