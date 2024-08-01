@@ -3,12 +3,13 @@ import {
   ApiResponse,
   EnvironmentNotFoundError,
   ProjectNotFoundError,
+  SharedApiError,
 } from '../../../../http/response'
 import { SecretKey } from '../../../../types/secretKey'
 import { createApiErrorFromResponse } from '../../../../http/errors/base'
 
 type SecretsData = Array<{ key: SecretKey; value: string; description?: string }>
-type ListSecretsError = ProjectNotFoundError | EnvironmentNotFoundError
+type ListSecretsError = SharedApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
 export interface ListSecretsArgs {
   /**
@@ -53,7 +54,7 @@ async function listSecrets(
 
   try {
     const secrets = await envClient.get<SecretsData>({
-      path: `/projects/${project}/environments/${environment}/secrets`,
+      path: `/v1/projects/${project}/environments/${environment}/secrets`,
       query,
     })
 
