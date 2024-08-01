@@ -58,11 +58,11 @@ export function environmentsAPI(httpClient: HttpClient) {
       return { data: null, error: null, ok: null }
     }
 
-    const response = await loadEnvironment(httpClient, args)
+    const { error } = await loadEnvironment(httpClient, args)
 
     // throws only error code
-    if (response.error) {
-      throw new Error(response?.error)
+    if (error) {
+      throw new Error(error?.code)
     }
   }
 
