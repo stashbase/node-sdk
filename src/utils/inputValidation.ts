@@ -5,7 +5,7 @@ import {
   invalidNewSecretKeysError,
   invalidSecretKeysError,
   missingPropertiesToUpdateError,
-  noValuesProvidedError,
+  noDataProvidedError,
   selfReferencingSecretsError,
 } from '../errors/secrets'
 import {
@@ -14,7 +14,7 @@ import {
   InvalidNewSecretKeysError,
   InvalidSecretKeysError,
   MissingPropertiesToUpdateError,
-  NoValuesProvidedError,
+  NoDataProvided,
   SelfReferencingSecretsError,
 } from '../types/errors/secrets'
 
@@ -109,7 +109,7 @@ interface SetSecretsItem {
 }
 
 type ValidateSetSecretsInputRes =
-  | NoValuesProvidedError
+  | NoDataProvided
   | InvalidSecretKeysError
   | DuplicateSecretsError
   | SelfReferencingSecretsError
@@ -120,7 +120,7 @@ export const validateSetSecretsInput = (
   data: Array<SetSecretsItem>
 ): ValidateSetSecretsInputRes => {
   if (data?.length === 0) {
-    const error = noValuesProvidedError()
+    const error = noDataProvidedError()
     return error
   }
   const invalidSecretKeys = new Set<string>()
@@ -177,7 +177,7 @@ export const validateSetSecretsInput = (
 export const validateCreateSecretsInput = validateSetSecretsInput
 
 type ValidateUpdateSecretsInputRes =
-  | NoValuesProvidedError
+  | NoDataProvided
   | MissingPropertiesToUpdateError
   | InvalidSecretKeysError
   | InvalidNewSecretKeysError
@@ -190,7 +190,7 @@ export const validateUpdateSecretsInput = (
   data: UpdateSecretData[]
 ): ValidateUpdateSecretsInputRes => {
   if (data.length === 0) {
-    const error = noValuesProvidedError()
+    const error = noDataProvidedError()
     return error
   }
 

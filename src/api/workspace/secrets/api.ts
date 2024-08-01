@@ -1,7 +1,7 @@
 import {
   invalidSecretKeyError,
   invalidSecretKeysError,
-  noValuesProvidedError,
+  noDataProvidedError,
 } from '../../../errors/secrets'
 import { HttpClient } from '../../../http/client'
 import { responseFailure } from '../../../http/response'
@@ -190,7 +190,7 @@ export function secretsAPI(httpClient: HttpClient) {
     }
 
     if (keys.length === 0) {
-      const error = noValuesProvidedError()
+      const error = noDataProvidedError()
       return responseFailure(error)
     }
 
