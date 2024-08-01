@@ -26,8 +26,8 @@ type TooManyRequestsError = ApiError<
   'too_many_requests',
   { retryAfter: { seconds: number; unixTimestamp: number } }
 >
-type UnauthorizedError = ApiError<'unauthorized'>
-type ServerError = ApiError<'server_error'>
+type UnauthorizedError = ApiError<'unauthorized', undefined>
+type ServerError = ApiError<'server_error', undefined>
 
 export type ProjectNotFoundError = ApiError<'project_not_found'>
 export type EnvironmentNotFoundError = ApiError<'environment_not_found'>
