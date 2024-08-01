@@ -5,6 +5,7 @@ export function createApiErrorFromResponse<T>(responseData: { error: ApiError<an
     return <T>{
       code: responseData?.error?.code,
       details: responseData?.error?.details ?? undefined,
+      message: responseData?.error?.message,
     }
   }
 
