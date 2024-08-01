@@ -36,6 +36,7 @@ export type UpdateSecretsError =
 
 export type NoValuesProvidedError = ApiError<'no_values_provided'>
 export type InvalidSecretKeysError = ApiError<'invalid_secret_keys', SecretsErrorDetails>
+export type InvalidSecretKeyError = ApiError<'invalid_secret_key', undefined>
 export type DuplicateSecretsError = ApiError<'duplicate_secrets', SecretsErrorDetails>
 export type SelfReferencingSecretsError = ApiError<'self_referencing_secrets', SecretsErrorDetails>
 export type DuplicateNewSecretsError = ApiError<'duplicate_new_secrets', SecretsErrorDetails>
