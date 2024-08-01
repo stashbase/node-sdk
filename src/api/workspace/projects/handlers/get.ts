@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiError, ApiResponse, responseSuccess } from '../../../../http/response'
+import { ApiError, ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
 type Project = {
   createdAt: string
@@ -22,6 +22,6 @@ export async function getProject(
     return responseSuccess(data)
   } catch (error) {
     const apiError = createApiErrorFromResponse<GetProjectError>(error)
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
