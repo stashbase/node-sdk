@@ -27,10 +27,8 @@ export async function listProjects(
     })
 
     return { data: data, error: null }
-  } catch (error: any) {
-    console.log('Error: ', error?.error)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<ListProjectsError>(error)
-
     return { data: null, error: apiError }
   }
 }

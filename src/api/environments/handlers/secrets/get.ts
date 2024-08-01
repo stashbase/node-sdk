@@ -19,10 +19,8 @@ async function getSecret(
     })
 
     return { data: secrets, error: null }
-  } catch (error: any) {
-    console.log('Error: ', error?.error)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<GetSecretError>(error)
-
     return { data: null, error: apiError }
   }
 }

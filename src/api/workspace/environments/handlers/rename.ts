@@ -29,9 +29,8 @@ async function renameEnvironment(
     })
 
     return { data: data, error: null }
-  } catch (error: any) {
+  } catch (error) {
     const apiError = createApiErrorFromResponse<RenameEnvironmentError>(error)
-
     return { data: null, error: apiError }
   }
 }

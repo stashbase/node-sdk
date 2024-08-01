@@ -43,8 +43,7 @@ async function updateSecrets(
     })
 
     return { data: secrets, error: null }
-  } catch (error: any) {
-    console.log('Error: ', error?.error)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<UpdateSecretsError>(error)
 
     return { data: null, error: apiError }

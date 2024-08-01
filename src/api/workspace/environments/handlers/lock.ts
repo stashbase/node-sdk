@@ -24,10 +24,8 @@ async function lockUnlockEnvironment(
     })
 
     return { data: data, error: null }
-  } catch (error: any) {
-    console.log('Error: ', error?.error)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<LockEnvironmentError>(error)
-
     return { data: null, error: apiError }
   }
 }

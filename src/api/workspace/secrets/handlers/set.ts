@@ -36,9 +36,8 @@ async function setSecrets(
     })
 
     return { data: null, error: null }
-  } catch (error: any) {
+  } catch (error) {
     const apiError = createApiErrorFromResponse<SetSecretsError>(error)
-
     return { data: null, error: apiError }
   }
 }
