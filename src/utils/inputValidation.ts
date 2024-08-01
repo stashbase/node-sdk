@@ -1,5 +1,13 @@
 import { UpdateSecretData } from '../api/workspace/secrets/handlers/update'
-import { ApiError } from '../http/response'
+import {
+  duplicateNewSecretsError,
+  duplicateSecretsError,
+  invalidNewSecretKeysError,
+  invalidSecretKeysError,
+  missingPropertiesToUpdateError,
+  noValuesProvidedError,
+  selfReferencingSecretsError,
+} from '../errors/secrets'
 import {
   DuplicateNewSecretsError,
   DuplicateSecretsError,
@@ -9,7 +17,6 @@ import {
   NoValuesProvidedError,
   SelfReferencingSecretsError,
 } from '../types/errors/secrets'
-import { SecretKey } from '../types/secretKey'
 
 export function containsMaxOneDash(str: string) {
   // return /^(?!-$)(?!.*--)[^-]*(?:-(?!$)[^-]*)?$/.test(str);
@@ -113,7 +120,8 @@ export const validateSetSecretsInput = (
   data: Array<SetSecretsItem>
 ): ValidateSetSecretsInputRes => {
   if (data?.length === 0) {
-    return { code: 'no_values_provided', details: undefined }
+    const error = noValuesProvidedError()
+    return error
   }
   const invalidSecretKeys = new Set<string>()
   const keysWithSelfReference = new Set<string>()
@@ -141,7 +149,8 @@ export const validateSetSecretsInput = (
 
   if (invalidSecretKeys.size > 0) {
     const secretKeys = Array.from(invalidSecretKeys)
-    return { code: 'invalid_secret_keys', details: { secretKeys } }
+    const err = invalidSecretKeysError(secretKeys)
+    return err
   }
 
   const duplicateSecretKeys = Array.from(keyOccurrences.entries())
@@ -150,16 +159,16 @@ export const validateSetSecretsInput = (
 
   if (duplicateSecretKeys?.length > 0) {
     const secretKeys = duplicateSecretKeys
-    return { code: 'duplicate_secrets', details: { secretKeys } }
+    const error = duplicateSecretsError(secretKeys)
+
+    return error
   }
 
   if (keysWithSelfReference.size > 0) {
     const secretKeys = Array.from(keysWithSelfReference)
+    const error = selfReferencingSecretsError(secretKeys)
 
-    return {
-      code: 'self_referencing_secrets',
-      details: { secretKeys },
-    }
+    return error
   }
 
   return null
@@ -181,7 +190,8 @@ export const validateUpdateSecretsInput = (
   data: UpdateSecretData[]
 ): ValidateUpdateSecretsInputRes => {
   if (data.length === 0) {
-    return { code: 'no_values_provided', details: undefined }
+    const error = noValuesProvidedError()
+    return error
   }
 
   const keyOccurrences = new Map<string, number>()
@@ -247,26 +257,22 @@ export const validateUpdateSecretsInput = (
 
   // NOTE: missing properties to update
   if (missingPropertiesToUpdateKeys.size > 0) {
-    return {
-      code: 'missing_properties_to_update',
-      details: { secretKeys: Array.from(missingPropertiesToUpdateKeys) },
-    }
+    const error = missingPropertiesToUpdateError(Array.from(missingPropertiesToUpdateKeys))
+    return error
   }
 
   // NOTE: invalid keys
   if (invalidSecretKeys.size > 0) {
-    const secretKeys = Array.from(invalidSecretKeys)
-    return { code: 'invalid_secret_keys', details: { secretKeys } }
+    const error = invalidSecretKeysError(Array.from(invalidSecretKeys))
+    return error
   }
 
   // NOTE: invalid new secret keys
   if (invalidNewSecretKeys.size > 0) {
     const secretKeys = Array.from(invalidNewSecretKeys)
+    const error = invalidNewSecretKeysError(secretKeys)
 
-    return {
-      code: 'invalid_new_secret_keys',
-      details: { secretKeys },
-    }
+    return error
   }
 
   // NOTE: duplicate secrets
@@ -276,7 +282,9 @@ export const validateUpdateSecretsInput = (
 
   if (duplicateSecretKeys?.length > 0) {
     const secretKeys = duplicateSecretKeys
-    return { code: 'duplicate_secrets', details: { secretKeys } }
+    const error = duplicateSecretsError(secretKeys)
+
+    return error
   }
 
   // NOTE: duplicate new secrets
@@ -285,30 +293,24 @@ export const validateUpdateSecretsInput = (
     ?.map(([key]) => key)
 
   if (duplicateNewSecrets?.length > 0) {
-    return {
-      code: 'duplicate_new_secrets',
-      details: { secretKeys: duplicateNewSecrets },
-    }
+    const error = duplicateNewSecretsError(duplicateNewSecrets)
+    return error
   }
 
   // NOTE: self-referencing secrets
   if (keysWithSelfReference.size > 0) {
     const secretKeys = Array.from(keysWithSelfReference)
+    const error = selfReferencingSecretsError(secretKeys)
 
-    return {
-      code: 'self_referencing_secrets',
-      details: { secretKeys },
-    }
+    return error
   }
 
   // NOTE: self-referencing new secrets
   if (newKeysWithSelfReference.size > 0) {
     const secretKeys = Array.from(newKeysWithSelfReference)
+    const error = selfReferencingSecretsError(secretKeys)
 
-    return {
-      code: 'self_referencing_secrets',
-      details: { secretKeys },
-    }
+    return error
   }
 
   return null
