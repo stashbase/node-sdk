@@ -19,7 +19,7 @@ type CreateSecretsResponseData = {
 //   'no_values_provided' | 'project_not_found' | 'environment_not_found' | 'duplicate_keys'
 // >
 
-type CreateSecretsError = ProjectNotFoundError | EnvironmentNotFoundError | SharedCreateSecretsError
+type CreateSecretsError = SharedCreateSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
 
 export interface CreateSecretsArgs {
   project: string

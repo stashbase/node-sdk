@@ -12,7 +12,7 @@ import { GetSecretError as SharedGetSecretsError } from '../../../../types/error
 
 type Secret = { key: SecretKey; value: string; description: string | null }
 
-type GetSecretError = ProjectNotFoundError | EnvironmentNotFoundError | SharedGetSecretsError
+type GetSecretError = SharedGetSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
 type GetSecretResponse = Promise<ApiResponse<Secret, GetSecretError>>
 
 export interface GetSecretArgs {

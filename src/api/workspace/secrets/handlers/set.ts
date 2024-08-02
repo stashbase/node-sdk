@@ -11,7 +11,7 @@ import { createApiErrorFromResponse } from '../../../../errors'
 import { SetSecretsError as SharedSetSecretsError } from '../../../../types/errors/secrets'
 
 type SetSecretsResponseData = null
-type SetSecretsError = ProjectNotFoundError | EnvironmentNotFoundError | SharedSetSecretsError
+type SetSecretsError = SharedSetSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
 
 export interface SetSecretsArgs {
   project: string
