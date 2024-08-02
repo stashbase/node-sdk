@@ -1,8 +1,8 @@
 export type SharedApiError =
   | UnauthorizedError
   | TooManyRequestsError
-  | ApiKeyUnsupportedError
-  | ApiKeyExpiredError
+  | UnsupportedApiKeyError
+  | ExpiredApiKeyError
   | MissingPermissionError
   | ServerError
 
@@ -21,8 +21,8 @@ type MissingPermissionError = ApiError<
   }
 >
 
-type ApiKeyExpiredError = ApiError<'api_key_expired', { expiredAt: string }>
-type ApiKeyUnsupportedError = ApiError<'api_key_unsupported', { supportedApiKeyTypes: string[] }>
+type ExpiredApiKeyError = ApiError<'expired_api_key', { expiredAt: string }>
+type UnsupportedApiKeyError = ApiError<'unsupported_api_key', { supportedApiKeyTypes: string[] }>
 
 type TooManyRequestsError = ApiError<
   'too_many_requests',
