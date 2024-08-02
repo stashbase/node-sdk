@@ -67,7 +67,7 @@ async function loadEnvironment(
       }
     }
 
-    return { data: null, error: null, ok: true }
+    return responseSuccess(null)
   } catch (error: any) {
     console.log('\nFailed to load environment')
     console.log(error)

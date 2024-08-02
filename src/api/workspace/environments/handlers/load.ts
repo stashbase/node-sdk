@@ -48,7 +48,7 @@ async function loadEnvironment(
       console.log(`\nLoaded environment: ${name} (${data?.type})`)
       console.log(`No secrets found`)
 
-      return { data: null, error: null, ok: true }
+      return responseSuccess(null)
     }
 
     const secretsObj = (secrets ?? []).reduce((obj: { [key: string]: string }, item) => {
