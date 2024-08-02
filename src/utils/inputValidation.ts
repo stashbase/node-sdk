@@ -138,13 +138,7 @@ export const validateSetSecretsInput = (
       keysWithSelfReference.add(key)
     }
 
-    const keyOccurrenceCount = keyOccurrences.get(key)
-
-    if (keyOccurrenceCount !== undefined) {
-      keyOccurrences.set(key, keyOccurrenceCount + 1)
-    } else {
-      keyOccurrences.set(key, 1)
-    }
+    keyOccurrences.set(key, (keyOccurrences.get(key) || 0) + 1)
   }
 
   if (invalidSecretKeys.size > 0) {
@@ -236,22 +230,10 @@ export const validateUpdateSecretsInput = (
       }
     }
 
-    const keyOccurrenceCount = keyOccurrences.get(key)
+    keyOccurrences.set(key, (keyOccurrences.get(key) || 0) + 1)
 
-    if (keyOccurrenceCount !== undefined) {
-      keyOccurrences.set(key, keyOccurrenceCount + 1)
-    } else {
-      keyOccurrences.set(key, 1)
-    }
-
-    if (newKey === undefined) continue
-
-    const newKeyOccurrenceCount = newKeyOccurrences.get(newKey)
-
-    if (newKeyOccurrenceCount !== undefined) {
-      newKeyOccurrences.set(newKey, newKeyOccurrenceCount + 1)
-    } else {
-      newKeyOccurrences.set(newKey, 1)
+    if (newKey !== undefined) {
+      newKeyOccurrences.set(key, (newKeyOccurrences.get(newKey) || 0) + 1)
     }
   }
 
