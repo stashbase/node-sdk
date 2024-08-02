@@ -1,7 +1,7 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-import { SharedApiError } from '../../../../types/errors'
+import { GenericApiError } from '../../../../types/errors'
 
 // TODO:
 export type ListProjectsOpts = {
@@ -15,7 +15,7 @@ type Project = {
   description: string | null
 }
 
-type ListProjectsError = SharedApiError
+type ListProjectsError = GenericApiError
 
 export async function listProjects(
   client: HttpClient,

@@ -5,11 +5,11 @@ import {
   ProjectAlreadyExistsError,
   ProjectLimitReachedError,
 } from '../../../../types/errors/projects'
-import { SharedApiError } from '../../../../types/errors'
+import { GenericApiError } from '../../../../types/errors'
 
 type CreateProjectResponseData = null
 
-type CreateSecretsError = SharedApiError | ProjectAlreadyExistsError | ProjectLimitReachedError
+type CreateSecretsError = GenericApiError | ProjectAlreadyExistsError | ProjectLimitReachedError
 
 export type CreateProjectData = {
   name: string

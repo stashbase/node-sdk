@@ -8,7 +8,7 @@ import {
 import {
   EnvironmentNotFoundError,
   ProjectNotFoundError,
-  SharedApiError,
+  GenericApiError,
 } from '../../../../types/errors'
 
 export interface RenameEnvironmentArgs {
@@ -19,7 +19,7 @@ export interface RenameEnvironmentArgs {
 }
 
 type RenameEnvironmentError =
-  | SharedApiError
+  | GenericApiError
   | ProjectNotFoundError
   | EnvironmentNotFoundError
   | EnvironmentAlreadyExistsError

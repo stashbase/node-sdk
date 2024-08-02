@@ -4,7 +4,7 @@ import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/
 import {
   EnvironmentNotFoundError,
   ProjectNotFoundError,
-  SharedApiError,
+  GenericApiError,
 } from '../../../../types/errors'
 
 export interface LockEnvironmentArgs {
@@ -14,7 +14,7 @@ export interface LockEnvironmentArgs {
   name: string
 }
 
-type LockEnvironmentError = SharedApiError | ProjectNotFoundError | EnvironmentNotFoundError
+type LockEnvironmentError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
 async function lockUnlockEnvironment(
   client: HttpClient,

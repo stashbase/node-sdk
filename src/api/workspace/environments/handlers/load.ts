@@ -6,7 +6,7 @@ import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/
 import {
   EnvironmentNotFoundError,
   ProjectNotFoundError,
-  SharedApiError,
+  GenericApiError,
 } from '../../../../types/errors'
 
 type SecretKeyValues = Array<{ key: string; value: string }>
@@ -20,7 +20,7 @@ export interface LoadEnvironmentArgs {
   print?: 'key-value' | 'key' | 'none'
 }
 
-type LoadEnvironmentError = SharedApiError | ProjectNotFoundError | EnvironmentNotFoundError
+type LoadEnvironmentError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
 type loadEnvironmentResponse = {
   name: string

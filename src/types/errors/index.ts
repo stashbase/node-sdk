@@ -1,6 +1,6 @@
 import { ApiError } from '../../http/response'
 
-export type SharedApiError =
+export type GenericApiError =
   | UnauthorizedError
   | TooManyRequestsError
   | UnsupportedApiKeyError
