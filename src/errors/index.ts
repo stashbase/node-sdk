@@ -2,10 +2,12 @@ import { ApiError, ApiErrorDetails } from '../http/response'
 
 export function createApiErrorFromResponse<T>(responseData: unknown): T {
   if (typeof responseData === 'object') {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const resData = responseData as { error?: ApiError<string, any> }
     if (resData && resData.error) {
       return <T>{
         code: resData?.error?.code,
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         details: resData?.error?.details ?? undefined,
         message: resData?.error?.message,
       }
