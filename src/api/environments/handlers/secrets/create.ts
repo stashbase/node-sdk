@@ -1,13 +1,12 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { createApiErrorFromResponse } from '../../../../errors'
+import { CreateSecretsError } from '../../../../types/errors/secrets'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
 type CreateSecretsResponseData = {
   createdCount: number
   duplicateKeys?: Array<Uppercase<string>>
 }
-
-type CreateSecretsError = ApiError<'duplicate_keys'> | ApiError<'self_referencing_secrets'>
 
 export type CreateSecretsData = Array<{
   key: Uppercase<string>
@@ -25,11 +24,10 @@ async function createSecrets(
       data,
     })
 
-    return { data: secrets, error: null }
-  } catch (error: any) {
+    return responseSuccess(secrets)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<CreateSecretsError>(error)
-
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

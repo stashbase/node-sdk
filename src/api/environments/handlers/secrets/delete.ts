@@ -1,8 +1,7 @@
 import { HttpClient } from '../../../../http/client'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
-import { ApiError, ApiResponse } from '../../../../http/response'
-
-type DeleteSecretsError = ApiError<'secret_not_found'>
+import { createApiErrorFromResponse } from '../../../../errors'
+import { DeleteSecretsError } from '../../../../types/errors/secrets'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
 type DeleteSecretsResponseData = {
   deletedCount: number
@@ -21,12 +20,10 @@ async function deleteEnvironmentSecrets(
       },
     })
 
-    return { data, error: null }
-  } catch (error: any) {
-    console.log('Error: ', error?.error)
+    return responseSuccess(data)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<DeleteSecretsError>(error)
-
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

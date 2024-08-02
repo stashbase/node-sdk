@@ -1,8 +1,13 @@
 import dotenvExpand from 'dotenv-expand'
 import { HttpClient } from '../../../../http/client'
 import { printSecretsTable } from '../../../../utils/table'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
-import { ApiError, ApiResponse } from '../../../../http/response'
+import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import {
+  EnvironmentNotFoundError,
+  ProjectNotFoundError,
+  GenericApiError,
+} from '../../../../types/errors'
 
 type SecretKeyValues = Array<{ key: string; value: string }>
 
@@ -15,7 +20,7 @@ export interface LoadEnvironmentArgs {
   print?: 'key-value' | 'key' | 'none'
 }
 
-type LoadEnvironmentError = ApiError
+type LoadEnvironmentError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
 type loadEnvironmentResponse = {
   name: string
@@ -41,7 +46,7 @@ async function loadEnvironment(
       console.log(`\nLoaded environment: ${name} (${data?.type})`)
       console.log(`No secrets found`)
 
-      return { data: null, error: null }
+      return responseSuccess(null)
     }
 
     const secretsObj = (secrets ?? []).reduce((obj: { [key: string]: string }, item) => {
@@ -67,13 +72,10 @@ async function loadEnvironment(
       }
     }
 
-    return { data: null, error: null }
-  } catch (error: any) {
-    console.log('\nFailed to load environment')
+    return responseSuccess(null)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<LoadEnvironmentError>(error)
-
-    return { data: null, error: apiError }
-    //
+    return responseFailure(apiError)
   }
 }
 

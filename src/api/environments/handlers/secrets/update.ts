@@ -1,32 +1,13 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
-import { AtLeastOne } from '../../../../utils/types'
+import { AtLeastOne } from '../../../../types/util'
+import { createApiErrorFromResponse } from '../../../../errors'
+import { UpdateSecretsError } from '../../../../types/errors/secrets'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
 type UpdateSecretsResponseData = {
   updatedCount: number
   notFoundKeys?: Array<Uppercase<string>>
 }
-
-type UpdateSecretsError =
-  | ApiError<
-      | 'no_values_provided'
-      | 'missing_properties'
-      | 'duplicate_new_keys'
-      | 'self_referencing_secrets'
-    >
-  | AlreadyExistApiError
-
-type AlreadyExistApiError = ApiError<
-  'new_keys_already_exist',
-  {
-    /**
-     * @summary Secret key that already exist
-     * @returns Uppercase Uppercase<string>
-     * */
-    alreadyExist: Uppercase<string>
-  }
->
 
 export type UpdateSecretsData = Array<
   {
@@ -48,12 +29,10 @@ async function updateSecrets(
       data,
     })
 
-    return { data: secrets, error: null }
-  } catch (error: any) {
-    console.log('Error: ', error?.error)
+    return responseSuccess(secrets)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<UpdateSecretsError>(error)
-
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

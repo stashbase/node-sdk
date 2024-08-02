@@ -1,6 +1,7 @@
 import { HttpClient } from '../../../http/client'
-import { ApiError, ApiResponse } from '../../../http/response'
-import { createApiErrorFromResponse } from '../../../http/errors/base'
+import { createApiErrorFromResponse } from '../../../errors'
+import { GenericApiError } from '../../../types/errors'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../http/response'
 
 interface Environment {
   projectName: string
@@ -12,7 +13,7 @@ interface Environment {
 }
 
 // type GetEnvironmentError = ApiError<EnvironmentApiError>
-type GetEnvironmentError = ApiError
+type GetEnvironmentError = GenericApiError
 
 async function getEnvironment(
   client: HttpClient
@@ -28,12 +29,10 @@ async function getEnvironment(
     //   printSecretsTable({ array: secrets })
     // }
 
-    return { data: data, error: null }
-  } catch (error: any) {
-    console.log('Error: ', error?.error)
+    return responseSuccess(data)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<GetEnvironmentError>(error)
-
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

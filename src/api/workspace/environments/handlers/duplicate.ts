@@ -1,6 +1,15 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import {
+  EnvironmentAlreadyExistsError,
+  EnvironmentLockedError,
+} from '../../../../types/errors/environments'
+import {
+  EnvironmentNotFoundError,
+  ProjectNotFoundError,
+  GenericApiError,
+} from '../../../../types/errors'
 
 export type DuplicateEnvironmentArgs = {
   project: string
@@ -9,12 +18,12 @@ export type DuplicateEnvironmentArgs = {
   duplicateName: string
 }
 
-type DulicateEnvironmentError = ApiError<
-  | 'project_not_found'
-  | 'environment_not_found'
-  | 'environment_already_exists'
-  | 'environment_locked'
->
+type DulicateEnvironmentError =
+  | GenericApiError
+  | ProjectNotFoundError
+  | EnvironmentNotFoundError
+  | EnvironmentAlreadyExistsError
+  | EnvironmentLockedError
 
 async function duplicateEnvironment(
   client: HttpClient,
@@ -28,11 +37,10 @@ async function duplicateEnvironment(
       data: { name: duplicateName },
     })
 
-    return { data: data, error: null }
-  } catch (error: any) {
+    return responseSuccess(data)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<DulicateEnvironmentError>(error)
-
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

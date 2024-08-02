@@ -1,6 +1,15 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import {
+  EnvironmentAlreadyExistsError,
+  EnvironmentLockedError,
+} from '../../../../types/errors/environments'
+import {
+  EnvironmentNotFoundError,
+  ProjectNotFoundError,
+  GenericApiError,
+} from '../../../../types/errors'
 
 export interface RenameEnvironmentArgs {
   project: string
@@ -9,12 +18,12 @@ export interface RenameEnvironmentArgs {
   newName: string
 }
 
-type RenameEnvironmentError = ApiError<
-  | 'project_not_found'
-  | 'environment_not_found'
-  | 'environment_already_exists'
-  | 'environment_locked'
->
+type RenameEnvironmentError =
+  | GenericApiError
+  | ProjectNotFoundError
+  | EnvironmentNotFoundError
+  | EnvironmentAlreadyExistsError
+  | EnvironmentLockedError
 
 async function renameEnvironment(
   client: HttpClient,
@@ -28,11 +37,10 @@ async function renameEnvironment(
       data: { name: newName },
     })
 
-    return { data: data, error: null }
-  } catch (error: any) {
+    return responseSuccess(data)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<RenameEnvironmentError>(error)
-
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

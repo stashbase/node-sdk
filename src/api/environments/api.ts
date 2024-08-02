@@ -2,7 +2,6 @@ import { LoadEnvironmentOpts, loadEnvironment } from './handlers/load'
 import { getEnvironment } from './handlers/get'
 import { deleteEnvironmentSecrets } from './handlers/secrets/delete'
 import { HttpClient } from '../../http/client'
-import { ApiError } from '../../http/response'
 import { ListSecretsOpts, listSecrets } from './handlers/secrets/list'
 import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
 import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
@@ -10,10 +9,17 @@ import { getSecret } from './handlers/secrets/get'
 import {
   isValidSecretKey,
   validateCreateSecretsInput,
+  validateSecretKeys,
   validateSetSecretsInput,
   validateUpdateSecretsInput,
 } from '../../utils/inputValidation'
 import { SetSecretsData, setSecrets } from './handlers/secrets/set'
+import {
+  invalidSecretKeyError,
+  invalidSecretKeysError,
+  noDataProvidedError,
+} from '../../errors/secrets'
+import { responseFailure } from '../../http/response'
 
 function environmentsAPI(httpClient: HttpClient) {
   /**
@@ -24,7 +30,7 @@ function environmentsAPI(httpClient: HttpClient) {
    * */
   async function load(options?: LoadEnvironmentOpts) {
     if (options?.enabled === false) {
-      return { data: null, error: null }
+      return { data: null, error: null, ok: null }
     }
 
     return await loadEnvironment(httpClient, options)
@@ -38,13 +44,13 @@ function environmentsAPI(httpClient: HttpClient) {
    * */
   async function loadOrThrow(options?: LoadEnvironmentOpts) {
     if (options?.enabled === false) {
-      return { data: null, error: null }
+      return { data: null, error: null, ok: null }
     }
 
     const { error } = await loadEnvironment(httpClient, options)
 
     if (error) {
-      throw new Error(error.code)
+      throw new Error(error?.code)
     }
   }
 
@@ -76,8 +82,8 @@ function envSecretsAPI(httpClient: HttpClient) {
    * */
   async function get(key: string, expandRefs = false) {
     if (!isValidSecretKey(key)) {
-      const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
-      return { data: null, error }
+      const error = invalidSecretKeyError()
+      return responseFailure(error)
     }
     return getSecret(httpClient, key, expandRefs)
   }
@@ -102,7 +108,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     const validationError = validateCreateSecretsInput(data)
 
     if (validationError) {
-      return { data: null, error: validationError }
+      return responseFailure(validationError)
     }
 
     return await createSecrets(httpClient, data)
@@ -118,7 +124,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     const validationError = validateSetSecretsInput(data)
 
     if (validationError) {
-      return { data: null, error: validationError }
+      return responseFailure(validationError)
     }
 
     return await setSecrets(httpClient, data)
@@ -170,7 +176,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     const validationError = validateUpdateSecretsInput(data)
 
     if (validationError) {
-      return { data: null, error: validationError }
+      return responseFailure(validationError)
     }
 
     return await updateSecrets(httpClient, data)
@@ -184,16 +190,15 @@ function envSecretsAPI(httpClient: HttpClient) {
    * */
   async function remove(keys: Uppercase<string>[]) {
     if (keys.length === 0) {
-      const error: ApiError<'no_keys'> = { code: 'no_keys' }
-
-      return { data: null, error }
+      const error = noDataProvidedError()
+      return responseFailure(error)
     }
 
-    const invalidKey = keys.find((key) => !isValidSecretKey(key))
+    const { invalidSecretKeys } = validateSecretKeys(keys)
 
-    if (invalidKey) {
-      const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
-      return { data: null, error }
+    if (invalidSecretKeys.length > 0) {
+      const error = invalidSecretKeysError(invalidSecretKeys)
+      return responseFailure(error)
     }
 
     return await deleteEnvironmentSecrets(httpClient, keys)

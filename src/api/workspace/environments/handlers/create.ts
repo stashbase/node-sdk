@@ -1,6 +1,11 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import {
+  EnvironmentAlreadyExistsError,
+  EnvironmentLimitReachedError,
+} from '../../../../types/errors/environments'
+import { ProjectNotFoundError, GenericApiError } from '../../../../types/errors'
 
 export interface CreateEnvironmentArgs {
   project: string
@@ -10,9 +15,11 @@ export interface CreateEnvironmentArgs {
   type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
 }
 
-type CreateEnvironmentError = ApiError<
-  'project_not_found' | 'environment_already_exists' | 'environment_limit_reached'
->
+type CreateEnvironmentError =
+  | GenericApiError
+  | ProjectNotFoundError
+  | EnvironmentAlreadyExistsError
+  | EnvironmentLimitReachedError
 
 async function createEnvironment(
   client: HttpClient,
@@ -26,11 +33,10 @@ async function createEnvironment(
       data: { ...args, project: undefined },
     })
 
-    return { data: data, error: null }
-  } catch (error: any) {
+    return responseSuccess(data)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<CreateEnvironmentError>(error)
-
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

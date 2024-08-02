@@ -1,15 +1,23 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { createApiErrorFromResponse } from '../../../../errors'
+import { EnvironmentLockedError } from '../../../../types/errors/environments'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import {
+  EnvironmentNotFoundError,
+  ProjectNotFoundError,
+  GenericApiError,
+} from '../../../../types/errors'
 
 export interface DeleteEnvironmentArgs {
   project: string
   environment: string
 }
 
-type DeleteEnvironmentError = ApiError<
-  'project_not_found' | 'environment_not_found' | 'environment_locked'
->
+type DeleteEnvironmentError =
+  | GenericApiError
+  | ProjectNotFoundError
+  | EnvironmentNotFoundError
+  | EnvironmentLockedError
 
 async function deleteEnvironment(
   client: HttpClient,
@@ -22,13 +30,10 @@ async function deleteEnvironment(
       path: `/v1/projects/${project}/environments/${args.environment}`,
     })
 
-    return { data: data, error: null }
-  } catch (error: any) {
-    console.log(error)
-
+    return responseSuccess(data)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<DeleteEnvironmentError>(error)
-
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

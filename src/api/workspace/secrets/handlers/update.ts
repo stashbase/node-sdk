@@ -1,35 +1,17 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
-import { AtLeastOne } from '../../../../utils/types'
+import { AtLeastOne } from '../../../../types/util'
+import { SecretKey } from '../../../../types/secretKey'
+import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
+import { UpdateSecretsError as SharedUpdateSecretsError } from '../../../../types/errors/secrets'
 
 type UpdateSecretsResponseData = {
   updatedCount: number
   notFoundKeys?: Array<Uppercase<string>>
 }
 
-type UpdateSecretsError =
-  | ApiError<
-      | 'no_values_provided'
-      | 'missing_properties'
-      | 'project_not_found'
-      | 'environment_not_found'
-      | 'duplicate_new_keys'
-      | 'duplicate_keys'
-      | 'self_referencing_secrets'
-    >
-  | AlreadyExistApiError
-
-type AlreadyExistApiError = ApiError<
-  'new_keys_already_exist',
-  {
-    /**
-     * @summary Secret key that already exist
-     * @returns Uppercase Uppercase<string>
-     * */
-    alreadyExist: Uppercase<string>
-  }
->
+type UpdateSecretsError = SharedUpdateSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
 
 export interface UpdateSecretsArgs {
   project: string
@@ -38,7 +20,7 @@ export interface UpdateSecretsArgs {
 }
 
 export type UpdateSecretData = {
-  key: Uppercase<string>
+  key: SecretKey
 } & AtLeastOne<{
   newKey: Uppercase<string>
   value: string
@@ -57,12 +39,10 @@ async function updateSecrets(
       data,
     })
 
-    return { data: secrets, error: null }
-  } catch (error: any) {
-    console.log('Error: ', error?.error)
+    return responseSuccess(secrets)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<UpdateSecretsError>(error)
-
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

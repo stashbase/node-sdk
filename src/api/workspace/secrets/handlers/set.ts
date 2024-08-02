@@ -1,12 +1,12 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { SecretKey } from '../../../../types/secretKey'
+import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
+import { SetSecretsError as SharedSetSecretsError } from '../../../../types/errors/secrets'
 
 type SetSecretsResponseData = null
-
-type CreateSecretsError = ApiError<
-  'no_values_provided' | 'project_not_found' | 'environment_not_found'
->
+type SetSecretsError = SharedSetSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
 
 export interface SetSecretsArgs {
   project: string
@@ -15,7 +15,7 @@ export interface SetSecretsArgs {
 }
 
 export type SetSecretData = {
-  key: Uppercase<string>
+  key: SecretKey
   value: string
   description?: string | null
 }
@@ -23,7 +23,7 @@ export type SetSecretData = {
 async function setSecrets(
   envClient: HttpClient,
   args: SetSecretsArgs
-): Promise<ApiResponse<SetSecretsResponseData, CreateSecretsError>> {
+): Promise<ApiResponse<SetSecretsResponseData, SetSecretsError>> {
   try {
     const { project, environment, data } = args
 
@@ -32,11 +32,10 @@ async function setSecrets(
       data,
     })
 
-    return { data: null, error: null }
-  } catch (error: any) {
-    const apiError = createApiErrorFromResponse<CreateSecretsError>(error)
-
-    return { data: null, error: apiError }
+    return responseSuccess(null)
+  } catch (error) {
+    const apiError = createApiErrorFromResponse<SetSecretsError>(error)
+    return responseFailure(apiError)
   }
 }
 

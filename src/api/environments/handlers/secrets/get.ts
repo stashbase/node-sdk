@@ -1,10 +1,10 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { createApiErrorFromResponse } from '../../../../errors'
+import { GetSecretError } from '../../../../types/errors/secrets'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
 type Secret = { key: Uppercase<string>; value: string; description?: string }
 
-type GetSecretError = ApiError<'secret_not_found'>
 type GetSecretResponse = Promise<ApiResponse<Secret, GetSecretError>>
 
 async function getSecret(
@@ -18,12 +18,10 @@ async function getSecret(
       query: expandRefs ? { 'expand-refs': 'true' } : undefined,
     })
 
-    return { data: secrets, error: null }
-  } catch (error: any) {
-    console.log('Error: ', error?.error)
+    return responseSuccess(secrets)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<GetSecretError>(error)
-
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

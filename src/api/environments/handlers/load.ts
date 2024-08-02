@@ -1,8 +1,9 @@
 import dotenvExpand from 'dotenv-expand'
 import { printSecretsTable } from '../../../utils/table'
 import { HttpClient } from '../../../http/client'
-import { ApiError, ApiResponse } from '../../../http/response'
-import { createApiErrorFromResponse } from '../../../http/errors/base'
+import { createApiErrorFromResponse } from '../../../errors'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../http/response'
+import { GenericApiError } from '../../../types/errors'
 
 type SecretKeyValues = Array<{ key: string; value: string }>
 
@@ -14,7 +15,7 @@ export interface LoadEnvironmentOpts {
 }
 
 // type LoadEnvironmentError = ApiError<EnvironmentApiError>
-type LoadEnvironmentError = ApiError
+type LoadEnvironmentError = GenericApiError
 
 async function loadEnvironment(
   client: HttpClient,
@@ -38,7 +39,7 @@ async function loadEnvironment(
       console.log(`\nLoaded environment: ${name}`)
       console.log(`No secrets found`)
 
-      return { data: null, error: null }
+      return responseSuccess(null)
     }
 
     const secretsObj = (secrets ?? []).reduce((obj: { [key: string]: string }, item) => {
@@ -62,14 +63,13 @@ async function loadEnvironment(
       }
     }
 
-    return { data: null, error: null }
+    return responseSuccess(null)
   } catch (error: any) {
     console.log('\nFailed to load environment')
     console.log(error)
 
     const apiError = createApiErrorFromResponse<LoadEnvironmentError>(error)
-
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
 
     // if (shouldThrow || shouldThrow === undefined) {
     //   throw error

@@ -1,10 +1,15 @@
 import { HttpClient } from '../../../../http/client'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
-import { ApiError, ApiResponse } from '../../../../http/response'
+import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import {
+  ProjectAlreadyExistsError,
+  ProjectLimitReachedError,
+} from '../../../../types/errors/projects'
+import { GenericApiError } from '../../../../types/errors'
 
 type CreateProjectResponseData = null
 
-type CreateSecretsError = ApiError<'project_already_exists' | 'project_limit_reached'>
+type CreateSecretsError = GenericApiError | ProjectAlreadyExistsError | ProjectLimitReachedError
 
 export type CreateProjectData = {
   name: string
@@ -21,11 +26,9 @@ export async function createProject(
       data,
     })
 
-    return { data: null, error: null }
-  } catch (error: any) {
-    console.log('Error: ', error?.error)
+    return responseSuccess(null)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<CreateSecretsError>(error)
-
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }

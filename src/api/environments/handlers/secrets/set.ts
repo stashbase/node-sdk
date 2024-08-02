@@ -1,10 +1,9 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { createApiErrorFromResponse } from '../../../../errors'
+import { SetSecretsError } from '../../../../types/errors/secrets'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
 type SetSecretsResponseData = null
-
-type SetSecretsError = ApiError<'no_values_provided'> | ApiError<'self_referencing_secrets'>
 
 export type SetSecretsData = Array<{
   key: Uppercase<string>
@@ -22,12 +21,10 @@ async function setSecrets(
       data,
     })
 
-    return { data: null, error: null }
-  } catch (error: any) {
-    console.log('Error: ', error?.error)
+    return responseSuccess(null)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<SetSecretsError>(error)
-
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 
