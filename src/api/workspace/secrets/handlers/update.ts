@@ -7,7 +7,7 @@ import {
   responseSuccess,
 } from '../../../../http/response'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { AtLeastOne } from '../../../../utils/types'
+import { AtLeastOne } from '../../../../types/util'
 import { SecretKey } from '../../../../types/secretKey'
 import { UpdateSecretsError as SharedUpdateSecretsError } from '../../../../types/errors/secrets'
 
