@@ -10,6 +10,7 @@ export type HttpClient = {
   get: <T>(args: { path: string; query?: { [key: string]: string } }) => Promise<T>
   del: <T>(args: { path: string; query?: { [key: string]: string } }) => Promise<T>
 
+  put: <T>(args: RequestWithData) => Promise<T>
   post: <T>(args: RequestWithData) => Promise<T>
   patch: <T>(args: RequestWithData) => Promise<T>
 }
@@ -61,13 +62,9 @@ export function createHttpClient(args: {
       })
 
       if (!response.ok) {
-        if (response.status === 500 || response.status === 404) {
-          throw new Error('Internal Server Error')
-        } else {
-          // TODO: errors
-          const errorData = await response.json() // Parse error response
-          throw errorData // Throw the entire error response object
-        }
+        // TODO: errors
+        const errorData = await response.json() // Parse error response
+        throw errorData // Throw the entire error response object
       }
 
       const data = await response.json()
@@ -86,7 +83,7 @@ export function createHttpClient(args: {
     path: string
     data?: { [key: string]: any } | any[]
   }): Promise<T> {
-    return await postOrPatch<T>({
+    return await requestWithData<T>({
       method: 'POST',
       headers,
       basePath,
@@ -105,7 +102,23 @@ export function createHttpClient(args: {
       delete reqHeaders['Content-Type']
     }
 
-    return await postOrPatch<T>({
+    return await requestWithData<T>({
+      method: 'PATCH',
+      headers: reqHeaders,
+      basePath,
+      path: args.path,
+      data: args.data,
+    })
+  }
+
+  async function put<T>(args: { path: string; data?: { [key: string]: any } | any[] }): Promise<T> {
+    const reqHeaders = headers
+
+    if (!args.data) {
+      delete reqHeaders['Content-Type']
+    }
+
+    return await requestWithData<T>({
       method: 'PATCH',
       headers: reqHeaders,
       basePath,
@@ -134,13 +147,9 @@ export function createHttpClient(args: {
       })
 
       if (!response.ok) {
-        if (response.status === 500 || response.status === 404) {
-          throw new Error('Internal Server Error')
-        } else {
-          // TODO: errors
-          const errorData = await response.json() // Parse error response
-          throw errorData // Throw the entire error response object
-        }
+        // TODO: errors
+        const errorData = await response.json() // Parse error response
+        throw errorData // Throw the entire error response object
       }
 
       if (response.status === 204) {
@@ -163,13 +172,14 @@ export function createHttpClient(args: {
   return {
     del,
     get,
+    put,
     post,
     patch,
   }
 }
 
-async function postOrPatch<T>(args: {
-  method: 'POST' | 'PATCH'
+async function requestWithData<T>(args: {
+  method: 'POST' | 'PATCH' | 'PUT'
   headers: Record<string, string>
   basePath: string
   path: string
@@ -189,13 +199,9 @@ async function postOrPatch<T>(args: {
     })
 
     if (!response.ok) {
-      if (response.status === 500 || response.status === 404) {
-        throw new Error('Internal Server Error')
-      } else {
-        const errorData = await response.json() // Parse error response
-        console.error(errorData)
-        throw errorData // Throw the entire error response object
-      }
+      const errorData = await response.json() // Parse error response
+      console.error(errorData)
+      throw errorData // Throw the entire error response object
     }
 
     if (response.status === 204) {

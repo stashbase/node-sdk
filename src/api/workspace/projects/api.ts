@@ -1,5 +1,6 @@
+import { invalidProjectNameError } from '../../../errors'
 import { HttpClient } from '../../../http/client'
-import { ApiError } from '../../../http/response'
+import { responseFailure } from '../../../http/response'
 import { isValidProjectName } from '../../../utils/inputValidation'
 import { CreateProjectData, createProject } from './handlers/create'
 import { deleteProject } from './handlers/delete'
@@ -15,9 +16,8 @@ export function projectsAPI(httpClient: HttpClient) {
    * */
   async function get(projectName: string) {
     if (!isValidProjectName(projectName)) {
-      // const error: ApiError<'invalid_name_format'> = { code: 'invalid_name_format' }
-      const error: ApiError<'invalid_name'> = { code: 'invalid_name' }
-      return { data: null, error }
+      const error = invalidProjectNameError
+      return responseFailure(error)
     }
 
     return await getProject(httpClient, projectName)
@@ -42,12 +42,10 @@ export function projectsAPI(httpClient: HttpClient) {
   async function create(data: CreateProjectData) {
     const { name } = data
     const valid = isValidProjectName(name)
-    console.log({ valid })
 
     if (!valid) {
-      const error: ApiError<'invalid_name'> = { code: 'invalid_name' }
-
-      return { data: null, error }
+      const error = invalidProjectNameError
+      return responseFailure(error)
     }
 
     return await createProject(httpClient, data)
@@ -59,16 +57,15 @@ export function projectsAPI(httpClient: HttpClient) {
    * @param key Project name
    * @returns null
    * */
-  async function remove(name: string) {
-    const invalidName = !isValidProjectName(name)
+  async function remove(projectName: string) {
+    const invalidName = !isValidProjectName(projectName)
 
     if (invalidName) {
-      const error: ApiError<'invalid_name'> = { code: 'invalid_name' }
-
-      return { data: null, error }
+      const error = invalidProjectNameError
+      return responseFailure(error)
     }
 
-    return await deleteProject(httpClient, name)
+    return await deleteProject(httpClient, projectName)
   }
 
   return {
