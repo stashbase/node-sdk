@@ -4,7 +4,7 @@ import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/
 import {
   EnvironmentNotFoundError,
   ProjectNotFoundError,
-  SharedApiError,
+  GenericApiError,
 } from '../../../../types/errors'
 
 export interface GetEnvironmentArgs {
@@ -21,7 +21,7 @@ interface Environment {
   description: string | null
 }
 
-type GetEnvironmentError = SharedApiError | ProjectNotFoundError | EnvironmentNotFoundError
+type GetEnvironmentError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
 async function getEnvironment(
   client: HttpClient,

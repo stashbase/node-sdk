@@ -1,7 +1,7 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-import { ProjectNotFoundError, SharedApiError } from '../../../../types/errors'
+import { ProjectNotFoundError, GenericApiError } from '../../../../types/errors'
 
 // ???
 // export interface GetEnvironmentOpts {
@@ -21,7 +21,7 @@ interface Environment {
   description: string | null
 }
 
-type ListEnvironmentsError = SharedApiError | ProjectNotFoundError
+type ListEnvironmentsError = GenericApiError | ProjectNotFoundError
 
 async function listEnvironments(
   client: HttpClient,

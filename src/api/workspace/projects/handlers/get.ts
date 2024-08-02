@@ -1,7 +1,7 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-import { ProjectNotFoundError, SharedApiError } from '../../../../types/errors'
+import { ProjectNotFoundError, GenericApiError } from '../../../../types/errors'
 
 type Project = {
   createdAt: string
@@ -9,7 +9,7 @@ type Project = {
   description: string | null
 }
 
-type GetProjectError = SharedApiError | ProjectNotFoundError
+type GetProjectError = GenericApiError | ProjectNotFoundError
 
 export async function getProject(
   client: HttpClient,

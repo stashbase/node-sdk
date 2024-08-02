@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../http/client'
 import { createApiErrorFromResponse } from '../../../errors'
-import { SharedApiError } from '../../../types/errors'
+import { GenericApiError } from '../../../types/errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../http/response'
 
 interface Environment {
@@ -13,7 +13,7 @@ interface Environment {
 }
 
 // type GetEnvironmentError = ApiError<EnvironmentApiError>
-type GetEnvironmentError = SharedApiError
+type GetEnvironmentError = GenericApiError
 
 async function getEnvironment(
   client: HttpClient
