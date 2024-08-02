@@ -3,7 +3,7 @@ import { printSecretsTable } from '../../../utils/table'
 import { HttpClient } from '../../../http/client'
 import { createApiErrorFromResponse } from '../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../http/response'
-import { SharedApiError } from '../../../types/errors'
+import { GenericApiError } from '../../../types/errors'
 
 type SecretKeyValues = Array<{ key: string; value: string }>
 
@@ -15,7 +15,7 @@ export interface LoadEnvironmentOpts {
 }
 
 // type LoadEnvironmentError = ApiError<EnvironmentApiError>
-type LoadEnvironmentError = SharedApiError
+type LoadEnvironmentError = GenericApiError
 
 async function loadEnvironment(
   client: HttpClient,

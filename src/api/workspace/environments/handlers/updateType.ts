@@ -5,7 +5,7 @@ import { EnvironmentLockedError } from '../../../../types/errors/environments'
 import {
   EnvironmentNotFoundError,
   ProjectNotFoundError,
-  SharedApiError,
+  GenericApiError,
 } from '../../../../types/errors'
 
 export interface UpdateEnvironmentTypeArgs {
@@ -16,7 +16,7 @@ export interface UpdateEnvironmentTypeArgs {
 }
 
 type UpdateEnvironmentTypeError =
-  | SharedApiError
+  | GenericApiError
   | ProjectNotFoundError
   | EnvironmentNotFoundError
   | EnvironmentLockedError

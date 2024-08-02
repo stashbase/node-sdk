@@ -5,7 +5,7 @@ import {
   EnvironmentAlreadyExistsError,
   EnvironmentLimitReachedError,
 } from '../../../../types/errors/environments'
-import { ProjectNotFoundError, SharedApiError } from '../../../../types/errors'
+import { ProjectNotFoundError, GenericApiError } from '../../../../types/errors'
 
 export interface CreateEnvironmentArgs {
   project: string
@@ -16,7 +16,7 @@ export interface CreateEnvironmentArgs {
 }
 
 type CreateEnvironmentError =
-  | SharedApiError
+  | GenericApiError
   | ProjectNotFoundError
   | EnvironmentAlreadyExistsError
   | EnvironmentLimitReachedError

@@ -8,7 +8,7 @@ import {
 import {
   EnvironmentNotFoundError,
   ProjectNotFoundError,
-  SharedApiError,
+  GenericApiError,
 } from '../../../../types/errors'
 
 export type DuplicateEnvironmentArgs = {
@@ -19,7 +19,7 @@ export type DuplicateEnvironmentArgs = {
 }
 
 type DulicateEnvironmentError =
-  | SharedApiError
+  | GenericApiError
   | ProjectNotFoundError
   | EnvironmentNotFoundError
   | EnvironmentAlreadyExistsError

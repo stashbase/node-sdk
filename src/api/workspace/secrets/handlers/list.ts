@@ -5,11 +5,11 @@ import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/
 import {
   EnvironmentNotFoundError,
   ProjectNotFoundError,
-  SharedApiError,
+  GenericApiError,
 } from '../../../../types/errors'
 
 type SecretsData = Array<{ key: SecretKey; value: string; description?: string }>
-type ListSecretsError = SharedApiError | ProjectNotFoundError | EnvironmentNotFoundError
+type ListSecretsError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
 export interface ListSecretsArgs {
   /**
