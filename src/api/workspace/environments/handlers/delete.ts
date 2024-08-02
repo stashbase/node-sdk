@@ -1,14 +1,12 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
+import { EnvironmentLockedError } from '../../../../types/errors/environments'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import {
-  ApiResponse,
   EnvironmentNotFoundError,
   ProjectNotFoundError,
   SharedApiError,
-  responseFailure,
-  responseSuccess,
-} from '../../../../http/response'
-import { EnvironmentLockedError } from '../../../../types/errors/environments'
+} from '../../../../types/errors'
 
 export interface DeleteEnvironmentArgs {
   project: string

@@ -1,17 +1,15 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
-import {
-  ApiResponse,
-  EnvironmentNotFoundError,
-  ProjectNotFoundError,
-  SharedApiError,
-  responseFailure,
-  responseSuccess,
-} from '../../../../http/response'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import {
   EnvironmentAlreadyExistsError,
   EnvironmentLockedError,
 } from '../../../../types/errors/environments'
+import {
+  EnvironmentNotFoundError,
+  ProjectNotFoundError,
+  SharedApiError,
+} from '../../../../types/errors'
 
 export type DuplicateEnvironmentArgs = {
   project: string
