@@ -1,14 +1,9 @@
 import { HttpClient } from '../../../../http/client'
-import {
-  ApiResponse,
-  EnvironmentNotFoundError,
-  ProjectNotFoundError,
-  responseFailure,
-  responseSuccess,
-} from '../../../../http/response'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { SecretKey } from '../../../../types/secretKey'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { GetSecretError as SharedGetSecretsError } from '../../../../types/errors/secrets'
+import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 
 type Secret = { key: SecretKey; value: string; description: string | null }
 

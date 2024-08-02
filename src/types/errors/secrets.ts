@@ -1,4 +1,5 @@
-import { ApiError, SharedApiError } from '../../http/response'
+import { ApiError } from '../../http/response'
+import { SharedApiError } from '.'
 
 export type SecretsErrorDetails = {
   secretKeys: Array<string>

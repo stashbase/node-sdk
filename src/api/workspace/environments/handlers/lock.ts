@@ -1,13 +1,11 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import {
-  ApiResponse,
   EnvironmentNotFoundError,
   ProjectNotFoundError,
   SharedApiError,
-  responseFailure,
-  responseSuccess,
-} from '../../../../http/response'
+} from '../../../../types/errors'
 
 export interface LockEnvironmentArgs {
   project: string
