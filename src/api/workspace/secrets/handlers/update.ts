@@ -16,7 +16,7 @@ type UpdateSecretsResponseData = {
   notFoundKeys?: Array<Uppercase<string>>
 }
 
-type UpdateSecretsError = ProjectNotFoundError | EnvironmentNotFoundError | SharedUpdateSecretsError
+type UpdateSecretsError = SharedUpdateSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
 
 export interface UpdateSecretsArgs {
   project: string
