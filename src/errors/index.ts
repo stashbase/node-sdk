@@ -33,14 +33,18 @@ export const createApiError = <T extends string, D = undefined | ApiErrorDetails
 
 export const invalidEnvironmentNameError = createApiError({
   code: 'invalid_environment_name',
-  details: undefined,
+  details: {
+    exampleProjectNames: ['my-project', 'booking-app-1', 'super_app'],
+  },
   message:
     'Environment name must be alphanumeric, only underscores or hyphen separator allowed, min 2 and max 255 characters.',
 })
 
 export const invalidProjectNameError = createApiError({
   code: 'invalid_project_name',
-  details: undefined,
+  details: {
+    exampleEnvironmentNames: ['staging', 'dev_copy', 'api-prod'],
+  },
   message:
     'Project name must be alphanumeric, only hyphens and underscores allowed, min 2 and max 255 characters.',
 })
