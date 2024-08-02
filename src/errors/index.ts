@@ -1,6 +1,6 @@
 import { ApiError, ApiErrorDetails } from '../http/response'
 
-export function createApiErrorFromResponse<T>(responseData: unknown): T {
+export function createApiErrorFromResponse<T>(responseData: unknown) {
   if (typeof responseData === 'object') {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const resData = responseData as { error?: ApiError<string, any> }
@@ -14,7 +14,7 @@ export function createApiErrorFromResponse<T>(responseData: unknown): T {
     }
   }
 
-  return <T>{ code: 'server_error', message: 'Something went wrong. Please try again later.' }
+  return connectionFailedError
 }
 
 export const createApiError = <T extends string, D = undefined | ApiErrorDetails>(args: {
@@ -30,6 +30,12 @@ export const createApiError = <T extends string, D = undefined | ApiErrorDetails
 
   return error
 }
+
+const connectionFailedError = createApiError({
+  code: 'connection_failed',
+  message: 'Could not connect to the API server. Please try again later.',
+  details: undefined,
+})
 
 export const invalidEnvironmentNameError = createApiError({
   code: 'invalid_environment_name',

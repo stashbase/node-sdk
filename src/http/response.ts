@@ -5,7 +5,7 @@ export type SharedApiError =
   | ExpiredApiKeyError
   | MissingPermissionError
   | InternalServerError
-  | ConnectionError
+  | ConnectionFailedError
 
 type MissingPermissionError = ApiError<
   'missing_permission',
@@ -31,7 +31,7 @@ type TooManyRequestsError = ApiError<
 >
 type UnauthorizedError = ApiError<'unauthorized', undefined>
 type InternalServerError = ApiError<'internal_server_error', { requestId: string }>
-type ConnectionError = ApiError<'connection_error', undefined>
+type ConnectionFailedError = ApiError<'connection_failed', undefined>
 
 export type ProjectNotFoundError = ApiError<'project_not_found'>
 export type EnvironmentNotFoundError = ApiError<'environment_not_found'>
