@@ -1,14 +1,9 @@
 import { HttpClient } from '../../../../http/client'
-import {
-  ApiResponse,
-  EnvironmentNotFoundError,
-  ProjectNotFoundError,
-  responseFailure,
-  responseSuccess,
-} from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../errors'
-import { DeleteSecretsError as SharedDeleteSecretsError } from '../../../../types/errors/secrets'
 import { SecretKey } from '../../../../types/secretKey'
+import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
+import { DeleteSecretsError as SharedDeleteSecretsError } from '../../../../types/errors/secrets'
 
 type DeleteSecretsError = ProjectNotFoundError | EnvironmentNotFoundError | SharedDeleteSecretsError
 

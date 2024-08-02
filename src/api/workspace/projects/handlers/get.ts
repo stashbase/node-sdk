@@ -1,12 +1,7 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
-import {
-  ApiResponse,
-  ProjectNotFoundError,
-  SharedApiError,
-  responseFailure,
-  responseSuccess,
-} from '../../../../http/response'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ProjectNotFoundError, SharedApiError } from '../../../../types/errors'
 
 type Project = {
   createdAt: string
