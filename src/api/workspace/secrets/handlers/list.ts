@@ -1,9 +1,15 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { SecretKey } from '../../../../types/secretKey'
+import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import {
+  EnvironmentNotFoundError,
+  ProjectNotFoundError,
+  GenericApiError,
+} from '../../../../types/errors'
 
-type SecretsData = Array<{ key: Uppercase<string>; value: string; description?: string }>
-type ListSecretsError = ApiError<'project_not_found' | 'environment_not_found'>
+type SecretsData = Array<{ key: SecretKey; value: string; description?: string }>
+type ListSecretsError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
 export interface ListSecretsArgs {
   /**
@@ -48,16 +54,14 @@ async function listSecrets(
 
   try {
     const secrets = await envClient.get<SecretsData>({
-      path: `/projects/${project}/environments/${environment}/secrets`,
+      path: `/v1/projects/${project}/environments/${environment}/secrets`,
       query,
     })
 
-    return { data: secrets, error: null }
-  } catch (error: any) {
-    console.log('Error: ', error?.error)
+    return responseSuccess(secrets)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<ListSecretsError>(error)
-
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

@@ -1,12 +1,15 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { SecretKey } from '../../../../types/secretKey'
+import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
+import { DeleteSecretsError as SharedDeleteSecretsError } from '../../../../types/errors/secrets'
 
-type DeleteSecretsError = ApiError<'project_not_found' | 'environment_not_found'>
+type DeleteSecretsError = ProjectNotFoundError | EnvironmentNotFoundError | SharedDeleteSecretsError
 
 type DeleteSecretsResponseData = {
   deletedCount: number
-  notFound?: Array<Uppercase<string>>
+  notFound?: Array<SecretKey>
 }
 
 export interface DeleteSecretsArgs {
@@ -29,12 +32,10 @@ async function deleteSecrets(
       },
     })
 
-    return { data, error: null }
-  } catch (error: any) {
-    console.log('Error: ', error?.error)
+    return responseSuccess(data)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<DeleteSecretsError>(error)
-
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

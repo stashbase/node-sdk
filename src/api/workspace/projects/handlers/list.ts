@@ -1,6 +1,7 @@
 import { HttpClient } from '../../../../http/client'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
-import { ApiError, ApiResponse } from '../../../../http/response'
+import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { GenericApiError } from '../../../../types/errors'
 
 // TODO:
 export type ListProjectsOpts = {
@@ -14,7 +15,7 @@ type Project = {
   description: string | null
 }
 
-type ListProjectsError = ApiError
+type ListProjectsError = GenericApiError
 
 export async function listProjects(
   client: HttpClient,
@@ -26,11 +27,9 @@ export async function listProjects(
       path: `/v1/projects`,
     })
 
-    return { data: data, error: null }
-  } catch (error: any) {
-    console.log('Error: ', error?.error)
+    return responseSuccess(data)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<ListProjectsError>(error)
-
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }

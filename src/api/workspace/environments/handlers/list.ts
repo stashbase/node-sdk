@@ -1,6 +1,7 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiError, ApiResponse } from '../../../../http/response'
-import { createApiErrorFromResponse } from '../../../../http/errors/base'
+import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ProjectNotFoundError, GenericApiError } from '../../../../types/errors'
 
 // ???
 // export interface GetEnvironmentOpts {
@@ -20,7 +21,7 @@ interface Environment {
   description: string | null
 }
 
-type ListEnvironmentsError = ApiError<'project_not_found'>
+type ListEnvironmentsError = GenericApiError | ProjectNotFoundError
 
 async function listEnvironments(
   client: HttpClient,
@@ -33,12 +34,10 @@ async function listEnvironments(
       path: `/v1/projects/${project}/environments`,
     })
 
-    return { data: data, error: null }
-  } catch (error: any) {
-    console.log('Error: ', error)
+    return responseSuccess(data)
+  } catch (error) {
     const apiError = createApiErrorFromResponse<ListEnvironmentsError>(error)
-
-    return { data: null, error: apiError }
+    return responseFailure(apiError)
   }
 }
 

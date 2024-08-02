@@ -1,8 +1,14 @@
+import {
+  invalidSecretKeyError,
+  invalidSecretKeysError,
+  noDataProvidedError,
+} from '../../../errors/secrets'
 import { HttpClient } from '../../../http/client'
-import { ApiError } from '../../../http/response'
+import { responseFailure } from '../../../http/response'
 import {
   isValidSecretKey,
   validateCreateSecretsInput,
+  validateSecretKeys,
   validateSetSecretsInput,
   validateUpdateSecretsInput,
 } from '../../../utils/inputValidation'
@@ -28,13 +34,12 @@ export function secretsAPI(httpClient: HttpClient) {
     const namesError = checkValidProjectEnv(project, environment)
 
     if (namesError) {
-      return { data: null, error: namesError }
+      return responseFailure(namesError)
     }
 
     if (!isValidSecretKey(key)) {
-      const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
-
-      return { data: null, error }
+      const error = invalidSecretKeyError()
+      return responseFailure(error)
     }
 
     return await getSecret(httpClient, args)
@@ -52,7 +57,7 @@ export function secretsAPI(httpClient: HttpClient) {
     const namesError = checkValidProjectEnv(project, environment)
 
     if (namesError) {
-      return { data: null, error: namesError }
+      return responseFailure(namesError)
     }
 
     return await listSecrets(httpClient, args)
@@ -70,13 +75,13 @@ export function secretsAPI(httpClient: HttpClient) {
     const namesError = checkValidProjectEnv(project, environment)
 
     if (namesError) {
-      return { data: null, error: namesError }
+      return responseFailure(namesError)
     }
 
     const validationError = validateCreateSecretsInput(data)
 
     if (validationError) {
-      return { data: null, error: validationError }
+      return responseFailure(validationError)
     }
 
     return await createSecrets(httpClient, args)
@@ -94,13 +99,13 @@ export function secretsAPI(httpClient: HttpClient) {
     const namesError = checkValidProjectEnv(project, environment)
 
     if (namesError) {
-      return { data: null, error: namesError }
+      return responseFailure(namesError)
     }
 
     const validationError = validateSetSecretsInput(data)
 
     if (validationError) {
-      return { data: null, error: validationError }
+      return responseFailure(validationError)
     }
 
     return await setSecrets(httpClient, args)
@@ -113,57 +118,12 @@ export function secretsAPI(httpClient: HttpClient) {
    * @returns updatedCount, notFoundKeys
    * */
   async function update(args: UpdateSecretsArgs) {
-    // const { data } = args
-    //
-    //  if (data?.length === 0) {
-    //   const error: ApiError<'no_values_provided'> = { code: 'no_values_provided' }
-    //
-    //   return { data: null, error }
-    // }
-    //
-    // validate
-    // for (const [index, { key, newKey, value, description }] of data.entries()) {
-    //   if (!isValidSecretKey(key)) {
-    //     const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
-    //     return { data: null, error }
-    //   }
-    //
-    //   if (newKey !== undefined) {
-    //     if (!isValidSecretKey(newKey)) {
-    //       const error: ApiError<'invalid_new_key'> = { code: 'invalid_new_key' }
-    //       return { data: null, error }
-    //     }
-    //   }
-    //
-    //   if (newKey === undefined && value === undefined && description === undefined) {
-    //     const error: ApiError<'missing_properties'> = { code: 'missing_properties' }
-    //
-    //     return { data: null, error }
-    //   }
-    //
-    //   const duplicateKey = data.some((d, i) => i !== index && d.key === key && key !== undefined)
-    //
-    //   if (duplicateKey) {
-    //     const error: ApiError<'duplicate_keys'> = { code: 'duplicate_keys' }
-    //     return { data: null, error }
-    //   }
-    //
-    //   const duplicateNewKey = data.some(
-    //     (d, i) => i !== index && d.newKey === newKey && newKey !== undefined
-    //   )
-    //
-    //   if (duplicateNewKey) {
-    //     const error: ApiError<'duplicate_new_keys'> = { code: 'duplicate_new_keys' }
-    //     return { data: null, error }
-    //   }
-    // }
-
     const { data } = args
 
     const validationError = validateUpdateSecretsInput(data)
 
     if (validationError) {
-      return { data: null, error: validationError }
+      return responseFailure(validationError)
     }
 
     return await updateSecrets(httpClient, args)
@@ -181,21 +141,19 @@ export function secretsAPI(httpClient: HttpClient) {
     const namesError = checkValidProjectEnv(project, environment)
 
     if (namesError) {
-      return { data: null, error: namesError }
+      return responseFailure(namesError)
     }
 
     if (keys.length === 0) {
-      const error: ApiError<'no_keys_provided'> = { code: 'no_keys_provided' }
-
-      return { data: null, error }
+      const error = noDataProvidedError()
+      return responseFailure(error)
     }
 
-    const invalidKey = keys.find((key) => !isValidSecretKey(key))
+    const { invalidSecretKeys } = validateSecretKeys(keys)
 
-    if (invalidKey) {
-      const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
-
-      return { data: null, error }
+    if (invalidSecretKeys.length > 0) {
+      const error = invalidSecretKeysError(invalidSecretKeys)
+      return responseFailure(error)
     }
 
     return await deleteSecrets(httpClient, args)
