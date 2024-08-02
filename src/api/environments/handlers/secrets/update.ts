@@ -1,5 +1,5 @@
 import { HttpClient } from '../../../../http/client'
-import { AtLeastOne } from '../../../../utils/types'
+import { AtLeastOne } from '../../../../types/util'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { UpdateSecretsError } from '../../../../types/errors/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
