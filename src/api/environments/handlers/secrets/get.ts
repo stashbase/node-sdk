@@ -14,7 +14,7 @@ async function getSecret(
 ): GetSecretResponse {
   try {
     const secrets = await envClient.get<Secret>({
-      path: `/secrets/${key}`,
+      path: `/v1/secrets/${key}`,
       query: expandRefs ? { 'expand-refs': 'true' } : undefined,
     })
 

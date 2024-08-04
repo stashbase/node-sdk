@@ -26,7 +26,7 @@ async function updateSecrets(
 ): Promise<ApiResponse<UpdateSecretsResponseData, UpdateSecretsError>> {
   try {
     const resData = await envClient.patch<UpdateSecretsResponseData>({
-      path: '/secrets',
+      path: '/v1/secrets',
       data,
     })
 

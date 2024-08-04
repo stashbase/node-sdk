@@ -26,7 +26,7 @@ async function deleteSecrets(
 
   try {
     const data = await client.post<DeleteSecretsResponseData>({
-      path: `/projects/${project}/environments/${environment}/secrets/delete`,
+      path: `/v1/projects/${project}/environments/${environment}/secrets/delete`,
       data: {
         keys,
       },
