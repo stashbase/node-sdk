@@ -9,7 +9,6 @@ import verifyWebhook from './webhooks/verify'
 // ROOT
 export function createEnvEase(workspaceApiKey: string) {
   const client = createHttpClient({
-    basePath: '',
     authorization: { workspaceApiKey },
   })
 
@@ -28,7 +27,6 @@ export function createEnvEase(workspaceApiKey: string) {
 export function createEnvApi(envApiKey: string) {
   console.log(envApiKey)
   const client = createHttpClient({
-    basePath: 'environments',
     authorization: { envApiKey },
   })
 
