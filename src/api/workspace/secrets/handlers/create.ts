@@ -5,9 +5,9 @@ import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 import { CreateSecretsError as SharedCreateSecretsError } from '../../../../types/errors/secrets'
 
-type CreateSecretsResponseData = {
+interface CreateSecretsResponseData {
   createdCount: number
-  duplicateKeys?: Array<SecretKey>
+  duplicateSecrets: Array<SecretKey>
 }
 
 // type CreateSecretsError = ApiError<
@@ -35,12 +35,12 @@ async function createSecrets(
   try {
     const { project, environment, data } = args
 
-    const secrets = await envClient.post<CreateSecretsResponseData>({
+    const resData = await envClient.post<CreateSecretsResponseData>({
       path: `/v1/projects/${project}/environments/${environment}/secrets`,
       data,
     })
 
-    return responseSuccess(secrets)
+    return responseSuccess(resData)
   } catch (error) {
     const apiError = createApiErrorFromResponse<CreateSecretsError>(error)
     return responseFailure(apiError)
