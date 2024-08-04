@@ -6,9 +6,9 @@ import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 import { UpdateSecretsError as SharedUpdateSecretsError } from '../../../../types/errors/secrets'
 
-type UpdateSecretsResponseData = {
+interface UpdateSecretsResponseData {
   updatedCount: number
-  notFoundKeys?: Array<Uppercase<string>>
+  notFoundSecrets: Array<Uppercase<string>>
 }
 
 type UpdateSecretsError = SharedUpdateSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
@@ -34,12 +34,12 @@ async function updateSecrets(
   const { project, environment, data } = args
 
   try {
-    const secrets = await envClient.patch<UpdateSecretsResponseData>({
+    const resData = await envClient.patch<UpdateSecretsResponseData>({
       path: `/projects/${project}/environments/${environment}/secrets`,
       data,
     })
 
-    return responseSuccess(secrets)
+    return responseSuccess(resData)
   } catch (error) {
     const apiError = createApiErrorFromResponse<UpdateSecretsError>(error)
     return responseFailure(apiError)

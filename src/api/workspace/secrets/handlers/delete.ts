@@ -7,9 +7,9 @@ import { DeleteSecretsError as SharedDeleteSecretsError } from '../../../../type
 
 type DeleteSecretsError = ProjectNotFoundError | EnvironmentNotFoundError | SharedDeleteSecretsError
 
-type DeleteSecretsResponseData = {
+interface DeleteSecretsResponseData {
   deletedCount: number
-  notFound?: Array<SecretKey>
+  notFoundSecrets: Array<SecretKey>
 }
 
 export interface DeleteSecretsArgs {

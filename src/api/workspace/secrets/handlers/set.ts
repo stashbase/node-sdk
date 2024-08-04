@@ -5,8 +5,12 @@ import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 import { SetSecretsError as SharedSetSecretsError } from '../../../../types/errors/secrets'
 
-type SetSecretsResponseData = null
 type SetSecretsError = SharedSetSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
+
+interface SetSecretsResponseData {
+  createdCount: number
+  updatedCount: number
+}
 
 export interface SetSecretsArgs {
   project: string
@@ -27,12 +31,12 @@ async function setSecrets(
   try {
     const { project, environment, data } = args
 
-    await envClient.post<SetSecretsResponseData>({
+    const resData = await envClient.put<SetSecretsResponseData>({
       path: `/projects/${project}/environments/${environment}/secrets/set`,
       data,
     })
 
-    return responseSuccess(null)
+    return responseSuccess(resData)
   } catch (error) {
     const apiError = createApiErrorFromResponse<SetSecretsError>(error)
     return responseFailure(apiError)
