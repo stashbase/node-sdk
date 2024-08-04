@@ -2,7 +2,7 @@ import fetchWithRetry from './retry'
 
 const baseURL: string = 'http://0.0.0.0:5000'
 
-type BasePath = 'environments' | 'projects' | ''
+// type BasePath = 'environments' | 'projects' | ''
 
 type RequestWithData = { path: string; data?: { [key: string]: any } | any[] }
 
@@ -16,7 +16,6 @@ export type HttpClient = {
 }
 
 export function createHttpClient(args: {
-  basePath: BasePath
   version?: string
   authorization: {
     envApiKey?: string
@@ -24,7 +23,6 @@ export function createHttpClient(args: {
   }
 }): HttpClient {
   const {
-    basePath,
     authorization: { envApiKey, workspaceApiKey },
   } = args
 
@@ -43,7 +41,8 @@ export function createHttpClient(args: {
   }
 
   async function get<T>(args: { path: string; query?: { [key: string]: string } }): Promise<T> {
-    let url = `${baseURL}${basePath === '' ? '' : `/${basePath}`}${args.path ?? ''}`
+    // let url = `${baseURL}${basePath === '' ? '' : `/${basePath}`}${args.path ?? ''}`
+    let url = `${baseURL}${args.path ?? ''}`
 
     if (args.query) {
       const query = args.query
@@ -86,7 +85,6 @@ export function createHttpClient(args: {
     return await requestWithData<T>({
       method: 'POST',
       headers,
-      basePath,
       path: args.path,
       data: args.data,
     })
@@ -105,7 +103,6 @@ export function createHttpClient(args: {
     return await requestWithData<T>({
       method: 'PATCH',
       headers: reqHeaders,
-      basePath,
       path: args.path,
       data: args.data,
     })
@@ -121,14 +118,13 @@ export function createHttpClient(args: {
     return await requestWithData<T>({
       method: 'PUT',
       headers: reqHeaders,
-      basePath,
       path: args.path,
       data: args.data,
     })
   }
 
   async function del<T>(args: { path: string; query?: { [key: string]: string } }): Promise<T> {
-    let url = `${baseURL}${basePath === '' ? '' : `/${basePath}`}${args.path ?? ''}`
+    let url = `${baseURL}${args.path ?? ''}`
 
     if (args.query) {
       const query = args.query
@@ -181,14 +177,13 @@ export function createHttpClient(args: {
 async function requestWithData<T>(args: {
   method: 'POST' | 'PATCH' | 'PUT'
   headers: Record<string, string>
-  basePath: string
   path: string
   data?: { [key: string]: any } | any[]
 }): Promise<T> {
-  const { method, basePath, headers, path, data } = args
+  const { method, headers, path, data } = args
 
   // const url = `${baseURL}${basePath == '' ? '' : basePath}${path ?? ''}`
-  const url = `${baseURL}${basePath === '' ? '' : `/${basePath}`}${path ?? ''}`
+  const url = `${baseURL}${path ?? ''}`
   console.log(url)
 
   try {
