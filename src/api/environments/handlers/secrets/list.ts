@@ -23,8 +23,8 @@ async function listSecrets(
     query['expand-refs'] = 'true'
   }
 
-  if (returnDescription) {
-    query['description'] = 'true'
+  if (returnDescription === false) {
+    query['no-description'] = 'true'
   }
 
   try {
