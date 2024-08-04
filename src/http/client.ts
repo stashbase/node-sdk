@@ -119,7 +119,7 @@ export function createHttpClient(args: {
     }
 
     return await requestWithData<T>({
-      method: 'PATCH',
+      method: 'PUT',
       headers: reqHeaders,
       basePath,
       path: args.path,
