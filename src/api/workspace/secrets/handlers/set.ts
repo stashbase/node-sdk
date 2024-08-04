@@ -32,7 +32,7 @@ async function setSecrets(
     const { project, environment, data } = args
 
     const resData = await envClient.put<SetSecretsResponseData>({
-      path: `/projects/${project}/environments/${environment}/secrets/set`,
+      path: `/v1/projects/${project}/environments/${environment}/secrets`,
       data,
     })
 

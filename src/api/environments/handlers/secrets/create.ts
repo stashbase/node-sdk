@@ -21,7 +21,7 @@ async function createSecrets(
 ): Promise<ApiResponse<CreateSecretsResponseData, CreateSecretsError>> {
   try {
     const resData = await envClient.post<CreateSecretsResponseData>({
-      path: '/secrets',
+      path: '/v1/secrets',
       data,
     })
 

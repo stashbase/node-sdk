@@ -20,7 +20,7 @@ async function setSecrets(
 ): Promise<ApiResponse<SetSecretsResponseData, SetSecretsError>> {
   try {
     const resData = await envClient.post<SetSecretsResponseData>({
-      path: '/secrets/set',
+      path: '/v1/secrets',
       data,
     })
 

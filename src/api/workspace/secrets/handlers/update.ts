@@ -35,7 +35,7 @@ async function updateSecrets(
 
   try {
     const resData = await envClient.patch<UpdateSecretsResponseData>({
-      path: `/projects/${project}/environments/${environment}/secrets`,
+      path: `/v1/projects/${project}/environments/${environment}/secrets`,
       data,
     })
 
