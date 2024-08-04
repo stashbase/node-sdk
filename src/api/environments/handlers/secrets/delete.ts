@@ -1,11 +1,12 @@
 import { HttpClient } from '../../../../http/client'
+import { SecretKey } from '../../../../types/secretKey'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { DeleteSecretsError } from '../../../../types/errors/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
-type DeleteSecretsResponseData = {
+interface DeleteSecretsResponseData {
   deletedCount: number
-  notFound?: Array<Uppercase<string>>
+  notFoundSecrets?: Array<SecretKey>
 }
 
 async function deleteEnvironmentSecrets(
