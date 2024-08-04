@@ -29,7 +29,7 @@ async function listSecrets(
 
   try {
     const secrets = await envClient.get<SecretsData>({
-      path: '/secrets/list',
+      path: '/v1/secrets',
       query,
     })
 
