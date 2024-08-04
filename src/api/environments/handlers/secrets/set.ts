@@ -3,7 +3,10 @@ import { createApiErrorFromResponse } from '../../../../errors'
 import { SetSecretsError } from '../../../../types/errors/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
-type SetSecretsResponseData = null
+interface SetSecretsResponseData {
+  createdCount: number
+  updatedCount: number
+}
 
 export type SetSecretsData = Array<{
   key: Uppercase<string>
@@ -16,12 +19,12 @@ async function setSecrets(
   data: SetSecretsData
 ): Promise<ApiResponse<SetSecretsResponseData, SetSecretsError>> {
   try {
-    await envClient.post<SetSecretsResponseData>({
+    const resData = await envClient.post<SetSecretsResponseData>({
       path: '/secrets/set',
       data,
     })
 
-    return responseSuccess(null)
+    return responseSuccess(resData)
   } catch (error) {
     const apiError = createApiErrorFromResponse<SetSecretsError>(error)
     return responseFailure(apiError)
