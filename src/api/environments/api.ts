@@ -1,4 +1,4 @@
-import { LoadEnvironmentOpts, loadEnvironment } from './handlers/load'
+import { loadEnvironment } from './handlers/load'
 import { getEnvironment } from './handlers/get'
 import { deleteEnvironmentSecrets } from './handlers/secrets/delete'
 import { HttpClient } from '../../http/client'
@@ -20,6 +20,7 @@ import {
   noDataProvidedError,
 } from '../../errors/secrets'
 import { responseFailure } from '../../http/response'
+import { LoadEnvironmentOpts } from '../../types/environments'
 
 function environmentsAPI(httpClient: HttpClient) {
   /**
