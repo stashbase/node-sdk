@@ -21,6 +21,7 @@ import {
 } from '../../errors/secrets'
 import { responseFailure } from '../../http/response'
 import { LoadEnvironmentOpts } from '../../types/environments'
+import { deleteAllEnvironmentSecrets } from './handlers/secrets/deleteAll'
 
 function environmentsAPI(httpClient: HttpClient) {
   /**
@@ -205,6 +206,15 @@ function envSecretsAPI(httpClient: HttpClient) {
     return await deleteEnvironmentSecrets(httpClient, keys)
   }
 
+  /**
+   * @summary Remove ll secrets
+   * @description Secrets
+   * @returns deletedCount
+   * */
+  async function removeAll() {
+    return await deleteAllEnvironmentSecrets(httpClient)
+  }
+
   return {
     get,
     list,
@@ -212,6 +222,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     set,
     update,
     remove,
+    removeAll,
   }
 }
 
