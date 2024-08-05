@@ -8,34 +8,18 @@ import {
   ProjectNotFoundError,
   GenericApiError,
 } from '../../../../types/errors'
-
-type SecretKeyValues = Array<{ key: string; value: string }>
-
-export interface LoadEnvironmentArgs {
-  project: string
-  environment: string
-  // optional
-  enabled?: boolean
-  expandRefs?: boolean
-  print?: 'key-value' | 'key' | 'none'
-}
-
-type QueryParams = {
-  'with-environment': string
-  'no-description': 'true'
-  // optional
-  'expand-refs'?: 'true'
-}
+import {
+  LoadEnvironmentOpts,
+  LoadEnvironmentQueryParams,
+  LoadEnvironmentResponse,
+} from '../../../../types/environments'
 
 type LoadEnvironmentError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
-type LoadEnvironmentResponse = {
-  environment: {
-    name: string
-    type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
-  }
-  secrets: SecretKeyValues
-}
+export type LoadEnvironmentArgs = {
+  project: string
+  environment: string
+} & LoadEnvironmentOpts
 
 async function loadEnvironment(
   client: HttpClient,
@@ -43,7 +27,7 @@ async function loadEnvironment(
 ): Promise<ApiResponse<null, LoadEnvironmentError>> {
   const { project, environment: environmentName } = args
 
-  const query: QueryParams = {
+  const query: LoadEnvironmentQueryParams = {
     'no-description': 'true',
     'with-environment': ['type'].join(','),
   }
