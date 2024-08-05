@@ -15,6 +15,7 @@ import {
 import { checkValidProjectEnv } from '../environments/api'
 import { CreateSecretsArgs, createSecrets } from './handlers/create'
 import { DeleteSecretsArgs, deleteSecrets } from './handlers/delete'
+import { DeleteAllSecretsArgs, deleteAllSecrets } from './handlers/deleteAll'
 import { GetSecretArgs, getSecret } from './handlers/get'
 import { ListSecretsArgs, listSecrets } from './handlers/list'
 import { SetSecretsArgs, setSecrets } from './handlers/set'
@@ -159,6 +160,23 @@ export function secretsAPI(httpClient: HttpClient) {
     return await deleteSecrets(httpClient, args)
   }
 
+  /**
+   * @summary Remove all secrets
+   * @description Secrets
+   * @param args project, environment
+   * @returns deletedCount
+   * */
+  async function removeAll(args: DeleteAllSecretsArgs) {
+    const { project, environment } = args
+    const namesError = checkValidProjectEnv(project, environment)
+
+    if (namesError) {
+      return responseFailure(namesError)
+    }
+
+    return await deleteAllSecrets(httpClient, args)
+  }
+
   return {
     get,
     list,
@@ -166,5 +184,6 @@ export function secretsAPI(httpClient: HttpClient) {
     set,
     update,
     remove,
+    removeAll,
   }
 }
