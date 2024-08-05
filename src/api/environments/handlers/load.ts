@@ -4,35 +4,13 @@ import { HttpClient } from '../../../http/client'
 import { createApiErrorFromResponse } from '../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../http/response'
 import { GenericApiError } from '../../../types/errors'
-import { AtMostOne } from '../../../types/util'
-import { SecretKey } from '../../../types/secretKey'
+import {
+  LoadEnvironmentOpts,
+  LoadEnvironmentQueryParams,
+  LoadEnvironmentResponse,
+} from '../../../types/environments'
 
-type SecretKeyValues = Array<{ key: string; value: string }>
-
-export type LoadEnvironmentOpts = {
-  enabled?: boolean
-  // printTable?: boolean
-  print?: 'key-value' | 'key' | 'none'
-  expandRefs?: boolean
-}
-
-type QueryParams = {
-  'with-environment': string
-  'no-description': 'true'
-  // optional
-  'expand-refs'?: 'true'
-}
-
-// type LoadEnvironmentError = ApiError<EnvironmentApiError>
 type LoadEnvironmentError = GenericApiError
-
-type LoadEnvironmentResponse = {
-  environment: {
-    name: string
-    type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
-  }
-  secrets: SecretKeyValues
-}
 
 async function loadEnvironment(
   client: HttpClient,
@@ -40,7 +18,7 @@ async function loadEnvironment(
 ): Promise<ApiResponse<null, LoadEnvironmentError>> {
   const printType = options?.print
 
-  const query: QueryParams = {
+  const query: LoadEnvironmentQueryParams = {
     'no-description': 'true',
     'with-environment': ['name', 'type'].join(','),
   }
