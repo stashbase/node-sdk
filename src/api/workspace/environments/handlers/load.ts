@@ -20,11 +20,20 @@ export interface LoadEnvironmentArgs {
   print?: 'key-value' | 'key' | 'none'
 }
 
+type QueryParams = {
+  'with-environment': string
+  'no-description': 'true'
+  // optional
+  'expand-refs'?: 'true'
+}
+
 type LoadEnvironmentError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
-type loadEnvironmentResponse = {
-  name: string
-  type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
+type LoadEnvironmentResponse = {
+  environment: {
+    name: string
+    type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
+  }
   secrets: SecretKeyValues
 }
 
@@ -32,18 +41,30 @@ async function loadEnvironment(
   client: HttpClient,
   args: LoadEnvironmentArgs
 ): Promise<ApiResponse<null, LoadEnvironmentError>> {
-  const { project, environment } = args
+  const { project, environment: environmentName } = args
+
+  const query: QueryParams = {
+    'no-description': 'true',
+    'with-environment': ['type'].join(','),
+  }
+
+  if (args?.expandRefs) {
+    query['expand-refs'] = 'true'
+  }
 
   try {
-    const data = await client.get<loadEnvironmentResponse>({
-      path: `/v1/projects/${project}/environments/${environment}/load`,
-      query: args.expandRefs ? { 'expand-refs': 'true' } : undefined,
+    const data = await client.get<LoadEnvironmentResponse>({
+      path: `/v1/projects/${project}/environments/${environmentName}/secrets`,
+      query,
     })
 
-    const { name, secrets } = data
+    const {
+      environment: { type: environmentType },
+      secrets,
+    } = data
 
     if (secrets.length === 0) {
-      console.log(`\nLoaded environment: ${name} (${data?.type})`)
+      console.log(`\nLoaded environment: ${environmentName} (${environmentType})`)
       console.log(`No secrets found`)
 
       return responseSuccess(null)
@@ -60,7 +81,7 @@ async function loadEnvironment(
 
     dotenvExpand.expand(dotenv)
 
-    console.log(`\nLoaded environment: ${name} (${data?.type})`)
+    console.log(`\nLoaded environment: ${environmentName} (${environmentType})`)
 
     const printType = args?.print
 
