@@ -1,4 +1,5 @@
 import { ApiError, ApiErrorDetails } from '../http/response'
+import { ConnectionFailedError } from '../types/errors'
 
 export function createApiErrorFromResponse<T>(responseData: unknown) {
   if (typeof responseData === 'object') {
@@ -31,14 +32,14 @@ export const createApiError = <T extends string, D = undefined | ApiErrorDetails
   return error
 }
 
-const connectionFailedError = createApiError({
-  code: 'connection_failed',
+const connectionFailedError: ConnectionFailedError = createApiError({
+  code: 'unexpected.connection_failed',
   message: 'Could not connect to the API server. Please try again later.',
   details: undefined,
 })
 
 export const invalidEnvironmentNameError = createApiError({
-  code: 'invalid_environment_name',
+  code: 'validation.invalid_environment_name',
   details: {
     exampleProjectNames: ['my-project', 'booking-app-1', 'super_app'],
   },
@@ -47,7 +48,7 @@ export const invalidEnvironmentNameError = createApiError({
 })
 
 export const invalidProjectNameError = createApiError({
-  code: 'invalid_project_name',
+  code: 'validation.invalid_project_name',
   details: {
     exampleEnvironmentNames: ['staging', 'dev_copy', 'api-prod'],
   },
