@@ -6,6 +6,7 @@ import {
   InvalidSecretKeyError,
   InvalidSecretKeysError,
   MissingPropertiesToUpdateError,
+  NewSecretKeysSameAsKeysError,
   NoDataProvided,
   SecretsErrorDetails,
   SelfReferencingSecretsError,
@@ -90,6 +91,16 @@ export const invalidNewSecretKeysError = (secretKeys: Array<string>): InvalidNew
   createSecretsError({
     code: 'invalid_new_secret_keys',
     message: secretKeyFormatErrorMessage,
+    details: {
+      secretKeys,
+    },
+  })
+
+export const newKeysSameAsKeys = (secretKeys: Array<string>): NewSecretKeysSameAsKeysError =>
+  createSecretsError({
+    code: 'new_secret_keys_same_as_keys',
+    message:
+      "One or more values of property 'newKey' match the provided 'key' values in the request.",
     details: {
       secretKeys,
     },

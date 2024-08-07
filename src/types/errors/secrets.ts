@@ -42,6 +42,10 @@ export type DuplicateSecretsKeysError = ApiError<'duplicate_secret_keys', Secret
 export type SelfReferencingSecretsError = ApiError<'self_referencing_secrets', SecretsErrorDetails>
 export type DuplicateNewSecretKeysError = ApiError<'duplicate_new_secret_keys', SecretsErrorDetails>
 export type InvalidNewSecretKeysError = ApiError<'invalid_new_secret_keys', SecretsErrorDetails>
+export type NewSecretKeysSameAsKeysError = ApiError<
+  'new_secret_keys_same_as_keys',
+  SecretsErrorDetails
+>
 export type MissingPropertiesToUpdateError = ApiError<
   'missing_properties_to_update',
   SecretsErrorDetails
