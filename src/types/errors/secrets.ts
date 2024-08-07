@@ -1,53 +1,72 @@
-import { ApiError } from '../../http/response'
-import { GenericApiError } from '.'
+import { ConflictApiError, GenericApiError, ResourceApiError, ValidationApiError } from './'
 
 export type SecretsErrorDetails = {
   secretKeys: Array<string>
 }
 
+type SecretsValidationErrorWithDetails<T extends string> = ValidationApiError<
+  T,
+  SecretsErrorDetails
+>
+
 export type CreateSecretsError =
   | GenericApiError
-  | InvalidSecretKeysError
-  | DuplicateSecretsKeysError
-  | SelfReferencingSecretsError
+  | InvalidSecretKeysValidationError
+  | DuplicateSecretsKeysValidationError
+  | SelfReferencingSecretsValidationError
 
-export type DeleteSecretsError = GenericApiError | InvalidSecretKeysError
-
-export type GetSecretError = GenericApiError | ApiError<'secret_not_found'>
-
+export type DeleteSecretsError = GenericApiError | InvalidSecretKeysValidationError
+export type GetSecretError = GenericApiError | ResourceApiError<'secret_not_found', undefined>
 export type ListSecretsError = GenericApiError
 
 export type SetSecretsError =
   | GenericApiError
-  | NoDataProvided
-  | InvalidSecretKeysError
-  | DuplicateSecretsKeysError
-  | SelfReferencingSecretsError
+  | NoDataProvidedValidationError
+  | InvalidSecretKeysValidationError
+  | DuplicateSecretsKeysValidationError
+  | SelfReferencingSecretsValidationError
 
 export type UpdateSecretsError =
   | GenericApiError
-  | NoDataProvided
-  | InvalidSecretKeysError
-  | DuplicateSecretsKeysError
-  | DuplicateNewSecretKeysError
-  | SelfReferencingSecretsError
-  | InvalidNewSecretKeysError
-  | MissingPropertiesToUpdateError
-  | SecretsAlreadyExistError
+  | NoDataProvidedValidationError
+  | InvalidSecretKeysValidationError
+  | DuplicateSecretsKeysValidationError
+  | DuplicateNewSecretKeysValidationError
+  | SelfReferencingSecretsValidationError
+  | InvalidNewSecretKeysValidationError
+  | MissingPropertiesToUpdateValidationError
+  | SelfReferencingSecretsConflictError
+  | SecretsAlreadyExistConflictError
 
-export type NoDataProvided = ApiError<'no_data_provided'>
-export type InvalidSecretKeysError = ApiError<'invalid_secret_keys', SecretsErrorDetails>
-export type InvalidSecretKeyError = ApiError<'invalid_secret_key', undefined>
-export type DuplicateSecretsKeysError = ApiError<'duplicate_secret_keys', SecretsErrorDetails>
-export type SelfReferencingSecretsError = ApiError<'self_referencing_secrets', SecretsErrorDetails>
-export type DuplicateNewSecretKeysError = ApiError<'duplicate_new_secret_keys', SecretsErrorDetails>
-export type InvalidNewSecretKeysError = ApiError<'invalid_new_secret_keys', SecretsErrorDetails>
-export type NewSecretKeysSameAsKeysError = ApiError<
-  'new_secret_keys_same_as_keys',
+export type NoDataProvidedValidationError = ValidationApiError<'no_data_provided'>
+export type InvalidSecretKeyValidationError = ValidationApiError<'invalid_secret_key', undefined>
+export type InvalidSecretKeysValidationError =
+  SecretsValidationErrorWithDetails<'invalid_secret_keys'>
+
+export type DuplicateSecretsKeysValidationError = ValidationApiError<
+  'duplicate_secret_keys',
   SecretsErrorDetails
 >
-export type MissingPropertiesToUpdateError = ApiError<
-  'missing_properties_to_update',
+
+export type SelfReferencingSecretsValidationError =
+  SecretsValidationErrorWithDetails<'self_referencing_secrets'>
+
+export type SelfReferencingSecretsConflictError = ConflictApiError<
+  'self_referencing_secrets',
   SecretsErrorDetails
 >
-export type SecretsAlreadyExistError = ApiError<'secrets_already_exist', SecretsErrorDetails>
+
+export type DuplicateNewSecretKeysValidationError =
+  SecretsValidationErrorWithDetails<'duplicate_new_secret_keys'>
+
+export type InvalidNewSecretKeysValidationError =
+  SecretsValidationErrorWithDetails<'invalid_new_secret_keys'>
+
+export type NewSecretKeysSameAsKeysValidationError =
+  SecretsValidationErrorWithDetails<'new_secret_keys_same_as_keys'>
+
+export type MissingPropertiesToUpdateValidationError =
+  SecretsValidationErrorWithDetails<'missing_properties_to_update'>
+
+export type SecretsAlreadyExistConflictError =
+  SecretsValidationErrorWithDetails<'secrets_already_exist'>
