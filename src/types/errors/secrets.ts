@@ -8,7 +8,7 @@ export type SecretsErrorDetails = {
 export type CreateSecretsError =
   | GenericApiError
   | InvalidSecretKeysError
-  | DuplicateSecretsError
+  | DuplicateSecretsKeysError
   | SelfReferencingSecretsError
 
 export type DeleteSecretsError = GenericApiError | InvalidSecretKeysError
@@ -21,32 +21,29 @@ export type SetSecretsError =
   | GenericApiError
   | NoDataProvided
   | InvalidSecretKeysError
-  | DuplicateSecretsError
+  | DuplicateSecretsKeysError
   | SelfReferencingSecretsError
 
 export type UpdateSecretsError =
   | GenericApiError
   | NoDataProvided
   | InvalidSecretKeysError
-  | DuplicateSecretsError
-  | DuplicateNewSecretsError
+  | DuplicateSecretsKeysError
+  | DuplicateNewSecretKeysError
   | SelfReferencingSecretsError
   | InvalidNewSecretKeysError
   | MissingPropertiesToUpdateError
-  | NewKeySecretsAlreadyExistError
+  | SecretsAlreadyExistError
 
 export type NoDataProvided = ApiError<'no_data_provided'>
 export type InvalidSecretKeysError = ApiError<'invalid_secret_keys', SecretsErrorDetails>
 export type InvalidSecretKeyError = ApiError<'invalid_secret_key', undefined>
-export type DuplicateSecretsError = ApiError<'duplicate_secrets', SecretsErrorDetails>
+export type DuplicateSecretsKeysError = ApiError<'duplicate_secret_keys', SecretsErrorDetails>
 export type SelfReferencingSecretsError = ApiError<'self_referencing_secrets', SecretsErrorDetails>
-export type DuplicateNewSecretsError = ApiError<'duplicate_new_secrets', SecretsErrorDetails>
+export type DuplicateNewSecretKeysError = ApiError<'duplicate_new_secret_keys', SecretsErrorDetails>
 export type InvalidNewSecretKeysError = ApiError<'invalid_new_secret_keys', SecretsErrorDetails>
 export type MissingPropertiesToUpdateError = ApiError<
   'missing_properties_to_update',
   SecretsErrorDetails
 >
-export type NewKeySecretsAlreadyExistError = ApiError<
-  'new_key_secrets_already_exist',
-  SecretsErrorDetails
->
+export type SecretsAlreadyExistError = ApiError<'secrets_already_exist', SecretsErrorDetails>
