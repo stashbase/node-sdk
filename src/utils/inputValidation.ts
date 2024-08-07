@@ -1,7 +1,7 @@
 import { UpdateSecretData } from '../api/workspace/secrets/handlers/update'
 import {
-  duplicateNewSecretsError,
-  duplicateSecretsError,
+  duplicateNewSecretKeysError,
+  duplicateSecretKeysError,
   invalidNewSecretKeysError,
   invalidSecretKeysError,
   missingPropertiesToUpdateError,
@@ -9,8 +9,8 @@ import {
   selfReferencingSecretsError,
 } from '../errors/secrets'
 import {
-  DuplicateNewSecretsError,
-  DuplicateSecretsError,
+  DuplicateNewSecretKeysError,
+  DuplicateSecretsKeysError,
   InvalidNewSecretKeysError,
   InvalidSecretKeysError,
   MissingPropertiesToUpdateError,
@@ -111,7 +111,7 @@ interface SetSecretsItem {
 type ValidateSetSecretsInputRes =
   | NoDataProvided
   | InvalidSecretKeysError
-  | DuplicateSecretsError
+  | DuplicateSecretsKeysError
   | SelfReferencingSecretsError
   | null
 
@@ -153,7 +153,7 @@ export const validateSetSecretsInput = (
 
   if (duplicateSecretKeys?.length > 0) {
     const secretKeys = duplicateSecretKeys
-    const error = duplicateSecretsError(secretKeys)
+    const error = duplicateSecretKeysError(secretKeys)
 
     return error
   }
@@ -175,8 +175,8 @@ type ValidateUpdateSecretsInputRes =
   | MissingPropertiesToUpdateError
   | InvalidSecretKeysError
   | InvalidNewSecretKeysError
-  | DuplicateSecretsError
-  | DuplicateNewSecretsError
+  | DuplicateSecretsKeysError
+  | DuplicateNewSecretKeysError
   | SelfReferencingSecretsError
   | null
 
@@ -233,7 +233,7 @@ export const validateUpdateSecretsInput = (
     keyOccurrences.set(key, (keyOccurrences.get(key) || 0) + 1)
 
     if (newKey !== undefined) {
-      newKeyOccurrences.set(key, (newKeyOccurrences.get(newKey) || 0) + 1)
+      newKeyOccurrences.set(newKey, (newKeyOccurrences.get(newKey) || 0) + 1)
     }
   }
 
@@ -264,7 +264,7 @@ export const validateUpdateSecretsInput = (
 
   if (duplicateSecretKeys?.length > 0) {
     const secretKeys = duplicateSecretKeys
-    const error = duplicateSecretsError(secretKeys)
+    const error = duplicateSecretKeysError(secretKeys)
 
     return error
   }
@@ -275,7 +275,7 @@ export const validateUpdateSecretsInput = (
     ?.map(([key]) => key)
 
   if (duplicateNewSecrets?.length > 0) {
-    const error = duplicateNewSecretsError(duplicateNewSecrets)
+    const error = duplicateNewSecretKeysError(duplicateNewSecrets)
     return error
   }
 
