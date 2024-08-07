@@ -5,6 +5,7 @@ import {
   invalidNewSecretKeysError,
   invalidSecretKeysError,
   missingPropertiesToUpdateError,
+  newKeysSameAsKeys,
   noDataProvidedError,
   selfReferencingSecretsError,
 } from '../errors/secrets'
@@ -14,6 +15,7 @@ import {
   InvalidNewSecretKeysError,
   InvalidSecretKeysError,
   MissingPropertiesToUpdateError,
+  NewSecretKeysSameAsKeysError,
   NoDataProvided,
   SelfReferencingSecretsError,
 } from '../types/errors/secrets'
@@ -178,6 +180,7 @@ type ValidateUpdateSecretsInputRes =
   | DuplicateSecretsKeysError
   | DuplicateNewSecretKeysError
   | SelfReferencingSecretsError
+  | NewSecretKeysSameAsKeysError
   | null
 
 export const validateUpdateSecretsInput = (
@@ -197,6 +200,7 @@ export const validateUpdateSecretsInput = (
   const invalidSecretKeys = new Set<string>()
   const invalidNewSecretKeys = new Set<string>()
 
+  const newKeySameAsKey = new Set<string>()
   const missingPropertiesToUpdateKeys = new Set<string>()
 
   for (const { key, newKey, value, description } of data) {
@@ -234,6 +238,10 @@ export const validateUpdateSecretsInput = (
 
     if (newKey !== undefined) {
       newKeyOccurrences.set(newKey, (newKeyOccurrences.get(newKey) || 0) + 1)
+
+      if (key === newKey) {
+        newKeySameAsKey.add(key)
+      }
     }
   }
 
@@ -276,6 +284,11 @@ export const validateUpdateSecretsInput = (
 
   if (duplicateNewSecrets?.length > 0) {
     const error = duplicateNewSecretKeysError(duplicateNewSecrets)
+    return error
+  }
+
+  if (newKeySameAsKey.size > 0) {
+    const error = newKeysSameAsKeys([...newKeySameAsKey.keys()])
     return error
   }
 
