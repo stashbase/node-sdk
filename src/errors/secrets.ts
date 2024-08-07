@@ -1,7 +1,7 @@
 import { ApiError } from '../http/response'
 import {
-  DuplicateNewSecretsError,
-  DuplicateSecretsError,
+  DuplicateNewSecretKeysError,
+  DuplicateSecretsKeysError,
   InvalidNewSecretKeysError,
   InvalidSecretKeyError,
   InvalidSecretKeysError,
@@ -44,10 +44,21 @@ export const invalidSecretKeyError = (): InvalidSecretKeyError =>
     details: undefined,
   })
 
-export const duplicateSecretsError = (secretKeys: Array<string>): DuplicateSecretsError =>
+export const duplicateSecretKeysError = (secretKeys: Array<string>): DuplicateSecretsKeysError =>
   createSecretsError({
-    code: 'duplicate_secrets',
-    message: 'Duplicate secrets provided in the request.',
+    code: 'duplicate_secret_keys',
+    message: `One or more secrets with the same value of property 'key' provided in the request.`,
+    details: {
+      secretKeys,
+    },
+  })
+
+export const duplicateNewSecretKeysError = (
+  secretKeys: Array<string>
+): DuplicateNewSecretKeysError =>
+  createSecretsError({
+    code: 'duplicate_new_secret_keys',
+    message: `One or more secrets with the same value of property 'newKey' provided in the request.`,
     details: {
       secretKeys,
     },
@@ -79,15 +90,6 @@ export const invalidNewSecretKeysError = (secretKeys: Array<string>): InvalidNew
   createSecretsError({
     code: 'invalid_new_secret_keys',
     message: secretKeyFormatErrorMessage,
-    details: {
-      secretKeys,
-    },
-  })
-
-export const duplicateNewSecretsError = (secretKeys: Array<string>): DuplicateNewSecretsError =>
-  createSecretsError({
-    code: 'duplicate_new_secrets',
-    message: 'Found new duplicate secrets.',
     details: {
       secretKeys,
     },
