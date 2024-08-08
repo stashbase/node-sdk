@@ -74,7 +74,7 @@ export const selfReferencingSecretsError = (
 ): SelfReferencingSecretsValidationError =>
   createSecretsError({
     code: 'validation.self_referencing_secrets',
-    message: 'Self referencing secrets are not allowed.',
+    message: 'One or more secrets would result in self-reference, which is not allowed.',
     details: {
       secretKeys,
     },
