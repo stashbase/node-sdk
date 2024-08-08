@@ -194,7 +194,6 @@ export const validateUpdateSecretsInput = (
   const keyOccurrences = new Map<string, number>()
   const newKeyOccurrences = new Map<string, number>()
 
-  const newKeysWithSelfReference = new Set<string>()
   const keysWithSelfReference = new Set<string>()
 
   const invalidSecretKeys = new Set<string>()
@@ -217,19 +216,17 @@ export const validateUpdateSecretsInput = (
     }
 
     if (value) {
-      if (key) {
-        const hasSelfReference = secretHasSelfReference(key, value)
-
-        if (hasSelfReference) {
-          keysWithSelfReference.add(key)
-        }
-      }
-
       if (newKey) {
         const hasSelfReference = secretHasSelfReference(newKey, value)
 
         if (hasSelfReference) {
-          newKeysWithSelfReference.add(newKey)
+          keysWithSelfReference.add(key)
+        }
+      } else {
+        const hasSelfReference = secretHasSelfReference(key, value)
+
+        if (hasSelfReference) {
+          keysWithSelfReference.add(key)
         }
       }
     }
@@ -295,14 +292,6 @@ export const validateUpdateSecretsInput = (
   // NOTE: self-referencing secrets
   if (keysWithSelfReference.size > 0) {
     const secretKeys = Array.from(keysWithSelfReference)
-    const error = selfReferencingSecretsError(secretKeys)
-
-    return error
-  }
-
-  // NOTE: self-referencing new secrets
-  if (newKeysWithSelfReference.size > 0) {
-    const secretKeys = Array.from(newKeysWithSelfReference)
     const error = selfReferencingSecretsError(secretKeys)
 
     return error
