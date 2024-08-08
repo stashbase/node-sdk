@@ -15,6 +15,7 @@ import { LockEnvironmentArgs, lockUnlockEnvironment } from './handlers/lock'
 import { RenameEnvironmentArgs, renameEnvironment } from './handlers/rename'
 import { UpdateEnvironmentTypeArgs, updateEnvironmentType } from './handlers/updateType'
 import { responseFailure } from '../../../http/response'
+import { ValidationApiError } from '../../../types/errors'
 
 export const checkValidProjectEnv = (projectName: string, environmentName: string) => {
   if (!isValidProjectName(projectName)) {
@@ -153,8 +154,8 @@ export function environmentsAPI(httpClient: HttpClient) {
     }
 
     if (!isValidEnvironmentName(newName)) {
-      const error = createApiError({
-        code: 'invalid_new_environment_name',
+      const error: ValidationApiError<'invalid_new_environment_name'> = createApiError({
+        code: 'validation.invalid_new_environment_name',
         details: undefined,
         message:
           'Environment name must be alphanumeric, only underscores or hyphen separator allowed, min 2 and max 255 characters.',
@@ -187,10 +188,9 @@ export function environmentsAPI(httpClient: HttpClient) {
     }
 
     if (name === duplicateName) {
-      const error = createApiError({
-        // code: 'duplicate_environment_name',
-        code: 'environment_names_are_equal',
-        message: 'Environment names must be different.',
+      const error: ValidationApiError<'new_environment_name_equals_original'> = createApiError({
+        code: 'validation.new_environment_name_equals_original',
+        message: 'The new environment name cannot be the same as the original environment name.',
         details: undefined,
       })
 
