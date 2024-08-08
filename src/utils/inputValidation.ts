@@ -10,14 +10,14 @@ import {
   selfReferencingSecretsError,
 } from '../errors/secrets'
 import {
-  DuplicateNewSecretKeysError,
-  DuplicateSecretsKeysError,
-  InvalidNewSecretKeysError,
-  InvalidSecretKeysError,
-  MissingPropertiesToUpdateError,
-  NewSecretKeysSameAsKeysError,
-  NoDataProvided,
-  SelfReferencingSecretsError,
+  DuplicateNewSecretKeysValidationError,
+  DuplicateSecretsKeysValidationError,
+  InvalidNewSecretKeysValidationError,
+  InvalidSecretKeysValidationError,
+  MissingPropertiesToUpdateValidationError,
+  NewSecretKeysSameAsKeysValidationError,
+  NoDataProvidedValidationError,
+  SelfReferencingSecretsValidationError,
 } from '../types/errors/secrets'
 
 export function containsMaxOneDash(str: string) {
@@ -111,10 +111,10 @@ interface SetSecretsItem {
 }
 
 type ValidateSetSecretsInputRes =
-  | NoDataProvided
-  | InvalidSecretKeysError
-  | DuplicateSecretsKeysError
-  | SelfReferencingSecretsError
+  | NoDataProvidedValidationError
+  | InvalidSecretKeysValidationError
+  | DuplicateSecretsKeysValidationError
+  | SelfReferencingSecretsValidationError
   | null
 
 // return api error
@@ -173,14 +173,14 @@ export const validateSetSecretsInput = (
 export const validateCreateSecretsInput = validateSetSecretsInput
 
 type ValidateUpdateSecretsInputRes =
-  | NoDataProvided
-  | MissingPropertiesToUpdateError
-  | InvalidSecretKeysError
-  | InvalidNewSecretKeysError
-  | DuplicateSecretsKeysError
-  | DuplicateNewSecretKeysError
-  | SelfReferencingSecretsError
-  | NewSecretKeysSameAsKeysError
+  | NoDataProvidedValidationError
+  | MissingPropertiesToUpdateValidationError
+  | InvalidSecretKeysValidationError
+  | InvalidNewSecretKeysValidationError
+  | DuplicateSecretsKeysValidationError
+  | DuplicateNewSecretKeysValidationError
+  | SelfReferencingSecretsValidationError
+  | NewSecretKeysSameAsKeysValidationError
   | null
 
 export const validateUpdateSecretsInput = (
