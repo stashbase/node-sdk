@@ -45,6 +45,8 @@ function isAlphanumericWithHyphensAndUnderscores(inputString: string): boolean {
 const isValidProjectName = (projectName: string) =>
   isAlphanumericWithHyphensAndUnderscores(projectName) && projectName.length >= 2
 
+const isValidProjectIdentifier = isValidProjectName
+
 //
 
 // function isAlphanumericWithHyphensAndUnderscores(inputString: string): boolean {
@@ -338,4 +340,4 @@ const isValidSecretKey = (key: string) =>
   isAlphanumericUppercaseWithUnderscore(key) &&
   !startsWithNumber(key)
 
-export { isValidProjectName, isValidEnvironmentName, isValidSecretKey }
+export { isValidProjectName, isValidProjectIdentifier, isValidEnvironmentName, isValidSecretKey }
