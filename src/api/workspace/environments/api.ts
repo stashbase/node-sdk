@@ -8,6 +8,7 @@ import {
 import {
   isResourceIdFormat,
   isValidEnvironmentName,
+  isValidProjectIdentifier,
   isValidProjectName,
 } from '../../../utils/inputValidation'
 import { CreateEnvironmentArgs, createEnvironment } from './handlers/create'
@@ -19,16 +20,16 @@ import { LoadEnvironmentArgs, loadEnvironment } from './handlers/load'
 import { LockEnvironmentArgs, lockUnlockEnvironment } from './handlers/lock'
 import { RenameEnvironmentArgs, renameEnvironment } from './handlers/rename'
 import { UpdateEnvironmentTypeArgs, updateEnvironmentType } from './handlers/updateType'
-import { responseFailure } from '../../../http/response'
+import { responseFailure, responseSuccess } from '../../../http/response'
 import { ValidationApiError } from '../../../types/errors'
 
 export const checkValidProjectEnv = (projectName: string, environmentName: string) => {
-  if (!isValidProjectName(projectName)) {
+  if (!isValidProjectIdentifier(projectName)) {
     const error = invalidProjectIdentifierError
     return error
   }
 
-  if (!isValidEnvironmentName(environmentName)) {
+  if (!isValidProjectIdentifier(environmentName)) {
     const error = invalidEnvironmentIdentifierError
     return error
   }
@@ -44,10 +45,10 @@ export function environmentsAPI(httpClient: HttpClient) {
   async function get(args: GetEnvironmentArgs) {
     const { environment, project } = args
 
-    const namesError = checkValidProjectEnv(project, environment)
+    const identifiersError = checkValidProjectEnv(project, environment)
 
-    if (namesError) {
-      return responseFailure(namesError)
+    if (identifiersError) {
+      return responseFailure(identifiersError)
     }
 
     return await getEnvironment(httpClient, args)
@@ -93,7 +94,7 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @returns Environment array
    * */
   async function list(args: ListEnvironmentArgs) {
-    if (!isValidProjectName(args.project)) {
+    if (!isValidProjectIdentifier(args.project)) {
       const error = invalidProjectIdentifierError
       return responseFailure(error)
     }
@@ -116,10 +117,10 @@ export function environmentsAPI(httpClient: HttpClient) {
     //   return { data: null, error }
     // }
 
-    const namesError = checkValidProjectEnv(project, name)
+    const projectIdentifierError = isValidProjectIdentifier(project)
 
-    if (namesError) {
-      return responseFailure(namesError)
+    if (projectIdentifierError) {
+      return responseFailure(projectIdentifierError)
     }
 
     const nameHasIdFormat = isResourceIdFormat('environment', name)
@@ -141,10 +142,10 @@ export function environmentsAPI(httpClient: HttpClient) {
   async function remove(args: DeleteEnvironmentArgs) {
     const { environment, project } = args
 
-    const namesError = checkValidProjectEnv(project, environment)
+    const identifiersError = checkValidProjectEnv(project, environment)
 
-    if (namesError) {
-      return responseFailure(namesError)
+    if (identifiersError) {
+      return responseFailure(identifiersError)
     }
 
     return await deleteEnvironment(httpClient, args)
@@ -159,10 +160,10 @@ export function environmentsAPI(httpClient: HttpClient) {
   async function rename(args: RenameEnvironmentArgs) {
     const { project, newName, name } = args
 
-    const namesError = checkValidProjectEnv(project, name)
+    const identifiersError = checkValidProjectEnv(project, name)
 
-    if (namesError) {
-      return responseFailure(namesError)
+    if (identifiersError) {
+      return responseFailure(identifiersError)
     }
 
     if (!isValidEnvironmentName(newName)) {
@@ -195,7 +196,7 @@ export function environmentsAPI(httpClient: HttpClient) {
   async function duplicate(args: DuplicateEnvironmentArgs) {
     const { project, duplicateName, name } = args
 
-    const namesError = checkValidProjectEnv(project, name)
+    const identifiersError = checkValidProjectEnv(project, name)
 
     if (namesError) {
       return { data: null, error: namesError }
@@ -235,10 +236,10 @@ export function environmentsAPI(httpClient: HttpClient) {
   async function updateType(args: UpdateEnvironmentTypeArgs) {
     const { project, name } = args
 
-    const namesError = checkValidProjectEnv(project, name)
+    const identifiersError = checkValidProjectEnv(project, name)
 
-    if (namesError) {
-      return responseFailure(namesError)
+    if (identifiersError) {
+      return responseFailure(identifiersError)
     }
 
     return await updateEnvironmentType(httpClient, args)
@@ -253,10 +254,10 @@ export function environmentsAPI(httpClient: HttpClient) {
   async function lock(args: LockEnvironmentArgs) {
     const { project, name } = args
 
-    const namesError = checkValidProjectEnv(project, name)
+    const identifiersError = checkValidProjectEnv(project, name)
 
-    if (namesError) {
-      return responseFailure(namesError)
+    if (identifiersError) {
+      return responseFailure(identifiersError)
     }
 
     return await lockUnlockEnvironment(httpClient, args, true)
@@ -271,10 +272,10 @@ export function environmentsAPI(httpClient: HttpClient) {
   async function unlock(args: LockEnvironmentArgs) {
     const { project, name } = args
 
-    const namesError = checkValidProjectEnv(project, name)
+    const identifiersError = checkValidProjectEnv(project, name)
 
-    if (namesError) {
-      return responseFailure(namesError)
+    if (identifiersError) {
+      return responseFailure(identifiersError)
     }
 
     return await lockUnlockEnvironment(httpClient, args, false)
