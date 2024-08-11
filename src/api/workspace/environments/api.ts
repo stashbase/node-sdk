@@ -61,8 +61,16 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @returns null
    * */
   async function loadOrThrow(args: LoadEnvironmentArgs) {
+    const { environment, project } = args
+
     if (args?.enabled === false) {
       return { data: null, error: null, ok: null }
+    }
+
+    const identifiersError = checkValidProjectEnv(project, environment)
+
+    if (identifiersError) {
+      return responseFailure(identifiersError)
     }
 
     const { error } = await loadEnvironment(httpClient, args)
@@ -80,8 +88,16 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @returns null
    * */
   async function load(args: LoadEnvironmentArgs) {
+    const { environment, project } = args
+
     if (args?.enabled === false) {
       return { data: null, error: null, ok: null }
+    }
+
+    const identifiersError = checkValidProjectEnv(project, environment)
+
+    if (identifiersError) {
+      return responseFailure(identifiersError)
     }
 
     return await loadEnvironment(httpClient, args)
