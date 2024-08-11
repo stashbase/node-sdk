@@ -38,7 +38,7 @@ const connectionFailedError: ConnectionFailedError = createApiError({
   details: undefined,
 })
 
-export const invalidEnvironmentNameError = createApiError({
+export const invalidEnvironmentIdentifierError = createApiError({
   code: 'validation.invalid_environment_identifier',
   details: {
     example: {
@@ -50,7 +50,7 @@ export const invalidEnvironmentNameError = createApiError({
     "Invalid environment identifier. Either name or Id can be used. The name must be alphanumeric, may include one hyphen as a separator and underscores, and must be between 2 and 255 characters long. The Id must start with the prefix 'ev_' and be exactly 25 characters long, consisting of alphanumeric characters.",
 })
 
-export const invalidProjectNameError = createApiError({
+export const invalidProjectIdentifierError = createApiError({
   code: 'validation.invalid_project_identifier',
   details: {
     example: {
