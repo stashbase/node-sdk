@@ -1,4 +1,4 @@
-import { invalidProjectNameError } from '../../../errors'
+import { invalidProjectIdentifierError } from '../../../errors'
 import { HttpClient } from '../../../http/client'
 import { responseFailure } from '../../../http/response'
 import { isValidProjectName } from '../../../utils/inputValidation'
@@ -16,7 +16,7 @@ export function projectsAPI(httpClient: HttpClient) {
    * */
   async function get(projectName: string) {
     if (!isValidProjectName(projectName)) {
-      const error = invalidProjectNameError
+      const error = invalidProjectIdentifierError
       return responseFailure(error)
     }
 
@@ -44,7 +44,7 @@ export function projectsAPI(httpClient: HttpClient) {
     const valid = isValidProjectName(name)
 
     if (!valid) {
-      const error = invalidProjectNameError
+      const error = invalidProjectIdentifierError
       return responseFailure(error)
     }
 
@@ -61,7 +61,7 @@ export function projectsAPI(httpClient: HttpClient) {
     const invalidName = !isValidProjectName(projectName)
 
     if (invalidName) {
-      const error = invalidProjectNameError
+      const error = invalidProjectIdentifierError
       return responseFailure(error)
     }
 

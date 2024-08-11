@@ -1,8 +1,8 @@
 import { HttpClient } from '../../../http/client'
 import {
   createApiError,
-  invalidEnvironmentNameError,
-  invalidProjectNameError,
+  invalidEnvironmentIdentifierError,
+  invalidProjectIdentifierError,
 } from '../../../errors'
 import { isValidEnvironmentName, isValidProjectName } from '../../../utils/inputValidation'
 import { CreateEnvironmentArgs, createEnvironment } from './handlers/create'
@@ -19,12 +19,12 @@ import { ValidationApiError } from '../../../types/errors'
 
 export const checkValidProjectEnv = (projectName: string, environmentName: string) => {
   if (!isValidProjectName(projectName)) {
-    const error = invalidProjectNameError
+    const error = invalidProjectIdentifierError
     return error
   }
 
   if (!isValidEnvironmentName(environmentName)) {
-    const error = invalidEnvironmentNameError
+    const error = invalidEnvironmentIdentifierError
     return error
   }
 }
@@ -89,7 +89,7 @@ export function environmentsAPI(httpClient: HttpClient) {
    * */
   async function list(args: ListEnvironmentArgs) {
     if (!isValidProjectName(args.project)) {
-      const error = invalidProjectNameError
+      const error = invalidProjectIdentifierError
       return responseFailure(error)
     }
 
@@ -183,7 +183,7 @@ export function environmentsAPI(httpClient: HttpClient) {
     }
 
     if (!isValidEnvironmentName(duplicateName)) {
-      const error = invalidEnvironmentNameError
+      const error = invalidEnvironmentIdentifierError
       return responseFailure(error)
     }
 
