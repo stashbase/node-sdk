@@ -1,7 +1,7 @@
-import { invalidProjectIdentifierError } from '../../../errors'
+import { invalidProjectIdentifierError, projectNameCannotUseIdFormat } from '../../../errors'
 import { HttpClient } from '../../../http/client'
 import { responseFailure } from '../../../http/response'
-import { isValidProjectName } from '../../../utils/inputValidation'
+import { isResourceIdFormat, isValidProjectName } from '../../../utils/inputValidation'
 import { CreateProjectData, createProject } from './handlers/create'
 import { deleteProject } from './handlers/delete'
 import { getProject } from './handlers/get'
@@ -45,6 +45,13 @@ export function projectsAPI(httpClient: HttpClient) {
 
     if (!valid) {
       const error = invalidProjectIdentifierError
+      return responseFailure(error)
+    }
+
+    const nameHasIdFormat = isResourceIdFormat('project', name)
+
+    if (nameHasIdFormat) {
+      const error = projectNameCannotUseIdFormat()
       return responseFailure(error)
     }
 
