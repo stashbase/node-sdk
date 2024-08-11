@@ -39,19 +39,25 @@ const connectionFailedError: ConnectionFailedError = createApiError({
 })
 
 export const invalidEnvironmentNameError = createApiError({
-  code: 'validation.invalid_environment_name',
+  code: 'validation.invalid_environment_identifier',
   details: {
-    exampleProjectNames: ['my-project', 'booking-app-1', 'super_app'],
+    example: {
+      environmentNames: ['staging', 'dev_copy', 'api-prod'],
+      environmentId: 'ev_2vKmcBluEENNfFKtXzrHBS',
+    },
   },
   message:
-    'Environment name must be alphanumeric, only underscores or hyphen separator allowed, min 2 and max 255 characters.',
+    "Invalid environment identifier. Either name or Id can be used. The name must be alphanumeric, may include one hyphen as a separator and underscores, and must be between 2 and 255 characters long. The Id must start with the prefix 'ev_' and be exactly 25 characters long, consisting of alphanumeric characters.",
 })
 
 export const invalidProjectNameError = createApiError({
-  code: 'validation.invalid_project_name',
+  code: 'validation.invalid_project_identifier',
   details: {
-    exampleEnvironmentNames: ['staging', 'dev_copy', 'api-prod'],
+    example: {
+      projectNames: ['my-project', 'booking-app-1', 'super_app'],
+      projectId: 'pr_9Ve7ijuUMuwh9fb1j7CyBq',
+    },
   },
   message:
-    'Project name must be alphanumeric, only hyphens and underscores allowed, min 2 and max 255 characters.',
+    "Invalid project identifier. Either name or Id can be used. The name must be alphanumeric, may include hyphens and underscores, and must be between 2 and 255 characters long. The Id must start with the prefix 'pr_' and be exactly 25 characters long, consisting of alphanumeric characters.",
 })
