@@ -1,10 +1,15 @@
 import { HttpClient } from '../../../http/client'
 import {
   createApiError,
+  environmentNameCannotUseIdFormatError,
   invalidEnvironmentIdentifierError,
   invalidProjectIdentifierError,
 } from '../../../errors'
-import { isValidEnvironmentName, isValidProjectName } from '../../../utils/inputValidation'
+import {
+  isResourceIdFormat,
+  isValidEnvironmentName,
+  isValidProjectName,
+} from '../../../utils/inputValidation'
 import { CreateEnvironmentArgs, createEnvironment } from './handlers/create'
 import { DeleteEnvironmentArgs, deleteEnvironment } from './handlers/delete'
 import { DuplicateEnvironmentArgs, duplicateEnvironment } from './handlers/duplicate'
@@ -117,6 +122,13 @@ export function environmentsAPI(httpClient: HttpClient) {
       return responseFailure(namesError)
     }
 
+    const nameHasIdFormat = isResourceIdFormat('environment', name)
+
+    if (nameHasIdFormat) {
+      const error = environmentNameCannotUseIdFormatError()
+      return responseFailure(error)
+    }
+
     return await createEnvironment(httpClient, args)
   }
 
@@ -164,6 +176,13 @@ export function environmentsAPI(httpClient: HttpClient) {
       return responseFailure(error)
     }
 
+    const nameHasIdFormat = isResourceIdFormat('environment', name)
+
+    if (nameHasIdFormat) {
+      const error = environmentNameCannotUseIdFormatError()
+      return responseFailure(error)
+    }
+
     return await renameEnvironment(httpClient, args)
   }
 
@@ -184,6 +203,13 @@ export function environmentsAPI(httpClient: HttpClient) {
 
     if (!isValidEnvironmentName(duplicateName)) {
       const error = invalidEnvironmentIdentifierError
+      return responseFailure(error)
+    }
+
+    const nameHasIdFormat = isResourceIdFormat('environment', name)
+
+    if (nameHasIdFormat) {
+      const error = environmentNameCannotUseIdFormatError()
       return responseFailure(error)
     }
 
