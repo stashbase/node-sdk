@@ -139,6 +139,17 @@ export function environmentsAPI(httpClient: HttpClient) {
       return responseFailure(projectIdentifierError)
     }
 
+    if (!isValidEnvironmentName(name)) {
+      const error: ValidationApiError<'invalid_new_environment_name'> = createApiError({
+        code: 'validation.invalid_new_environment_name',
+        details: undefined,
+        message:
+          'Environment name must be alphanumeric, only underscores or hyphen separator allowed, min 2 and max 255 characters.',
+      })
+
+      return responseFailure(error)
+    }
+
     const nameHasIdFormat = isResourceIdFormat('environment', name)
 
     if (nameHasIdFormat) {
@@ -214,8 +225,8 @@ export function environmentsAPI(httpClient: HttpClient) {
 
     const identifiersError = checkValidProjectEnv(project, name)
 
-    if (namesError) {
-      return { data: null, error: namesError }
+    if (identifiersError) {
+      return responseFailure(identifiersError)
     }
 
     if (!isValidEnvironmentName(duplicateName)) {
