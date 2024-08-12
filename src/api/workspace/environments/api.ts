@@ -3,6 +3,7 @@ import {
   createApiError,
   environmentNameCannotUseIdFormatError,
   invalidEnvironmentIdentifierError,
+  invalidNewEnvironmentNameError,
   invalidProjectIdentifierError,
 } from '../../../errors'
 import {
@@ -140,13 +141,7 @@ export function environmentsAPI(httpClient: HttpClient) {
     }
 
     if (!isValidEnvironmentName(name)) {
-      const error: ValidationApiError<'invalid_new_environment_name'> = createApiError({
-        code: 'validation.invalid_new_environment_name',
-        details: undefined,
-        message:
-          'Environment name must be alphanumeric, only underscores or hyphen separator allowed, min 2 and max 255 characters.',
-      })
-
+      const error = invalidNewEnvironmentNameError
       return responseFailure(error)
     }
 
@@ -194,13 +189,7 @@ export function environmentsAPI(httpClient: HttpClient) {
     }
 
     if (!isValidEnvironmentName(newName)) {
-      const error: ValidationApiError<'invalid_new_environment_name'> = createApiError({
-        code: 'validation.invalid_new_environment_name',
-        details: undefined,
-        message:
-          'Environment name must be alphanumeric, only underscores or hyphen separator allowed, min 2 and max 255 characters.',
-      })
-
+      const error = invalidNewEnvironmentNameError
       return responseFailure(error)
     }
 
