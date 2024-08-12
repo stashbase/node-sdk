@@ -4,6 +4,7 @@ import {
   environmentNameCannotUseIdFormatError,
   invalidEnvironmentIdentifierError,
   invalidNewEnvironmentNameError,
+  invalidNewProjectNameError,
   invalidProjectIdentifierError,
   newEnvironmentNameEqualsOriginal,
 } from '../../../errors'
@@ -137,7 +138,8 @@ export function environmentsAPI(httpClient: HttpClient) {
     const projectIdentifierError = isValidProjectIdentifier(project)
 
     if (projectIdentifierError) {
-      return responseFailure(projectIdentifierError)
+      const error = invalidProjectIdentifierError
+      return responseFailure(error)
     }
 
     if (!isValidEnvironmentName(name)) {
