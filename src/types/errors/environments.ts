@@ -40,3 +40,5 @@ export type EnvironmentCannotUseIdFormatNameError = ValidationApiError<
     }
   }
 >
+
+export type InvalidNewEnvironmentNameError = ValidationApiError<'invalid_new_environment_name'>
