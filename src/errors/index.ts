@@ -72,7 +72,7 @@ export const invalidProjectIdentifierError: InvalidIdentifierProjectError = crea
 export const projectNameUsesIdFormat: ProjectNameUsesIdFormatError = createApiError({
   code: 'validation.project_name_uses_id_format',
   message:
-    "The project name provided is using an Id format. Please ensure the name is in a valid format: alphanumeric, with hyphens and underscores, and without the prefix 'pr_'. Names must adhere to the length constraints of 2 to 255 characters and cannot resemble Ids.",
+    "The provided project name is using an Id format. Please ensure the name is in a valid format: alphanumeric, with hyphens and underscores, and without the prefix 'pr_'. Names must adhere to the length constraints of 2 to 255 characters and cannot resemble Ids.",
   details: {
     validNameExamples: ['my-project', 'booking-app-1', 'super_app'],
     invalidNameExamples: ['pr_nVe7ijuUMuwh9fb1j7CyBq', 'pr_2vKmcBluEENNfFKtXzrHBS'],
@@ -82,7 +82,7 @@ export const projectNameUsesIdFormat: ProjectNameUsesIdFormatError = createApiEr
 export const environmentNameUsesIdFormatError: EnvironmentNameUsesIdFormatError = createApiError({
   code: 'validation.environment_name_uses_id_format',
   message:
-    "The environment name provided is using an Id format. Please ensure the name is in a valid format: alphanumeric, with one hyphen as separator and underscores, and without the prefix 'en_'. Names must adhere to the length constraints of 2 to 255 characters and cannot resemble Ids.",
+    "The provided environment name is using an Id format. Please ensure the name is in a valid format: alphanumeric, with one hyphen as separator and underscores, and without the prefix 'en_'. Names must adhere to the length constraints of 2 to 255 characters and cannot resemble Ids.",
   details: {
     validNameExamples: ['staging', 'dev_copy', 'api-prod'],
     invalidNameExamples: ['ev_pTFmJBTuEENNfFKtXzrMQG', 'ev_9Ve7ijuUMuwh9fb1j7CyBq'],
