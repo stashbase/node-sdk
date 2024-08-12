@@ -1,7 +1,7 @@
 import { HttpClient } from '../../../http/client'
 import {
   createApiError,
-  environmentNameCannotUseIdFormatError,
+  environmentNameUsesIdFormatError,
   invalidEnvironmentIdentifierError,
   invalidNewEnvironmentNameError,
   invalidNewProjectNameError,
@@ -150,7 +150,7 @@ export function environmentsAPI(httpClient: HttpClient) {
     const nameHasIdFormat = isResourceIdFormat('environment', name)
 
     if (nameHasIdFormat) {
-      const error = environmentNameCannotUseIdFormatError
+      const error = environmentNameUsesIdFormatError
       return responseFailure(error)
     }
 
@@ -198,7 +198,7 @@ export function environmentsAPI(httpClient: HttpClient) {
     const newNameHasIdFormat = isResourceIdFormat('environment', newName)
 
     if (newNameHasIdFormat) {
-      const error = environmentNameCannotUseIdFormatError
+      const error = environmentNameUsesIdFormatError
       return responseFailure(error)
     }
 
@@ -235,7 +235,7 @@ export function environmentsAPI(httpClient: HttpClient) {
     const nameHasIdFormat = isResourceIdFormat('environment', name)
 
     if (nameHasIdFormat) {
-      const error = environmentNameCannotUseIdFormatError
+      const error = environmentNameUsesIdFormatError
       return responseFailure(error)
     }
 

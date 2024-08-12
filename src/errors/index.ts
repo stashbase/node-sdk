@@ -79,16 +79,15 @@ export const projectNameUsesIdFormat: ProjectNameUsesIdFormatError = createApiEr
   },
 })
 
-export const environmentNameCannotUseIdFormatError: EnvironmentNameUsesIdFormatError =
-  createApiError({
-    code: 'validation.environment_name_uses_id_format',
-    message:
-      "The environment name provided is using an Id format. Please ensure the name is in a valid format: alphanumeric, with one hyphen as separator and underscores, and without the prefix 'en_'. Names must adhere to the length constraints of 2 to 255 characters and cannot resemble Ids.",
-    details: {
-      validNameExamples: ['staging', 'dev_copy', 'api-prod'],
-      invalidNameExamples: ['ev_pTFmJBTuEENNfFKtXzrMQG', 'ev_9Ve7ijuUMuwh9fb1j7CyBq'],
-    },
-  })
+export const environmentNameUsesIdFormatError: EnvironmentNameUsesIdFormatError = createApiError({
+  code: 'validation.environment_name_uses_id_format',
+  message:
+    "The environment name provided is using an Id format. Please ensure the name is in a valid format: alphanumeric, with one hyphen as separator and underscores, and without the prefix 'en_'. Names must adhere to the length constraints of 2 to 255 characters and cannot resemble Ids.",
+  details: {
+    validNameExamples: ['staging', 'dev_copy', 'api-prod'],
+    invalidNameExamples: ['ev_pTFmJBTuEENNfFKtXzrMQG', 'ev_9Ve7ijuUMuwh9fb1j7CyBq'],
+  },
+})
 
 export const invalidNewEnvironmentNameError: InvalidNewEnvironmentNameError = createApiError({
   code: 'validation.invalid_new_environment_name',
