@@ -1,7 +1,15 @@
-import { invalidProjectNameError } from '../../../errors'
+import {
+  invalidNewProjectNameError,
+  invalidProjectIdentifierError,
+  projectNameUsesIdFormat,
+} from '../../../errors'
 import { HttpClient } from '../../../http/client'
 import { responseFailure } from '../../../http/response'
-import { isValidProjectName } from '../../../utils/inputValidation'
+import {
+  isResourceIdFormat,
+  isValidProjectIdentifier,
+  isValidProjectName,
+} from '../../../utils/inputValidation'
 import { CreateProjectData, createProject } from './handlers/create'
 import { deleteProject } from './handlers/delete'
 import { getProject } from './handlers/get'
@@ -11,16 +19,16 @@ export function projectsAPI(httpClient: HttpClient) {
   /**
    * @summary Retrieve single project
    * @description Project
-   * @param projectName Project name
+   * @param projectNameOrId Project name or id
    * @returns Project object
    * */
-  async function get(projectName: string) {
-    if (!isValidProjectName(projectName)) {
-      const error = invalidProjectNameError
+  async function get(projectNameOrId: string) {
+    if (!isValidProjectIdentifier(projectNameOrId)) {
+      const error = invalidProjectIdentifierError
       return responseFailure(error)
     }
 
-    return await getProject(httpClient, projectName)
+    return await getProject(httpClient, projectNameOrId)
   }
 
   /**
@@ -44,7 +52,14 @@ export function projectsAPI(httpClient: HttpClient) {
     const valid = isValidProjectName(name)
 
     if (!valid) {
-      const error = invalidProjectNameError
+      const error = invalidNewProjectNameError
+      return responseFailure(error)
+    }
+
+    const nameHasIdFormat = isResourceIdFormat('project', name)
+
+    if (nameHasIdFormat) {
+      const error = projectNameUsesIdFormat
       return responseFailure(error)
     }
 
@@ -54,18 +69,18 @@ export function projectsAPI(httpClient: HttpClient) {
   /**
    * @summary Remove project
    * @description Project
-   * @param key Project name
+   * @param key Project name or id
    * @returns null
    * */
-  async function remove(projectName: string) {
-    const invalidName = !isValidProjectName(projectName)
+  async function remove(projectNameOrId: string) {
+    const invaliIdentifier = !isValidProjectIdentifier(projectNameOrId)
 
-    if (invalidName) {
-      const error = invalidProjectNameError
+    if (invaliIdentifier) {
+      const error = invalidProjectIdentifierError
       return responseFailure(error)
     }
 
-    return await deleteProject(httpClient, projectName)
+    return await deleteProject(httpClient, projectNameOrId)
   }
 
   return {

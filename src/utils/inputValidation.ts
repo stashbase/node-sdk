@@ -20,6 +20,8 @@ import {
   SelfReferencingSecretsValidationError,
 } from '../types/errors/secrets'
 
+const alphanumericRegex = /[a-zA-Z0-9]/
+
 export function containsMaxOneDash(str: string) {
   // return /^(?!-$)(?!.*--)[^-]*(?:-(?!$)[^-]*)?$/.test(str);
   return /^(?!-)(?!.*--)[^-]*(?:-(?!$)[^-]*)?$/.test(str)
@@ -42,6 +44,8 @@ function isAlphanumericWithHyphensAndUnderscores(inputString: string): boolean {
 // TODO: validate max length
 const isValidProjectName = (projectName: string) =>
   isAlphanumericWithHyphensAndUnderscores(projectName) && projectName.length >= 2
+
+const isValidProjectIdentifier = isValidProjectName
 
 //
 
@@ -73,6 +77,24 @@ function isAlphanumericUppercaseWithUnderscore(inputString: string): boolean {
   const pattern = /[^A-Z0-9_]/
 
   return !pattern.test(inputString)
+}
+
+type Resource = 'project' | 'environment'
+
+export const isResourceIdFormat = (resource: Resource, input: string) => {
+  const prefix = resource === 'project' ? 'pr_' : 'ev_'
+
+  if (input?.length !== 25 || !input.startsWith(prefix)) {
+    return false
+  }
+
+  const idWithoutPrefix = input.slice(prefix.length)
+
+  if (alphanumericRegex.test(idWithoutPrefix)) {
+    return true
+  } else {
+    return false
+  }
 }
 
 export const secretHasSelfReference = (secretKey: string, value: string): boolean => {
@@ -318,4 +340,4 @@ const isValidSecretKey = (key: string) =>
   isAlphanumericUppercaseWithUnderscore(key) &&
   !startsWithNumber(key)
 
-export { isValidProjectName, isValidEnvironmentName, isValidSecretKey }
+export { isValidProjectName, isValidProjectIdentifier, isValidEnvironmentName, isValidSecretKey }
