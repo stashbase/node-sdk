@@ -64,10 +64,8 @@ export const invalidEnvironmentIdentifierError: InvalidEnvironmentIdentifierErro
 export const invalidProjectIdentifierError: InvalidIdentifierProjectError = createApiError({
   code: 'validation.invalid_project_identifier',
   details: {
-    example: {
-      projectNames: ['my-project', 'booking-app-1', 'super_app'],
-      projectId: 'pr_9Ve7ijuUMuwh9fb1j7CyBq',
-    },
+    nameExamples: ['my-project', 'booking-app-1', 'super_app'],
+    idExample: 'pr_9Ve7ijuUMuwh9fb1j7CyBq',
   },
   message:
     "Invalid project identifier. Either name or Id can be used. The name must be alphanumeric, may include hyphens and underscores, and must be between 2 and 255 characters long. The Id must start with the prefix 'pr_' and be exactly 25 characters long, consisting of alphanumeric characters.",
