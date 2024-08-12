@@ -6,10 +6,8 @@ export type ProjectAlreadyExistsError = ConflictApiError<'project_already_exists
 export type ProjectCannotUseIdFormatNameError = ValidationApiError<
   'project_name_cannot_use_id_format',
   {
-    example: {
-      validProjectNames: string[]
-      invalidProjectNames: string[]
-    }
+    invalidNameExamples: string[]
+    validNameExamples: string[]
   }
 >
 
