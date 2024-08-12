@@ -1,7 +1,7 @@
 import {
   invalidNewProjectNameError,
   invalidProjectIdentifierError,
-  projectNameCannotUseIdFormat,
+  projectNameUsesIdFormat,
 } from '../../../errors'
 import { HttpClient } from '../../../http/client'
 import { responseFailure } from '../../../http/response'
@@ -59,7 +59,7 @@ export function projectsAPI(httpClient: HttpClient) {
     const nameHasIdFormat = isResourceIdFormat('project', name)
 
     if (nameHasIdFormat) {
-      const error = projectNameCannotUseIdFormat
+      const error = projectNameUsesIdFormat
       return responseFailure(error)
     }
 
