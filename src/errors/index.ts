@@ -74,10 +74,8 @@ export const projectNameCannotUseIdFormat: ProjectCannotUseIdFormatNameError = c
   message:
     "The project name provided is using an Id format. Please ensure the name is in a valid format: alphanumeric, with hyphens and underscores, and without the prefix 'pr_'. Names must adhere to the length constraints of 2 to 255 characters and cannot resemble Ids.",
   details: {
-    example: {
-      validProjectNames: ['my-project', 'booking-app-1', 'super_app'],
-      invalidProjectNames: ['pr_nVe7ijuUMuwh9fb1j7CyBq', 'pr_2vKmcBluEENNfFKtXzrHBS'],
-    },
+    validNameExamples: ['my-project', 'booking-app-1', 'super_app'],
+    invalidNameExamples: ['pr_nVe7ijuUMuwh9fb1j7CyBq', 'pr_2vKmcBluEENNfFKtXzrHBS'],
   },
 })
 
