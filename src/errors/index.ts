@@ -3,6 +3,7 @@ import { ConnectionFailedError } from '../types/errors'
 import {
   EnvironmentCannotUseIdFormatNameError,
   InvalidEnvironmentIdentifierError,
+  InvalidNewEnvironmentNameError,
 } from '../types/errors/environments'
 import {
   InvalidIdentifierProjectError,
@@ -94,3 +95,10 @@ export const environmentNameCannotUseIdFormatError: EnvironmentCannotUseIdFormat
       },
     },
   })
+
+export const invalidNewEnvironmentNameError: InvalidNewEnvironmentNameError = createApiError({
+  code: 'validation.invalid_new_environment_name',
+  details: undefined,
+  message:
+    'Environment name must be alphanumeric, only underscores or hyphen separator allowed, min 2 and max 255 characters.',
+})
