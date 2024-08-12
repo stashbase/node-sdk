@@ -19,16 +19,16 @@ export function projectsAPI(httpClient: HttpClient) {
   /**
    * @summary Retrieve single project
    * @description Project
-   * @param projectName Project name
+   * @param projectNameOrId Project name or id
    * @returns Project object
    * */
-  async function get(projectName: string) {
-    if (!isValidProjectIdentifier(projectName)) {
+  async function get(projectNameOrId: string) {
+    if (!isValidProjectIdentifier(projectNameOrId)) {
       const error = invalidProjectIdentifierError
       return responseFailure(error)
     }
 
-    return await getProject(httpClient, projectName)
+    return await getProject(httpClient, projectNameOrId)
   }
 
   /**
@@ -69,18 +69,18 @@ export function projectsAPI(httpClient: HttpClient) {
   /**
    * @summary Remove project
    * @description Project
-   * @param key Project name
+   * @param key Project name or id
    * @returns null
    * */
-  async function remove(projectName: string) {
-    const invaliIdentifier = !isValidProjectIdentifier(projectName)
+  async function remove(projectNameOrId: string) {
+    const invaliIdentifier = !isValidProjectIdentifier(projectNameOrId)
 
     if (invaliIdentifier) {
       const error = invalidProjectIdentifierError
       return responseFailure(error)
     }
 
-    return await deleteProject(httpClient, projectName)
+    return await deleteProject(httpClient, projectNameOrId)
   }
 
   return {
