@@ -55,7 +55,7 @@ export function projectsAPI(httpClient: HttpClient) {
     const nameHasIdFormat = isResourceIdFormat('project', name)
 
     if (nameHasIdFormat) {
-      const error = projectNameCannotUseIdFormat()
+      const error = projectNameCannotUseIdFormat
       return responseFailure(error)
     }
 

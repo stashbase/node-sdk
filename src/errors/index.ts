@@ -70,19 +70,17 @@ export const invalidProjectIdentifierError: InvalidIdentifierProjectError = crea
     "Invalid project identifier. Either name or Id can be used. The name must be alphanumeric, may include hyphens and underscores, and must be between 2 and 255 characters long. The Id must start with the prefix 'pr_' and be exactly 25 characters long, consisting of alphanumeric characters.",
 })
 
-export const projectNameCannotUseIdFormat = (): ProjectCannotUseIdFormatNameError => {
-  return createApiError({
-    code: 'validation.project_name_cannot_use_id_format',
-    message:
-      "The project name provided is using an Id format. Please ensure the name is in a valid format: alphanumeric, with hyphens and underscores, and without the prefix 'pr_'. Names must adhere to the length constraints of 2 to 255 characters and cannot resemble Ids.",
-    details: {
-      example: {
-        validProjectNames: ['my-project', 'booking-app-1', 'super_app'],
-        invalidProjectNames: ['pr_nVe7ijuUMuwh9fb1j7CyBq', 'pr_2vKmcBluEENNfFKtXzrHBS'],
-      },
+export const projectNameCannotUseIdFormat: ProjectCannotUseIdFormatNameError = createApiError({
+  code: 'validation.project_name_cannot_use_id_format',
+  message:
+    "The project name provided is using an Id format. Please ensure the name is in a valid format: alphanumeric, with hyphens and underscores, and without the prefix 'pr_'. Names must adhere to the length constraints of 2 to 255 characters and cannot resemble Ids.",
+  details: {
+    example: {
+      validProjectNames: ['my-project', 'booking-app-1', 'super_app'],
+      invalidProjectNames: ['pr_nVe7ijuUMuwh9fb1j7CyBq', 'pr_2vKmcBluEENNfFKtXzrHBS'],
     },
-  })
-}
+  },
+})
 
 export const environmentNameCannotUseIdFormatError = (): EnvironmentCannotUseIdFormatNameError => {
   return createApiError({
