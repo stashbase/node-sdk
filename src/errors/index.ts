@@ -102,7 +102,7 @@ export const invalidNewEnvironmentNameError: InvalidNewEnvironmentNameError = cr
   code: 'validation.invalid_new_environment_name',
   details: undefined,
   message:
-    'Environment name must be alphanumeric, only underscores or hyphen separator allowed, min 2 and max 255 characters.',
+    'Environment name must be alphanumeric, only underscores and hyphen separator allowed, min 2 and max 255 characters.',
 })
 
 export const newEnvironmentNameEqualsOriginal: NewEnvironmentNameEqualsOriginal = createApiError({
