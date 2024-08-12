@@ -29,7 +29,7 @@ export type InvalidEnvironmentIdentifierError = ValidationApiError<
   }
 >
 
-export type EnvironmentCannotUseIdFormatNameError = ValidationApiError<
+export type EnvironmentNameUsesIdFormatError = ValidationApiError<
   'environment_name_uses_id_format',
   {
     invalidNameExamples: string[]
