@@ -52,10 +52,8 @@ const connectionFailedError: ConnectionFailedError = createApiError({
 export const invalidEnvironmentIdentifierError: InvalidEnvironmentIdentifierError = createApiError({
   code: 'validation.invalid_environment_identifier',
   details: {
-    example: {
-      environmentNames: ['staging', 'dev_copy', 'api-prod'],
-      environmentId: 'ev_2vKmcBluEENNfFKtXzrHBS',
-    },
+    nameExamples: ['staging', 'dev_copy', 'api-prod'],
+    idExample: 'ev_2vKmcBluEENNfFKtXzrHBS',
   },
   message:
     "Invalid environment identifier. Either name or Id can be used. The name must be alphanumeric, may include one hyphen as a separator and underscores, and must be between 2 and 255 characters long. The Id must start with the prefix 'ev_' and be exactly 25 characters long, consisting of alphanumeric characters.",
