@@ -193,10 +193,17 @@ export function environmentsAPI(httpClient: HttpClient) {
       return responseFailure(error)
     }
 
+    const newNameHasIdFormat = isResourceIdFormat('environment', newName)
+
+    if (newNameHasIdFormat) {
+      const error = environmentNameCannotUseIdFormatError
+      return responseFailure(error)
+    }
+
     const nameHasIdFormat = isResourceIdFormat('environment', name)
 
-    if (nameHasIdFormat) {
-      const error = environmentNameCannotUseIdFormatError
+    if (nameHasIdFormat && newName === name) {
+      const error = newEnvironmentNameEqualsOriginal
       return responseFailure(error)
     }
 
