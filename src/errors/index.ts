@@ -81,7 +81,7 @@ export const projectNameCannotUseIdFormat: ProjectCannotUseIdFormatNameError = c
 
 export const environmentNameCannotUseIdFormatError: EnvironmentCannotUseIdFormatNameError =
   createApiError({
-    code: 'validation.environment_name_cannot_use_id_format',
+    code: 'validation.environment_name_uses_id_format',
     message:
       "The environment name provided is using an Id format. Please ensure the name is in a valid format: alphanumeric, with one hyphen as separator and underscores, and without the prefix 'en_'. Names must adhere to the length constraints of 2 to 255 characters and cannot resemble Ids.",
     details: {
