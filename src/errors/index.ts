@@ -4,6 +4,7 @@ import {
   EnvironmentCannotUseIdFormatNameError,
   InvalidEnvironmentIdentifierError,
   InvalidNewEnvironmentNameError,
+  NewEnvironmentNameEqualsOriginal,
 } from '../types/errors/environments'
 import {
   InvalidIdentifierProjectError,
@@ -101,4 +102,10 @@ export const invalidNewEnvironmentNameError: InvalidNewEnvironmentNameError = cr
   details: undefined,
   message:
     'Environment name must be alphanumeric, only underscores or hyphen separator allowed, min 2 and max 255 characters.',
+})
+
+export const newEnvironmentNameEqualsOriginal: NewEnvironmentNameEqualsOriginal = createApiError({
+  code: 'validation.new_environment_name_equals_original',
+  message: 'The new environment name cannot be the same as the original environment name.',
+  details: undefined,
 })
