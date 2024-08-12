@@ -72,7 +72,7 @@ export const invalidProjectIdentifierError: InvalidIdentifierProjectError = crea
 export const projectNameUsesIdFormat: ProjectNameUsesIdFormatError = createApiError({
   code: 'validation.project_name_uses_id_format',
   message:
-    "The provided project name is using an Id format. Please ensure the name is in a valid format: alphanumeric, with hyphens and underscores, and without the prefix 'pr_'. Names must adhere to the length constraints of 2 to 255 characters and cannot resemble Ids.",
+    "The provided provided project name is using an Id format. Please ensure the name is in a valid format: alphanumeric, with hyphens and underscores, min 2 and max 255 characters. Project names cannot start with prefix 'pr_' followed by 22 alphanumeric characters.",
   details: {
     validNameExamples: ['my-project', 'booking-app-1', 'super_app'],
     invalidNameExamples: ['pr_nVe7ijuUMuwh9fb1j7CyBq', 'pr_2vKmcBluEENNfFKtXzrHBS'],
