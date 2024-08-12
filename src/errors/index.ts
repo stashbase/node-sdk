@@ -1,6 +1,10 @@
 import { ApiError, ApiErrorDetails } from '../http/response'
 import { ConnectionFailedError } from '../types/errors'
-import { ProjectCannotUseIdFormatNameError } from '../types/errors/projects'
+import { InvalidEnvironmentIdentifierError } from '../types/errors/environments'
+import {
+  InvalidIdentifierProjectError,
+  ProjectCannotUseIdFormatNameError,
+} from '../types/errors/projects'
 
 export function createApiErrorFromResponse<T>(responseData: unknown) {
   if (typeof responseData === 'object') {
@@ -39,7 +43,7 @@ const connectionFailedError: ConnectionFailedError = createApiError({
   details: undefined,
 })
 
-export const invalidEnvironmentIdentifierError = createApiError({
+export const invalidEnvironmentIdentifierError: InvalidEnvironmentIdentifierError = createApiError({
   code: 'validation.invalid_environment_identifier',
   details: {
     example: {
@@ -51,7 +55,7 @@ export const invalidEnvironmentIdentifierError = createApiError({
     "Invalid environment identifier. Either name or Id can be used. The name must be alphanumeric, may include one hyphen as a separator and underscores, and must be between 2 and 255 characters long. The Id must start with the prefix 'ev_' and be exactly 25 characters long, consisting of alphanumeric characters.",
 })
 
-export const invalidProjectIdentifierError = createApiError({
+export const invalidProjectIdentifierError: InvalidIdentifierProjectError = createApiError({
   code: 'validation.invalid_project_identifier',
   details: {
     example: {

@@ -20,3 +20,13 @@ export type ProjectCannotUseIdFormatNameError = ValidationApiError<
     }
   }
 >
+
+export type InvalidEnvironmentIdentifierError = ValidationApiError<
+  'invalid_environment_identifier',
+  {
+    example: {
+      environmentNames: string[]
+      environmentId: string
+    }
+  }
+>
