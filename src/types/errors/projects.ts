@@ -22,3 +22,12 @@ export type InvalidIdentifierProjectError = ValidationApiError<
     }
   }
 >
+
+export type InvalidNewProjectNameError = ValidationApiError<
+  'invalid_new_project_name',
+  {
+    example: {
+      validProjectNames: string[]
+    }
+  }
+>

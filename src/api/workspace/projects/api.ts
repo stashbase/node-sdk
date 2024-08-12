@@ -1,4 +1,8 @@
-import { invalidProjectIdentifierError, projectNameCannotUseIdFormat } from '../../../errors'
+import {
+  invalidNewProjectNameError,
+  invalidProjectIdentifierError,
+  projectNameCannotUseIdFormat,
+} from '../../../errors'
 import { HttpClient } from '../../../http/client'
 import { responseFailure } from '../../../http/response'
 import {
@@ -48,7 +52,7 @@ export function projectsAPI(httpClient: HttpClient) {
     const valid = isValidProjectName(name)
 
     if (!valid) {
-      const error = invalidProjectIdentifierError
+      const error = invalidNewProjectNameError
       return responseFailure(error)
     }
 
