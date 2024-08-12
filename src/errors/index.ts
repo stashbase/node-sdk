@@ -87,10 +87,8 @@ export const environmentNameCannotUseIdFormatError: EnvironmentCannotUseIdFormat
     message:
       "The environment name provided is using an Id format. Please ensure the name is in a valid format: alphanumeric, with one hyphen as separator and underscores, and without the prefix 'en_'. Names must adhere to the length constraints of 2 to 255 characters and cannot resemble Ids.",
     details: {
-      example: {
-        validEnvironmentNames: ['staging', 'dev_copy', 'api-prod'],
-        invalidEnvironmentNames: ['ev_pTFmJBTuEENNfFKtXzrMQG', 'ev_9Ve7ijuUMuwh9fb1j7CyBq'],
-      },
+      validNameExamples: ['staging', 'dev_copy', 'api-prod'],
+      invalidNameExamples: ['ev_pTFmJBTuEENNfFKtXzrMQG', 'ev_9Ve7ijuUMuwh9fb1j7CyBq'],
     },
   })
 
