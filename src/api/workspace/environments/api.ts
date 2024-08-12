@@ -153,7 +153,7 @@ export function environmentsAPI(httpClient: HttpClient) {
     const nameHasIdFormat = isResourceIdFormat('environment', name)
 
     if (nameHasIdFormat) {
-      const error = environmentNameCannotUseIdFormatError()
+      const error = environmentNameCannotUseIdFormatError
       return responseFailure(error)
     }
 
@@ -207,7 +207,7 @@ export function environmentsAPI(httpClient: HttpClient) {
     const nameHasIdFormat = isResourceIdFormat('environment', name)
 
     if (nameHasIdFormat) {
-      const error = environmentNameCannotUseIdFormatError()
+      const error = environmentNameCannotUseIdFormatError
       return responseFailure(error)
     }
 
@@ -237,7 +237,7 @@ export function environmentsAPI(httpClient: HttpClient) {
     const nameHasIdFormat = isResourceIdFormat('environment', name)
 
     if (nameHasIdFormat) {
-      const error = environmentNameCannotUseIdFormatError()
+      const error = environmentNameCannotUseIdFormatError
       return responseFailure(error)
     }
 
