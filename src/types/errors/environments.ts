@@ -30,3 +30,13 @@ export type InvalidEnvironmentIdentifierError = ValidationApiError<
     }
   }
 >
+
+export type EnvironmentCannotUseIdFormatNameError = ValidationApiError<
+  'environment_name_cannot_use_id_format',
+  {
+    example: {
+      validEnvironmentNames: string[]
+      invalidEnvironmentNames: string[]
+    }
+  }
+>
