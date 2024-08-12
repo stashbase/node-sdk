@@ -5,6 +5,7 @@ import {
   invalidEnvironmentIdentifierError,
   invalidNewEnvironmentNameError,
   invalidProjectIdentifierError,
+  newEnvironmentNameEqualsOriginal,
 } from '../../../errors'
 import {
   isResourceIdFormat,
@@ -22,7 +23,6 @@ import { LockEnvironmentArgs, lockUnlockEnvironment } from './handlers/lock'
 import { RenameEnvironmentArgs, renameEnvironment } from './handlers/rename'
 import { UpdateEnvironmentTypeArgs, updateEnvironmentType } from './handlers/updateType'
 import { responseFailure, responseSuccess } from '../../../http/response'
-import { ValidationApiError } from '../../../types/errors'
 
 export const checkValidProjectEnv = (projectName: string, environmentName: string) => {
   if (!isValidProjectIdentifier(projectName)) {
@@ -231,12 +231,7 @@ export function environmentsAPI(httpClient: HttpClient) {
     }
 
     if (name === duplicateName) {
-      const error: ValidationApiError<'new_environment_name_equals_original'> = createApiError({
-        code: 'validation.new_environment_name_equals_original',
-        message: 'The new environment name cannot be the same as the original environment name.',
-        details: undefined,
-      })
-
+      const error = newEnvironmentNameEqualsOriginal
       return responseFailure(error)
     }
 
