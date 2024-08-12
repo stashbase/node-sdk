@@ -8,6 +8,7 @@ import {
 } from '../types/errors/environments'
 import {
   InvalidIdentifierProjectError,
+  InvalidNewProjectNameError,
   ProjectCannotUseIdFormatNameError,
 } from '../types/errors/projects'
 
@@ -108,4 +109,15 @@ export const newEnvironmentNameEqualsOriginal: NewEnvironmentNameEqualsOriginal 
   code: 'validation.new_environment_name_equals_original',
   message: 'The new environment name cannot be the same as the original environment name.',
   details: undefined,
+})
+
+export const invalidNewProjectNameError: InvalidNewProjectNameError = createApiError({
+  code: 'validation.invalid_new_project_name',
+  message:
+    'Project name must be alphanumeric only underscores or hyphens are allowed, min 2 and max 255 characters.',
+  details: {
+    example: {
+      validProjectNames: ['my-project', 'booking-app-1', 'super_app'],
+    },
+  },
 })
