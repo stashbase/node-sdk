@@ -4,7 +4,7 @@ export type ProjectNotFoundError = ResourceApiError<'project_not_found', undefin
 export type ProjectLimitReachedError = ResourceApiError<'project_limit_reached', undefined>
 export type ProjectAlreadyExistsError = ConflictApiError<'project_already_exists', undefined>
 export type ProjectCannotUseIdFormatNameError = ValidationApiError<
-  'project_name_cannot_use_id_format',
+  'project_name_uses_id_format',
   {
     invalidNameExamples: string[]
     validNameExamples: string[]
