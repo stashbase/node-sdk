@@ -202,7 +202,7 @@ export function environmentsAPI(httpClient: HttpClient) {
 
     const nameHasIdFormat = isResourceIdFormat('environment', name)
 
-    if (nameHasIdFormat && newName === name) {
+    if (!nameHasIdFormat && newName === name) {
       const error = newEnvironmentNameEqualsOriginal
       return responseFailure(error)
     }
