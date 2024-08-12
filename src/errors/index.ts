@@ -1,6 +1,9 @@
 import { ApiError, ApiErrorDetails } from '../http/response'
 import { ConnectionFailedError } from '../types/errors'
-import { InvalidEnvironmentIdentifierError } from '../types/errors/environments'
+import {
+  EnvironmentCannotUseIdFormatNameError,
+  InvalidEnvironmentIdentifierError,
+} from '../types/errors/environments'
 import {
   InvalidIdentifierProjectError,
   ProjectCannotUseIdFormatNameError,
@@ -81,7 +84,7 @@ export const projectNameCannotUseIdFormat = (): ProjectCannotUseIdFormatNameErro
   })
 }
 
-export const environmentNameCannotUseIdFormatError = () => {
+export const environmentNameCannotUseIdFormatError = (): EnvironmentCannotUseIdFormatNameError => {
   return createApiError({
     code: 'validation.environment_name_cannot_use_id_format',
     message:
