@@ -90,7 +90,7 @@ type UnsupportedApiKeyError = AccessApiError<
 >
 type ExpiredApiKeyError = AuthApiError<'expired_api_key', { expiredAt: string }>
 
-type TooManyRequestsApiError = RateLimitApiError<
+export type TooManyRequestsApiError = RateLimitApiError<
   'too_many_requests',
   { retryAfter: { seconds: number; unixTimestamp: number } }
 >
