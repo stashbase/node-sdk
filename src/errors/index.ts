@@ -1,5 +1,5 @@
 import { ApiError, ApiErrorDetails } from '../http/response'
-import { ConnectionFailedError } from '../types/errors'
+import { ApiErrorType, ConnectionFailedError } from '../types/errors'
 import {
   EnvironmentNameUsesIdFormatError,
   InvalidEnvironmentIdentifierError,
@@ -17,12 +17,13 @@ export function createApiErrorFromResponse<T>(responseData: unknown) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const resData = responseData as { error?: ApiError<string, any> }
     if (resData && resData.error) {
-      return <T>{
-        code: resData?.error?.code,
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        details: resData?.error?.details ?? undefined,
-        message: resData?.error?.message,
-      }
+      const error = new ApiError(
+        resData.error.code,
+        resData.error.details,
+        resData.error.message
+      ) as T
+
+      return error
     }
   }
 
@@ -34,12 +35,17 @@ export const createApiError = <T extends string, D = undefined | ApiErrorDetails
   message: string
   details: D
 }) => {
-  const error: ApiError<T, D> = {
-    code: args.code,
-    message: args.message,
-    details: args.details,
-  }
+  // const error: ApiError<T, D> = {
+  //   code: args.code,
+  //   message: args.message,
+  //   details: args.details,
+  //   getType: () => {
+  //     const splittedCode = args.code.split('.')
+  //     const type = splittedCode[0] as ApiErrorType
+  //     return type
+  //   },
 
+  const error = new ApiError(args.code, args.details, args.message)
   return error
 }
 
