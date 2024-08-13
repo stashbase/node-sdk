@@ -1,15 +1,114 @@
+import { ExtractApiError } from '../errors/mapping'
+import {
+  AccessApiError,
+  ApiErrorType,
+  AuthApiError,
+  ConflictApiError,
+  QuotaLimitApiError,
+  ResourceApiError,
+  TooManyRequestsApiError,
+  UnexpectedApiError,
+  ValidationApiError,
+} from '../types/errors'
+
 export type ApiErrorDetails = Record<string, { [key: string]: object }>
 
 /**
- * Api error with the specified code and optional details.
- * @param code - The error code.
- * @param details - Optional details for the error.
- * @param message - Message describing the error.
+ * Represents an API error with a code, details, and message.
+ * @template T - The type of the error code.
+ * @template D - The type of the error details (optional).
  */
-export type ApiError<T extends string, D = undefined | ApiErrorDetails> = {
-  code: T
-  details: D
-  message: string
+export class ApiError<T extends string, D = undefined | ApiErrorDetails> implements ApiError<T, D> {
+  /**
+   * @param {T} code - The error code.
+   * @param {D} details - Additional details about the error.
+   * @param {string} message - A descriptive error message.
+   */
+  constructor(public code: T, public details: D, public message: string) {}
+
+  /**
+   * Gets the type of the error from the code.
+   * @returns ApiErrorType - The type of the error (e.g., 'auth', 'access').
+   */
+  getType(): ApiErrorType {
+    const splitCode = this.code.split('.')
+    const type = splitCode[0] as ApiErrorType
+
+    return type
+  }
+
+  /**
+   * Checks if the error is an unexpected error.
+   * @returns True if the error is of type UnexpectedApiError.
+   */
+  isUnexpectedError(): this is UnexpectedApiError<string, D> {
+    return this.isTypeOf('unexpected')
+  }
+
+  /**
+   * Checks if the error is an auth error.
+   * @returns True if the error is of type AuthApiError.
+   */
+  isAuthError(): this is AuthApiError<string, D> {
+    return this.isTypeOf('auth')
+  }
+
+  /**
+   * Checks if the error is a rate limit error.
+   * @returns True if the error is of type RateLimitApiError.
+   */
+  isRateLimitError(): this is TooManyRequestsApiError {
+    return this.isTypeOf('rate_limit')
+  }
+
+  /**
+   * Checks if the error is an access error.
+   * @returns True if the error is of type AccessApiError.
+   */
+  isAccessError(): this is AccessApiError<string, D> {
+    return this.isTypeOf('access')
+  }
+
+  /**
+   * Checks if the error is a validation error.
+   * @returns True if the error is of type ValidationApiError.
+   */
+  isValidationError(): this is ValidationApiError<string, D> {
+    return this.isTypeOf('validation')
+  }
+
+  /**
+   * Checks if the error is a resource error.
+   * @returns True if the error is of type ResourceApiError.
+   */
+  isResourceError(): this is ResourceApiError<string, D> {
+    return this.isTypeOf('resource')
+  }
+
+  /**
+   * Checks if the error is a conflict error.
+   * @returns True if the error is of type ConflictApiError.
+   */
+  isConflictError(): this is ConflictApiError<string, D> {
+    return this.isTypeOf('conflict')
+  }
+
+  /**
+   * Checks if the error is a quota limit error.
+   * @returns True if the error is of type QuotaLimitApiError.
+   */
+  isQuotaError(): this is QuotaLimitApiError<string, D> {
+    return this.isTypeOf('quota')
+  }
+
+  /**
+   * Checks if the error is of a specific type.
+   * @param {E} type - The type to check against.
+   * @returns True if the error is of the specified type.
+   */
+  isTypeOf<E extends ApiErrorType>(type: E): this is ExtractApiError<E> {
+    return this.getType() === type
+  }
 }
 
 interface ResponseSuccess<T> {
