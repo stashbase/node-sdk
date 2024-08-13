@@ -38,7 +38,7 @@ export type UpdateSecretsError =
   | SelfReferencingSecretsConflictError
   | SecretsAlreadyExistConflictError
 
-export type NoDataProvidedValidationError = ValidationApiError<'no_data_provided'>
+export type NoDataProvidedValidationError = ValidationApiError<'no_data_provided', undefined>
 export type InvalidSecretKeyValidationError = ValidationApiError<'invalid_secret_key', undefined>
 export type InvalidSecretKeysValidationError =
   SecretsValidationErrorWithDetails<'invalid_secret_keys'>
