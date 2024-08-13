@@ -11,6 +11,16 @@ export type UnexpectedErrorCodePrefix = 'unexpected'
 
 type ApiErrorDetailsGenericType = undefined | ApiErrorDetails
 
+export type ApiErrorType =
+  | AuthErrorCodePrefix
+  | AccessErrorCodePrefix
+  | ResourceErrorCodePrefix
+  | ValidationErrorCodePrefix
+  | ConflictErrorCodePrefix
+  | QuotaLimitErrorCodePrefix
+  | RateLimitErrorCodePrefix
+  | UnexpectedErrorCodePrefix
+
 export type UnexpectedApiError<T extends string, D = ApiErrorDetailsGenericType> = ApiError<
   `${UnexpectedErrorCodePrefix}.${T}`,
   D
