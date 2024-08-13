@@ -99,5 +99,5 @@ type UnauthorizedApiError = AuthApiError<'unauthorized', undefined>
 type InternalServerError = UnexpectedApiError<'internal_server_error', { requestId: string }>
 
 export type ConnectionFailedError = UnexpectedApiError<'connection_failed', undefined>
-export type ProjectNotFoundError = ResourceApiError<'project_not_found'>
-export type EnvironmentNotFoundError = ResourceApiError<'environment_not_found'>
+export type ProjectNotFoundError = ResourceApiError<'project_not_found', undefined>
+export type EnvironmentNotFoundError = ResourceApiError<'environment_not_found', undefined>
