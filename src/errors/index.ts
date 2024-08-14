@@ -62,7 +62,7 @@ export const invalidEnvironmentIdentifierError: InvalidEnvironmentIdentifierErro
     idExample: 'ev_2vKmcBluEENNfFKtXzrHBS',
   },
   message:
-    "Invalid environment identifier. Either name or Id can be used. The name must be alphanumeric, may include one hyphen as a separator and underscores, and must be between 2 and 255 characters long. The Id must start with the prefix 'ev_' and be exactly 25 characters long, consisting of alphanumeric characters.",
+    "Invalid environment identifier. Either name or Id can be used. The name must be alphanumeric, may include one hyphen as a separator and underscores, and must be between 2 and 40 characters long. The Id must start with the prefix 'ev_' and be exactly 25 characters long, consisting of alphanumeric characters.",
 })
 
 export const invalidProjectIdentifierError: InvalidIdentifierProjectError = createApiError({
@@ -72,13 +72,13 @@ export const invalidProjectIdentifierError: InvalidIdentifierProjectError = crea
     idExample: 'pr_9Ve7ijuUMuwh9fb1j7CyBq',
   },
   message:
-    "Invalid project identifier. Either name or Id can be used. The name must be alphanumeric, may include hyphens and underscores, and must be between 2 and 255 characters long. The Id must start with the prefix 'pr_' and be exactly 25 characters long, consisting of alphanumeric characters.",
+    "Invalid project identifier. Either name or Id can be used. The name must be alphanumeric, may include hyphens and underscores, and must be between 2 and 40 characters long. The Id must start with the prefix 'pr_' and be exactly 25 characters long, consisting of alphanumeric characters.",
 })
 
 export const projectNameUsesIdFormat: ProjectNameUsesIdFormatError = createApiError({
   code: 'validation.project_name_uses_id_format',
   message:
-    "The provided provided project name is using an Id format. Please ensure the name is in a valid format: alphanumeric, with hyphens and underscores, min 2 and max 255 characters. Project names cannot start with prefix 'pr_' followed by 22 alphanumeric characters.",
+    "The provided provided project name is using an Id format. Please ensure the name is in a valid format: alphanumeric, with hyphens and underscores, min 2 and max 40 characters. Project names cannot start with prefix 'pr_' followed by 22 alphanumeric characters.",
   details: {
     validNameExamples: ['my-project', 'booking-app-1', 'super_app'],
     invalidNameExamples: ['pr_nVe7ijuUMuwh9fb1j7CyBq', 'pr_2vKmcBluEENNfFKtXzrHBS'],
@@ -88,7 +88,7 @@ export const projectNameUsesIdFormat: ProjectNameUsesIdFormatError = createApiEr
 export const environmentNameUsesIdFormatError: EnvironmentNameUsesIdFormatError = createApiError({
   code: 'validation.environment_name_uses_id_format',
   message:
-    "The provided environment name is using an Id format. Please ensure the name is in a valid format: alphanumeric, with one hyphen as separator and underscores, min 2 and max 255 characters. Environment names cannot start with prefix 'en_' followed by 22 alphanumeric characters.",
+    "The provided environment name is using an Id format. Please ensure the name is in a valid format: alphanumeric, with one hyphen as separator and underscores, min 2 and max 40 characters. Environment names cannot start with prefix 'en_' followed by 22 alphanumeric characters.",
   details: {
     validNameExamples: ['staging', 'dev_copy', 'api-prod'],
     invalidNameExamples: ['ev_pTFmJBTuEENNfFKtXzrMQG', 'ev_9Ve7ijuUMuwh9fb1j7CyBq'],
@@ -99,7 +99,7 @@ export const invalidNewEnvironmentNameError: InvalidNewEnvironmentNameError = cr
   code: 'validation.invalid_new_environment_name',
   details: undefined,
   message:
-    'Environment name must be alphanumeric, only underscores and hyphen separator allowed, min 2 and max 255 characters.',
+    'Environment name must be alphanumeric, only underscores and hyphen separator allowed, min 2 and max 40 characters.',
 })
 
 export const newEnvironmentNameEqualsOriginal: NewEnvironmentNameEqualsOriginal = createApiError({
@@ -111,7 +111,7 @@ export const newEnvironmentNameEqualsOriginal: NewEnvironmentNameEqualsOriginal 
 export const invalidNewProjectNameError: InvalidNewProjectNameError = createApiError({
   code: 'validation.invalid_new_project_name',
   message:
-    'Project name must be alphanumeric only underscores or hyphens are allowed, min 2 and max 255 characters.',
+    'Project name must be alphanumeric only underscores or hyphens are allowed, min 2 and max 40 characters.',
   details: {
     example: {
       validProjectNames: ['my-project', 'booking-app-1', 'super_app'],
