@@ -2,6 +2,7 @@ import { ApiError, ApiErrorDetails } from '../http/response'
 import { ApiErrorType, ConnectionFailedError } from '../types/errors'
 import {
   EnvironmentNameUsesIdFormatError,
+  EnvironmentSelfComparision,
   InvalidEnvironmentIdentifierError,
   InvalidNewEnvironmentNameError,
   NewEnvironmentNameEqualsOriginal,
@@ -113,8 +114,7 @@ export const invalidNewProjectNameError: InvalidNewProjectNameError = createApiE
   message:
     'Project name must be alphanumeric only underscores or hyphens are allowed, min 2 and max 40 characters.',
   details: {
-    example: {
-      validProjectNames: ['my-project', 'booking-app-1', 'super_app'],
-    },
+    validNameExamples: ['my-project', 'booking-app-1', 'super_app'],
+    invalidNameExamples: ['super project', '#app-1', `joe's app`],
   },
 })
