@@ -114,7 +114,7 @@ export const newEnvironmentNameEqualsOriginal: NewEnvironmentNameEqualsOriginal 
 export const invalidNewProjectNameError: InvalidNewProjectNameError = createApiError({
   code: 'validation.invalid_new_project_name',
   message:
-    'Project name must be alphanumeric; only underscores (_) and hyphens (-) are allowed, with a minimum of 2 and a maximum of 40 characters.',
+    'Project name must be alphanumeric and may include underscores (_) and hyphens (-), with a minimum of 2 and a maximum of 40 characters.',
   details: {
     validNameExamples: ['my-project', 'booking-app-1', 'super_app'],
     invalidNameExamples: ['super project', '#app-1', `joe's app`],
