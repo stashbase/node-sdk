@@ -88,7 +88,7 @@ export const projectNameUsesIdFormat: ProjectNameUsesIdFormatError = createApiEr
 export const environmentNameUsesIdFormatError: EnvironmentNameUsesIdFormatError = createApiError({
   code: 'validation.environment_name_uses_id_format',
   message:
-    "The provided environment name is using an Id format. Please ensure the name is in a valid format: alphanumeric, with one hyphen as separator and underscores, min 2 and max 40 characters. Environment names cannot start with prefix 'en_' followed by 22 alphanumeric characters.",
+    "The provided environment name appears to be in Id format. Please use a valid name format: alphanumeric, with optional underscores (_) and a single hyphen (-) as a separator, between 2 and 40 characters long. Environment names must not start with the prefix 'en_' followed by 22 alphanumeric characters.",
   details: {
     validNameExamples: ['staging', 'dev_copy', 'api-prod'],
     invalidNameExamples: ['ev_pTFmJBTuEENNfFKtXzrMQG', 'ev_9Ve7ijuUMuwh9fb1j7CyBq'],
