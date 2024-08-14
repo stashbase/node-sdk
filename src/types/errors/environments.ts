@@ -37,6 +37,12 @@ export type EnvironmentNameUsesIdFormatError = ValidationApiError<
   }
 >
 
-export type InvalidNewEnvironmentNameError = ValidationApiError<'invalid_new_environment_name'>
+export type InvalidNewEnvironmentNameError = ValidationApiError<
+  'invalid_new_environment_name',
+  {
+    validNameExamples: string[]
+    invalidNameExamples: string[]
+  }
+>
 export type NewEnvironmentNameEqualsOriginal =
   ValidationApiError<'new_environment_name_equals_original'>
