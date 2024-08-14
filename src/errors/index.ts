@@ -98,7 +98,7 @@ export const environmentNameUsesIdFormatError: EnvironmentNameUsesIdFormatError 
 export const invalidNewEnvironmentNameError: InvalidNewEnvironmentNameError = createApiError({
   code: 'validation.invalid_new_environment_name',
   message:
-    'Environment name must be alphanumeric, only underscores and hyphen separator allowed, min 2 and max 40 characters.',
+    'Environment name must be alphanumeric and may include underscores (_) and a single hyphen (-) as a separator, with a minimum of 2 and a maximum of 40 characters.',
   details: {
     validNameExamples: ['staging', 'dev_copy', 'api-prod'],
     invalidNameExamples: ['#dev', 'api-dev-1', 'service--ops'],
