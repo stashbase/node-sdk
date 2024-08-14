@@ -2,7 +2,6 @@ import { ApiError, ApiErrorDetails } from '../http/response'
 import { ApiErrorType, ConnectionFailedError } from '../types/errors'
 import {
   EnvironmentNameUsesIdFormatError,
-  EnvironmentSelfComparision,
   InvalidEnvironmentIdentifierError,
   InvalidNewEnvironmentNameError,
   NewEnvironmentNameEqualsOriginal,
