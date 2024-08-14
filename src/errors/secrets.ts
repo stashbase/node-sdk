@@ -17,13 +17,7 @@ export const createSecretsError = <T extends string, D = undefined | SecretsErro
   message: string
   details: D
 }) => {
-  const error: ApiError<T, D> = {
-    code: args.code,
-    message: args.message,
-    details: args.details,
-  }
-
-  return error
+  return new ApiError(args.code, args.details, args.message)
 }
 
 export const secretKeyFormatErrorMessage =
