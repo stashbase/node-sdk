@@ -72,7 +72,7 @@ export const invalidProjectIdentifierError: InvalidIdentifierProjectError = crea
     idExample: 'pr_9Ve7ijuUMuwh9fb1j7CyBq',
   },
   message:
-    "Invalid project identifier. Either name or Id can be used. The name must be alphanumeric, may include hyphens and underscores, and must be between 2 and 40 characters long. The Id must start with the prefix 'pr_' and be exactly 25 characters long, consisting of alphanumeric characters.",
+    "Invalid project identifier. Either a name or Id can be used. The name must be alphanumeric, may include underscores (_) and hyphens (-), and must be between 2 and 40 characters long. The Id must start with the prefix 'pr_', be exactly 25 characters long, and consist of alphanumeric characters.",
 })
 
 export const projectNameUsesIdFormat: ProjectNameUsesIdFormatError = createApiError({
