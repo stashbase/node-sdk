@@ -43,7 +43,9 @@ function isAlphanumericWithHyphensAndUnderscores(inputString: string): boolean {
 
 // TODO: validate max length
 const isValidProjectName = (projectName: string) =>
-  isAlphanumericWithHyphensAndUnderscores(projectName) && projectName.length >= 2
+  projectName.length >= 2 &&
+  projectName.length <= 40 &&
+  isAlphanumericWithHyphensAndUnderscores(projectName)
 
 const isValidProjectIdentifier = isValidProjectName
 
@@ -69,6 +71,7 @@ const isValidProjectIdentifier = isValidProjectName
 
 const isValidEnvironmentName = (environmentName: string) =>
   environmentName.length >= 2 &&
+  environmentName.length <= 40 &&
   containsMaxOneDash(environmentName) &&
   isAlphanumericWithHyphensAndUnderscores(environmentName)
 
