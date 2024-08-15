@@ -7,7 +7,7 @@ import {
   QuotaLimitApiError,
   ResourceApiError,
   TooManyRequestsApiError,
-  UnexpectedApiError,
+  SeverApiError,
   ValidationApiError,
 } from '../types/errors'
 
@@ -41,8 +41,8 @@ export class ApiError<T extends string, D = undefined | ApiErrorDetails> impleme
    * Checks if the error is an unexpected error.
    * @returns True if the error is of type UnexpectedApiError.
    */
-  isUnexpectedError(): this is UnexpectedApiError<string, D> {
-    return this.isTypeOf('unexpected')
+  isServerError(): this is SeverApiError<string, D> {
+    return this.isTypeOf('server')
   }
 
   /**
