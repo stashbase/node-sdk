@@ -7,7 +7,7 @@ import {
   QuotaLimitApiError,
   ResourceApiError,
   TooManyRequestsApiError,
-  UnexpectedApiError,
+  SeverApiError,
   ValidationApiError,
 } from '../types/errors'
 
@@ -20,7 +20,7 @@ type ApiErrorTypeMapping = {
   validation: ValidationApiError<string, undefined | ApiErrorDetails>
   conflict: ConflictApiError<string, undefined | ApiErrorDetails>
   quota: QuotaLimitApiError<string, undefined | ApiErrorDetails>
-  unexpected: UnexpectedApiError<string, undefined | ApiErrorDetails>
+  server: SeverApiError<string, undefined | ApiErrorDetails>
 }
 
 export type ExtractApiError<T extends ApiErrorType> = T extends keyof ApiErrorTypeMapping

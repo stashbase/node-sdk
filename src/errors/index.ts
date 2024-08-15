@@ -50,7 +50,7 @@ export const createApiError = <T extends string, D = undefined | ApiErrorDetails
 }
 
 const connectionFailedError: ConnectionFailedError = createApiError({
-  code: 'unexpected.connection_failed',
+  code: 'server.connection_failed',
   message: 'Could not connect to the API server. Please try again later.',
   details: undefined,
 })
