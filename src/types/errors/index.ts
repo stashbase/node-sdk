@@ -7,7 +7,7 @@ export type ValidationErrorCodePrefix = 'validation'
 export type ConflictErrorCodePrefix = 'conflict'
 export type QuotaLimitErrorCodePrefix = 'quota'
 export type RateLimitErrorCodePrefix = 'rate_limit'
-export type UnexpectedErrorCodePrefix = 'unexpected'
+export type ServerErrorCodePrefix = 'server'
 
 type ApiErrorDetailsGenericType = undefined | ApiErrorDetails
 
@@ -19,10 +19,10 @@ export type ApiErrorType =
   | ConflictErrorCodePrefix
   | QuotaLimitErrorCodePrefix
   | RateLimitErrorCodePrefix
-  | UnexpectedErrorCodePrefix
+  | ServerErrorCodePrefix
 
-export type UnexpectedApiError<T extends string, D = ApiErrorDetailsGenericType> = ApiError<
-  `${UnexpectedErrorCodePrefix}.${T}`,
+export type SeverApiError<T extends string, D = ApiErrorDetailsGenericType> = ApiError<
+  `${ServerErrorCodePrefix}.${T}`,
   D
 >
 
@@ -96,8 +96,8 @@ export type TooManyRequestsApiError = RateLimitApiError<
 >
 type UnauthorizedApiError = AuthApiError<'unauthorized', undefined>
 
-type InternalServerError = UnexpectedApiError<'internal_server_error', { requestId: string }>
+type InternalServerError = SeverApiError<'internal_error', { requestId: string }>
 
-export type ConnectionFailedError = UnexpectedApiError<'connection_failed', undefined>
+export type ConnectionFailedError = SeverApiError<'connection_failed', undefined>
 export type ProjectNotFoundError = ResourceApiError<'project_not_found', undefined>
 export type EnvironmentNotFoundError = ResourceApiError<'environment_not_found', undefined>
