@@ -266,13 +266,6 @@ export const validateUpdateSecretsInput = (
       }
     }
   }
-
-  // NOTE: missing properties to update
-  if (missingPropertiesToUpdateKeys.size > 0) {
-    const error = missingPropertiesToUpdateError(Array.from(missingPropertiesToUpdateKeys))
-    return error
-  }
-
   // NOTE: invalid keys
   if (invalidSecretKeys.size > 0) {
     const error = invalidSecretKeysError(Array.from(invalidSecretKeys))
@@ -284,6 +277,12 @@ export const validateUpdateSecretsInput = (
     const secretKeys = Array.from(invalidNewSecretKeys)
     const error = invalidNewSecretKeysError(secretKeys)
 
+    return error
+  }
+
+  // NOTE: missing properties to update
+  if (missingPropertiesToUpdateKeys.size > 0) {
+    const error = missingPropertiesToUpdateError(Array.from(missingPropertiesToUpdateKeys))
     return error
   }
 
