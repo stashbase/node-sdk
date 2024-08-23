@@ -8,7 +8,7 @@ import {
   GenericApiError,
 } from '../../../../types/errors'
 
-type SecretsData = Array<{ key: SecretKey; value: string; description?: string }>
+type SecretsData = Array<{ key: SecretKey; value: string; description: string | null }>
 type ListSecretsError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
 export interface ListSecretsArgs {
