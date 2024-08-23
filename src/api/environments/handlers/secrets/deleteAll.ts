@@ -13,8 +13,8 @@ async function deleteAllEnvironmentSecrets(
   client: HttpClient
 ): Promise<ApiResponse<DeleteAllSecretsResponseData, DeleteAllSecretsError>> {
   try {
-    const data = await client.del<DeleteAllSecretsResponseData>({
-      path: '/v1/secrets/all',
+    const data = await client.post<DeleteAllSecretsResponseData>({
+      path: '/v1/secrets/delete/all',
     })
 
     return responseSuccess(data)
