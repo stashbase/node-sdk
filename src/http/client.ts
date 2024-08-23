@@ -85,9 +85,15 @@ export function createHttpClient(args: {
     path: string
     data?: { [key: string]: any } | any[]
   }): Promise<T> {
+    const reqHeaders = headers
+
+    if (!args.data) {
+      delete reqHeaders['Content-Type']
+    }
+
     return await requestWithData<T>({
       method: 'POST',
-      headers,
+      headers: reqHeaders,
       path: args.path,
       data: args.data,
     })
@@ -102,6 +108,8 @@ export function createHttpClient(args: {
     if (!args.data) {
       delete reqHeaders['Content-Type']
     }
+
+    console.log({ reqHeaders })
 
     return await requestWithData<T>({
       method: 'PATCH',
