@@ -4,12 +4,17 @@ import { GenericApiError } from '../../../types/errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../http/response'
 
 interface Environment {
-  projectName: string
+  id: string
+  createdAt: string
+  name: string
   type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
   locked: boolean
-  name: string
-  createdAt: string
   description: string | null
+  secretCount: number
+  project: {
+    id: string
+    name: string
+  }
 }
 
 // type GetEnvironmentError = ApiError<EnvironmentApiError>
