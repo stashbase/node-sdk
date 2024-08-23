@@ -2,6 +2,7 @@ import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { ProjectNotFoundError, GenericApiError } from '../../../../types/errors'
+import { Environment } from '../../../../types/environments'
 
 // ???
 // export interface GetEnvironmentOpts {
@@ -11,14 +12,6 @@ import { ProjectNotFoundError, GenericApiError } from '../../../../types/errors'
 //
 export interface ListEnvironmentArgs {
   project: string
-}
-
-interface Environment {
-  type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
-  locked: boolean
-  name: string
-  createdAt: string
-  description: string | null
 }
 
 type ListEnvironmentsError = GenericApiError | ProjectNotFoundError
