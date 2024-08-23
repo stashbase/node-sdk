@@ -33,7 +33,7 @@ async function renameEnvironment(
 
   try {
     const data = await client.patch<null>({
-      path: `/v1/projects/${project}/environments/${name}/rename`,
+      path: `/v1/projects/${project}/environments/${name}`,
       data: { name: newName },
     })
 
