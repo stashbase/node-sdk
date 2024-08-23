@@ -3,7 +3,7 @@ import { createApiErrorFromResponse } from '../../../../errors'
 import { GetSecretError } from '../../../../types/errors/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
-type Secret = { key: Uppercase<string>; value: string; description?: string }
+type Secret = { key: Uppercase<string>; value: string; description: string | null }
 
 type GetSecretResponse = Promise<ApiResponse<Secret, GetSecretError>>
 
