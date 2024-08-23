@@ -9,7 +9,7 @@ export type LoadEnvironmentOpts = {
 
 export type LoadEnvironmentQueryParams = {
   'with-environment': string
-  'no-description': 'true'
+  omit: 'description' | 'value' | 'description,value' | 'value,description'
   // optional
   'expand-refs'?: 'true'
 }
