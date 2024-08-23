@@ -2,12 +2,7 @@ import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { ProjectNotFoundError, GenericApiError } from '../../../../types/errors'
-
-type Project = {
-  createdAt: string
-  name: string
-  description: string | null
-}
+import { Project } from '../../../../types/projects'
 
 type GetProjectError = GenericApiError | ProjectNotFoundError
 
