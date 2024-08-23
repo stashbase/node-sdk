@@ -8,7 +8,7 @@ export interface ListSecretsOpts {
   expandRefs?: boolean
 }
 
-type SecretsData = Array<{ key: Uppercase<string>; value: string; description?: string }>
+type SecretsData = Array<{ key: Uppercase<string>; value: string; description?: string | null }>
 
 async function listSecrets(
   envClient: HttpClient,
@@ -24,7 +24,7 @@ async function listSecrets(
   }
 
   if (returnDescription === false) {
-    query['no-description'] = 'true'
+    query['omit'] = 'description'
   }
 
   try {
