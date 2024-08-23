@@ -6,7 +6,7 @@ import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/
 
 interface DeleteSecretsResponseData {
   deletedCount: number
-  notFoundSecrets?: Array<SecretKey>
+  notFoundSecrets: Array<SecretKey>
 }
 
 async function deleteEnvironmentSecrets(
