@@ -25,14 +25,19 @@ type DulicateEnvironmentError =
   | EnvironmentAlreadyExistsError
   | EnvironmentLockedError
 
+interface DuplicateEnvironmentResData {
+  id: string
+  name: string
+}
+
 async function duplicateEnvironment(
   client: HttpClient,
   args: DuplicateEnvironmentArgs
-): Promise<ApiResponse<null, DulicateEnvironmentError>> {
+): Promise<ApiResponse<DuplicateEnvironmentResData, DulicateEnvironmentError>> {
   const { project, name, duplicateName } = args
 
   try {
-    const data = await client.post<null>({
+    const data = await client.post<DuplicateEnvironmentResData>({
       path: `/v1/projects/${project}/environments/${name}/duplicate`,
       data: { name: duplicateName },
     })
