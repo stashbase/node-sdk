@@ -1,32 +1,18 @@
 import { HttpClient } from '../../../http/client'
-import { createApiErrorFromResponse } from '../../../errors'
 import { GenericApiError } from '../../../types/errors'
+import { createApiErrorFromResponse } from '../../../errors'
+import { EnvironmentWithProject } from '../../../types/environments'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../http/response'
 
-interface Environment {
-  id: string
-  createdAt: string
-  name: string
-  type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
-  locked: boolean
-  description: string | null
-  secretCount: number
-  project: {
-    id: string
-    name: string
-  }
-}
-
-// type GetEnvironmentError = ApiError<EnvironmentApiError>
 type GetEnvironmentError = GenericApiError
 
 async function getEnvironment(
   client: HttpClient
-): Promise<ApiResponse<Environment, GetEnvironmentError>> {
+): Promise<ApiResponse<EnvironmentWithProject, GetEnvironmentError>> {
   // const printTable = options?.printTable
 
   try {
-    const data = await client.get<Environment>({
+    const data = await client.get<EnvironmentWithProject>({
       path: '/',
     })
 
