@@ -13,7 +13,7 @@ async function getEnvironment(
 
   try {
     const data = await client.get<EnvironmentWithProject>({
-      path: '/',
+      path: '/v1/environment',
     })
 
     // if (printTable) {
