@@ -19,7 +19,7 @@ async function loadEnvironment(
   const printType = options?.print
 
   const query: LoadEnvironmentQueryParams = {
-    'no-description': 'true',
+    omit: 'description',
     'with-environment': ['name', 'type'].join(','),
   }
 
