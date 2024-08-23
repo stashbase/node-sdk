@@ -4,7 +4,7 @@ import { createEnvEase } from '../../../src'
 describe('Lock/unlock environment', () => {
   test('Lock', async () => {
     console.log('lock test')
-    const envEase = createEnvEase('xPKDa2Xq0zWmfES1nLDoG45qZtR1z2qL')
+    const envEase = createEnvEase(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
     const { data, error } = await envEase.environments.lock({
       project: 'hero-hub',
@@ -18,7 +18,7 @@ describe('Lock/unlock environment', () => {
   test('Unlock', async () => {
     console.log('unlock test')
 
-    const envEase = createEnvEase('xPKDa2Xq0zWmfES1nLDoG45qZtR1z2qL')
+    const envEase = createEnvEase(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
     const { data, error } = await envEase.environments.unlock({
       project: 'hero-hub',
