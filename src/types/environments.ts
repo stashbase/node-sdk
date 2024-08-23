@@ -21,3 +21,20 @@ export type LoadEnvironmentResponse = {
   }
   secrets: Array<{ key: SecretKey; value: string }>
 }
+
+export interface Environment {
+  id: string
+  createdAt: string
+  name: string
+  type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
+  locked: boolean
+  description: string | null
+  secretCount: number
+}
+
+export type EnvironmentWithProject = Environment & {
+  project: {
+    id: string
+    name: string
+  }
+}
