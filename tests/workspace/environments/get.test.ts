@@ -10,6 +10,14 @@ describe('Get environment', () => {
       environment: 'vercel',
     })
 
+    const type = error?.getType()
+
+    if (error) {
+      if (error.isRateLimitError() === true) {
+        console.log(error.code === 'rate_limit.too_many_requests')
+      }
+    }
+
     console.log(data)
     console.log(error)
   })

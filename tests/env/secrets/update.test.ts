@@ -20,8 +20,8 @@ test('Update env secrets', async () => {
     console.log('Data:\n')
     console.log(data)
 
-    const { updatedCount, notFoundKeys } = data
+    const { updatedCount, notFoundSecrets } = data
     console.log('updatedCount: ', updatedCount)
-    console.log('notFoundKeys: ', notFoundKeys)
+    console.log('notFoundSecrets: ', notFoundSecrets)
   }
 })

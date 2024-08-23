@@ -18,5 +18,17 @@ describe('Create secrets', () => {
 
     console.log(data)
     console.log(error)
+
+    if (error) {
+      const err = error
+
+      if (err.isRateLimitError()) {
+        const e = err.code === 'rate_limit.too_many_requests'
+
+        if (e) {
+          const d = err.details.retryAfter.seconds
+        }
+      }
+    }
   })
 })

@@ -3,15 +3,17 @@ import { createEnvEase } from '../../../src'
 
 describe('Create environment', () => {
   test('', async () => {
-    const envEase = createEnvEase('xPKDa2Xq0zWmfES1nLDoG45qZtR1z2qL')
+    const envEase = createEnvEase('sbc_jeY61Qt6lqHrS3KRvXjSYr5GkZlMaVOGocmNorUdjqBIrlnmFFjzkIcU')
 
     const { data, error } = await envEase.environments.create({
-      project: 'hero-hub',
-      name: 'dev-sdk',
+      project: 'pr_nVpZPsL5nQTUP9yXU2GKYJ',
+      name: 'ev_3NCdY7kmbLJpZcpMg4W6wk-dev',
       type: 'DEVELOPMENT',
     })
 
-    console.log(data)
-    console.log(error)
+    if (error?.isConflictError()) {
+      const code = error.code === 'conflict.environment_already_exists'
+      console.log('Is isValidationError')
+    }
   })
 })
