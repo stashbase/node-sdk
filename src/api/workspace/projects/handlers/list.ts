@@ -2,29 +2,30 @@ import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { GenericApiError } from '../../../../types/errors'
+import { PaginationMetadata } from '../../../../types/pagination'
+import { Project } from '../../../../types/projects'
 
-// TODO:
+// TODO: other options
 export type ListProjectsOpts = {
   page?: number
-  perPage?: number
+  limit?: number
 }
 
-type Project = {
-  createdAt: string
-  name: string
-  description: string | null
+type ListProjectsResponse = {
+  data: Array<Project>
+  pagination: PaginationMetadata
 }
 
 type ListProjectsError = GenericApiError
 
 export async function listProjects(
   client: HttpClient,
-  // TODO: make use of this options
   options?: ListProjectsOpts
-): Promise<ApiResponse<Array<Project>, ListProjectsError>> {
+): Promise<ApiResponse<ListProjectsResponse, ListProjectsError>> {
   try {
-    const data = await client.get<Array<Project>>({
+    const data = await client.get<ListProjectsResponse>({
       path: `/v1/projects`,
+      query: options,
     })
 
     return responseSuccess(data)
