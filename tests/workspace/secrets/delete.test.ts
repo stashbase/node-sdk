@@ -5,16 +5,14 @@ test('Delete secrets', async () => {
   const envEase = createEnvEase('xPKDa2Xq0zWmfES1nLDoG45qZtR1z2qL')
 
   const { data, error } = await envEase.secrets.remove({
-    project: 'hero-hub',
-    environment: 'vercel',
-    keys: ['SOME_KEY'],
+    project: 'pr_iBgCx5tegfVaKzjywTg2ck',
+    environment: 'ev_3NCdY7kmbLJpZcpMg4W6wk',
+    keys: ['KEYS', 'SECRET_234'],
   })
   if (error) {
     const { code } = error
     console.log(code)
   } else {
-    const { deletedCount, notFound } = data
-    console.log('deletedCount: ', deletedCount)
-    console.log('notFound: ', notFound)
+    console.log(data)
   }
 })
