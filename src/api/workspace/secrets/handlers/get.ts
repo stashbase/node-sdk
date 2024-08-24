@@ -1,14 +1,12 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-import { SecretKey } from '../../../../types/secretKey'
+import { GetSecretResData } from '../../../../types/secrets'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { GetSecretError as SharedGetSecretsError } from '../../../../types/errors/secrets'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
-
-type Secret = { key: SecretKey; value: string; description: string | null }
+import { GetSecretError as SharedGetSecretsError } from '../../../../types/errors/secrets'
 
 type GetSecretError = SharedGetSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
-type GetSecretResponse = Promise<ApiResponse<Secret, GetSecretError>>
+type GetSecretResponse = Promise<ApiResponse<GetSecretResData, GetSecretError>>
 
 export interface GetSecretArgs {
   project: string
@@ -23,7 +21,7 @@ async function getSecret(envClient: HttpClient, args: GetSecretArgs): GetSecretR
   const { project, environment, key } = args
 
   try {
-    const secrets = await envClient.get<Secret>({
+    const secrets = await envClient.get<GetSecretResData>({
       path: `/projects/${project}/environments/${environment}/secrets/${key}`,
       query: args.expandRefs ? { 'expand-refs': 'true' } : undefined,
     })
