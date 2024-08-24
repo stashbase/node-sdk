@@ -11,6 +11,7 @@ import { Environment } from '../../../../types/environments'
 // }
 //
 export interface ListEnvironmentArgs {
+  /** Project name or id. */
   project: string
 }
 
