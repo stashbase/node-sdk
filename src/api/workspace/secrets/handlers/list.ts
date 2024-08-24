@@ -1,5 +1,5 @@
 import { HttpClient } from '../../../../http/client'
-import { ListSecretsResData } from '../../../../types/secrets'
+import { ListSecretsQueryParams, ListSecretsResData } from '../../../../types/secrets'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import {
@@ -41,20 +41,20 @@ async function listSecrets(
   const { project, environment } = args
   const returnDescription = args?.description
 
-  const query: Record<string, string> = {}
+  const query: ListSecretsQueryParams = {}
 
-  if (returnDescription) {
-    query['description'] = 'true'
+  if (returnDescription === false) {
+    query['omit'] = 'description'
   }
 
   if (args?.expandRefs) {
-    query['expand-refs'] = 'true'
+    query['expand-refs'] = true
   }
 
   try {
     const secrets = await envClient.get<ListSecretsResData>({
       path: `/v1/projects/${project}/environments/${environment}/secrets`,
-      query,
+      query: query as Record<string, string | boolean>,
     })
 
     return responseSuccess(secrets)

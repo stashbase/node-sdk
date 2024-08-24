@@ -2,7 +2,7 @@ import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ListSecretsError } from '../../../../types/errors/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-import { ListSecretsResData } from '../../../../types/secrets'
+import { ListSecretsQueryParams, ListSecretsResData } from '../../../../types/secrets'
 
 export interface ListSecretsOpts {
   description?: boolean
@@ -16,10 +16,10 @@ async function listSecrets(
   const returnDescription = options?.description
   const expandRefs = options?.expandRefs
 
-  const query: Record<string, string> = {}
+  const query: ListSecretsQueryParams = {}
 
   if (expandRefs) {
-    query['expand-refs'] = 'true'
+    query['expand-refs'] = true
   }
 
   if (returnDescription === false) {
@@ -29,7 +29,7 @@ async function listSecrets(
   try {
     const secrets = await envClient.get<ListSecretsResData>({
       path: '/v1/secrets',
-      query,
+      query: query as Record<string, string | boolean>,
     })
 
     return responseSuccess(secrets)
