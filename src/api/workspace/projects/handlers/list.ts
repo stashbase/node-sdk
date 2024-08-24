@@ -5,9 +5,10 @@ import { GenericApiError } from '../../../../types/errors'
 import { PaginationMetadata } from '../../../../types/pagination'
 import { Project } from '../../../../types/projects'
 
-// TODO: other options
 export type ListProjectsOpts = {
+  /** The current page number (min 1, max 1000, default 1). */
   page?: number
+  /** The number of items per page (min 2, max 30, default 10). */
   limit?: number
 }
 
