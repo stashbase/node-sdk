@@ -1,4 +1,5 @@
 import { SecretKey } from './secretKey'
+import { ListSecretsQueryParams } from './secrets'
 
 export type LoadEnvironmentOpts = {
   enabled?: boolean
@@ -7,12 +8,7 @@ export type LoadEnvironmentOpts = {
   expandRefs?: boolean
 }
 
-export type LoadEnvironmentQueryParams = {
-  'with-environment': string
-  omit: 'description' | 'value' | 'description,value' | 'value,description'
-  // optional
-  'expand-refs'?: 'true'
-}
+export type LoadEnvironmentQueryParams = ListSecretsQueryParams
 
 export type LoadEnvironmentResponse = {
   environment: {
