@@ -1,19 +1,16 @@
 import { HttpClient } from '../../../../http/client'
 import { GenericApiError } from '../../../../types/errors'
 import { createApiErrorFromResponse } from '../../../../errors'
+import { DeleteAllSecretsResData } from '../../../../types/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
 type DeleteAllSecretsError = GenericApiError
 
-interface DeleteAllSecretsResponseData {
-  deletedCount: number
-}
-
 async function deleteAllEnvironmentSecrets(
   client: HttpClient
-): Promise<ApiResponse<DeleteAllSecretsResponseData, DeleteAllSecretsError>> {
+): Promise<ApiResponse<DeleteAllSecretsResData, DeleteAllSecretsError>> {
   try {
-    const data = await client.post<DeleteAllSecretsResponseData>({
+    const data = await client.post<DeleteAllSecretsResData>({
       path: '/v1/secrets/delete/all',
     })
 
