@@ -1,13 +1,8 @@
 import { HttpClient } from '../../../../http/client'
-import { SecretKey } from '../../../../types/secretKey'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { CreateSecretsError } from '../../../../types/errors/secrets'
+import { CreateSecretsResData } from '../../../../types/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-
-interface CreateSecretsResponseData {
-  createdCount: number
-  duplicateSecrets: Array<SecretKey>
-}
 
 export type CreateSecretsData = Array<{
   key: Uppercase<string>
@@ -18,9 +13,11 @@ export type CreateSecretsData = Array<{
 async function createSecrets(
   envClient: HttpClient,
   data: CreateSecretsData
-): Promise<ApiResponse<CreateSecretsResponseData, CreateSecretsError>> {
+): Promise<ApiResponse<CreateSecretsResData, CreateSecretsError>> {
   try {
-    const resData = await envClient.post<CreateSecretsResponseData>({
+    type NewType = CreateSecretsResData
+
+    const resData = await envClient.post<NewType>({
       path: '/v1/secrets',
       data,
     })

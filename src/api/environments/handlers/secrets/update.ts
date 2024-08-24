@@ -1,14 +1,9 @@
 import { HttpClient } from '../../../../http/client'
 import { AtLeastOne } from '../../../../types/util'
-import { SecretKey } from '../../../../types/secretKey'
 import { createApiErrorFromResponse } from '../../../../errors'
+import { UpdateSecretsResData } from '../../../../types/secrets'
 import { UpdateSecretsError } from '../../../../types/errors/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-
-interface UpdateSecretsResponseData {
-  updatedCount: number
-  notFoundSecrets: Array<SecretKey>
-}
 
 export type UpdateSecretsData = Array<
   {
@@ -23,9 +18,9 @@ export type UpdateSecretsData = Array<
 async function updateSecrets(
   envClient: HttpClient,
   data: UpdateSecretsData
-): Promise<ApiResponse<UpdateSecretsResponseData, UpdateSecretsError>> {
+): Promise<ApiResponse<UpdateSecretsResData, UpdateSecretsError>> {
   try {
-    const resData = await envClient.patch<UpdateSecretsResponseData>({
+    const resData = await envClient.patch<UpdateSecretsResData>({
       path: '/v1/secrets',
       data,
     })

@@ -2,18 +2,15 @@ import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { GetSecretError } from '../../../../types/errors/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-
-type Secret = { key: Uppercase<string>; value: string; description: string | null }
-
-type GetSecretResponse = Promise<ApiResponse<Secret, GetSecretError>>
+import { GetSecretResData } from '../../../../types/secrets'
 
 async function getSecret(
   envClient: HttpClient,
   key: string,
   expandRefs?: boolean
-): GetSecretResponse {
+): Promise<ApiResponse<GetSecretResData, GetSecretError>> {
   try {
-    const secrets = await envClient.get<Secret>({
+    const secrets = await envClient.get<GetSecretResData>({
       path: `/v1/secrets/${key}`,
       query: expandRefs ? { 'expand-refs': 'true' } : undefined,
     })
