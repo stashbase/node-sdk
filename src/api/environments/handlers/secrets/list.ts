@@ -5,15 +5,15 @@ import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/
 import { ListSecretsQueryParams, ListSecretsResData } from '../../../../types/secrets'
 
 export interface ListSecretsOpts {
-  description?: boolean
   expandRefs?: boolean
+  omit?: Array<'value' | 'description'>
 }
 
 async function listSecrets(
   envClient: HttpClient,
   options?: ListSecretsOpts
 ): Promise<ApiResponse<ListSecretsResData, ListSecretsError>> {
-  const returnDescription = options?.description
+  const omit = options?.omit
   const expandRefs = options?.expandRefs
 
   const query: ListSecretsQueryParams = {}
@@ -22,8 +22,8 @@ async function listSecrets(
     query['expand-refs'] = true
   }
 
-  if (returnDescription === false) {
-    query['omit'] = 'description'
+  if (omit) {
+    query['omit'] = omit.join(',')
   }
 
   try {
