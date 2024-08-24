@@ -45,3 +45,18 @@ export interface ListSecretsQueryParams {
   // only?: Array<SecretKey>
   // exclude?: Array<SecretKey>
 }
+
+export type GetSecretQueryParams = Pick<ListSecretsQueryParams, 'omit' | 'expand-refs'>
+
+export interface GetSecretOptions {
+  /**
+   * expand all refered secrets to their values
+   * */
+  expandRefs?: boolean
+  /**
+   * omit selected secret properties
+   * */
+  omit?: Array<'value' | 'description'>
+}
+
+export type ListSecretsOptions = GetSecretOptions
