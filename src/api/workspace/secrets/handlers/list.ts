@@ -1,5 +1,9 @@
 import { HttpClient } from '../../../../http/client'
-import { ListSecretsQueryParams, ListSecretsResData } from '../../../../types/secrets'
+import {
+  ListSecretsOptions,
+  ListSecretsQueryParams,
+  ListSecretsResData,
+} from '../../../../types/secrets'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import {
@@ -10,7 +14,7 @@ import {
 
 type ListSecretsError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
-export interface ListSecretsArgs {
+export type ListSecretsArgs = {
   /**
    * project name
    * */
@@ -19,15 +23,7 @@ export interface ListSecretsArgs {
    * environment name
    * */
   environment: string
-  /**
-   * expand all refered secrets to their values
-   * */
-  expandRefs?: boolean
-  /**
-   * omit selected secret properties
-   * */
-  omit?: Array<'value' | 'description'>
-}
+} & ListSecretsOptions
 
 // export interface ListSecretsOpts {
 //   description?: boolean
@@ -40,20 +36,23 @@ async function listSecrets(
 ): Promise<ApiResponse<ListSecretsResData, ListSecretsError>> {
   const { project, environment, omit } = args
 
-  const query: ListSecretsQueryParams = {}
+  const queryObj: ListSecretsQueryParams = {}
 
-  if (omit) {
-    query['omit'] = omit.join(',')
+  if (omit && omit.length > 0) {
+    const omitStr = omit.filter((o) => o === 'value' || o === 'description').join(',')
+
+    if (omitStr.length > 0) {
+      queryObj['omit'] = omitStr
+    }
   }
 
-  if (args?.expandRefs) {
-    query['expand-refs'] = true
-  }
+  const query =
+    Object.keys(queryObj).length > 0 ? (queryObj as Record<string, string | boolean>) : undefined
 
   try {
     const secrets = await envClient.get<ListSecretsResData>({
       path: `/v1/projects/${project}/environments/${environment}/secrets`,
-      query: query as Record<string, string | boolean>,
+      query: query,
     })
 
     return responseSuccess(secrets)
