@@ -26,11 +26,11 @@ import { GetSecretOptions, ListSecretsOptions } from '../../types/secrets'
 
 function environmentsAPI(httpClient: HttpClient) {
   /**
-   * @summary Load environment
-   * @description Load environment and inject the secrets to the process
-   * @param key options print keys or key-values table with the secrets
-   * @returns null
-   * */
+   * Loads the environment and injects the secrets into the process.
+   *
+   * @param options - Options for loading the environment.
+   * @returns A promise that resolves to an object containing the loaded data, error (if any), and success status.
+   */
   async function load(options?: LoadEnvironmentOpts) {
     if (options?.enabled === false) {
       return { data: null, error: null, ok: null }
@@ -40,11 +40,12 @@ function environmentsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Load environment
-   * @description Load environment and inject the secrets to the process, throws an error if it fails
-   * @param key options print keys or key-values table with the secrets
-   * @returns null
-   * */
+   * Loads the environment and injects the secrets into the process, throwing an error if it fails.
+   *
+   * @param options - Options for loading the environment.
+   * @returns A promise that resolves to an object containing the loaded data, error (if any), and success status.
+   * @throws Error if the loading process fails.
+   */
   async function loadOrThrow(options?: LoadEnvironmentOpts) {
     if (options?.enabled === false) {
       return { data: null, error: null, ok: null }
@@ -58,10 +59,10 @@ function environmentsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Get environment
-   * @description Environment
-   * @returns Environment data
-   * */
+   * Retrieves environment data associated with the current API key.
+   *
+   * @returns A promise that resolves to the retrieved secret or an error response.
+   */
   async function get() {
     return await getEnvironment(httpClient)
   }
@@ -78,11 +79,12 @@ function environmentsAPI(httpClient: HttpClient) {
 
 function envSecretsAPI(httpClient: HttpClient) {
   /**
-   * @summary Retrieve single secret
-   * @description Secret
-   * @param key Secret key
-   * @returns Result object
-   * */
+   * Retrieves a single secret by its key.
+   *
+   * @param key - The key of the secret to retrieve.
+   * @param options - Additional options for retrieving the secret.
+   * @returns A promise that resolves to the retrieved secret or an error response.
+   */
   async function get(key: string, options?: GetSecretOptions) {
     if (!isValidSecretKey(key)) {
       const error = invalidSecretKeyError()
@@ -92,21 +94,21 @@ function envSecretsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Retrieve all secrets
-   * @description Secrets
-   * @param options Options
-   * @returns Array of secrets
-   * */
+   * Retrieves all secrets.
+   *
+   * @param options - Options for listing secrets.
+   * @returns A promise that resolves to an array of secrets or an error response.
+   */
   async function list(options?: ListSecretsOptions) {
     return await listSecrets(httpClient, options)
   }
 
   /**
-   * @summary Create secrets
-   * @description Secrets
-   * @param data Array of secrets
-   * @returns createdCount, duplicateKeys
-   * */
+   * Creates new secrets.
+   *
+   * @param data - An array of secrets to create.
+   * @returns A promise that resolves to an object containing the count of created secrets and any duplicate secrets (keys), or an error response.
+   */
   async function create(data: CreateSecretsData) {
     const validationError = validateCreateSecretsInput(data)
 
@@ -118,11 +120,11 @@ function envSecretsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Set secrets
-   * @description Secrets
-   * @param data Array of secrets
-   * @returns null
-   * */
+   * Sets secrets, overwriting existing ones if they exist.
+   *
+   * @param data - An array of secrets to set.
+   * @returns A promise that resolves to null on success or an error response.
+   */
   async function set(data: SetSecretsData) {
     const validationError = validateSetSecretsInput(data)
 
@@ -134,48 +136,12 @@ function envSecretsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Update secrets
-   * @description Secrets
-   * @param data Array of secrets to update
-   * @returns updatedCount, notFoundKeys
-   * */
+   * Updates existing secrets.
+   *
+   * @param data - An array of secrets to update.
+   * @returns A promise that resolves to an object containing the count of updated secrets and any secrets (keys) not found, or an error response.
+   */
   async function update(data: UpdateSecretsData) {
-    // if (data?.length === 0) {
-    //   const error: ApiError<'no_values_provided'> = { code: 'no_values_provided' }
-    //
-    //   return { data: null, error }
-    // }
-    //
-    // // validate
-    // for (const [index, { key, newKey, value, description }] of data.entries()) {
-    //   if (!isValidSecretKey(key)) {
-    //     const error: ApiError<'invalid_secret_key'> = { code: 'invalid_secret_key' }
-    //     return { data: null, error }
-    //   }
-    //
-    //   if (newKey !== undefined) {
-    //     if (!isValidSecretKey(newKey)) {
-    //       const error: ApiError<'invalid_new_key'> = { code: 'invalid_new_key' }
-    //       return { data: null, error }
-    //     }
-    //   }
-    //
-    //   if (newKey === undefined && value === undefined && description === undefined) {
-    //     const error: ApiError<'missing_properties'> = { code: 'missing_properties' }
-    //
-    //     return { data: null, error }
-    //   }
-    //
-    //   const duplicateNewKey = data.some(
-    //     (d, i) => i !== index && d.newKey === newKey && d?.newKey !== undefined
-    //   )
-    //
-    //   if (duplicateNewKey) {
-    //     const error: ApiError<'duplicate_new_keys'> = { code: 'duplicate_new_keys' }
-    //     return { data: null, error }
-    //   }
-    // }
-
     const validationError = validateUpdateSecretsInput(data)
 
     if (validationError) {
@@ -186,11 +152,11 @@ function envSecretsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Remove secrets
-   * @description Secrets
-   * @param keys Keys to remove
-   * @returns deletedCount, notFound
-   * */
+   * Removes specific secrets.
+   *
+   * @param keys - An array of secret keys to remove.
+   * @returns A promise that resolves to an object containing the count of deleted secrets and any secrets (keys) not found, or an error response.
+   */
   async function remove(keys: Uppercase<string>[]) {
     if (keys.length === 0) {
       const error = noDataProvidedError()
@@ -208,10 +174,10 @@ function envSecretsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Remove ll secrets
-   * @description Secrets
-   * @returns deletedCount
-   * */
+   * Removes all secrets from the environment.
+   *
+   * @returns A promise that resolves to an object containing the count of deleted secrets, or an error response.
+   */
   async function removeAll() {
     return await deleteAllEnvironmentSecrets(httpClient)
   }
