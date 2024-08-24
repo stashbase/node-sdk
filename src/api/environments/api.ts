@@ -2,10 +2,10 @@ import { loadEnvironment } from './handlers/load'
 import { getEnvironment } from './handlers/get'
 import { deleteEnvironmentSecrets } from './handlers/secrets/delete'
 import { HttpClient } from '../../http/client'
-import { ListSecretsOpts, listSecrets } from './handlers/secrets/list'
+import { listSecrets } from './handlers/secrets/list'
 import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
 import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
-import { getSecret, GetSecretOptions } from './handlers/secrets/get'
+import { getSecret } from './handlers/secrets/get'
 import {
   isValidSecretKey,
   validateCreateSecretsInput,
@@ -22,6 +22,7 @@ import {
 import { responseFailure } from '../../http/response'
 import { LoadEnvironmentOpts } from '../../types/environments'
 import { deleteAllEnvironmentSecrets } from './handlers/secrets/deleteAll'
+import { GetSecretOptions, ListSecretsOptions } from '../../types/secrets'
 
 function environmentsAPI(httpClient: HttpClient) {
   /**
@@ -96,7 +97,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param options Options
    * @returns Array of secrets
    * */
-  async function list(options?: ListSecretsOpts) {
+  async function list(options?: ListSecretsOptions) {
     return await listSecrets(httpClient, options)
   }
 
