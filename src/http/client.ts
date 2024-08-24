@@ -6,9 +6,11 @@ const baseURL: string = 'http://0.0.0.0:5000'
 
 type RequestWithData = { path: string; data?: { [key: string]: any } | any[] }
 
+type Query = Record<string, string | number | boolean>
+
 export type HttpClient = {
-  get: <T>(args: { path: string; query?: { [key: string]: string | number } }) => Promise<T>
-  del: <T>(args: { path: string; query?: { [key: string]: string | number } }) => Promise<T>
+  get: <T>(args: { path: string; query?: Query }) => Promise<T>
+  del: <T>(args: { path: string; query?: Query }) => Promise<T>
 
   put: <T>(args: RequestWithData) => Promise<T>
   post: <T>(args: RequestWithData) => Promise<T>
@@ -40,10 +42,7 @@ export function createHttpClient(args: {
     headers['x-api-key'] = workspaceApiKey
   }
 
-  async function get<T>(args: {
-    path: string
-    query?: { [key: string]: string | number }
-  }): Promise<T> {
+  async function get<T>(args: { path: string; query?: Query }): Promise<T> {
     // let url = `${baseURL}${basePath === '' ? '' : `/${basePath}`}${args.path ?? ''}`
     let url = `${baseURL}${args.path ?? ''}`
 
@@ -134,10 +133,7 @@ export function createHttpClient(args: {
     })
   }
 
-  async function del<T>(args: {
-    path: string
-    query?: { [key: string]: string | number }
-  }): Promise<T> {
+  async function del<T>(args: { path: string; query?: Query }): Promise<T> {
     let url = `${baseURL}${args.path ?? ''}`
 
     if (args.query) {
