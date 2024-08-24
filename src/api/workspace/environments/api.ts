@@ -39,11 +39,12 @@ export const checkValidProjectEnv = (projectName: string, environmentName: strin
 
 export function environmentsAPI(httpClient: HttpClient) {
   /**
-   * @summary Get environment
-   * @description Environment
-   * @param args project, environment;
-   * @returns Environment data
-   * */
+   * Retrieves an environment by its name within a project.
+   * @param args - The arguments for getting an environment.
+   * @param args.environment - The name or id of the environment to retrieve.
+   * @param args.project - The name or the id of the project containing the environment.
+   * @returns A promise that resolves to the environment data or an error response.
+   */
   async function get(args: GetEnvironmentArgs) {
     const { environment, project } = args
 
@@ -57,11 +58,14 @@ export function environmentsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Load environment
-   * @description Load environment (print name and type) and inject the secrets to the process, throws an error if it fails
-   * @param key options print keys or key-values table with the secrets
-   * @returns null
-   * */
+   * Loads an environment and injects its secrets into the process, throwing an error if it fails.
+   * @param args - The arguments for loading an environment.
+   * @param args.environment - The name or id of the environment to load.
+   * @param args.project - The name or id of the project containing the environment.
+   * @param args.enabled - Whether this methods is enabled (optional).
+   * @throws Error with the error code if loading fails.
+   * @returns A promise that resolves to null if successful.
+   */
   async function loadOrThrow(args: LoadEnvironmentArgs) {
     const { environment, project } = args
 
@@ -84,11 +88,13 @@ export function environmentsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Load environment
-   * @description Load environment (print name and type) and inject the secrets to the process
-   * @param key options print keys or key-values table with the secrets
-   * @returns null
-   * */
+   * Loads an environment and injects its secrets into the process.
+   * @param args - The arguments for loading an environment.
+   * @param args.environment - The name or id of the environment to load.
+   * @param args.project - The name of the project containing the environment.
+   * @param args.enabled - Whether the loading is enabled (optional).
+   * @returns A promise that resolves to the load result or an error response.
+   */
   async function load(args: LoadEnvironmentArgs) {
     const { environment, project } = args
 
@@ -106,11 +112,11 @@ export function environmentsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary List environments
-   * @description Environment
-   * @param args project;
-   * @returns Environment array
-   * */
+   * Lists all environments within a project.
+   * @param args - The arguments for listing environments.
+   * @param args.project - The name or id of the project to list environments from.
+   * @returns A promise that resolves to an array of environments or an error response.
+   */
   async function list(args: ListEnvironmentArgs) {
     if (!isValidProjectIdentifier(args.project)) {
       const error = invalidProjectIdentifierError
@@ -121,19 +127,14 @@ export function environmentsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Create environment
-   * @description Environment
-   * @param args create argumens;
-   * @returns null
-   * */
+   * Creates a new environment within a project.
+   * @param args - The arguments for creating an environment.
+   * @param args.project - The name or id of the project to create the environment in.
+   * @param args.name - The name of the new environment.
+   * @returns A promise that resolves to the creation result or an error response.
+   */
   async function create(args: CreateEnvironmentArgs) {
     const { project, name } = args
-
-    // if (!isValidProjectName(project)) {
-    //   const error: ApiError<'invalid_project_name'> = { code: 'invalid_project_name' }
-    //
-    //   return { data: null, error }
-    // }
 
     const projectIdentifierError = isValidProjectIdentifier(project)
 
@@ -158,11 +159,12 @@ export function environmentsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Create environment
-   * @description Environment
-   * @param args create argumens;
-   * @returns null
-   * */
+   * Removes an environment from a project.
+   * @param args - The arguments for removing an environment.
+   * @param args.environment - The name or id of the environment to remove.
+   * @param args.project - The name or id of the project containing the environment.
+   * @returns A promise that resolves to the removal result or an error response.
+   */
   async function remove(args: DeleteEnvironmentArgs) {
     const { environment, project } = args
 
@@ -176,11 +178,13 @@ export function environmentsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Rename environment
-   * @description Environment
-   * @param args rename argumens;
-   * @returns null
-   * */
+   * Renames an environment within a project.
+   * @param args - The arguments for renaming an environment.
+   * @param args.project - The name or id of the project containing the environment.
+   * @param args.name - The current name or id of the environment.
+   * @param args.newName - The new name for the environment.
+   * @returns A promise that resolves to the rename result or an error response.
+   */
   async function rename(args: RenameEnvironmentArgs) {
     const { project, newName, name } = args
 
@@ -213,11 +217,13 @@ export function environmentsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Duplicate environment
-   * @description Environment
-   * @param args duplicate argumens;
-   * @returns null
-   * */
+   * Duplicates an environment within a project.
+   * @param args - The arguments for duplicating an environment.
+   * @param args.project - The name or id of the project containing the environment.
+   * @param args.name - The name or id of the environment to duplicate.
+   * @param args.duplicateName - The name for the new duplicate environment.
+   * @returns A promise that resolves to the duplication result or an error response.
+   */
   async function duplicate(args: DuplicateEnvironmentArgs) {
     const { project, duplicateName, name } = args
 
@@ -248,11 +254,12 @@ export function environmentsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Change environment typ
-   * @description Environment
-   * @param args updateType argumens;
-   * @returns null
-   * */
+   * Updates the type of an environment.
+   * @param args - The arguments for updating the environment type.
+   * @param args.project - The name or id of the project containing the environment.
+   * @param args.name - The name or id of the environment to update.
+   * @returns A promise that resolves to the update result or an error response.
+   */
   async function updateType(args: UpdateEnvironmentTypeArgs) {
     const { project, name } = args
 
@@ -266,11 +273,12 @@ export function environmentsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Lock environment
-   * @description Environment
-   * @param args lock argumens;
-   * @returns null
-   * */
+   * Locks an environment to prevent modifications.
+   * @param args - The arguments for locking an environment.
+   * @param args.project - The name or id of the project containing the environment.
+   * @param args.name - The name or id of the environment to lock.
+   * @returns A promise that resolves to the lock result or an error response.
+   */
   async function lock(args: LockEnvironmentArgs) {
     const { project, name } = args
 
@@ -284,11 +292,12 @@ export function environmentsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Unlock environment
-   * @description Environment
-   * @param args lock argumens;
-   * @returns null
-   * */
+   * Unlocks a previously locked environment.
+   * @param args - The arguments for unlocking an environment.
+   * @param args.project - The name or id of the project containing the environment.
+   * @param args.name - The name or id of the environment to unlock.
+   * @returns A promise that resolves to the unlock result or an error response.
+   */
   async function unlock(args: LockEnvironmentArgs) {
     const { project, name } = args
 

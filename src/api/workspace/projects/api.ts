@@ -17,11 +17,10 @@ import { ListProjectsOpts, listProjects } from './handlers/list'
 
 export function projectsAPI(httpClient: HttpClient) {
   /**
-   * @summary Retrieve single project
-   * @description Project
-   * @param projectNameOrId Project name or id
-   * @returns Project object
-   * */
+   * Retrieves a single project by its name or id.
+   * @param projectNameOrId - The name or id of the project to retrieve.
+   * @returns A promise that resolves to the project object or an error response.
+   */
   async function get(projectNameOrId: string) {
     if (!isValidProjectIdentifier(projectNameOrId)) {
       const error = invalidProjectIdentifierError
@@ -32,21 +31,19 @@ export function projectsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Retrieve single project
-   * @description Project
-   * @param projectName Project name
-   * @returns Project object
-   * */
+   * Lists all projects, optionally filtered by the provided options.
+   * @param options - Optional parameters to filter or paginate the list of projects.
+   * @returns A promise that resolves to an array of project objects or an error response.
+   */
   async function list(options?: ListProjectsOpts) {
     return await listProjects(httpClient, options)
   }
 
   /**
-   * @summary Create new project
-   * @description Project
-   * @param data Project input
-   * @returns null
-   * */
+   * Creates a new project with the provided data.
+   * @param data - The data for creating a new project, including the project name.
+   * @returns A promise that resolves to the created project object or an error response.
+   */
   async function create(data: CreateProjectData) {
     const { name } = data
     const valid = isValidProjectName(name)
@@ -67,11 +64,10 @@ export function projectsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Remove project
-   * @description Project
-   * @param key Project name or id
-   * @returns null
-   * */
+   * Removes a project by its name or id.
+   * @param projectNameOrId - The name or id of the project to remove.
+   * @returns A promise that resolves to null on successful deletion or an error response.
+   */
   async function remove(projectNameOrId: string) {
     const invaliIdentifier = !isValidProjectIdentifier(projectNameOrId)
 
