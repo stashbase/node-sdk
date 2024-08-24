@@ -29,7 +29,7 @@ function environmentsAPI(httpClient: HttpClient) {
    * Loads the environment and injects the secrets into the process.
    *
    * @param options - Options for loading the environment.
-   * @returns A promise that resolves to an object containing the loaded data, error (if any), and success status.
+   * @returns A promise that resolves to a null, error (if any), and success status.
    */
   async function load(options?: LoadEnvironmentOpts) {
     if (options?.enabled === false) {
