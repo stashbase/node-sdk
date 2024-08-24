@@ -20,13 +20,13 @@ export interface ListSecretsArgs {
    * */
   environment: string
   /**
-   * return secret description
-   * */
-  description?: boolean
-  /**
    * expand all refered secrets to their values
    * */
   expandRefs?: boolean
+  /**
+   * omit selected secret properties
+   * */
+  omit?: Array<'value' | 'description'>
 }
 
 // export interface ListSecretsOpts {
@@ -38,13 +38,12 @@ async function listSecrets(
   args: ListSecretsArgs
   // options?: ListSecretsOpts
 ): Promise<ApiResponse<ListSecretsResData, ListSecretsError>> {
-  const { project, environment } = args
-  const returnDescription = args?.description
+  const { project, environment, omit } = args
 
   const query: ListSecretsQueryParams = {}
 
-  if (returnDescription === false) {
-    query['omit'] = 'description'
+  if (omit) {
+    query['omit'] = omit.join(',')
   }
 
   if (args?.expandRefs) {
