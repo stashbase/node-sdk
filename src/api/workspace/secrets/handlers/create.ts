@@ -1,18 +1,9 @@
 import { HttpClient } from '../../../../http/client'
-import { SecretKey } from '../../../../types/secretKey'
 import { createApiErrorFromResponse } from '../../../../errors'
+import { CreateSecretsResData } from '../../../../types/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 import { CreateSecretsError as SharedCreateSecretsError } from '../../../../types/errors/secrets'
-
-interface CreateSecretsResponseData {
-  createdCount: number
-  duplicateSecrets: Array<SecretKey>
-}
-
-// type CreateSecretsError = ApiError<
-//   'no_values_provided' | 'project_not_found' | 'environment_not_found' | 'duplicate_keys'
-// >
 
 type CreateSecretsError = SharedCreateSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
 
@@ -31,11 +22,11 @@ export type CreateSecretData = {
 async function createSecrets(
   envClient: HttpClient,
   args: CreateSecretsArgs
-): Promise<ApiResponse<CreateSecretsResponseData, CreateSecretsError>> {
+): Promise<ApiResponse<CreateSecretsResData, CreateSecretsError>> {
   try {
     const { project, environment, data } = args
 
-    const resData = await envClient.post<CreateSecretsResponseData>({
+    const resData = await envClient.post<CreateSecretsResData>({
       path: `/v1/projects/${project}/environments/${environment}/secrets`,
       data,
     })

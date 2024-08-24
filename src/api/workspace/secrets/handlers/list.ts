@@ -1,5 +1,5 @@
 import { HttpClient } from '../../../../http/client'
-import { SecretKey } from '../../../../types/secretKey'
+import { ListSecretsResData } from '../../../../types/secrets'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import {
@@ -8,7 +8,6 @@ import {
   GenericApiError,
 } from '../../../../types/errors'
 
-type SecretsData = Array<{ key: SecretKey; value: string; description: string | null }>
 type ListSecretsError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
 export interface ListSecretsArgs {
@@ -38,7 +37,7 @@ async function listSecrets(
   envClient: HttpClient,
   args: ListSecretsArgs
   // options?: ListSecretsOpts
-): Promise<ApiResponse<SecretsData, ListSecretsError>> {
+): Promise<ApiResponse<ListSecretsResData, ListSecretsError>> {
   const { project, environment } = args
   const returnDescription = args?.description
 
@@ -53,7 +52,7 @@ async function listSecrets(
   }
 
   try {
-    const secrets = await envClient.get<SecretsData>({
+    const secrets = await envClient.get<ListSecretsResData>({
       path: `/v1/projects/${project}/environments/${environment}/secrets`,
       query,
     })
