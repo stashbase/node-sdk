@@ -32,3 +32,16 @@ export interface UpdateSecretsResData {
   updatedCount: number
   notFoundSecrets: Array<SecretKey>
 }
+
+export interface ListSecretsQueryParams {
+  'expand-refs'?: true
+  // comma separated list of properties to return (id, name, type)
+  'with-environment'?: string
+  // omit?: 'description' | 'value' | 'description,value' | 'value,description'
+  omit?: string
+  only?: string
+  exclude?: string
+
+  // only?: Array<SecretKey>
+  // exclude?: Array<SecretKey>
+}
