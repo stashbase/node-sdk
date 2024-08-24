@@ -5,7 +5,7 @@ import { HttpClient } from '../../http/client'
 import { ListSecretsOpts, listSecrets } from './handlers/secrets/list'
 import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
 import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
-import { getSecret } from './handlers/secrets/get'
+import { getSecret, GetSecretOptions } from './handlers/secrets/get'
 import {
   isValidSecretKey,
   validateCreateSecretsInput,
@@ -82,12 +82,12 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param key Secret key
    * @returns Result object
    * */
-  async function get(key: string, expandRefs = false) {
+  async function get(key: string, options?: GetSecretOptions) {
     if (!isValidSecretKey(key)) {
       const error = invalidSecretKeyError()
       return responseFailure(error)
     }
-    return getSecret(httpClient, key, expandRefs)
+    return getSecret(httpClient, key, options)
   }
 
   /**
