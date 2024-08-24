@@ -10,6 +10,12 @@ export type ListProjectsOpts = {
   page?: number
   /** The number of items per page (min 2, max 30, default 10). */
   limit?: number
+  /** The field to sort by. */
+  sortBy?: 'name' | 'createdAt' | 'environmentCount'
+  /** Whether to sort in descending order. */
+  sortDesc?: boolean
+  /** A search query (min 2, max 40 characters). */
+  search?: string
 }
 
 type ListProjectsResponse = {
@@ -23,10 +29,32 @@ export async function listProjects(
   client: HttpClient,
   options?: ListProjectsOpts
 ): Promise<ApiResponse<ListProjectsResponse, ListProjectsError>> {
+  const query: Record<string, string | number | boolean> = {}
+
+  if (options?.page) {
+    query.page = options.page
+  }
+
+  if (options?.limit) {
+    query.limit = options.limit
+  }
+
+  if (options?.search) {
+    query.search = options.search
+  }
+
+  if (options?.sortBy) {
+    query['sort-by'] = options.sortBy
+  }
+
+  if (options?.sortDesc) {
+    query.descending = true
+  }
+
   try {
     const data = await client.get<ListProjectsResponse>({
       path: `/v1/projects`,
-      query: options,
+      query: Object.keys(query).length > 0 ? query : undefined,
     })
 
     return responseSuccess(data)
