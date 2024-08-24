@@ -2,18 +2,17 @@ import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ListSecretsError } from '../../../../types/errors/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ListSecretsResData } from '../../../../types/secrets'
 
 export interface ListSecretsOpts {
   description?: boolean
   expandRefs?: boolean
 }
 
-type SecretsData = Array<{ key: Uppercase<string>; value: string; description?: string | null }>
-
 async function listSecrets(
   envClient: HttpClient,
   options?: ListSecretsOpts
-): Promise<ApiResponse<SecretsData, ListSecretsError>> {
+): Promise<ApiResponse<ListSecretsResData, ListSecretsError>> {
   const returnDescription = options?.description
   const expandRefs = options?.expandRefs
 
@@ -28,7 +27,7 @@ async function listSecrets(
   }
 
   try {
-    const secrets = await envClient.get<SecretsData>({
+    const secrets = await envClient.get<ListSecretsResData>({
       path: '/v1/secrets',
       query,
     })
