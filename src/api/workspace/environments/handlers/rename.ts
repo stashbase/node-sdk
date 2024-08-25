@@ -14,7 +14,7 @@ import {
 export interface RenameEnvironmentArgs {
   project: string
   //
-  name: string
+  environment: string
   newName: string
 }
 
@@ -29,11 +29,11 @@ async function renameEnvironment(
   client: HttpClient,
   args: RenameEnvironmentArgs
 ): Promise<ApiResponse<null, RenameEnvironmentError>> {
-  const { project, name, newName } = args
+  const { project, environment, newName } = args
 
   try {
     const data = await client.patch<null>({
-      path: `/v1/projects/${project}/environments/${name}`,
+      path: `/v1/projects/${project}/environments/${environment}`,
       data: { name: newName },
     })
 
