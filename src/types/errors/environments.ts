@@ -46,3 +46,26 @@ export type InvalidNewEnvironmentNameError = ValidationApiError<
 >
 export type NewEnvironmentNameEqualsOriginal =
   ValidationApiError<'new_environment_name_equals_original'>
+
+export type InvalidEnvironmentSortByError = ValidationApiError<
+  'invalid_sort_by',
+  {
+    allowedValues: Array<string>
+  }
+>
+
+export type InvalidEnvironmentOrderError = ValidationApiError<
+  'invalid_order',
+  {
+    allowedValues: Array<string>
+  }
+>
+
+export type InvalidEnvironmentSearchError = ValidationApiError<
+  'invalid_search',
+  {
+    validSearchExamples: string[]
+    invalidSearchExamples: string[]
+  }
+>
+
