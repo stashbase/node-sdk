@@ -3,6 +3,9 @@ import { ApiErrorType, ConnectionFailedError } from '../types/errors'
 import {
   EnvironmentNameUsesIdFormatError,
   InvalidEnvironmentIdentifierError,
+  InvalidEnvironmentOrderError,
+  InvalidEnvironmentSearchError,
+  InvalidEnvironmentSortByError,
   InvalidNewEnvironmentNameError,
   NewEnvironmentNameEqualsOriginal,
 } from '../types/errors/environments'
@@ -126,7 +129,6 @@ export const invalidNewProjectNameError: InvalidNewProjectNameError = createApiE
   },
 })
 
-//
 export const invalidProjectPageError: InvalidProjectPageNumberError = createApiError({
   code: 'validation.invalid_page',
   message: 'Page number must a number between 1 and 1000.',
@@ -178,3 +180,30 @@ export const invalidProjectSearchError: InvalidProjectSearchError = createApiErr
   //
   // },
 })
+
+export const invalidEnvironmentSortByError: InvalidEnvironmentSortByError = createApiError({
+  code: 'validation.invalid_sort_by',
+  message: 'Sort by field must be one of: name or createdAt or secretCount. Defaulting to name.',
+  details: {
+    allowedValues: ['name', 'createdAt', 'secretCount'],
+  },
+})
+
+export const invalidEnvironmentOrderError: InvalidEnvironmentOrderError = createApiError({
+  code: 'validation.invalid_order',
+  message: 'Order must be either "asc" or "desc".',
+  details: {
+    allowedValues: ['asc', 'desc'],
+  },
+})
+
+export const invalidEnvironmentSearchError: InvalidEnvironmentSearchError = createApiError({
+  code: 'validation.invalid_search',
+  message:
+    'Search value must be alphanumeric and may include underscores (_) and a single hyphen (-) as a separator, with a minimum of 2 and a maximum of 40 characters.',
+  details: {
+    validSearchExamples: ['staging', 'dev_copy', 'api-prod'],
+    invalidSearchExamples: ['dev-api-1', '#staging', 'prod environment'],
+  },
+})
+
