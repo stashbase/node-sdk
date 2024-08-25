@@ -2,7 +2,7 @@ import { test } from 'vitest'
 import { createEnvEase } from '../../../src'
 
 test('Delete secrets', async () => {
-  const envEase = createEnvEase('xPKDa2Xq0zWmfES1nLDoG45qZtR1z2qL')
+  const envEase = createEnvEase(process.env.WORKSPACE_API_KEY as string)
 
   const { data, error } = await envEase.secrets.remove({
     project: 'pr_iBgCx5tegfVaKzjywTg2ck',

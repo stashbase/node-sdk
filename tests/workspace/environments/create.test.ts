@@ -3,7 +3,7 @@ import { createEnvEase } from '../../../src'
 
 describe('Create environment', () => {
   test('', async () => {
-    const envEase = createEnvEase('sbc_jeY61Qt6lqHrS3KRvXjSYr5GkZlMaVOGocmNorUdjqBIrlnmFFjzkIcU')
+    const envEase = createEnvEase(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
     const { data, error } = await envEase.environments.create({
       project: 'pr_nVpZPsL5nQTUP9yXU2GKYJ',
