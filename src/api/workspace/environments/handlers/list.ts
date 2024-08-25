@@ -15,8 +15,8 @@ export interface ListEnvironmentArgs {
   project: string
   /** The field to sort by. */
   sortBy?: 'name' | 'locked' | 'createdAt' | 'secretCount'
-  /** Whether to sort in descending order. */
-  sortDesc?: boolean
+  /** Whether to sort in ascending or descending order, default: 'asc'. */
+  order?: 'asc' | 'desc'
   /** A search query (min 2, max 40 characters). */
   search?: string
 }
@@ -35,8 +35,8 @@ async function listEnvironments(
     query['sort-by'] = args.sortBy
   }
 
-  if (args.sortDesc) {
-    query.descending = true
+  if (args.order) {
+    query.order = true
   }
 
   if (args.search) {
