@@ -3,6 +3,9 @@ import {
   createApiError,
   environmentNameUsesIdFormatError,
   invalidEnvironmentIdentifierError,
+  invalidEnvironmentOrderError,
+  invalidEnvironmentSearchError,
+  invalidEnvironmentSortByError,
   invalidNewEnvironmentNameError,
   invalidNewProjectNameError,
   invalidProjectIdentifierError,
@@ -121,6 +124,31 @@ export function environmentsAPI(httpClient: HttpClient) {
     if (!isValidProjectIdentifier(args.project)) {
       const error = invalidProjectIdentifierError
       return responseFailure(error)
+    }
+
+    if (args.sortBy) {
+      const sortBy = args.sortBy
+
+      if (sortBy !== 'name' && sortBy !== 'createdAt' && sortBy !== 'secretCount') {
+        const error = invalidEnvironmentSortByError
+        return responseFailure(error)
+      }
+    }
+
+    if (args.order) {
+      const order = args.order
+
+      if (order !== 'asc' && order !== 'desc') {
+        const error = invalidEnvironmentOrderError
+        return responseFailure(error)
+      }
+    }
+
+    if (args.search) {
+      if (!isValidEnvironmentName(args.search)) {
+        const error = invalidEnvironmentSearchError
+        return responseFailure(error)
+      }
     }
 
     return await listEnvironments(httpClient, args)
