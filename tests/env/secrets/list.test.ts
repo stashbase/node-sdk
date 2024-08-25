@@ -2,7 +2,7 @@ import { test } from 'vitest'
 import { createEnvApi } from '../../../src'
 
 test('List environment secrets', async () => {
-  const envApi = createEnvApi('-YSbVSq5kzmc1EgzAO9SThUXFQLjb6R1')
+  const envApi = createEnvApi(process.env.VITE_TEST_ENV_API_KEY as string)
 
   const { data, error } = await envApi.secrets.list({ description: true })
   if (error) {

@@ -2,29 +2,59 @@ import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { GenericApiError } from '../../../../types/errors'
+import { PaginationMetadata } from '../../../../types/pagination'
+import { Project } from '../../../../types/projects'
 
-// TODO:
 export type ListProjectsOpts = {
+  /** The current page number (min 1, max 1000, default 1). */
   page?: number
-  perPage?: number
+  /** The number of items per page (min 2, max 30, default 10). */
+  limit?: number
+  /** The field to sort by. */
+  sortBy?: 'name' | 'createdAt' | 'environmentCount'
+  /** Whether to sort in ascending or descending order, default: 'asc'. */
+  order?: 'asc' | 'desc'
+  /** A search query (min 2, max 40 characters). */
+  search?: string
 }
 
-type Project = {
-  createdAt: string
-  name: string
-  description: string | null
+type ListProjectsResponse = {
+  data: Array<Project>
+  pagination: PaginationMetadata
 }
 
 type ListProjectsError = GenericApiError
 
 export async function listProjects(
   client: HttpClient,
-  // TODO: make use of this options
   options?: ListProjectsOpts
-): Promise<ApiResponse<Array<Project>, ListProjectsError>> {
+): Promise<ApiResponse<ListProjectsResponse, ListProjectsError>> {
+  const query: Record<string, string | number | boolean> = {}
+
+  if (options?.page) {
+    query.page = options.page
+  }
+
+  if (options?.limit) {
+    query.limit = options.limit
+  }
+
+  if (options?.search) {
+    query.search = options.search
+  }
+
+  if (options?.sortBy) {
+    query['sort-by'] = options.sortBy
+  }
+
+  if (options?.order) {
+    query.order = options.order
+  }
+
   try {
-    const data = await client.get<Array<Project>>({
+    const data = await client.get<ListProjectsResponse>({
       path: `/v1/projects`,
+      query: Object.keys(query).length > 0 ? query : undefined,
     })
 
     return responseSuccess(data)

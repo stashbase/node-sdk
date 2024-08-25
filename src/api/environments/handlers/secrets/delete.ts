@@ -1,20 +1,15 @@
 import { HttpClient } from '../../../../http/client'
-import { SecretKey } from '../../../../types/secretKey'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { DeleteSecretsError } from '../../../../types/errors/secrets'
+import { DeleteSecretsResData } from '../../../../types/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-
-interface DeleteSecretsResponseData {
-  deletedCount: number
-  notFoundSecrets?: Array<SecretKey>
-}
 
 async function deleteEnvironmentSecrets(
   client: HttpClient,
   keys: Uppercase<string>[]
-): Promise<ApiResponse<DeleteSecretsResponseData, DeleteSecretsError>> {
+): Promise<ApiResponse<DeleteSecretsResData, DeleteSecretsError>> {
   try {
-    const data = await client.post<DeleteSecretsResponseData>({
+    const data = await client.post<DeleteSecretsResData>({
       path: '/v1/secrets/delete',
       data: keys,
     })

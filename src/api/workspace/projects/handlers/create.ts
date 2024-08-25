@@ -7,13 +7,16 @@ import {
 } from '../../../../types/errors/projects'
 import { GenericApiError } from '../../../../types/errors'
 
-type CreateProjectResponseData = null
+interface CreateProjectResponseData {
+  id: string
+  name: string
+}
 
 type CreateSecretsError = GenericApiError | ProjectAlreadyExistsError | ProjectLimitReachedError
 
 export type CreateProjectData = {
   name: string
-  description?: string
+  description?: string | null
 }
 
 export async function createProject(
@@ -21,12 +24,12 @@ export async function createProject(
   data: CreateProjectData
 ): Promise<ApiResponse<CreateProjectResponseData, CreateSecretsError>> {
   try {
-    await envClient.post<CreateProjectResponseData>({
+    const resData = await envClient.post<CreateProjectResponseData>({
       path: '/v1/projects',
       data,
     })
 
-    return responseSuccess(null)
+    return responseSuccess(resData)
   } catch (error) {
     const apiError = createApiErrorFromResponse<CreateSecretsError>(error)
     return responseFailure(apiError)

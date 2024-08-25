@@ -2,7 +2,7 @@ import { test } from 'vitest'
 import { createEnvApi } from '../../../src'
 
 test('Set secrets (add new or update existing)', async () => {
-  const envApi = createEnvApi('mdkzKx0HXUCkwh2ERZzgbeOBRXOcPxFi')
+  const envApi = createEnvApi(process.env.VITE_TEST_ENV_API_KEY as string)
 
   const { error } = await envApi.secrets.set([
     {

@@ -6,19 +6,11 @@ import {
   ProjectNotFoundError,
   GenericApiError,
 } from '../../../../types/errors'
+import { Environment } from '../../../../types/environments'
 
 export interface GetEnvironmentArgs {
   project: string
   environment: string
-}
-
-interface Environment {
-  projectName: string
-  type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
-  locked: boolean
-  name: string
-  createdAt: string
-  description: string | null
 }
 
 type GetEnvironmentError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError

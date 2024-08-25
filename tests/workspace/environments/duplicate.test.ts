@@ -3,11 +3,11 @@ import { createEnvEase } from '../../../src'
 
 describe('Duplicate environment', () => {
   test('', async () => {
-    const onestash = createEnvEase('evw_wMOnvAH3VHltWG43tS8g4u7FK9yZQCgu4QMLhO41jSj8IcQ6bxf5w6qr')
+    const stashbase = createEnvEase(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { error } = await onestash.environments.duplicate({
+    const { error } = await stashbase.environments.duplicate({
       project: 'hero-hub',
-      name: 'aws',
+      environment: 'aws',
       duplicateName: 'aws_copy',
     })
 

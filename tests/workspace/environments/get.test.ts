@@ -3,7 +3,7 @@ import { createEnvEase } from '../../../src'
 
 describe('Get environment', () => {
   test('OK', async () => {
-    const envEase = createEnvEase('')
+    const envEase = createEnvEase(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
     const { data, error } = await envEase.environments.get({
       project: 'hero-hub',
