@@ -24,13 +24,13 @@ async function loadEnvironment(
   }
 
   if (options?.expandRefs) {
-    query['expand-refs'] = 'true'
+    query['expand-refs'] = true
   }
 
   try {
     const data = await client.get<LoadEnvironmentResponse>({
       path: '/v1/secrets',
-      query,
+      query: query as Record<string, string | boolean>,
     })
 
     const { environment, secrets } = data
