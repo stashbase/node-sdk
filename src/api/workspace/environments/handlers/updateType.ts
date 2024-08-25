@@ -11,7 +11,7 @@ import {
 export interface UpdateEnvironmentTypeArgs {
   project: string
   //
-  name: string
+  environment: string
   type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
 }
 
@@ -25,11 +25,11 @@ async function updateEnvironmentType(
   client: HttpClient,
   args: UpdateEnvironmentTypeArgs
 ): Promise<ApiResponse<null, UpdateEnvironmentTypeError>> {
-  const { project, name, type } = args
+  const { project, environment, type } = args
 
   try {
     const data = await client.patch<null>({
-      path: `/v1/projects/${project}/environments/${name}`,
+      path: `/v1/projects/${project}/environments/${environment}`,
       data: { type },
     })
 
