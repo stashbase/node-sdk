@@ -14,7 +14,7 @@ import {
 export type DuplicateEnvironmentArgs = {
   project: string
   //
-  name: string
+  environment: string
   duplicateName: string
 }
 
@@ -34,11 +34,11 @@ async function duplicateEnvironment(
   client: HttpClient,
   args: DuplicateEnvironmentArgs
 ): Promise<ApiResponse<DuplicateEnvironmentResData, DulicateEnvironmentError>> {
-  const { project, name, duplicateName } = args
+  const { project, environment, duplicateName } = args
 
   try {
     const data = await client.post<DuplicateEnvironmentResData>({
-      path: `/v1/projects/${project}/environments/${name}/duplicate`,
+      path: `/v1/projects/${project}/environments/${environment}/duplicate`,
       data: { name: duplicateName },
     })
 
