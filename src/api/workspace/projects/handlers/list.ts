@@ -12,8 +12,8 @@ export type ListProjectsOpts = {
   limit?: number
   /** The field to sort by. */
   sortBy?: 'name' | 'createdAt' | 'environmentCount'
-  /** Whether to sort in descending order. */
-  sortDesc?: boolean
+  /** Whether to sort in ascending or descending order, default: 'asc'. */
+  order?: 'asc' | 'desc'
   /** A search query (min 2, max 40 characters). */
   search?: string
 }
@@ -47,8 +47,8 @@ export async function listProjects(
     query['sort-by'] = options.sortBy
   }
 
-  if (options?.sortDesc) {
-    query.descending = true
+  if (options?.order) {
+    query.order = options.order
   }
 
   try {
