@@ -15,13 +15,9 @@ import {
 type ListSecretsError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
 export type ListSecretsArgs = {
-  /**
-   * project name
-   * */
+  /* Project name or id */
   project: string
-  /**
-   * environment name
-   * */
+  /* Environment name or id */
   environment: string
 } & ListSecretsOptions
 
