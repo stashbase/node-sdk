@@ -16,7 +16,7 @@ type CreateSecretsError = GenericApiError | ProjectAlreadyExistsError | ProjectL
 
 export type CreateProjectData = {
   name: string
-  description?: string
+  description?: string | null
 }
 
 export async function createProject(
