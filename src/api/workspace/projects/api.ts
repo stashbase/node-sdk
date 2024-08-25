@@ -1,6 +1,11 @@
 import {
   invalidNewProjectNameError,
   invalidProjectIdentifierError,
+  invalidProjectLimitError,
+  invalidProjectOrderError,
+  invalidProjectPageError,
+  invalidProjectSearchError,
+  invalidProjectSortByError,
   projectNameUsesIdFormat,
 } from '../../../errors'
 import { HttpClient } from '../../../http/client'
@@ -36,6 +41,53 @@ export function projectsAPI(httpClient: HttpClient) {
    * @returns A promise that resolves to an array of project objects or an error response.
    */
   async function list(options?: ListProjectsOpts) {
+    if (options) {
+      if (options.page) {
+        const page = options.page
+
+        if (page <= 0 || page > 1000 || typeof page !== 'number') {
+          const error = invalidProjectPageError
+          return responseFailure(error)
+        }
+      }
+
+      if (options.limit) {
+        const limit = options.limit
+
+        if (limit < 2 || limit > 1000 || typeof limit !== 'number') {
+          const error = invalidProjectLimitError
+          return responseFailure(error)
+        }
+      }
+
+      if (options.sortBy) {
+        const sortBy = options.sortBy
+
+        if (sortBy !== 'name' && sortBy !== 'createdAt' && sortBy !== 'environmentCount') {
+          const error = invalidProjectSortByError
+          return responseFailure(error)
+        }
+      }
+
+      if (options.order) {
+        const order = options.order
+
+        if (order !== 'asc' && order !== 'desc') {
+          const error = invalidProjectOrderError
+          return responseFailure(error)
+        }
+      }
+
+      if (options.search) {
+        const search = options.search
+
+        if (!isValidProjectName(search)) {
+          const error = invalidProjectSearchError
+          return responseFailure(error)
+        }
+      }
+    }
+
     return await listProjects(httpClient, options)
   }
 
