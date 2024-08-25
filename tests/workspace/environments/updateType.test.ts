@@ -5,9 +5,9 @@ describe('Update  environment type', () => {
   test('', async () => {
     const stashbase = createEnvEase(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await envEase.environments.updateType({
+    const { data, error } = await stashbase.environments.updateType({
       project: 'hero-hub',
-      name: 'dev-sdk',
+      environment: 'dev-sdk',
       type: 'STAGING',
     })
 
