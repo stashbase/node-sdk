@@ -11,7 +11,7 @@ export interface CreateEnvironmentArgs {
   project: string
   //
   name: string
-  description?: string
+  description?: string | null
   type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
 }
 
