@@ -109,7 +109,7 @@ export const invalidNewEnvironmentNameError: InvalidNewEnvironmentNameError = cr
     'Environment name must be alphanumeric and may include underscores (_) and a single hyphen (-) as a separator, with a minimum of 2 and a maximum of 40 characters.',
   details: {
     validNameExamples: ['staging', 'dev_copy', 'api-prod'],
-    invalidNameExamples: ['#dev', 'api-dev-1', 'service--ops'],
+    invalidNameExamples: ['#dev', 'api-dev-1', 'service--dev'],
   },
 })
 
@@ -203,7 +203,7 @@ export const invalidEnvironmentSearchError: InvalidEnvironmentSearchError = crea
     'Search value must be alphanumeric and may include underscores (_) and a single hyphen (-) as a separator, with a minimum of 2 and a maximum of 40 characters.',
   details: {
     validSearchExamples: ['staging', 'dev_copy', 'api-prod'],
-    invalidSearchExamples: ['dev-api-1', '#staging', 'prod environment'],
+    invalidSearchExamples: ['#dev', 'api-dev-1', 'service--dev'],
   },
 })
 
