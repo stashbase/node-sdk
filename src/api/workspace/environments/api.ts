@@ -214,9 +214,9 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @returns A promise that resolves to the rename result or an error response.
    */
   async function rename(args: RenameEnvironmentArgs) {
-    const { project, newName, name } = args
+    const { project, newName, environment } = args
 
-    const identifiersError = checkValidProjectEnv(project, name)
+    const identifiersError = checkValidProjectEnv(project, environment)
 
     if (identifiersError) {
       return responseFailure(identifiersError)
@@ -234,9 +234,9 @@ export function environmentsAPI(httpClient: HttpClient) {
       return responseFailure(error)
     }
 
-    const nameHasIdFormat = isResourceIdFormat('environment', name)
+    const environmentHasIdFormat = isResourceIdFormat('environment', environment)
 
-    if (!nameHasIdFormat && newName === name) {
+    if (!environmentHasIdFormat && newName === environment) {
       const error = newEnvironmentNameEqualsOriginal
       return responseFailure(error)
     }
@@ -253,9 +253,9 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @returns A promise that resolves to the duplication result or an error response.
    */
   async function duplicate(args: DuplicateEnvironmentArgs) {
-    const { project, duplicateName, name } = args
+    const { project, duplicateName, environment } = args
 
-    const identifiersError = checkValidProjectEnv(project, name)
+    const identifiersError = checkValidProjectEnv(project, environment)
 
     if (identifiersError) {
       return responseFailure(identifiersError)
@@ -266,14 +266,16 @@ export function environmentsAPI(httpClient: HttpClient) {
       return responseFailure(error)
     }
 
-    const nameHasIdFormat = isResourceIdFormat('environment', name)
+    const duplicateNameHasIdFormat = isResourceIdFormat('environment', duplicateName)
 
-    if (nameHasIdFormat) {
+    if (duplicateNameHasIdFormat) {
       const error = environmentNameUsesIdFormatError
       return responseFailure(error)
     }
 
-    if (name === duplicateName) {
+    const environmentHasIdFormat = isResourceIdFormat('environment', environment)
+
+    if (!environmentHasIdFormat && duplicateName === environment) {
       const error = newEnvironmentNameEqualsOriginal
       return responseFailure(error)
     }
@@ -289,9 +291,9 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @returns A promise that resolves to the update result or an error response.
    */
   async function updateType(args: UpdateEnvironmentTypeArgs) {
-    const { project, name } = args
+    const { project, environment } = args
 
-    const identifiersError = checkValidProjectEnv(project, name)
+    const identifiersError = checkValidProjectEnv(project, environment)
 
     if (identifiersError) {
       return responseFailure(identifiersError)
