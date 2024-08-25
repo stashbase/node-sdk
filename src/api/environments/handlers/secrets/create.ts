@@ -7,7 +7,7 @@ import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/
 export type CreateSecretsData = Array<{
   key: Uppercase<string>
   value: string
-  description?: string
+  description?: string | null
 }>
 
 async function createSecrets(
@@ -15,9 +15,7 @@ async function createSecrets(
   data: CreateSecretsData
 ): Promise<ApiResponse<CreateSecretsResData, CreateSecretsError>> {
   try {
-    type NewType = CreateSecretsResData
-
-    const resData = await envClient.post<NewType>({
+    const resData = await envClient.post<CreateSecretsResData>({
       path: '/v1/secrets',
       data,
     })
