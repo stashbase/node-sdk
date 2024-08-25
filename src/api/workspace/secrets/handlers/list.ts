@@ -1,5 +1,9 @@
 import { HttpClient } from '../../../../http/client'
-import { SecretKey } from '../../../../types/secretKey'
+import {
+  ListSecretsOptions,
+  ListSecretsQueryParams,
+  ListSecretsResData,
+} from '../../../../types/secrets'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import {
@@ -8,27 +12,14 @@ import {
   GenericApiError,
 } from '../../../../types/errors'
 
-type SecretsData = Array<{ key: SecretKey; value: string; description?: string }>
 type ListSecretsError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
-export interface ListSecretsArgs {
-  /**
-   * project name
-   * */
+export type ListSecretsArgs = {
+  /* Project name or id */
   project: string
-  /**
-   * environment name
-   * */
+  /* Environment name or id */
   environment: string
-  /**
-   * return secret description
-   * */
-  description?: boolean
-  /**
-   * expand all refered secrets to their values
-   * */
-  expandRefs?: boolean
-}
+} & ListSecretsOptions
 
 // export interface ListSecretsOpts {
 //   description?: boolean
@@ -38,24 +29,26 @@ async function listSecrets(
   envClient: HttpClient,
   args: ListSecretsArgs
   // options?: ListSecretsOpts
-): Promise<ApiResponse<SecretsData, ListSecretsError>> {
-  const { project, environment } = args
-  const returnDescription = args?.description
+): Promise<ApiResponse<ListSecretsResData, ListSecretsError>> {
+  const { project, environment, omit } = args
 
-  const query: Record<string, string> = {}
+  const queryObj: ListSecretsQueryParams = {}
 
-  if (returnDescription) {
-    query['description'] = 'true'
+  if (omit && omit.length > 0) {
+    const omitStr = omit.filter((o) => o === 'value' || o === 'description').join(',')
+
+    if (omitStr.length > 0) {
+      queryObj['omit'] = omitStr
+    }
   }
 
-  if (args?.expandRefs) {
-    query['expand-refs'] = 'true'
-  }
+  const query =
+    Object.keys(queryObj).length > 0 ? (queryObj as Record<string, string | boolean>) : undefined
 
   try {
-    const secrets = await envClient.get<SecretsData>({
+    const secrets = await envClient.get<ListSecretsResData>({
       path: `/v1/projects/${project}/environments/${environment}/secrets`,
-      query,
+      query: query,
     })
 
     return responseSuccess(secrets)

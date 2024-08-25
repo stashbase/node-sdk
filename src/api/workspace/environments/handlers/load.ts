@@ -28,18 +28,18 @@ async function loadEnvironment(
   const { project, environment: environmentName } = args
 
   const query: LoadEnvironmentQueryParams = {
-    'no-description': 'true',
+    omit: 'description',
     'with-environment': ['type'].join(','),
   }
 
   if (args?.expandRefs) {
-    query['expand-refs'] = 'true'
+    query['expand-refs'] = true
   }
 
   try {
     const data = await client.get<LoadEnvironmentResponse>({
       path: `/v1/projects/${project}/environments/${environmentName}/secrets`,
-      query,
+      query: query as Record<string, string | boolean>,
     })
 
     const {

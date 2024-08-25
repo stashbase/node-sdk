@@ -11,8 +11,13 @@ export interface CreateEnvironmentArgs {
   project: string
   //
   name: string
-  description?: string
+  description?: string | null
   type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
+}
+
+interface CreateEnvironmentResponseData {
+  id: string
+  name: string
 }
 
 type CreateEnvironmentError =
@@ -24,11 +29,11 @@ type CreateEnvironmentError =
 async function createEnvironment(
   client: HttpClient,
   args: CreateEnvironmentArgs
-): Promise<ApiResponse<null, CreateEnvironmentError>> {
+): Promise<ApiResponse<CreateEnvironmentResponseData, CreateEnvironmentError>> {
   const { project } = args
 
   try {
-    const data = await client.post<null>({
+    const data = await client.post<CreateEnvironmentResponseData>({
       path: `/v1/projects/${project}/environments`,
       data: { ...args, project: undefined },
     })

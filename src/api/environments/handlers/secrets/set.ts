@@ -1,12 +1,8 @@
 import { HttpClient } from '../../../../http/client'
+import { SetSecretsResData } from '../../../../types/secrets'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { SetSecretsError } from '../../../../types/errors/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-
-interface SetSecretsResponseData {
-  createdCount: number
-  updatedCount: number
-}
 
 export type SetSecretsData = Array<{
   key: Uppercase<string>
@@ -17,9 +13,9 @@ export type SetSecretsData = Array<{
 async function setSecrets(
   envClient: HttpClient,
   data: SetSecretsData
-): Promise<ApiResponse<SetSecretsResponseData, SetSecretsError>> {
+): Promise<ApiResponse<SetSecretsResData, SetSecretsError>> {
   try {
-    const resData = await envClient.put<SetSecretsResponseData>({
+    const resData = await envClient.put<SetSecretsResData>({
       path: '/v1/secrets',
       data,
     })

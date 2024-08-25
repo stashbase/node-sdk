@@ -23,12 +23,14 @@ import { UpdateSecretsArgs, updateSecrets } from './handlers/update'
 
 export function secretsAPI(httpClient: HttpClient) {
   /**
-   * @summary Get secret
-   * @description Secrets
-   * @param args project, environment, key
-   * @param options Options (return secrets)
-   * @returns Secret object
-   * */
+   * Retrieves a single secret by its key from a specific project and environment.
+   * 
+   * @param args - The arguments for retrieving a secret.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.key - The key of the secret to retrieve.
+   * @returns A promise that resolves to the secret object or an error response.
+   */
   async function get(args: GetSecretArgs) {
     const { project, environment, key } = args
 
@@ -45,13 +47,15 @@ export function secretsAPI(httpClient: HttpClient) {
 
     return await getSecret(httpClient, args)
   }
+
   /**
-   * @summary List secrets
-   * @description Secrets
-   * @param args project, environment
-   * @param options Options (return secrets);
-   * @returns Array of secrets
-   * */
+   * Lists all secrets for a specific project and environment.
+   * 
+   * @param args - The arguments for listing secrets.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @returns A promise that resolves to an array of secret objects or an error response.
+   */
   async function list(args: ListSecretsArgs) {
     const { project, environment } = args
 
@@ -65,11 +69,14 @@ export function secretsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Create secrets
-   * @description Secrets
-   * @param args project, environment, data
-   * @returns createdCount, duplicateKeys
-   * */
+   * Creates new secrets in a specific project and environment.
+   * 
+   * @param args - The arguments for creating secrets.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.data - The secret data to create.
+   * @returns A promise that resolves to an object containing the count of created secrets and any duplicate keys, or an error response.
+   */
   async function create(args: CreateSecretsArgs) {
     const { project, environment, data } = args
 
@@ -89,11 +96,14 @@ export function secretsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Set secrets
-   * @description Secrets
-   * @param args project, environment, data
-   * @returns null
-   * */
+   * Sets secrets in a specific project and environment, overwriting existing ones with the same keys.
+   * 
+   * @param args - The arguments for setting secrets.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.data - The secret data to set.
+   * @returns A promise that resolves to null on success or an error response.
+   */
   async function set(args: SetSecretsArgs) {
     const { project, environment, data } = args
 
@@ -113,11 +123,14 @@ export function secretsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Update secrets
-   * @description Secrets
-   * @param args project, environment, data
-   * @returns updatedCount, notFoundKeys
-   * */
+   * Updates existing secrets in a specific project and environment.
+   * 
+   * @param args - The arguments for updating secrets.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.data - The secret data to update.
+   * @returns A promise that resolves to an object containing the count of updated secrets and any keys not found, or an error response.
+   */
   async function update(args: UpdateSecretsArgs) {
     const { data } = args
 
@@ -131,11 +144,14 @@ export function secretsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Remove secrets
-   * @description Secrets
-   * @param args project, environment, keys
-   * @returns deletedCount, notFound
-   * */
+   * Removes specific secrets from a project and environment.
+   * 
+   * @param args - The arguments for removing secrets.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.keys - An array of secret keys to remove.
+   * @returns A promise that resolves to an object containing the count of deleted secrets and any keys not found, or an error response.
+   */
   async function remove(args: DeleteSecretsArgs) {
     const { keys, project, environment } = args
 
@@ -161,11 +177,13 @@ export function secretsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * @summary Remove all secrets
-   * @description Secrets
-   * @param args project, environment
-   * @returns deletedCount
-   * */
+   * Removes all secrets from a specific project and environment.
+   * 
+   * @param args - The arguments for removing all secrets.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @returns A promise that resolves to an object containing the count of deleted secrets, or an error response.
+   */
   async function removeAll(args: DeleteAllSecretsArgs) {
     const { project, environment } = args
     const namesError = checkValidProjectEnv(project, environment)

@@ -3,13 +3,21 @@ import { ApiErrorType, ConnectionFailedError } from '../types/errors'
 import {
   EnvironmentNameUsesIdFormatError,
   InvalidEnvironmentIdentifierError,
+  InvalidEnvironmentOrderError,
+  InvalidEnvironmentSearchError,
+  InvalidEnvironmentSortByError,
   InvalidNewEnvironmentNameError,
   NewEnvironmentNameEqualsOriginal,
 } from '../types/errors/environments'
 import {
   InvalidIdentifierProjectError,
   InvalidNewProjectNameError,
+  InvalidProjectLimitError,
+  InvalidProjectPageNumberError,
+  InvalidProjectByProjectError,
   ProjectNameUsesIdFormatError,
+  InvalidProjectOrderError,
+  InvalidProjectSearchError,
 } from '../types/errors/projects'
 
 export function createApiErrorFromResponse<T>(responseData: unknown) {
@@ -101,7 +109,7 @@ export const invalidNewEnvironmentNameError: InvalidNewEnvironmentNameError = cr
     'Environment name must be alphanumeric and may include underscores (_) and a single hyphen (-) as a separator, with a minimum of 2 and a maximum of 40 characters.',
   details: {
     validNameExamples: ['staging', 'dev_copy', 'api-prod'],
-    invalidNameExamples: ['#dev', 'api-dev-1', 'service--ops'],
+    invalidNameExamples: ['#dev', 'api-dev-1', 'service--dev'],
   },
 })
 
@@ -120,3 +128,82 @@ export const invalidNewProjectNameError: InvalidNewProjectNameError = createApiE
     invalidNameExamples: ['super project', '#app-1', `joe's app`],
   },
 })
+
+export const invalidProjectPageError: InvalidProjectPageNumberError = createApiError({
+  code: 'validation.invalid_page',
+  message: 'Page number must a number between 1 and 1000.',
+  details: {
+    min: 1,
+    max: 1000,
+    default: 1,
+  },
+})
+
+export const invalidProjectLimitError: InvalidProjectLimitError = createApiError({
+  code: 'validation.invalid_limit',
+  message: 'Limit must be a number between 2 and 30, defaulting to 10.',
+  details: {
+    min: 2,
+    max: 30,
+    default: 10,
+  },
+})
+
+export const invalidProjectSortByError: InvalidProjectByProjectError = createApiError({
+  code: 'validation.invalid_sort_by',
+  message: 'Sort by field must be one of: name, createdAt, or environmentCount.',
+  details: {
+    allowedValues: ['name', 'createdAt', 'environmentCount'],
+  },
+})
+
+export const invalidProjectOrderError: InvalidProjectOrderError = createApiError({
+  code: 'validation.invalid_order',
+  message: 'Order must be either "asc" or "desc".',
+  details: {
+    allowedValues: ['asc', 'desc'],
+  },
+})
+
+export const invalidProjectSearchError: InvalidProjectSearchError = createApiError({
+  code: 'validation.invalid_search',
+  // message: 'Invalid search query. Must be between 2 and 40 characters.',
+  message:
+    'Search value must be alphanumeric and may include underscores (_) and hyphens (-), with a minimum of 2 and a maximum of 40 characters.',
+  details: {
+    validSearchExamples: ['my-project', 'booking-app-1', 'super_app'],
+    invalidSearchExamples: ['super project', '#app-1', `joe's app`],
+  },
+  // details: {
+  //   minLength: 2,
+  //   maxLength: 40,
+  //
+  // },
+})
+
+export const invalidEnvironmentSortByError: InvalidEnvironmentSortByError = createApiError({
+  code: 'validation.invalid_sort_by',
+  message: 'Sort by field must be one of: name or createdAt or secretCount. Defaulting to name.',
+  details: {
+    allowedValues: ['name', 'createdAt', 'secretCount'],
+  },
+})
+
+export const invalidEnvironmentOrderError: InvalidEnvironmentOrderError = createApiError({
+  code: 'validation.invalid_order',
+  message: 'Order must be either "asc" or "desc".',
+  details: {
+    allowedValues: ['asc', 'desc'],
+  },
+})
+
+export const invalidEnvironmentSearchError: InvalidEnvironmentSearchError = createApiError({
+  code: 'validation.invalid_search',
+  message:
+    'Search value must be alphanumeric and may include underscores (_) and a single hyphen (-) as a separator, with a minimum of 2 and a maximum of 40 characters.',
+  details: {
+    validSearchExamples: ['staging', 'dev_copy', 'api-prod'],
+    invalidSearchExamples: ['#dev', 'api-dev-1', 'service--dev'],
+  },
+})
+
