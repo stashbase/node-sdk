@@ -1,16 +1,11 @@
 import { HttpClient } from '../../../../http/client'
-import { SecretKey } from '../../../../types/secretKey'
 import { createApiErrorFromResponse } from '../../../../errors'
+import { DeleteSecretsResData } from '../../../../types/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 import { DeleteSecretsError as SharedDeleteSecretsError } from '../../../../types/errors/secrets'
 
 type DeleteSecretsError = ProjectNotFoundError | EnvironmentNotFoundError | SharedDeleteSecretsError
-
-interface DeleteSecretsResponseData {
-  deletedCount: number
-  notFoundSecrets: Array<SecretKey>
-}
 
 export interface DeleteSecretsArgs {
   project: string
@@ -21,11 +16,11 @@ export interface DeleteSecretsArgs {
 async function deleteSecrets(
   client: HttpClient,
   args: DeleteSecretsArgs
-): Promise<ApiResponse<DeleteSecretsResponseData, DeleteSecretsError>> {
+): Promise<ApiResponse<DeleteSecretsResData, DeleteSecretsError>> {
   const { project, environment, keys } = args
 
   try {
-    const data = await client.post<DeleteSecretsResponseData>({
+    const data = await client.post<DeleteSecretsResData>({
       path: `/v1/projects/${project}/environments/${environment}/secrets/delete`,
       data: keys,
     })

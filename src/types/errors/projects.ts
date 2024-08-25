@@ -26,3 +26,43 @@ export type InvalidNewProjectNameError = ValidationApiError<
     invalidNameExamples: string[]
   }
 >
+
+export type InvalidProjectPageNumberError = ValidationApiError<
+  'invalid_page',
+  {
+    min: number
+    max: number
+  }
+>
+
+export type InvalidProjectLimitError = ValidationApiError<
+  'invalid_limit',
+  {
+    min: number
+    max: number
+  }
+>
+
+export type InvalidProjectByProjectError = ValidationApiError<
+  'invalid_sort_by',
+  {
+    allowedValues: Array<string>
+  }
+>
+
+export type InvalidProjectOrderError = ValidationApiError<
+  'invalid_order',
+  {
+    allowedValues: Array<string>
+  }
+>
+
+export type InvalidProjectSearchError = ValidationApiError<
+  'invalid_search',
+  {
+    // minLength: number
+    // maxLength: number
+    validSearchExamples: string[]
+    invalidSearchExamples: string[]
+  }
+>

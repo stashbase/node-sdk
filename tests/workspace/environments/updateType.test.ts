@@ -3,11 +3,11 @@ import { createEnvEase } from '../../../src'
 
 describe('Update  environment type', () => {
   test('', async () => {
-    const envEase = createEnvEase('xPKDa2Xq0zWmfES1nLDoG45qZtR1z2qL')
+    const stashbase = createEnvEase(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await envEase.environments.updateType({
+    const { data, error } = await stashbase.environments.updateType({
       project: 'hero-hub',
-      name: 'dev-sdk',
+      environment: 'dev-sdk',
       type: 'STAGING',
     })
 

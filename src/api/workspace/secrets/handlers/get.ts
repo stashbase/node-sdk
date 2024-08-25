@@ -1,34 +1,48 @@
 import { HttpClient } from '../../../../http/client'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-import { SecretKey } from '../../../../types/secretKey'
+import { GetSecretOptions, GetSecretQueryParams, GetSecretResData } from '../../../../types/secrets'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { GetSecretError as SharedGetSecretsError } from '../../../../types/errors/secrets'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
-
-type Secret = { key: SecretKey; value: string; description: string | null }
+import { GetSecretError as SharedGetSecretsError } from '../../../../types/errors/secrets'
 
 type GetSecretError = SharedGetSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
-type GetSecretResponse = Promise<ApiResponse<Secret, GetSecretError>>
+type GetSecretResponse = Promise<ApiResponse<GetSecretResData, GetSecretError>>
 
-export interface GetSecretArgs {
+export type GetSecretArgs = {
   project: string
   // environment name
   environment: string
   // secret key
   key: Uppercase<string>
-  expandRefs?: boolean
-}
+} & GetSecretOptions
 
 async function getSecret(envClient: HttpClient, args: GetSecretArgs): GetSecretResponse {
   const { project, environment, key } = args
+  const { expandRefs, omit } = args
+
+  const query: GetSecretQueryParams = {}
+
+  if (expandRefs) {
+    if (!omit?.includes('value')) {
+      query['expand-refs'] = true
+    }
+  }
+
+  if (omit && omit.length > 0) {
+    const omitStr = omit.filter((o) => o === 'value' || o === 'description').join(',')
+
+    if (omitStr.length > 0) {
+      query['omit'] = omitStr
+    }
+  }
 
   try {
-    const secrets = await envClient.get<Secret>({
-      path: `/projects/${project}/environments/${environment}/secrets/${key}`,
-      query: args.expandRefs ? { 'expand-refs': 'true' } : undefined,
+    const secret = await envClient.get<GetSecretResData>({
+      path: `/v1/projects/${project}/environments/${environment}/secrets/${key}`,
+      query: Object.keys(query).length > 0 ? query : undefined,
     })
 
-    return responseSuccess(secrets)
+    return responseSuccess(secret)
   } catch (error) {
     const apiError = createApiErrorFromResponse<GetSecretError>(error)
     return responseFailure(apiError)
