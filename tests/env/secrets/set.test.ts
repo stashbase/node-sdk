@@ -4,7 +4,7 @@ import { createEnvApi } from '../../../src'
 test('Set secrets (add new or update existing)', async () => {
   const envApi = createEnvApi(process.env.VITE_TEST_ENV_API_KEY as string)
 
-  const { error } = await envApi.secrets.set([
+  const { error } = await envApi.secrets.setMany([
     {
       key: 'SECRET',
       value: 'VALUE_123',

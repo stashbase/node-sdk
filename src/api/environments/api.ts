@@ -142,7 +142,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param data - An array of secrets to create.
    * @returns A promise that resolves to an object containing the count of created secrets and any duplicate secrets (keys), or an error response.
    */
-  async function create(data: CreateSecretsData) {
+  async function createMany(data: CreateSecretsData) {
     const validationError = validateCreateSecretsInput(data)
 
     if (validationError) {
@@ -158,7 +158,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param data - An array of secrets to set.
    * @returns A promise that resolves to null on success or an error response.
    */
-  async function set(data: SetSecretsData) {
+  async function setMany(data: SetSecretsData) {
     const validationError = validateSetSecretsInput(data)
 
     if (validationError) {
@@ -174,7 +174,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param data - An array of secrets to update.
    * @returns A promise that resolves to an object containing the count of updated secrets and any secrets (keys) not found, or an error response.
    */
-  async function update(data: UpdateSecretsData) {
+  async function updateMany(data: UpdateSecretsData) {
     const validationError = validateUpdateSecretsInput(data)
 
     if (validationError) {
@@ -190,7 +190,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param keys - An array of secret keys to remove.
    * @returns A promise that resolves to an object containing the count of deleted secrets and any secrets (keys) not found, or an error response.
    */
-  async function remove(keys: Uppercase<string>[]) {
+  async function removeMany(keys: Uppercase<string>[]) {
     if (keys.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
@@ -220,10 +220,10 @@ function envSecretsAPI(httpClient: HttpClient) {
     list,
     listOnly,
     listExcluding,
-    create,
-    set,
-    update,
-    remove,
+    createMany,
+    setMany,
+    updateMany,
+    removeMany,
     removeAll,
   }
 }
