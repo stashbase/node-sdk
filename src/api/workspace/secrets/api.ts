@@ -19,7 +19,12 @@ import { CreateSecretArgs, CreateSecretsArgs, createSecrets } from './handlers/c
 import { DeleteSecretsArgs, DeleteSecretArgs, deleteSecrets } from './handlers/delete'
 import { DeleteAllSecretsArgs, deleteAllSecrets } from './handlers/deleteAll'
 import { GetSecretArgs, getSecret } from './handlers/get'
-import { ListSecretsArgs, listSecrets } from './handlers/list'
+import {
+  ListSecretsArgs,
+  ListSecretsOnlyArgs,
+  ListSecretsExcludeArgs,
+  listSecrets,
+} from './handlers/list'
 import { SetSecretArgs, SetSecretsArgs, setSecrets } from './handlers/set'
 import { UpdateSecretArgs, UpdateSecretsArgs, updateSecrets } from './handlers/update'
 
@@ -58,7 +63,7 @@ export function secretsAPI(httpClient: HttpClient) {
    * @param args.environment - The name or id of the environment.
    * @returns A promise that resolves to an array of secret objects or an error response.
    */
-  async function list(args: Omit<ListSecretsArgs, 'only' | 'exclude'>) {
+  async function list(args: ListSecretsArgs) {
     const { project, environment } = args
 
     const namesError = checkValidProjectEnv(project, environment)
@@ -79,7 +84,7 @@ export function secretsAPI(httpClient: HttpClient) {
    * @param args.only - An array of secret keys to retrieve.
    * @returns A promise that resolves to an array of specified secret objects or an error response.
    */
-  async function listOnly(args: ListSecretsArgs & { only: SecretKey[] }) {
+  async function listOnly(args: ListSecretsOnlyArgs) {
     const { project, environment, only } = args
 
     const namesError = checkValidProjectEnv(project, environment)
@@ -113,7 +118,7 @@ export function secretsAPI(httpClient: HttpClient) {
    * @param args.exclude - An array of secret keys to exclude from the list.
    * @returns A promise that resolves to an array of secret objects (excluding specified keys) or an error response.
    */
-  async function listExcluding(args: ListSecretsArgs & { exclude: SecretKey[] }) {
+  async function listExcluding(args: ListSecretsExcludeArgs) {
     const { project, environment, exclude } = args
 
     const namesError = checkValidProjectEnv(project, environment)
@@ -285,7 +290,6 @@ export function secretsAPI(httpClient: HttpClient) {
 
     return await updateSecrets(httpClient, args)
   }
-
 
   /**
    * Removes a specific secret from a project and environment.
