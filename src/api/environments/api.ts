@@ -100,7 +100,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @returns A promise that resolves to an array of secrets or an error response.
    */
   async function list(options?: ListSecretsOptions) {
-    return await listSecrets(httpClient, options)
+    return await listSecrets({ envClient: httpClient, options })
   }
 
   /**
