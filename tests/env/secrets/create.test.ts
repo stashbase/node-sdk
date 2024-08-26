@@ -4,7 +4,7 @@ import { createEnvApi } from '../../../src'
 test('Create new secrets (add them to environment)', async () => {
   const envApi = createEnvApi(process.env.VITE_TEST_ENV_API_KEY as string)
 
-  const { data, error } = await envApi.secrets.create([
+  const { data, error } = await envApi.secrets.createMany([
     {
       key: 'KEY',
       value: 'Some value',

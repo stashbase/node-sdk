@@ -4,7 +4,7 @@ import { createEnvApi } from '../../../src'
 test('Update env secrets', async () => {
   const envApi = createEnvApi('duIwyuCWOhJYpWQM3zmcGm0uGAJanqBS')
 
-  const { data, error } = await envApi.secrets.update([
+  const { data, error } = await envApi.secrets.updateMany([
     {
       key: 'NEW_APP_URL',
       description: 'THidhoihsdofhais',
