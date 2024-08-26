@@ -4,7 +4,9 @@ import {
   noDataProvidedError,
 } from '../../../errors/secrets'
 import { HttpClient } from '../../../http/client'
-import { responseFailure } from '../../../http/response'
+import { responseFailure, responseSuccess } from '../../../http/response'
+import { SecretKey } from '../../../types/secretKey'
+import { ListSecretsResData, Secret } from '../../../types/secrets'
 import {
   isValidSecretKey,
   validateCreateSecretsInput,
@@ -24,7 +26,7 @@ import { UpdateSecretsArgs, updateSecrets } from './handlers/update'
 export function secretsAPI(httpClient: HttpClient) {
   /**
    * Retrieves a single secret by its key from a specific project and environment.
-   * 
+   *
    * @param args - The arguments for retrieving a secret.
    * @param args.project - The name or id of the project.
    * @param args.environment - The name or id of the environment.
@@ -50,13 +52,13 @@ export function secretsAPI(httpClient: HttpClient) {
 
   /**
    * Lists all secrets for a specific project and environment.
-   * 
+   *
    * @param args - The arguments for listing secrets.
    * @param args.project - The name or id of the project.
    * @param args.environment - The name or id of the environment.
    * @returns A promise that resolves to an array of secret objects or an error response.
    */
-  async function list(args: ListSecretsArgs) {
+  async function list(args: Omit<ListSecretsArgs, 'only' | 'exclude'>) {
     const { project, environment } = args
 
     const namesError = checkValidProjectEnv(project, environment)
@@ -69,8 +71,42 @@ export function secretsAPI(httpClient: HttpClient) {
   }
 
   /**
+   * Lists specific secrets for a project and environment.
+   *
+   * @param args - The arguments for listing specific secrets.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.only - An array of secret keys to retrieve.
+   * @returns A promise that resolves to an array of specified secret objects or an error response.
+   */
+  async function listOnly(args: ListSecretsArgs & { only: SecretKey[] }) {
+    const { project, environment, only } = args
+
+    const namesError = checkValidProjectEnv(project, environment)
+
+    if (namesError) {
+      return responseFailure(namesError)
+    }
+
+    if (!Array.isArray(only) || only.length === 0) {
+      // TODO: error???
+      const emptyData: ListSecretsResData[] = []
+      return responseSuccess(emptyData)
+    }
+
+    const { invalidSecretKeys } = validateSecretKeys(only)
+
+    if (invalidSecretKeys.length > 0) {
+      const error = invalidSecretKeysError(invalidSecretKeys)
+      return responseFailure(error)
+    }
+
+    return await listSecrets(httpClient, args)
+  }
+
+  /**
    * Creates new secrets in a specific project and environment.
-   * 
+   *
    * @param args - The arguments for creating secrets.
    * @param args.project - The name or id of the project.
    * @param args.environment - The name or id of the environment.
@@ -97,7 +133,7 @@ export function secretsAPI(httpClient: HttpClient) {
 
   /**
    * Sets secrets in a specific project and environment, overwriting existing ones with the same keys.
-   * 
+   *
    * @param args - The arguments for setting secrets.
    * @param args.project - The name or id of the project.
    * @param args.environment - The name or id of the environment.
@@ -124,7 +160,7 @@ export function secretsAPI(httpClient: HttpClient) {
 
   /**
    * Updates existing secrets in a specific project and environment.
-   * 
+   *
    * @param args - The arguments for updating secrets.
    * @param args.project - The name or id of the project.
    * @param args.environment - The name or id of the environment.
@@ -145,7 +181,7 @@ export function secretsAPI(httpClient: HttpClient) {
 
   /**
    * Removes specific secrets from a project and environment.
-   * 
+   *
    * @param args - The arguments for removing secrets.
    * @param args.project - The name or id of the project.
    * @param args.environment - The name or id of the environment.
@@ -178,7 +214,7 @@ export function secretsAPI(httpClient: HttpClient) {
 
   /**
    * Removes all secrets from a specific project and environment.
-   * 
+   *
    * @param args - The arguments for removing all secrets.
    * @param args.project - The name or id of the project.
    * @param args.environment - The name or id of the environment.
@@ -198,6 +234,7 @@ export function secretsAPI(httpClient: HttpClient) {
   return {
     get,
     list,
+    listOnly,
     create,
     set,
     update,
