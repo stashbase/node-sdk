@@ -24,6 +24,7 @@ import { LoadEnvironmentOpts } from '../../types/environments'
 import { deleteAllEnvironmentSecrets } from './handlers/secrets/deleteAll'
 import { GetSecretOptions, ListSecretsOptions } from '../../types/secrets'
 import { SecretKey } from '../../types/secretKey'
+import { AtLeastOne } from '../../types/util'
 
 function environmentsAPI(httpClient: HttpClient) {
   /**
@@ -213,6 +214,34 @@ function envSecretsAPI(httpClient: HttpClient) {
   }
 
   /**
+   * Updates a single secret.
+   *
+   * @param key - The key of the secret to update.
+   * @param data - An object containing at least one of the following properties:
+   *               newKey - The new key for the secret (optional).
+   *               value - The new value for the secret (optional).
+   *               description - The new description for the secret (optional).
+   * @returns A promise that resolves to an object containing the count of updated secrets and any secrets (keys) not found, or an error response.
+   */
+  async function update(
+    key: SecretKey,
+    data: AtLeastOne<{
+      newKey: SecretKey
+      value: string
+      description: string | null
+    }>
+  ) {
+    const arrayItems = [{ key, ...data }]
+    const validationError = validateUpdateSecretsInput(arrayItems)
+
+    if (validationError) {
+      return responseFailure(validationError)
+    }
+
+    return await updateSecrets(httpClient, arrayItems)
+  }
+
+  /**
    * Updates existing secrets.
    *
    * @param data - An array of secrets to update.
@@ -268,6 +297,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     createMany,
     set,
     setMany,
+    update,
     updateMany,
     removeMany,
     removeAll,
