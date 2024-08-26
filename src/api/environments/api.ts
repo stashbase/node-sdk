@@ -137,6 +137,30 @@ function envSecretsAPI(httpClient: HttpClient) {
   }
 
   /**
+   * Creates a new secret.
+   *
+   * @param key - The key of the secret to create.
+   * @param value - The value of the secret.
+   * @param description - Optional description for the secret.
+   * @returns A promise that resolves to an object containing the count of created secrets and any duplicate secrets (keys), or an error response.
+   */
+  async function create(key: SecretKey, value: string, description?: string | null) {
+    const validationError = validateCreateSecretsInput([
+      {
+        key,
+        value,
+        description,
+      },
+    ])
+
+    if (validationError) {
+      return responseFailure(validationError)
+    }
+
+    return await createSecrets(httpClient, [{ key, value, description }])
+  }
+
+  /**
    * Creates new secrets.
    *
    * @param data - An array of secrets to create.
@@ -220,6 +244,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     list,
     listOnly,
     listExcluding,
+    create,
     createMany,
     setMany,
     updateMany,
