@@ -145,7 +145,7 @@ export function secretsAPI(httpClient: HttpClient) {
    * @param args.data - The secret data to create.
    * @returns A promise that resolves to an object containing the count of created secrets and any duplicate keys, or an error response.
    */
-  async function create(args: CreateSecretsArgs) {
+  async function createMany(args: CreateSecretsArgs) {
     const { project, environment, data } = args
 
     const namesError = checkValidProjectEnv(project, environment)
@@ -172,7 +172,7 @@ export function secretsAPI(httpClient: HttpClient) {
    * @param args.data - The secret data to set.
    * @returns A promise that resolves to null on success or an error response.
    */
-  async function set(args: SetSecretsArgs) {
+  async function setMany(args: SetSecretsArgs) {
     const { project, environment, data } = args
 
     const namesError = checkValidProjectEnv(project, environment)
@@ -199,7 +199,7 @@ export function secretsAPI(httpClient: HttpClient) {
    * @param args.data - The secret data to update.
    * @returns A promise that resolves to an object containing the count of updated secrets and any keys not found, or an error response.
    */
-  async function update(args: UpdateSecretsArgs) {
+  async function updateMany(args: UpdateSecretsArgs) {
     const { data } = args
 
     const validationError = validateUpdateSecretsInput(data)
@@ -220,7 +220,7 @@ export function secretsAPI(httpClient: HttpClient) {
    * @param args.keys - An array of secret keys to remove.
    * @returns A promise that resolves to an object containing the count of deleted secrets and any keys not found, or an error response.
    */
-  async function remove(args: DeleteSecretsArgs) {
+  async function removeMany(args: DeleteSecretsArgs) {
     const { keys, project, environment } = args
 
     const namesError = checkValidProjectEnv(project, environment)
@@ -268,10 +268,10 @@ export function secretsAPI(httpClient: HttpClient) {
     list,
     listOnly,
     listExcluding,
-    create,
-    set,
-    update,
-    remove,
+    createMany,
+    setMany,
+    updateMany,
+    removeMany,
     removeAll,
   }
 }
