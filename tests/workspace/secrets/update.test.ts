@@ -4,7 +4,7 @@ import { createEnvEase } from '../../../src'
 test('Update secrets', async () => {
   const envEase = createEnvEase(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-  const { data, error } = await envEase.secrets.update({
+  const { data, error } = await envEase.secrets.updateMany({
     project: 'name',
     environment: '123',
     data: [

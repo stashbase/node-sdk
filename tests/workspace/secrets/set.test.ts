@@ -5,7 +5,7 @@ describe('Set secrets', () => {
   test('', async () => {
     const envEase = createEnvEase(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await envEase.secrets.set({
+    const { data, error } = await envEase.secrets.setMany({
       project: 'pr_iBgCx5tegfVaKzjywTg2ck',
       environment: 'ev_3NCdY7kmbLJpZcpMg4W6wk',
       data: [

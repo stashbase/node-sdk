@@ -5,7 +5,7 @@ describe('Create secrets', () => {
   test('OK', async () => {
     const envEase = createEnvEase(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await envEase.secrets.create({
+    const { data, error } = await envEase.secrets.createMany({
       project: 'hero-hub',
       environment: 'vercel',
       data: [
