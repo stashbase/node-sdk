@@ -23,6 +23,7 @@ import { responseFailure } from '../../http/response'
 import { LoadEnvironmentOpts } from '../../types/environments'
 import { deleteAllEnvironmentSecrets } from './handlers/secrets/deleteAll'
 import { GetSecretOptions, ListSecretsOptions } from '../../types/secrets'
+import { SecretKey } from '../../types/secretKey'
 
 function environmentsAPI(httpClient: HttpClient) {
   /**
@@ -101,6 +102,22 @@ function envSecretsAPI(httpClient: HttpClient) {
    */
   async function list(options?: ListSecretsOptions) {
     return await listSecrets({ envClient: httpClient, options })
+  }
+
+  async function listOnly(keys: SecretKey[], options?: ListSecretsOptions) {
+    if (keys.length === 0) {
+      const error = noDataProvidedError()
+      return responseFailure(error)
+    }
+
+    const { invalidSecretKeys } = validateSecretKeys(keys)
+
+    if (invalidSecretKeys.length > 0) {
+      const error = invalidSecretKeysError(invalidSecretKeys)
+      return responseFailure(error)
+    }
+
+    return await listSecrets({ envClient: httpClient, options, only: keys })
   }
 
   /**
@@ -185,6 +202,7 @@ function envSecretsAPI(httpClient: HttpClient) {
   return {
     get,
     list,
+    listOnly,
     create,
     set,
     update,
