@@ -258,6 +258,23 @@ function envSecretsAPI(httpClient: HttpClient) {
   }
 
   /**
+   * Removes a single secret.
+   *
+   * @param key - The key of the secret to remove.
+   * @returns A promise that resolves to an object containing the count of deleted secrets and any secrets (keys) not found, or an error response.
+   */
+  async function remove(key: Uppercase<string>) {
+    const { invalidSecretKeys } = validateSecretKeys([key])
+
+    if (invalidSecretKeys.length > 0) {
+      const error = invalidSecretKeysError(invalidSecretKeys)
+      return responseFailure(error)
+    }
+
+    return await deleteEnvironmentSecrets(httpClient, [key])
+  }
+
+  /**
    * Removes specific secrets.
    *
    * @param keys - An array of secret keys to remove.
@@ -299,6 +316,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     setMany,
     update,
     updateMany,
+    remove,
     removeMany,
     removeAll,
   }
