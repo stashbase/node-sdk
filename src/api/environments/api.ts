@@ -120,6 +120,22 @@ function envSecretsAPI(httpClient: HttpClient) {
     return await listSecrets({ envClient: httpClient, options, only: keys })
   }
 
+  async function listExcluding(excludeKeys: SecretKey[], options?: ListSecretsOptions) {
+    if (excludeKeys.length === 0) {
+      const error = noDataProvidedError()
+      return responseFailure(error)
+    }
+
+    const { invalidSecretKeys } = validateSecretKeys(excludeKeys)
+
+    if (invalidSecretKeys.length > 0) {
+      const error = invalidSecretKeysError(invalidSecretKeys)
+      return responseFailure(error)
+    }
+
+    return await listSecrets({ envClient: httpClient, options, exclude: excludeKeys })
+  }
+
   /**
    * Creates new secrets.
    *
@@ -203,6 +219,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     get,
     list,
     listOnly,
+    listExcluding,
     create,
     set,
     update,
