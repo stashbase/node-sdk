@@ -13,6 +13,12 @@ export interface CreateSecretsArgs {
   data: Array<CreateSecretData>
 }
 
+export interface CreateSecretArgs {
+  project: string
+  environment: string
+  data: CreateSecretData
+}
+
 export type CreateSecretData = {
   key: Uppercase<string>
   value: string
