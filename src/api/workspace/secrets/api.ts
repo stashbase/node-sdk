@@ -20,7 +20,7 @@ import { DeleteSecretsArgs, deleteSecrets } from './handlers/delete'
 import { DeleteAllSecretsArgs, deleteAllSecrets } from './handlers/deleteAll'
 import { GetSecretArgs, getSecret } from './handlers/get'
 import { ListSecretsArgs, listSecrets } from './handlers/list'
-import { SetSecretsArgs, setSecrets } from './handlers/set'
+import { SetSecretArgs, SetSecretsArgs, setSecrets } from './handlers/set'
 import { UpdateSecretsArgs, updateSecrets } from './handlers/update'
 
 export function secretsAPI(httpClient: HttpClient) {
@@ -191,6 +191,33 @@ export function secretsAPI(httpClient: HttpClient) {
   }
 
   /**
+   * Sets a secret in a specific project and environment.
+   *
+   * @param args - The arguments for setting a secret.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.data - The object with secret data to set.
+   * @returns A promise that resolves to null on success or an error response.
+   */
+  async function set(args: SetSecretArgs) {
+    const { project, environment, data } = args
+
+    const namesError = checkValidProjectEnv(project, environment)
+
+    if (namesError) {
+      return responseFailure(namesError)
+    }
+
+    const validationError = validateSetSecretsInput([data])
+
+    if (validationError) {
+      return responseFailure(validationError)
+    }
+
+    return await setSecrets(httpClient, { ...args, data: [data] })
+  }
+
+  /**
    * Sets secrets in a specific project and environment, overwriting existing ones with the same keys.
    *
    * @param args - The arguments for setting secrets.
@@ -297,6 +324,7 @@ export function secretsAPI(httpClient: HttpClient) {
     listExcluding,
     create,
     createMany,
+    set,
     setMany,
     updateMany,
     removeMany,
