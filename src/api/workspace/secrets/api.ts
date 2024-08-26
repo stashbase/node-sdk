@@ -15,7 +15,7 @@ import {
   validateUpdateSecretsInput,
 } from '../../../utils/inputValidation'
 import { checkValidProjectEnv } from '../environments/api'
-import { CreateSecretsArgs, createSecrets } from './handlers/create'
+import { CreateSecretArgs, CreateSecretsArgs, createSecrets } from './handlers/create'
 import { DeleteSecretsArgs, deleteSecrets } from './handlers/delete'
 import { DeleteAllSecretsArgs, deleteAllSecrets } from './handlers/deleteAll'
 import { GetSecretArgs, getSecret } from './handlers/get'
@@ -164,6 +164,33 @@ export function secretsAPI(httpClient: HttpClient) {
   }
 
   /**
+   * Creates a new secret in a specific project and environment.
+   *
+   * @param args - The arguments for creating a secret.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.data - The object with secret data to create.
+   * @returns A promise that resolves to an object containing the count of created secrets and any duplicate keys, or an error response.
+   */
+  async function create(args: CreateSecretArgs) {
+    const { project, environment, data } = args
+
+    const namesError = checkValidProjectEnv(project, environment)
+
+    if (namesError) {
+      return responseFailure(namesError)
+    }
+
+    const validationError = validateCreateSecretsInput([data])
+
+    if (validationError) {
+      return responseFailure(validationError)
+    }
+
+    return await createSecrets(httpClient, { ...args, data: [data] })
+  }
+
+  /**
    * Sets secrets in a specific project and environment, overwriting existing ones with the same keys.
    *
    * @param args - The arguments for setting secrets.
@@ -268,6 +295,7 @@ export function secretsAPI(httpClient: HttpClient) {
     list,
     listOnly,
     listExcluding,
+    create,
     createMany,
     setMany,
     updateMany,
