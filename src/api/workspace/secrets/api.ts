@@ -21,7 +21,7 @@ import { DeleteAllSecretsArgs, deleteAllSecrets } from './handlers/deleteAll'
 import { GetSecretArgs, getSecret } from './handlers/get'
 import { ListSecretsArgs, listSecrets } from './handlers/list'
 import { SetSecretArgs, SetSecretsArgs, setSecrets } from './handlers/set'
-import { UpdateSecretsArgs, updateSecrets } from './handlers/update'
+import { UpdateSecretArgs, UpdateSecretsArgs, updateSecrets } from './handlers/update'
 
 export function secretsAPI(httpClient: HttpClient) {
   /**
@@ -251,6 +251,27 @@ export function secretsAPI(httpClient: HttpClient) {
    * @param args.project - The name or id of the project.
    * @param args.environment - The name or id of the environment.
    * @param args.data - The secret data to update.
+   * @returns A promise that resolves to an object containing the count of updated secrets and any secrets (keys) not found, or an error response.
+   */
+  async function update(args: UpdateSecretArgs) {
+    const { data } = args
+
+    const validationError = validateUpdateSecretsInput([data])
+
+    if (validationError) {
+      return responseFailure(validationError)
+    }
+
+    return await updateSecrets(httpClient, { ...args, data: [data] })
+  }
+
+  /**
+   * Updates existing secrets in a specific project and environment.
+   *
+   * @param args - The arguments for updating secrets.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.data - The secret data to update.
    * @returns A promise that resolves to an object containing the count of updated secrets and any keys not found, or an error response.
    */
   async function updateMany(args: UpdateSecretsArgs) {
@@ -326,6 +347,7 @@ export function secretsAPI(httpClient: HttpClient) {
     createMany,
     set,
     setMany,
+    update,
     updateMany,
     removeMany,
     removeAll,
