@@ -177,6 +177,26 @@ function envSecretsAPI(httpClient: HttpClient) {
   }
 
   /**
+   * Sets a single secret, overwriting it if it already exists.
+   *
+   * @param key - The key of the secret to set.
+   * @param value - The value of the secret.
+   * @param description - Optional description for the secret.
+   * @returns A promise that resolves to an object containing the count of set secrets and any secrets (keys) not found, or an error response.
+   */
+  async function set(key: SecretKey, value: string, description?: string | null) {
+    const arrayItems = [{ key, value, description }]
+
+    const validationError = validateSetSecretsInput(arrayItems)
+
+    if (validationError) {
+      return responseFailure(validationError)
+    }
+
+    return await setSecrets(httpClient, arrayItems)
+  }
+
+  /**
    * Sets secrets, overwriting existing ones if they exist.
    *
    * @param data - An array of secrets to set.
@@ -246,6 +266,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     listExcluding,
     create,
     createMany,
+    set,
     setMany,
     updateMany,
     removeMany,
