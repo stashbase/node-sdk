@@ -11,6 +11,7 @@ import {
   ProjectNotFoundError,
   GenericApiError,
 } from '../../../../types/errors'
+import { SecretKey } from '../../../../types/secretKey'
 
 type ListSecretsError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
@@ -19,6 +20,9 @@ export type ListSecretsArgs = {
   project: string
   /* Environment name or id */
   environment: string
+
+  only?: SecretKey[]
+  exclude?: SecretKey[]
 } & ListSecretsOptions
 
 // export interface ListSecretsOpts {
@@ -28,7 +32,6 @@ export type ListSecretsArgs = {
 async function listSecrets(
   envClient: HttpClient,
   args: ListSecretsArgs
-  // options?: ListSecretsOpts
 ): Promise<ApiResponse<ListSecretsResData, ListSecretsError>> {
   const { project, environment, omit } = args
 
@@ -40,6 +43,14 @@ async function listSecrets(
     if (omitStr.length > 0) {
       queryObj['omit'] = omitStr
     }
+  }
+
+  if (args.only && args.only.length > 0) {
+    queryObj['only'] = args.only.join(',')
+  }
+
+  if (args.exclude && args.exclude.length > 0) {
+    queryObj['exclude'] = args.exclude.join(',')
   }
 
   const query =
