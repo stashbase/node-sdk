@@ -16,7 +16,7 @@ import {
 } from '../../../utils/inputValidation'
 import { checkValidProjectEnv } from '../environments/api'
 import { CreateSecretArgs, CreateSecretsArgs, createSecrets } from './handlers/create'
-import { DeleteSecretsArgs, deleteSecrets } from './handlers/delete'
+import { DeleteSecretsArgs, DeleteSecretArgs, deleteSecrets } from './handlers/delete'
 import { DeleteAllSecretsArgs, deleteAllSecrets } from './handlers/deleteAll'
 import { GetSecretArgs, getSecret } from './handlers/get'
 import { ListSecretsArgs, listSecrets } from './handlers/list'
@@ -286,6 +286,28 @@ export function secretsAPI(httpClient: HttpClient) {
     return await updateSecrets(httpClient, args)
   }
 
+
+  /**
+   * Removes a specific secret from a project and environment.
+   *
+   * @param args - The arguments for removing a secret.
+   * @param args.key - The key of the secret to remove.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @returns A promise that resolves to an object containing the count of deleted secrets and any keys not found, or an error response.
+   */
+  async function remove(args: DeleteSecretArgs) {
+    const { key, project, environment } = args
+
+    const namesError = checkValidProjectEnv(project, environment)
+
+    if (namesError) {
+      return responseFailure(namesError)
+    }
+
+    return await deleteSecrets(httpClient, { ...args, keys: [key] })
+  }
+
   /**
    * Removes specific secrets from a project and environment.
    *
@@ -349,6 +371,7 @@ export function secretsAPI(httpClient: HttpClient) {
     setMany,
     update,
     updateMany,
+    remove,
     removeMany,
     removeAll,
   }
