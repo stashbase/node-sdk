@@ -14,6 +14,12 @@ export interface SetSecretsArgs {
   data: Array<SetSecretData>
 }
 
+export interface SetSecretArgs {
+  project: string
+  environment: string
+  data: SetSecretData
+}
+
 export type SetSecretData = {
   key: SecretKey
   value: string
