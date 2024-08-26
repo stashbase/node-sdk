@@ -15,6 +15,12 @@ export interface UpdateSecretsArgs {
   data: Array<UpdateSecretData>
 }
 
+export interface UpdateSecretArgs {
+  project: string
+  environment: string
+  data: UpdateSecretData
+}
+
 export type UpdateSecretData = {
   key: SecretKey
 } & AtLeastOne<{
