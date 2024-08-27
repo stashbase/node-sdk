@@ -17,7 +17,7 @@ import { CreateSecretsArgs, createSecrets } from './handlers/create'
 import { DeleteSecretsArgs, deleteSecrets } from './handlers/delete'
 import { DeleteAllSecretsArgs, deleteAllSecrets } from './handlers/deleteAll'
 import { GetSecretArgs, getSecret } from './handlers/get'
-import { ListSecretsArgs, listSecrets } from './handlers/list'
+import { ListOnlySecretsArgs, ListSecretsArgs, listSecrets } from './handlers/list'
 import { SetSecretsArgs, setSecrets } from './handlers/set'
 import { UpdateSecretsArgs, updateSecrets } from './handlers/update'
 
@@ -63,6 +63,45 @@ export function secretsAPI(httpClient: HttpClient) {
 
     if (namesError) {
       return responseFailure(namesError)
+    }
+
+    return await listSecrets(httpClient, args)
+  }
+
+  /**
+   * Lists specific secrets for a project and environment.
+   *
+   * @param args - The arguments for listing specific secrets.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.only - An array of secret keys to retrieve.
+   * @param args.expandRefs - Whether to expand references to other secrets.
+   * @param args.omit - An array of secret properties to omit.
+   *
+   * @returns A promise that resolves to an array of specified secret objects or an error response.
+   */
+  async function listOnly(args: ListOnlySecretsArgs) {
+    const { project, environment, only } = args
+
+    const namesError = checkValidProjectEnv(project, environment)
+
+    if (namesError) {
+      return responseFailure(namesError)
+    }
+
+    if (!Array.isArray(only) || only.length === 0) {
+      // const emptyData: ListSecretsResData[] = []
+      // return responseSuccess(emptyData)
+
+      const error = noDataProvidedError()
+      return responseFailure(error)
+    }
+
+    const { invalidSecretKeys } = validateSecretKeys(only)
+
+    if (invalidSecretKeys.length > 0) {
+      const error = invalidSecretKeysError(invalidSecretKeys)
+      return responseFailure(error)
     }
 
     return await listSecrets(httpClient, args)
@@ -198,6 +237,7 @@ export function secretsAPI(httpClient: HttpClient) {
   return {
     get,
     list,
+    listOnly,
     create,
     set,
     update,
