@@ -11,26 +11,36 @@ import {
   ProjectNotFoundError,
   GenericApiError,
 } from '../../../../types/errors'
+import { SecretKey } from '../../../../types/secretKey'
 
 type ListSecretsError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
-export type ListSecretsArgs = {
+type ListSecretsBaseArgs = {
   /* Project name or id */
   project: string
   /* Environment name or id */
   environment: string
 } & ListSecretsOptions
 
-// export interface ListSecretsOpts {
-//   description?: boolean
-// }
-//
+export type ListSecretsArgs = ListSecretsBaseArgs
+
+export type ListOnlySecretsArgs = ListSecretsBaseArgs & {
+  /* List only secrets with these keys */
+  only: SecretKey[]
+}
+
+export type ListExcludeSecretsArgs = ListSecretsBaseArgs & {
+  /* Exclude secrets with these keys */
+  exclude: SecretKey[]
+}
+
 async function listSecrets(
   envClient: HttpClient,
-  args: ListSecretsArgs
+  args: ListSecretsBaseArgs & { only?: SecretKey[]; exclude?: SecretKey[] }
   // options?: ListSecretsOpts
 ): Promise<ApiResponse<ListSecretsResData, ListSecretsError>> {
   const { project, environment, omit } = args
+  const { only, exclude } = args
 
   const queryObj: ListSecretsQueryParams = {}
 
@@ -40,6 +50,14 @@ async function listSecrets(
     if (omitStr.length > 0) {
       queryObj['omit'] = omitStr
     }
+  }
+
+  if (only && only.length > 0) {
+    queryObj['only'] = only.join(',')
+  }
+
+  if (exclude && exclude.length > 0) {
+    queryObj['exclude'] = exclude.join(',')
   }
 
   const query =
