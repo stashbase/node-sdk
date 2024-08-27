@@ -17,7 +17,12 @@ import { CreateSecretsArgs, createSecrets } from './handlers/create'
 import { DeleteSecretsArgs, deleteSecrets } from './handlers/delete'
 import { DeleteAllSecretsArgs, deleteAllSecrets } from './handlers/deleteAll'
 import { GetSecretArgs, getSecret } from './handlers/get'
-import { ListOnlySecretsArgs, ListSecretsArgs, listSecrets } from './handlers/list'
+import {
+  ListExcludeSecretsArgs,
+  ListOnlySecretsArgs,
+  ListSecretsArgs,
+  listSecrets,
+} from './handlers/list'
 import { SetSecretsArgs, setSecrets } from './handlers/set'
 import { UpdateSecretsArgs, updateSecrets } from './handlers/update'
 
@@ -108,12 +113,51 @@ export function secretsAPI(httpClient: HttpClient) {
   }
 
   /**
+   * Lists secrets for a project and environment, excluding secrets with specified keys.
+   *
+   * @param args - The arguments for listing secrets with exclusions.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.exclude - An array of secret keys to exclude from the list.
+   * @param args.expandRefs - Whether to expand references to other secrets.
+   * @param args.omit - An array of secret properties to omit.
+   * @returns A promise that resolves to an array of secret objects (excluding specified keys) or an error response.
+   */
+  async function listExclude(args: ListExcludeSecretsArgs) {
+    const { project, environment, exclude } = args
+
+    const namesError = checkValidProjectEnv(project, environment)
+
+    if (namesError) {
+      return responseFailure(namesError)
+    }
+
+    if (!Array.isArray(exclude) || exclude.length === 0) {
+      // return empty response
+      // return await listSecrets(httpClient, args)
+
+      const error = noDataProvidedError()
+      return responseFailure(error)
+    }
+
+    const { invalidSecretKeys } = validateSecretKeys(exclude)
+
+    if (invalidSecretKeys.length > 0) {
+      const error = invalidSecretKeysError(invalidSecretKeys)
+      return responseFailure(error)
+    }
+
+    return await listSecrets(httpClient, args)
+  }
+
+  /**
    * Creates new secrets in a specific project and environment.
    *
    * @param args - The arguments for creating secrets.
    * @param args.project - The name or id of the project.
    * @param args.environment - The name or id of the environment.
    * @param args.data - The secret data to create.
+   *
    * @returns A promise that resolves to an object containing the count of created secrets and any duplicate keys, or an error response.
    */
   async function create(args: CreateSecretsArgs) {
@@ -238,6 +282,7 @@ export function secretsAPI(httpClient: HttpClient) {
     get,
     list,
     listOnly,
+    listExclude,
     create,
     set,
     update,
