@@ -47,7 +47,7 @@ export function secretsAPI(httpClient: HttpClient) {
     }
 
     if (!isValidSecretKey(key)) {
-      const error = invalidSecretKeyError()
+      const error = invalidSecretKeysError([key])
       return responseFailure(error)
     }
 

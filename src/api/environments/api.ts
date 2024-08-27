@@ -85,13 +85,15 @@ function envSecretsAPI(httpClient: HttpClient) {
    *
    * @param key - The key of the secret to retrieve.
    * @param options - Additional options for retrieving the secret.
-   * @returns A promise that resolves to the retrieved secret or an error response.
+   * @returns A promise that resolves to the retrieved secret or null if not found, or an error response.
    */
   async function get(key: SecretKey, options?: GetSecretOptions) {
     if (!isValidSecretKey(key)) {
-      const error = invalidSecretKeyError()
+      // error for consistency with list method
+      const error = invalidSecretKeysError([key])
       return responseFailure(error)
     }
+
     return getSecret(httpClient, key, options)
   }
 
