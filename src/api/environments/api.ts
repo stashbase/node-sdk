@@ -3,8 +3,8 @@ import { getEnvironment } from './handlers/get'
 import { deleteEnvironmentSecrets } from './handlers/secrets/delete'
 import { HttpClient } from '../../http/client'
 import { listSecrets } from './handlers/secrets/list'
-import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
-import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
+import { CreateManySecretsData, createSecrets } from './handlers/secrets/create'
+import { UpdateManySecretsData, updateSecrets } from './handlers/secrets/update'
 import { getSecret } from './handlers/secrets/get'
 import {
   isValidSecretKey,
@@ -13,7 +13,7 @@ import {
   validateSetSecretsInput,
   validateUpdateSecretsInput,
 } from '../../utils/inputValidation'
-import { SetSecretsData, setSecrets } from './handlers/secrets/set'
+import { SetManySecretsData, setSecrets } from './handlers/secrets/set'
 import {
   invalidSecretKeyError,
   invalidSecretKeysError,
@@ -174,7 +174,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param data - An array of secrets to create.
    * @returns A promise that resolves to an object containing the count of created secrets and any duplicate secrets (keys), or an error response.
    */
-  async function createMany(data: CreateSecretsData) {
+  async function createMany(data: CreateManySecretsData) {
     const validationError = validateCreateSecretsInput(data)
 
     if (validationError) {
@@ -210,7 +210,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param data - An array of secrets to set.
    * @returns A promise that resolves to an object containing the count of updated and created secrets, or an error response.
    */
-  async function setMany(data: SetSecretsData) {
+  async function setMany(data: SetManySecretsData) {
     const validationError = validateSetSecretsInput(data)
 
     if (validationError) {
@@ -254,7 +254,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param data - An array of secrets to update.
    * @returns A promise that resolves to an object containing the count of updated secrets and any secrets (keys) not found, or an error response.
    */
-  async function updateMany(data: UpdateSecretsData) {
+  async function updateMany(data: UpdateManySecretsData) {
     const validationError = validateUpdateSecretsInput(data)
 
     if (validationError) {

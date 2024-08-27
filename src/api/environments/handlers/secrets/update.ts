@@ -5,7 +5,7 @@ import { UpdateSecretsResData } from '../../../../types/secrets'
 import { UpdateSecretsError } from '../../../../types/errors/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
-export type UpdateSecretsData = Array<
+export type UpdateManySecretsData = Array<
   {
     key: Uppercase<string>
   } & AtLeastOne<{
@@ -17,7 +17,7 @@ export type UpdateSecretsData = Array<
 
 async function updateSecrets(
   envClient: HttpClient,
-  data: UpdateSecretsData
+  data: UpdateManySecretsData
 ): Promise<ApiResponse<UpdateSecretsResData, UpdateSecretsError>> {
   try {
     const resData = await envClient.patch<UpdateSecretsResData>({
