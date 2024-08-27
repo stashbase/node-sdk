@@ -24,7 +24,7 @@ import { UpdateSecretsArgs, updateSecrets } from './handlers/update'
 export function secretsAPI(httpClient: HttpClient) {
   /**
    * Retrieves a single secret by its key from a specific project and environment.
-   * 
+   *
    * @param args - The arguments for retrieving a secret.
    * @param args.project - The name or id of the project.
    * @param args.environment - The name or id of the environment.
@@ -50,7 +50,7 @@ export function secretsAPI(httpClient: HttpClient) {
 
   /**
    * Lists all secrets for a specific project and environment.
-   * 
+   *
    * @param args - The arguments for listing secrets.
    * @param args.project - The name or id of the project.
    * @param args.environment - The name or id of the environment.
@@ -70,7 +70,7 @@ export function secretsAPI(httpClient: HttpClient) {
 
   /**
    * Creates new secrets in a specific project and environment.
-   * 
+   *
    * @param args - The arguments for creating secrets.
    * @param args.project - The name or id of the project.
    * @param args.environment - The name or id of the environment.
@@ -97,7 +97,7 @@ export function secretsAPI(httpClient: HttpClient) {
 
   /**
    * Sets secrets in a specific project and environment, overwriting existing ones with the same keys.
-   * 
+   *
    * @param args - The arguments for setting secrets.
    * @param args.project - The name or id of the project.
    * @param args.environment - The name or id of the environment.
@@ -124,7 +124,7 @@ export function secretsAPI(httpClient: HttpClient) {
 
   /**
    * Updates existing secrets in a specific project and environment.
-   * 
+   *
    * @param args - The arguments for updating secrets.
    * @param args.project - The name or id of the project.
    * @param args.environment - The name or id of the environment.
@@ -145,7 +145,7 @@ export function secretsAPI(httpClient: HttpClient) {
 
   /**
    * Removes specific secrets from a project and environment.
-   * 
+   *
    * @param args - The arguments for removing secrets.
    * @param args.project - The name or id of the project.
    * @param args.environment - The name or id of the environment.
@@ -178,7 +178,7 @@ export function secretsAPI(httpClient: HttpClient) {
 
   /**
    * Removes all secrets from a specific project and environment.
-   * 
+   *
    * @param args - The arguments for removing all secrets.
    * @param args.project - The name or id of the project.
    * @param args.environment - The name or id of the environment.
