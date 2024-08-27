@@ -121,7 +121,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     return await listSecrets({ envClient: httpClient, options, only: keys })
   }
 
-  async function listExcluding(excludeKeys: SecretKey[], options?: ListSecretsOptions) {
+  async function listExclude(excludeKeys: SecretKey[], options?: ListSecretsOptions) {
     if (excludeKeys.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
@@ -309,7 +309,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     get,
     list,
     listOnly,
-    listExcluding,
+    listExclude,
     create,
     createMany,
     set,
