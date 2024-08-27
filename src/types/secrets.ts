@@ -75,6 +75,3 @@ export interface GetSecretOptions {
 }
 
 export type ListSecretsOptions = GetSecretOptions
-
-export type ListOnlySecretsOptions = ListSecretsOptions & { only: SecretKey[] }
-export type ListExcludeSecretsOptions = ListSecretsOptions & { exclude: SecretKey[] }
