@@ -87,7 +87,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param options - Additional options for retrieving the secret.
    * @returns A promise that resolves to the retrieved secret or an error response.
    */
-  async function get(key: string, options?: GetSecretOptions) {
+  async function get(key: SecretKey, options?: GetSecretOptions) {
     if (!isValidSecretKey(key)) {
       const error = invalidSecretKeyError()
       return responseFailure(error)
@@ -275,7 +275,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param key - The key of the secret to remove.
    * @returns A promise that resolves to an object containing the count of deleted secrets and any secrets (keys) not found, or an error response.
    */
-  async function remove(key: Uppercase<string>) {
+  async function remove(key: SecretKey) {
     const { invalidSecretKeys } = validateSecretKeys([key])
 
     if (invalidSecretKeys.length > 0) {
@@ -292,7 +292,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param keys - An array of secret keys to remove.
    * @returns A promise that resolves to an object containing the count of deleted secrets and any secrets (keys) not found, or an error response.
    */
-  async function removeMany(keys: Uppercase<string>[]) {
+  async function removeMany(keys: SecretKey[]) {
     if (keys.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
