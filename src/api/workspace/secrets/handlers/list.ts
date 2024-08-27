@@ -15,7 +15,7 @@ import { SecretKey } from '../../../../types/secretKey'
 
 type ListSecretsError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
-export type ListSecretsBaseArgs = {
+type ListSecretsBaseArgs = {
   /* Project name or id */
   project: string
   /* Environment name or id */
@@ -24,23 +24,19 @@ export type ListSecretsBaseArgs = {
 
 export type ListSecretsArgs = ListSecretsBaseArgs
 
-export type ListSecretsOnlyArgs = ListSecretsBaseArgs & {
-  /* List only these secrets */
+export type ListOnlySecretsArgs = ListSecretsBaseArgs & {
+  /* List only secrets with these keys */
   only: SecretKey[]
 }
 
-export type ListSecretsExcludeArgs = ListSecretsBaseArgs & {
-  /* Exclude these secrets */
+export type ListExcludeSecretsArgs = ListSecretsBaseArgs & {
+  /* Exclude secrets with these keys */
   exclude: SecretKey[]
 }
 
-// export interface ListSecretsOpts {
-//   description?: boolean
-// }
-//
 async function listSecrets(
   envClient: HttpClient,
-  args: ListSecretsArgs & { only?: SecretKey[]; exclude?: SecretKey[] }
+  args: ListSecretsBaseArgs & { only?: SecretKey[]; exclude?: SecretKey[] }
 ): Promise<ApiResponse<ListSecretsResData, ListSecretsError>> {
   const { project, environment, omit } = args
 

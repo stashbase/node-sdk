@@ -8,7 +8,7 @@ import { SecretKey } from '../../../../types/secretKey'
 
 type DeleteSecretsError = ProjectNotFoundError | EnvironmentNotFoundError | SharedDeleteSecretsError
 
-export interface DeleteSecretsArgs {
+export interface DeleteManySecretsArgs {
   project: string
   environment: string
   keys: Array<Uppercase<string>>
@@ -22,7 +22,7 @@ export interface DeleteSecretArgs {
 
 async function deleteSecrets(
   client: HttpClient,
-  args: DeleteSecretsArgs
+  args: DeleteManySecretsArgs
 ): Promise<ApiResponse<DeleteSecretsResData, DeleteSecretsError>> {
   const { project, environment, keys } = args
 
