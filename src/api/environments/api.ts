@@ -104,43 +104,43 @@ function envSecretsAPI(httpClient: HttpClient) {
     return await listSecrets(httpClient, options)
   }
 
-  async function listOnly(keys: SecretKey[], options?: ListSecretsOptions) {
-    if (!Array.isArray(keys) || keys.length === 0) {
+  async function listOnly(only: SecretKey[], options?: ListSecretsOptions) {
+    if (!Array.isArray(only) || only.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
     }
 
-    const { invalidSecretKeys } = validateSecretKeys(keys)
+    const { invalidSecretKeys } = validateSecretKeys(only)
 
     if (invalidSecretKeys.length > 0) {
       const error = invalidSecretKeysError(invalidSecretKeys)
       return responseFailure(error)
     }
 
-    return await listSecrets(httpClient, { ...options, only: keys })
+    return await listSecrets(httpClient, { ...options, only: only })
   }
 
   /**
    * Retrieves all secrets excluding the specified keys.
    *
-   * @param excludeKeys - An array of secret keys to exclude from the results.
+   * @param exclude - An array of secret keys to exclude from the results.
    * @param options - Additional options for listing secrets.
    * @returns A promise that resolves to an array of secrets excluding the specified secrets by their keys or an error response.
    */
-  async function listExclude(excludeKeys: SecretKey[], options?: ListSecretsOptions) {
-    if (!Array.isArray(excludeKeys) || excludeKeys.length === 0) {
+  async function listExclude(exclude: SecretKey[], options?: ListSecretsOptions) {
+    if (!Array.isArray(exclude) || exclude.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
     }
 
-    const { invalidSecretKeys } = validateSecretKeys(excludeKeys)
+    const { invalidSecretKeys } = validateSecretKeys(exclude)
 
     if (invalidSecretKeys.length > 0) {
       const error = invalidSecretKeysError(invalidSecretKeys)
       return responseFailure(error)
     }
 
-    return await listSecrets(httpClient, { ...options, exclude: excludeKeys })
+    return await listSecrets(httpClient, { ...options, exclude: exclude })
   }
 
   /**
