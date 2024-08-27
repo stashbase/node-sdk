@@ -93,9 +93,11 @@ export function secretsAPI(httpClient: HttpClient) {
     }
 
     if (!Array.isArray(only) || only.length === 0) {
-      // TODO: error???
-      const emptyData: ListSecretsResData[] = []
-      return responseSuccess(emptyData)
+      // const emptyData: ListSecretsResData[] = []
+      // return responseSuccess(emptyData)
+
+      const error = noDataProvidedError()
+      return responseFailure(error)
     }
 
     const { invalidSecretKeys } = validateSecretKeys(only)
@@ -127,7 +129,11 @@ export function secretsAPI(httpClient: HttpClient) {
     }
 
     if (!Array.isArray(exclude) || exclude.length === 0) {
-      return await listSecrets(httpClient, args)
+      // return empty response
+      // return await listSecrets(httpClient, args)
+
+      const error = noDataProvidedError()
+      return responseFailure(error)
     }
 
     const { invalidSecretKeys } = validateSecretKeys(exclude)

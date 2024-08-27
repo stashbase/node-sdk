@@ -106,7 +106,7 @@ function envSecretsAPI(httpClient: HttpClient) {
   }
 
   async function listOnly(keys: SecretKey[], options?: ListSecretsOptions) {
-    if (keys.length === 0) {
+    if (!Array.isArray(keys) || keys.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
     }
@@ -129,7 +129,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @returns A promise that resolves to an array of secrets excluding the specified secrets by their keys or an error response.
    */
   async function listExclude(excludeKeys: SecretKey[], options?: ListSecretsOptions) {
-    if (excludeKeys.length === 0) {
+    if (!Array.isArray(excludeKeys) || excludeKeys.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
     }
