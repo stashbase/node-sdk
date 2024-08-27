@@ -9,7 +9,7 @@ export interface Secret {
   description: string | null
 }
 
-export type GetSecretResData = Secret
+export type GetSecretResData = Secret | null
 export type ListSecretsResData = Array<Secret>
 
 export interface CreateSecretsResData {
