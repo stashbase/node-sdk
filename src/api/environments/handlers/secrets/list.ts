@@ -7,13 +7,13 @@ import {
   ListSecretsQueryParams,
   ListSecretsResData,
 } from '../../../../types/secrets'
+import { SecretKey } from '../../../../types/secretKey'
 
 async function listSecrets(
   envClient: HttpClient,
-  options?: ListSecretsOptions
+  options?: ListSecretsOptions & { only?: SecretKey[]; exclude?: SecretKey[] }
 ): Promise<ApiResponse<ListSecretsResData, ListSecretsError>> {
-  const omit = options?.omit
-  const expandRefs = options?.expandRefs
+  const { omit, expandRefs, only, exclude } = options || {}
 
   const queryObj: ListSecretsQueryParams = {}
 
@@ -27,6 +27,16 @@ async function listSecrets(
     if (omitStr.length > 0) {
       queryObj['omit'] = omitStr
     }
+  }
+
+  if (only && only.length > 0) {
+    const onlyStr = only.join(',')
+    queryObj['only'] = onlyStr
+  }
+
+  if (exclude && exclude.length > 0) {
+    const excludeStr = exclude.join(',')
+    queryObj['exclude'] = excludeStr
   }
 
   const query =
