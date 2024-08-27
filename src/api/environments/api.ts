@@ -121,6 +121,29 @@ function envSecretsAPI(httpClient: HttpClient) {
   }
 
   /**
+   * Retrieves all secrets excluding the specified keys.
+   *
+   * @param excludeKeys - An array of secret keys to exclude from the results.
+   * @param options - Additional options for listing secrets.
+   * @returns A promise that resolves to an array of secrets excluding the specified secrets by their keys or an error response.
+   */
+  async function listExclude(excludeKeys: SecretKey[], options?: ListSecretsOptions) {
+    if (!Array.isArray(excludeKeys) || excludeKeys.length === 0) {
+      const error = noDataProvidedError()
+      return responseFailure(error)
+    }
+
+    const { invalidSecretKeys } = validateSecretKeys(excludeKeys)
+
+    if (invalidSecretKeys.length > 0) {
+      const error = invalidSecretKeysError(invalidSecretKeys)
+      return responseFailure(error)
+    }
+
+    return await listSecrets(httpClient, { ...options, exclude: excludeKeys })
+  }
+
+  /**
    * Creates new secrets.
    *
    * @param data - An array of secrets to create.
@@ -203,6 +226,7 @@ function envSecretsAPI(httpClient: HttpClient) {
     get,
     list,
     listOnly,
+    listExclude,
     create,
     set,
     update,
