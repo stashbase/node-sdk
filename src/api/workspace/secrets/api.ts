@@ -5,8 +5,7 @@ import {
 } from '../../../errors/secrets'
 import { HttpClient } from '../../../http/client'
 import { responseFailure, responseSuccess } from '../../../http/response'
-import { SecretKey } from '../../../types/secretKey'
-import { ListSecretsResData, Secret } from '../../../types/secrets'
+import { ListSecretsResData } from '../../../types/secrets'
 import {
   isValidSecretKey,
   validateCreateSecretsInput,
