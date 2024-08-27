@@ -117,7 +117,7 @@ export function secretsAPI(httpClient: HttpClient) {
    * @param args.exclude - An array of secret keys to exclude from the list.
    * @returns A promise that resolves to an array of secret objects (excluding specified keys) or an error response.
    */
-  async function listExcluding(args: ListSecretsExcludeArgs) {
+  async function listExclude(args: ListSecretsExcludeArgs) {
     const { project, environment, exclude } = args
 
     const namesError = checkValidProjectEnv(project, environment)
@@ -367,7 +367,7 @@ export function secretsAPI(httpClient: HttpClient) {
     get,
     list,
     listOnly,
-    listExcluding,
+    listExclude,
     create,
     createMany,
     set,
