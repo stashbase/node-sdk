@@ -245,6 +245,11 @@ function envSecretsAPI(httpClient: HttpClient) {
       return responseFailure(validationError)
     }
 
+    if (Object.keys(data).length === 0) {
+      const error = noDataProvidedError()
+      return responseFailure(error)
+    }
+
     return await updateSecrets(httpClient, arrayItems)
   }
 
