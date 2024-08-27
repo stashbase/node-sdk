@@ -121,6 +121,13 @@ function envSecretsAPI(httpClient: HttpClient) {
     return await listSecrets({ envClient: httpClient, options, only: keys })
   }
 
+  /**
+   * Retrieves all secrets excluding the specified keys.
+   *
+   * @param excludeKeys - An array of secret keys to exclude from the results.
+   * @param options - Additional options for listing secrets.
+   * @returns A promise that resolves to an array of secrets excluding the specified secrets by their keys or an error response.
+   */
   async function listExclude(excludeKeys: SecretKey[], options?: ListSecretsOptions) {
     if (excludeKeys.length === 0) {
       const error = noDataProvidedError()
