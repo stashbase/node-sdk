@@ -11,7 +11,7 @@ type DeleteSecretsError = ProjectNotFoundError | EnvironmentNotFoundError | Shar
 export interface DeleteManySecretsArgs {
   project: string
   environment: string
-  keys: Array<Uppercase<string>>
+  keys: Array<SecretKey>
 }
 
 export interface DeleteSecretArgs {
