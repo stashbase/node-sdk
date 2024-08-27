@@ -4,7 +4,7 @@ import { CreateSecretsError } from '../../../../types/errors/secrets'
 import { CreateSecretsResData } from '../../../../types/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
-export type CreateSecretsData = Array<{
+export type CreateManySecretsData = Array<{
   key: Uppercase<string>
   value: string
   description?: string | null
@@ -12,7 +12,7 @@ export type CreateSecretsData = Array<{
 
 async function createSecrets(
   envClient: HttpClient,
-  data: CreateSecretsData
+  data: CreateManySecretsData
 ): Promise<ApiResponse<CreateSecretsResData, CreateSecretsError>> {
   try {
     const resData = await envClient.post<CreateSecretsResData>({
