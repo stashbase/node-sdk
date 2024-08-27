@@ -1,9 +1,10 @@
 import { HttpClient } from '../../../../http/client'
-import { GetSecretOptions, GetSecretQueryParams, GetSecretResData } from '../../../../types/secrets'
+import { SecretKey } from '../../../../types/secretKey'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 import { GetSecretError as SharedGetSecretsError } from '../../../../types/errors/secrets'
+import { GetSecretOptions, GetSecretQueryParams, GetSecretResData } from '../../../../types/secrets'
 
 type GetSecretError = SharedGetSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
 type GetSecretResponse = Promise<ApiResponse<GetSecretResData, GetSecretError>>
@@ -13,7 +14,7 @@ export type GetSecretArgs = {
   // environment name
   environment: string
   // secret key
-  key: Uppercase<string>
+  key: SecretKey
 } & GetSecretOptions
 
 async function getSecret(envClient: HttpClient, args: GetSecretArgs): GetSecretResponse {

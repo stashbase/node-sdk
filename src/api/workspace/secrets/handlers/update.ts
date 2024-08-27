@@ -24,7 +24,7 @@ export interface UpdateSecretArgs {
 export type UpdateSecretData = {
   key: SecretKey
 } & AtLeastOne<{
-  newKey: Uppercase<string>
+  newKey: SecretKey
   value: string
   description: string | null
 }>

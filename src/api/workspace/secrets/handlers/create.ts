@@ -1,4 +1,5 @@
 import { HttpClient } from '../../../../http/client'
+import { SecretKey } from '../../../../types/secretKey'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { CreateSecretsResData } from '../../../../types/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
@@ -20,7 +21,7 @@ export interface CreateSecretArgs {
 }
 
 export type CreateSecretData = {
-  key: Uppercase<string>
+  key: SecretKey
   value: string
   description?: string | null
 }
