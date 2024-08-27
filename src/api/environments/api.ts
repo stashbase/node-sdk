@@ -147,30 +147,6 @@ function envSecretsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * Creates a new secret.
-   *
-   * @param key - The key of the secret to create.
-   * @param value - The value of the secret.
-   * @param description - Optional description for the secret.
-   * @returns A promise that resolves to an object containing the count of created secrets and any duplicate secrets (keys), or an error response.
-   */
-  async function create(key: SecretKey, value: string, description?: string | null) {
-    const validationError = validateCreateSecretsInput([
-      {
-        key,
-        value,
-        description,
-      },
-    ])
-
-    if (validationError) {
-      return responseFailure(validationError)
-    }
-
-    return await createSecrets(httpClient, [{ key, value, description }])
-  }
-
-  /**
    * Creates new secrets.
    *
    * @param data - An array of secrets to create.
@@ -184,26 +160,6 @@ function envSecretsAPI(httpClient: HttpClient) {
     }
 
     return await createSecrets(httpClient, data)
-  }
-
-  /**
-   * Sets a single secret, overwriting it if it already exists.
-   *
-   * @param key - The key of the secret to set.
-   * @param value - The value of the secret.
-   * @param description - Optional description for the secret.
-   * @returns A promise that resolves to an object containing the count of updated and created secrets, or an error response.
-   */
-  async function set(key: SecretKey, value: string, description?: string | null) {
-    const arrayItems = [{ key, value, description }]
-
-    const validationError = validateSetSecretsInput(arrayItems)
-
-    if (validationError) {
-      return responseFailure(validationError)
-    }
-
-    return await setSecrets(httpClient, arrayItems)
   }
 
   /**
@@ -223,39 +179,6 @@ function envSecretsAPI(httpClient: HttpClient) {
   }
 
   /**
-   * Updates a single secret.
-   *
-   * @param key - The key of the secret to update.
-   * @param data - An object containing at least one of the following properties:
-   *               newKey - The new key for the secret (optional).
-   *               value - The new value for the secret (optional).
-   *               description - The new description for the secret (optional).
-   * @returns A promise that resolves to an object containing the count of updated secrets and any secrets (keys) not found, or an error response.
-   */
-  async function update(
-    key: SecretKey,
-    data: AtLeastOne<{
-      newKey: SecretKey
-      value: string
-      description: string | null
-    }>
-  ) {
-    const arrayItems = [{ key, ...data }]
-    const validationError = validateUpdateSecretsInput(arrayItems)
-
-    if (validationError) {
-      return responseFailure(validationError)
-    }
-
-    if (Object.keys(data).length === 0) {
-      const error = noDataProvidedError()
-      return responseFailure(error)
-    }
-
-    return await updateSecrets(httpClient, arrayItems)
-  }
-
-  /**
    * Updates existing secrets.
    *
    * @param data - An array of secrets to update.
@@ -269,23 +192,6 @@ function envSecretsAPI(httpClient: HttpClient) {
     }
 
     return await updateSecrets(httpClient, data)
-  }
-
-  /**
-   * Removes a single secret.
-   *
-   * @param key - The key of the secret to remove.
-   * @returns A promise that resolves to an object containing the count of deleted secrets and any secrets (keys) not found, or an error response.
-   */
-  async function remove(key: SecretKey) {
-    const { invalidSecretKeys } = validateSecretKeys([key])
-
-    if (invalidSecretKeys.length > 0) {
-      const error = invalidSecretKeysError(invalidSecretKeys)
-      return responseFailure(error)
-    }
-
-    return await deleteEnvironmentSecrets(httpClient, [key])
   }
 
   /**
@@ -324,13 +230,9 @@ function envSecretsAPI(httpClient: HttpClient) {
     list,
     listOnly,
     listExclude,
-    create,
     createMany,
-    set,
     setMany,
-    update,
     updateMany,
-    remove,
     removeMany,
     removeAll,
   }
