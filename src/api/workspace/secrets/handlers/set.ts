@@ -8,7 +8,7 @@ import { SetSecretsError as SharedSetSecretsError } from '../../../../types/erro
 
 type SetSecretsError = SharedSetSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
 
-export interface SetSecretsArgs {
+export interface SetManySecretsArgs {
   project: string
   environment: string
   data: Array<SetSecretData>
@@ -28,7 +28,7 @@ export type SetSecretData = {
 
 async function setSecrets(
   envClient: HttpClient,
-  args: SetSecretsArgs
+  args: SetManySecretsArgs
 ): Promise<ApiResponse<SetSecretsResData, SetSecretsError>> {
   try {
     const { project, environment, data } = args
