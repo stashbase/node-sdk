@@ -183,7 +183,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param key - The key of the secret to set.
    * @param value - The value of the secret.
    * @param description - Optional description for the secret.
-   * @returns A promise that resolves to an object containing the count of set secrets and any secrets (keys) not found, or an error response.
+   * @returns A promise that resolves to an object containing the count of updated and created secrets, or an error response.
    */
   async function set(key: SecretKey, value: string, description?: string | null) {
     const arrayItems = [{ key, value, description }]
@@ -201,7 +201,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * Sets secrets, overwriting existing ones if they exist.
    *
    * @param data - An array of secrets to set.
-   * @returns A promise that resolves to null on success or an error response.
+   * @returns A promise that resolves to an object containing the count of updated and created secrets, or an error response.
    */
   async function setMany(data: SetSecretsData) {
     const validationError = validateSetSecretsInput(data)
