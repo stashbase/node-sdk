@@ -32,6 +32,7 @@ import { createWebhook } from './handlers/webhooks/create'
 import { CreateWebhookData } from './handlers/webhooks/create'
 import { updateWebhookStatus } from './handlers/webhooks/updateStatus'
 import { updateWebhook, UpdateWebhookData } from './handlers/webhooks/update'
+import { testWebhook } from './handlers/webhooks/test'
 
 class EnvironmentsAPI {
   constructor(private httpClient: HttpClient) {}
@@ -271,6 +272,11 @@ class WebhooksAPI {
   async update(webhookId: string, data: UpdateWebhookData) {
     return await updateWebhook(this.httpClient, { webhookId, data })
   }
+
+  async test(webhookId: string) {
+    return await testWebhook(this.httpClient, webhookId)
+  }
+
   async delete(webhookId: string) {
     return await deleteWebhook(this.httpClient, webhookId)
   }
