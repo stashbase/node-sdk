@@ -3,6 +3,7 @@ import { createWebhook, CreateWebhookArgs } from './handlers/create'
 import { getWebhook, GetWebhookArgs } from './handlers/get'
 import { listWebhooks, ListWebhooksArgs } from './handlers/list'
 import { listWebhookLogs, ListWebhookLogsArgs } from './handlers/listLogs'
+import { updateWebhookStatus, UpdateWebhookStatusArgs } from './handlers/updateStatus'
 export class WebhooksAPI {
   private httpClient: HttpClient
 
@@ -61,5 +62,31 @@ export class WebhooksAPI {
    */
   async create(args: CreateWebhookArgs) {
     return await createWebhook(this.httpClient, args)
+  }
+
+  /**
+   * Enables a webhook in a specific project and environment.
+   *
+   * @param args - The arguments for enabling a webhook.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.webhookId - The id of the webhook to enable.
+   * @returns A promise that resolves to the updated webhook object or an error response.
+   */
+  async enable(args: UpdateWebhookStatusArgs) {
+    return await updateWebhookStatus(this.httpClient, args, true)
+  }
+
+  /**
+   * Disables a webhook in a specific project and environment.
+   *
+   * @param args - The arguments for disabling a webhook.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.webhookId - The id of the webhook to disable.
+   * @returns A promise that resolves to the updated webhook object or an error response.
+   */
+  async disable(args: GetWebhookArgs) {
+    return await updateWebhookStatus(this.httpClient, args, false)
   }
 }
