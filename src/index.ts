@@ -1,7 +1,7 @@
-import environmentsAPI from './api/environments/api'
-import { projectsAPI } from './api/workspace/projects/api'
-import { environmentsAPI as envApi } from './api/workspace/environments/api'
-import { secretsAPI } from './api/workspace/secrets/api'
+import EnvironmentsAPI from './api/environments/api'
+import { ProjectsAPI } from './api/workspace/projects/api'
+import { EnvironmentsAPI as WsEnvironmentsAPI } from './api/workspace/environments/api'
+import { SecretsAPI } from './api/workspace/secrets/api'
 import { createHttpClient } from './http/client'
 import verifyWebhook from './webhooks/verify'
 
@@ -16,9 +16,9 @@ export function createEnvEase(workspaceApiKey: string) {
     authorization: { workspaceApiKey },
   })
 
-  const projects = projectsAPI(client)
-  const environments = envApi(client)
-  const secrets = secretsAPI(client)
+  const secrets = new SecretsAPI(client)
+  const projects = new ProjectsAPI(client)
+  const environments = new WsEnvironmentsAPI(client)
 
   return {
     projects,
@@ -39,7 +39,7 @@ export function createEnvApi(envApiKey: string) {
     authorization: { envApiKey },
   })
 
-  return environmentsAPI(client)
+  return new EnvironmentsAPI(client)
 }
 
 export { verifyWebhook }
