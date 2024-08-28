@@ -26,7 +26,13 @@ import {
 import { SetSecretsArgs, setSecrets } from './handlers/set'
 import { UpdateSecretsArgs, updateSecrets } from './handlers/update'
 
-export function secretsAPI(httpClient: HttpClient) {
+export class SecretsAPI {
+  private httpClient: HttpClient;
+
+  constructor(httpClient: HttpClient) {
+    this.httpClient = httpClient;
+  }
+
   /**
    * Retrieves a single secret by its key from a specific project and environment.
    *
@@ -36,7 +42,7 @@ export function secretsAPI(httpClient: HttpClient) {
    * @param args.key - The key of the secret to retrieve.
    * @returns A promise that resolves to the secret object or an error response.
    */
-  async function get(args: GetSecretArgs) {
+  async get(args: GetSecretArgs) {
     const { project, environment, key } = args
 
     const namesError = checkValidProjectEnv(project, environment)
@@ -50,7 +56,7 @@ export function secretsAPI(httpClient: HttpClient) {
       return responseFailure(error)
     }
 
-    return await getSecret(httpClient, args)
+    return await getSecret(this.httpClient, args)
   }
 
   /**
@@ -61,7 +67,7 @@ export function secretsAPI(httpClient: HttpClient) {
    * @param args.environment - The name or id of the environment.
    * @returns A promise that resolves to an array of secret objects or an error response.
    */
-  async function list(args: ListSecretsArgs) {
+  async list(args: ListSecretsArgs) {
     const { project, environment } = args
 
     const namesError = checkValidProjectEnv(project, environment)
@@ -70,7 +76,7 @@ export function secretsAPI(httpClient: HttpClient) {
       return responseFailure(namesError)
     }
 
-    return await listSecrets(httpClient, args)
+    return await listSecrets(this.httpClient, args)
   }
 
   /**
@@ -85,7 +91,7 @@ export function secretsAPI(httpClient: HttpClient) {
    *
    * @returns A promise that resolves to an array of specified secret objects or an error response.
    */
-  async function listOnly(args: ListOnlySecretsArgs) {
+  async listOnly(args: ListOnlySecretsArgs) {
     const { project, environment, only } = args
 
     const namesError = checkValidProjectEnv(project, environment)
@@ -95,9 +101,6 @@ export function secretsAPI(httpClient: HttpClient) {
     }
 
     if (!Array.isArray(only) || only.length === 0) {
-      // const emptyData: ListSecretsResData[] = []
-      // return responseSuccess(emptyData)
-
       const error = noDataProvidedError()
       return responseFailure(error)
     }
@@ -109,7 +112,7 @@ export function secretsAPI(httpClient: HttpClient) {
       return responseFailure(error)
     }
 
-    return await listSecrets(httpClient, args)
+    return await listSecrets(this.httpClient, args)
   }
 
   /**
@@ -123,7 +126,7 @@ export function secretsAPI(httpClient: HttpClient) {
    * @param args.omit - An array of secret properties to omit.
    * @returns A promise that resolves to an array of secret objects (excluding specified keys) or an error response.
    */
-  async function listExclude(args: ListExcludeSecretsArgs) {
+  async listExclude(args: ListExcludeSecretsArgs) {
     const { project, environment, exclude } = args
 
     const namesError = checkValidProjectEnv(project, environment)
@@ -133,9 +136,6 @@ export function secretsAPI(httpClient: HttpClient) {
     }
 
     if (!Array.isArray(exclude) || exclude.length === 0) {
-      // return empty response
-      // return await listSecrets(httpClient, args)
-
       const error = noDataProvidedError()
       return responseFailure(error)
     }
@@ -147,7 +147,7 @@ export function secretsAPI(httpClient: HttpClient) {
       return responseFailure(error)
     }
 
-    return await listSecrets(httpClient, args)
+    return await listSecrets(this.httpClient, args)
   }
 
   /**
@@ -160,7 +160,7 @@ export function secretsAPI(httpClient: HttpClient) {
    *
    * @returns A promise that resolves to an object containing the count of created secrets and any duplicate keys, or an error response.
    */
-  async function create(args: CreateSecretsArgs) {
+  async create(args: CreateSecretsArgs) {
     const { project, environment, data } = args
 
     const namesError = checkValidProjectEnv(project, environment)
@@ -175,7 +175,7 @@ export function secretsAPI(httpClient: HttpClient) {
       return responseFailure(validationError)
     }
 
-    return await createSecrets(httpClient, args)
+    return await createSecrets(this.httpClient, args)
   }
 
   /**
@@ -187,7 +187,7 @@ export function secretsAPI(httpClient: HttpClient) {
    * @param args.data - The secret data to set.
    * @returns A promise that resolves to null on success or an error response.
    */
-  async function set(args: SetSecretsArgs) {
+  async set(args: SetSecretsArgs) {
     const { project, environment, data } = args
 
     const namesError = checkValidProjectEnv(project, environment)
@@ -202,7 +202,7 @@ export function secretsAPI(httpClient: HttpClient) {
       return responseFailure(validationError)
     }
 
-    return await setSecrets(httpClient, args)
+    return await setSecrets(this.httpClient, args)
   }
 
   /**
@@ -214,7 +214,7 @@ export function secretsAPI(httpClient: HttpClient) {
    * @param args.data - The secret data to update.
    * @returns A promise that resolves to an object containing the count of updated secrets and any keys not found, or an error response.
    */
-  async function update(args: UpdateSecretsArgs) {
+  async update(args: UpdateSecretsArgs) {
     const { data } = args
 
     const validationError = validateUpdateSecretsInput(data)
@@ -223,7 +223,7 @@ export function secretsAPI(httpClient: HttpClient) {
       return responseFailure(validationError)
     }
 
-    return await updateSecrets(httpClient, args)
+    return await updateSecrets(this.httpClient, args)
   }
 
   /**
@@ -235,7 +235,7 @@ export function secretsAPI(httpClient: HttpClient) {
    * @param args.keys - An array of secret keys to remove.
    * @returns A promise that resolves to an object containing the count of deleted secrets and any keys not found, or an error response.
    */
-  async function remove(args: DeleteSecretsArgs) {
+  async remove(args: DeleteSecretsArgs) {
     const { keys, project, environment } = args
 
     const namesError = checkValidProjectEnv(project, environment)
@@ -256,7 +256,7 @@ export function secretsAPI(httpClient: HttpClient) {
       return responseFailure(error)
     }
 
-    return await deleteSecrets(httpClient, args)
+    return await deleteSecrets(this.httpClient, args)
   }
 
   /**
@@ -267,7 +267,7 @@ export function secretsAPI(httpClient: HttpClient) {
    * @param args.environment - The name or id of the environment.
    * @returns A promise that resolves to an object containing the count of deleted secrets, or an error response.
    */
-  async function removeAll(args: DeleteAllSecretsArgs) {
+  async removeAll(args: DeleteAllSecretsArgs) {
     const { project, environment } = args
     const namesError = checkValidProjectEnv(project, environment)
 
@@ -275,18 +275,6 @@ export function secretsAPI(httpClient: HttpClient) {
       return responseFailure(namesError)
     }
 
-    return await deleteAllSecrets(httpClient, args)
-  }
-
-  return {
-    get,
-    list,
-    listOnly,
-    listExclude,
-    create,
-    set,
-    update,
-    remove,
-    removeAll,
+    return await deleteAllSecrets(this.httpClient, args)
   }
 }
