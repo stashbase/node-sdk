@@ -71,6 +71,7 @@ class EnvironmentsAPI {
   }
 
   secrets = new EnvSecretsAPI(this.httpClient)
+  webhooks = new WebhooksAPI(this.httpClient)
 }
 
 class EnvSecretsAPI {
@@ -221,4 +222,7 @@ class EnvSecretsAPI {
   }
 }
 
+class WebhooksAPI {
+  constructor(private httpClient: HttpClient) {}
+  }
 export default EnvironmentsAPI
