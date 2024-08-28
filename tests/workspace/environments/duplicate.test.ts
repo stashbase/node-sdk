@@ -1,9 +1,9 @@
 import { describe, test } from 'vitest'
-import { createEnvEase } from '../../../src'
+import { createWorkspaceClient } from '../../../src'
 
 describe('Duplicate environment', () => {
   test('', async () => {
-    const stashbase = createEnvEase(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
+    const stashbase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
     const { error } = await stashbase.environments.duplicate({
       project: 'hero-hub',

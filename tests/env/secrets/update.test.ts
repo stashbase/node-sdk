@@ -1,8 +1,8 @@
 import { test } from 'vitest'
-import { createEnvApi } from '../../../src'
+import { createEnvClient } from '../../../src'
 
 test('Update env secrets', async () => {
-  const envApi = createEnvApi('duIwyuCWOhJYpWQM3zmcGm0uGAJanqBS')
+  const envApi = createEnvClient('duIwyuCWOhJYpWQM3zmcGm0uGAJanqBS')
 
   const { data, error } = await envApi.secrets.update([
     {

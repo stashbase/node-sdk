@@ -1,8 +1,8 @@
 import { assert, test } from 'vitest'
-import { createEnvApi } from '../../../src'
+import { createEnvClient } from '../../../src'
 
 test('Returns exipred token error', async () => {
-  const envApi = createEnvApi('5D0sqWbu8BzauYK76bFQ4hrIstkQKeqr')
+  const envApi = createEnvClient('5D0sqWbu8BzauYK76bFQ4hrIstkQKeqr')
 
   const { error } = await envApi.load({
     print: 'key',

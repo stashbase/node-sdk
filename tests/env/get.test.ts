@@ -1,9 +1,9 @@
 // tests/projects.test.ts
 import { assert, test } from 'vitest'
-import { createEnvApi } from '../../src'
+import { createEnvClient } from '../../src'
 
 test('Get specific env with env token and return variables with name', async () => {
-  const envApi = createEnvApi(process.env.VITE_TEST_ENV_API_KEY as string)
+  const envApi = createEnvClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
   const { data, error } = await envApi.get()
 

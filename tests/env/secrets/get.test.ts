@@ -1,8 +1,8 @@
 import { test } from 'vitest'
-import { createEnvApi } from '../../../src'
+import { createEnvClient } from '../../../src'
 
 test('Get signgle secret by key', async () => {
-  const envApi = createEnvApi(process.env.VITE_TEST_ENV_API_KEY as string)
+  const envApi = createEnvClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
   const { data, error } = await envApi.secrets.get('NEW_KEY')
 
