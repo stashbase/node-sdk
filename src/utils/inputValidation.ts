@@ -82,10 +82,10 @@ function isAlphanumericUppercaseWithUnderscore(inputString: string): boolean {
   return !pattern.test(inputString)
 }
 
-type Resource = 'project' | 'environment'
+type Resource = 'project' | 'environment' | 'webhook'
 
 export const isResourceIdFormat = (resource: Resource, input: string) => {
-  const prefix = resource === 'project' ? 'pr_' : 'ev_'
+  const prefix = resource === 'project' ? 'pr_' : resource === 'webhook' ? 'wh_' : 'ev_'
 
   if (input?.length !== 25 || !input.startsWith(prefix)) {
     return false
@@ -99,6 +99,8 @@ export const isResourceIdFormat = (resource: Resource, input: string) => {
     return false
   }
 }
+
+export const isValidWebhookId = (webhookId: string) => isResourceIdFormat('webhook', webhookId)
 
 export const secretHasSelfReference = (secretKey: string, value: string): boolean => {
   const regex = /\${(.*?)}/g
