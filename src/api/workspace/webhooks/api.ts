@@ -1,4 +1,5 @@
 import { HttpClient } from '../../../http/client'
+import { getWebhook, GetWebhookArgs } from './handlers/get'
 import { listWebhooks, ListWebhooksArgs } from './handlers/list'
 import { listWebhookLogs, ListWebhookLogsArgs } from './handlers/listLogs'
 export class WebhooksAPI {
@@ -31,5 +32,20 @@ export class WebhooksAPI {
    */
   async listLogs(args: ListWebhookLogsArgs) {
     return await listWebhookLogs(this.httpClient, args)
+  }
+
+  /**
+   * Retrieves a single webhook by its id from a specific project and environment.
+   *
+   * @param args - The arguments for retrieving a webhook.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.webhookId - The id of the webhook to retrieve.
+   * @param args.withSecret - Whether to include the webhook secret in the response.
+   * @returns A promise that resolves to the webhook object identifiers (id, name) or an error response.
+   */
+  async get(args: GetWebhookArgs) {
+    const withSecret = args.withSecret ?? false
+    return await getWebhook(this.httpClient, { ...args, withSecret })
   }
 }
