@@ -5,6 +5,7 @@ import { getWebhook, GetWebhookArgs } from './handlers/get'
 import { listWebhooks, ListWebhooksArgs } from './handlers/list'
 import { listWebhookLogs, ListWebhookLogsArgs } from './handlers/listLogs'
 import { testWebhook, TestWebhookArgs } from './handlers/test'
+import { updateWebhook, UpdateWebhookArgs } from './handlers/update'
 import { updateWebhookStatus, UpdateWebhookStatusArgs } from './handlers/updateStatus'
 export class WebhooksAPI {
   private httpClient: HttpClient
@@ -91,7 +92,21 @@ export class WebhooksAPI {
   async disable(args: GetWebhookArgs) {
     return await updateWebhookStatus(this.httpClient, args, false)
   }
+
   /**
+   * Updates an existing webhook in a specific project and environment.
+   *
+   * @param args - The arguments for updating a webhook.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.webhookId - The id of the webhook to update.
+   * @param args.data - The webhook data to update.
+   * @returns A promise that resolves to the updated webhook object or an error response.
+   */
+  async update(args: UpdateWebhookArgs) {
+    return await updateWebhook(this.httpClient, args)
+  }
+
   /**
    * Tests a webhook in a specific project and environment.
    *
