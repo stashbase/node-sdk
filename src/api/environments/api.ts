@@ -30,6 +30,7 @@ import { listWebhookLogs } from './handlers/webhooks/listLogs'
 import { deleteWebhook } from './handlers/webhooks/delete'
 import { createWebhook } from './handlers/webhooks/create'
 import { CreateWebhookData } from './handlers/webhooks/create'
+import { getWebhookSigningSecret } from './handlers/webhooks/getSecret'
 import { updateWebhookStatus } from './handlers/webhooks/updateStatus'
 import { updateWebhook, UpdateWebhookData } from './handlers/webhooks/update'
 import { testWebhook } from './handlers/webhooks/test'
@@ -279,5 +280,9 @@ class WebhooksAPI {
 
   async delete(webhookId: string) {
     return await deleteWebhook(this.httpClient, webhookId)
+  }
+
+  async getSigningSecret(webhookId: string) {
+    return await getWebhookSigningSecret(this.httpClient, webhookId)
   }
 export default EnvironmentsAPI
