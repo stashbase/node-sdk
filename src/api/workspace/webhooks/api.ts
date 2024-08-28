@@ -5,9 +5,11 @@ import { getWebhook, GetWebhookArgs } from './handlers/get'
 import { getWebhookSigningSecret, GetWebhookSigningSecretArgs } from './handlers/getSecret'
 import { listWebhooks, ListWebhooksArgs } from './handlers/list'
 import { listWebhookLogs, ListWebhookLogsArgs } from './handlers/listLogs'
+import { rotateWebhookSigningSecret, RotateWebhookSigningSecretArgs } from './handlers/rotateSecret'
 import { testWebhook, TestWebhookArgs } from './handlers/test'
 import { updateWebhook, UpdateWebhookArgs } from './handlers/update'
 import { updateWebhookStatus, UpdateWebhookStatusArgs } from './handlers/updateStatus'
+
 export class WebhooksAPI {
   private httpClient: HttpClient
 
@@ -120,6 +122,7 @@ export class WebhooksAPI {
   async test(args: TestWebhookArgs) {
     return await testWebhook(this.httpClient, args)
   }
+
   /**
    * Deletes a webhook from a specific project and environment.
    *
@@ -144,5 +147,18 @@ export class WebhooksAPI {
    */
   async getSigningSecret(args: GetWebhookSigningSecretArgs) {
     return await getWebhookSigningSecret(this.httpClient, args)
+  }
+
+  /**
+   * Rotates the signing secret for a specific webhook in a project and environment.
+   *
+   * @param args - The arguments for rotating the signing secret.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.webhookId - The id of the webhook.
+   * @returns A promise that resolves to the new signing secret or an error response.
+   */
+  async rotateSigningSecret(args: RotateWebhookSigningSecretArgs) {
+    return await rotateWebhookSigningSecret(this.httpClient, args)
   }
 }
