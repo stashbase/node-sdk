@@ -1,4 +1,5 @@
 import { HttpClient } from '../../../http/client'
+import { createWebhook, CreateWebhookArgs } from './handlers/create'
 import { getWebhook, GetWebhookArgs } from './handlers/get'
 import { listWebhooks, ListWebhooksArgs } from './handlers/list'
 import { listWebhookLogs, ListWebhookLogsArgs } from './handlers/listLogs'
@@ -47,5 +48,18 @@ export class WebhooksAPI {
   async get(args: GetWebhookArgs) {
     const withSecret = args.withSecret ?? false
     return await getWebhook(this.httpClient, { ...args, withSecret })
+  }
+
+  /**
+   * Creates a new webhook in a specific project and environment.
+   *
+   * @param args - The arguments for creating a webhook.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.data - The webhook data to create.
+   * @returns A promise that resolves to the created webhook object or an error response.
+   */
+  async create(args: CreateWebhookArgs) {
+    return await createWebhook(this.httpClient, args)
   }
 }
