@@ -27,10 +27,10 @@ import { SetSecretsArgs, setSecrets } from './handlers/set'
 import { UpdateSecretsArgs, updateSecrets } from './handlers/update'
 
 export class SecretsAPI {
-  private httpClient: HttpClient;
+  private httpClient: HttpClient
 
   constructor(httpClient: HttpClient) {
-    this.httpClient = httpClient;
+    this.httpClient = httpClient
   }
 
   /**
@@ -227,7 +227,7 @@ export class SecretsAPI {
   }
 
   /**
-   * Removes specific secrets from a project and environment.
+   * Deleetes specific secrets from a project and environment.
    *
    * @param args - The arguments for removing secrets.
    * @param args.project - The name or id of the project.
@@ -235,7 +235,7 @@ export class SecretsAPI {
    * @param args.keys - An array of secret keys to remove.
    * @returns A promise that resolves to an object containing the count of deleted secrets and any keys not found, or an error response.
    */
-  async remove(args: DeleteSecretsArgs) {
+  async delete(args: DeleteSecretsArgs) {
     const { keys, project, environment } = args
 
     const namesError = checkValidProjectEnv(project, environment)
@@ -260,14 +260,14 @@ export class SecretsAPI {
   }
 
   /**
-   * Removes all secrets from a specific project and environment.
+   * Deletes all secrets from a specific project and environment.
    *
    * @param args - The arguments for removing all secrets.
    * @param args.project - The name or id of the project.
    * @param args.environment - The name or id of the environment.
    * @returns A promise that resolves to an object containing the count of deleted secrets, or an error response.
    */
-  async removeAll(args: DeleteAllSecretsArgs) {
+  async deleteAll(args: DeleteAllSecretsArgs) {
     const { project, environment } = args
     const namesError = checkValidProjectEnv(project, environment)
 
