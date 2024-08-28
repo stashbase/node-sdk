@@ -5,7 +5,7 @@ describe('Delete environment', () => {
   test('Invalid token', async () => {
     const envEase = createWorkspaceClient('4r4')
 
-    const { data, error } = await envEase.environments.remove({
+    const { data, error } = await envEase.environments.delete({
       project: 'hero-hub1231231231',
       environment: 'dev-sdk',
     })
@@ -19,7 +19,7 @@ describe('Delete environment', () => {
   test('Project not found', async () => {
     const envEase = createWorkspaceClient('xPKDa2Xq0zWmfES1nLDoG45qZtR1z2qL')
 
-    const { data, error } = await envEase.environments.remove({
+    const { data, error } = await envEase.environments.delete({
       project: 'hero-hub1231231231',
       environment: 'dev-sdk',
     })
