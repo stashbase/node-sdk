@@ -190,12 +190,12 @@ class EnvSecretsAPI {
   }
 
   /**
-   * Removes specific secrets.
+   * Delete specific secrets.
    *
    * @param keys - An array of secret keys to remove.
    * @returns A promise that resolves to an object containing the count of deleted secrets and any secrets (keys) not found, or an error response.
    */
-  async remove(keys: Uppercase<string>[]) {
+  async delete(keys: Uppercase<string>[]) {
     if (keys.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
@@ -212,11 +212,11 @@ class EnvSecretsAPI {
   }
 
   /**
-   * Removes all secrets from the environment.
+   * Delete all secrets from the environment.
    *
    * @returns A promise that resolves to an object containing the count of deleted secrets, or an error response.
    */
-  async removeAll() {
+  async deleteAll() {
     return await deleteAllEnvironmentSecrets(this.httpClient)
   }
 }
