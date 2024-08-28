@@ -26,6 +26,7 @@ import { GetSecretOptions, ListSecretsOptions } from '../../types/secrets'
 import { SecretKey } from '../../types/secretKey'
 import { listWebhooks } from './handlers/webhooks/list'
 import { getWebhook } from './handlers/webhooks/get'
+import { listWebhookLogs } from './handlers/webhooks/listLogs'
 
 class EnvironmentsAPI {
   constructor(private httpClient: HttpClient) {}
@@ -235,5 +236,18 @@ class WebhooksAPI {
   /** Retrieves a single webhook associated with the current API key environment. */
   async get(webhookId: string, withSecret?: boolean) {
     return await getWebhook(this.httpClient, { webhookId, withSecret: withSecret ?? false })
+  }
+
+  async listLogs(
+    webhookId: string,
+    options?: {
+      /** The current page number (min 1, max 1000, default 1). */
+      page?: number
+      /** The number of items per page (min 2, max 30, default 10). */
+      limit?: number
+    }
+  ) {
+    const opts = options ?? {}
+    return await listWebhookLogs(this.httpClient, { webhookId, ...opts })
   }
 export default EnvironmentsAPI
