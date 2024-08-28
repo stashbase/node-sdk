@@ -1,9 +1,9 @@
 import { describe, test } from 'vitest'
-import { createEnvEase } from '../../../src'
+import { createWorkspaceClient } from '../../../src'
 
 describe('Update  environment type', () => {
   test('', async () => {
-    const stashbase = createEnvEase(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
+    const stashbase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
     const { data, error } = await stashbase.environments.updateType({
       project: 'hero-hub',

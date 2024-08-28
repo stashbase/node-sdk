@@ -11,7 +11,7 @@ import verifyWebhook from './webhooks/verify'
  * @param workspaceApiKey - The Worksapce API key.
  * @returns An object containing methods for interacting with projects, environments, and secrets.
  */
-export function createEnvEase(workspaceApiKey: string) {
+export function createWorkspaceClient(workspaceApiKey: string) {
   const client = createHttpClient({
     authorization: { workspaceApiKey },
   })
@@ -33,7 +33,7 @@ export function createEnvEase(workspaceApiKey: string) {
  * @param envApiKey - The environment API key.
  * @returns An object containing methods for interacting with the environment.
  */
-export function createEnvApi(envApiKey: string) {
+export function createEnvClient(envApiKey: string) {
   console.log(envApiKey)
   const client = createHttpClient({
     authorization: { envApiKey },

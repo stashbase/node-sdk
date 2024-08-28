@@ -1,8 +1,8 @@
 import { test } from 'vitest'
-import { createEnvEase } from '../../../src'
+import { createWorkspaceClient } from '../../../src'
 
 test('Delete secrets', async () => {
-  const envEase = createEnvEase(process.env.WORKSPACE_API_KEY as string)
+  const envEase = createWorkspaceClient(process.env.WORKSPACE_API_KEY as string)
 
   const { data, error } = await envEase.secrets.removeAll({
     project: 'name',

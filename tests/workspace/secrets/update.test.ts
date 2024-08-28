@@ -1,8 +1,8 @@
 import { test } from 'vitest'
-import { createEnvEase } from '../../../src'
+import { createWorkspaceClient } from '../../../src'
 
 test('Update secrets', async () => {
-  const envEase = createEnvEase(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
+  const envEase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
   const { data, error } = await envEase.secrets.update({
     project: 'name',
