@@ -20,19 +20,25 @@ import { deleteProject } from './handlers/delete'
 import { getProject } from './handlers/get'
 import { ListProjectsOpts, listProjects } from './handlers/list'
 
-export function projectsAPI(httpClient: HttpClient) {
+export class ProjectsAPI {
+  private httpClient: HttpClient;
+
+  constructor(httpClient: HttpClient) {
+    this.httpClient = httpClient;
+  }
+
   /**
    * Retrieves a single project by its name or id.
    * @param projectNameOrId - The name or id of the project to retrieve.
    * @returns A promise that resolves to the project object or an error response.
    */
-  async function get(projectNameOrId: string) {
+  async get(projectNameOrId: string) {
     if (!isValidProjectIdentifier(projectNameOrId)) {
       const error = invalidProjectIdentifierError
       return responseFailure(error)
     }
 
-    return await getProject(httpClient, projectNameOrId)
+    return await getProject(this.httpClient, projectNameOrId)
   }
 
   /**
@@ -40,7 +46,7 @@ export function projectsAPI(httpClient: HttpClient) {
    * @param options - Optional parameters to filter or paginate the list of projects.
    * @returns A promise that resolves to an array of project objects or an error response.
    */
-  async function list(options?: ListProjectsOpts) {
+  async list(options?: ListProjectsOpts) {
     if (options) {
       if (options.page) {
         const page = options.page
@@ -88,7 +94,7 @@ export function projectsAPI(httpClient: HttpClient) {
       }
     }
 
-    return await listProjects(httpClient, options)
+    return await listProjects(this.httpClient, options)
   }
 
   /**
@@ -96,7 +102,7 @@ export function projectsAPI(httpClient: HttpClient) {
    * @param data - The data for creating a new project, including the project name.
    * @returns A promise that resolves to the created project object or an error response.
    */
-  async function create(data: CreateProjectData) {
+  async create(data: CreateProjectData) {
     const { name } = data
     const valid = isValidProjectName(name)
 
@@ -112,7 +118,7 @@ export function projectsAPI(httpClient: HttpClient) {
       return responseFailure(error)
     }
 
-    return await createProject(httpClient, data)
+    return await createProject(this.httpClient, data)
   }
 
   /**
@@ -120,7 +126,7 @@ export function projectsAPI(httpClient: HttpClient) {
    * @param projectNameOrId - The name or id of the project to remove.
    * @returns A promise that resolves to null on successful deletion or an error response.
    */
-  async function remove(projectNameOrId: string) {
+  async remove(projectNameOrId: string) {
     const invaliIdentifier = !isValidProjectIdentifier(projectNameOrId)
 
     if (invaliIdentifier) {
@@ -128,13 +134,6 @@ export function projectsAPI(httpClient: HttpClient) {
       return responseFailure(error)
     }
 
-    return await deleteProject(httpClient, projectNameOrId)
-  }
-
-  return {
-    get,
-    list,
-    create,
-    remove,
+    return await deleteProject(this.httpClient, projectNameOrId)
   }
 }
