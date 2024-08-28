@@ -40,7 +40,13 @@ export const checkValidProjectEnv = (projectName: string, environmentName: strin
   }
 }
 
-export function environmentsAPI(httpClient: HttpClient) {
+export class EnvironmentsAPI {
+  private httpClient: HttpClient;
+
+  constructor(httpClient: HttpClient) {
+    this.httpClient = httpClient;
+  }
+
   /**
    * Retrieves an environment by its name within a project.
    * @param args - The arguments for getting an environment.
@@ -48,7 +54,7 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @param args.project - The name or the id of the project containing the environment.
    * @returns A promise that resolves to the environment data or an error response.
    */
-  async function get(args: GetEnvironmentArgs) {
+  async get(args: GetEnvironmentArgs) {
     const { environment, project } = args
 
     const identifiersError = checkValidProjectEnv(project, environment)
@@ -57,7 +63,7 @@ export function environmentsAPI(httpClient: HttpClient) {
       return responseFailure(identifiersError)
     }
 
-    return await getEnvironment(httpClient, args)
+    return await getEnvironment(this.httpClient, args)
   }
 
   /**
@@ -69,7 +75,7 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @throws Error with the error code if loading fails.
    * @returns A promise that resolves to null if successful.
    */
-  async function loadOrThrow(args: LoadEnvironmentArgs) {
+  async loadOrThrow(args: LoadEnvironmentArgs) {
     const { environment, project } = args
 
     if (args?.enabled === false) {
@@ -82,7 +88,7 @@ export function environmentsAPI(httpClient: HttpClient) {
       return responseFailure(identifiersError)
     }
 
-    const { error } = await loadEnvironment(httpClient, args)
+    const { error } = await loadEnvironment(this.httpClient, args)
 
     // throws only error code
     if (error) {
@@ -98,7 +104,7 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @param args.enabled - Whether the loading is enabled (optional).
    * @returns A promise that resolves to the load result or an error response.
    */
-  async function load(args: LoadEnvironmentArgs) {
+  async load(args: LoadEnvironmentArgs) {
     const { environment, project } = args
 
     if (args?.enabled === false) {
@@ -111,7 +117,7 @@ export function environmentsAPI(httpClient: HttpClient) {
       return responseFailure(identifiersError)
     }
 
-    return await loadEnvironment(httpClient, args)
+    return await loadEnvironment(this.httpClient, args)
   }
 
   /**
@@ -120,7 +126,7 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @param args.project - The name or id of the project to list environments from.
    * @returns A promise that resolves to an array of environments or an error response.
    */
-  async function list(args: ListEnvironmentArgs) {
+  async list(args: ListEnvironmentArgs) {
     if (!isValidProjectIdentifier(args.project)) {
       const error = invalidProjectIdentifierError
       return responseFailure(error)
@@ -151,7 +157,7 @@ export function environmentsAPI(httpClient: HttpClient) {
       }
     }
 
-    return await listEnvironments(httpClient, args)
+    return await listEnvironments(this.httpClient, args)
   }
 
   /**
@@ -161,7 +167,7 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @param args.name - The name of the new environment.
    * @returns A promise that resolves to the creation result or an error response.
    */
-  async function create(args: CreateEnvironmentArgs) {
+  async create(args: CreateEnvironmentArgs) {
     const { project, name } = args
 
     const projectIdentifierError = isValidProjectIdentifier(project)
@@ -183,7 +189,7 @@ export function environmentsAPI(httpClient: HttpClient) {
       return responseFailure(error)
     }
 
-    return await createEnvironment(httpClient, args)
+    return await createEnvironment(this.httpClient, args)
   }
 
   /**
@@ -193,7 +199,7 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @param args.project - The name or id of the project containing the environment.
    * @returns A promise that resolves to the removal result or an error response.
    */
-  async function remove(args: DeleteEnvironmentArgs) {
+  async remove(args: DeleteEnvironmentArgs) {
     const { environment, project } = args
 
     const identifiersError = checkValidProjectEnv(project, environment)
@@ -202,7 +208,7 @@ export function environmentsAPI(httpClient: HttpClient) {
       return responseFailure(identifiersError)
     }
 
-    return await deleteEnvironment(httpClient, args)
+    return await deleteEnvironment(this.httpClient, args)
   }
 
   /**
@@ -213,7 +219,7 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @param args.newName - The new name for the environment.
    * @returns A promise that resolves to the rename result or an error response.
    */
-  async function rename(args: RenameEnvironmentArgs) {
+  async rename(args: RenameEnvironmentArgs) {
     const { project, newName, environment } = args
 
     const identifiersError = checkValidProjectEnv(project, environment)
@@ -241,7 +247,7 @@ export function environmentsAPI(httpClient: HttpClient) {
       return responseFailure(error)
     }
 
-    return await renameEnvironment(httpClient, args)
+    return await renameEnvironment(this.httpClient, args)
   }
 
   /**
@@ -252,7 +258,7 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @param args.duplicateName - The name for the new duplicate environment.
    * @returns A promise that resolves to the duplication result or an error response.
    */
-  async function duplicate(args: DuplicateEnvironmentArgs) {
+  async duplicate(args: DuplicateEnvironmentArgs) {
     const { project, duplicateName, environment } = args
 
     const identifiersError = checkValidProjectEnv(project, environment)
@@ -280,7 +286,7 @@ export function environmentsAPI(httpClient: HttpClient) {
       return responseFailure(error)
     }
 
-    return await duplicateEnvironment(httpClient, args)
+    return await duplicateEnvironment(this.httpClient, args)
   }
 
   /**
@@ -290,7 +296,7 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @param args.name - The name or id of the environment to update.
    * @returns A promise that resolves to the update result or an error response.
    */
-  async function updateType(args: UpdateEnvironmentTypeArgs) {
+  async updateType(args: UpdateEnvironmentTypeArgs) {
     const { project, environment } = args
 
     const identifiersError = checkValidProjectEnv(project, environment)
@@ -299,7 +305,7 @@ export function environmentsAPI(httpClient: HttpClient) {
       return responseFailure(identifiersError)
     }
 
-    return await updateEnvironmentType(httpClient, args)
+    return await updateEnvironmentType(this.httpClient, args)
   }
 
   /**
@@ -309,7 +315,7 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @param args.name - The name or id of the environment to lock.
    * @returns A promise that resolves to the lock result or an error response.
    */
-  async function lock(args: LockEnvironmentArgs) {
+  async lock(args: LockEnvironmentArgs) {
     const { project, name } = args
 
     const identifiersError = checkValidProjectEnv(project, name)
@@ -318,7 +324,7 @@ export function environmentsAPI(httpClient: HttpClient) {
       return responseFailure(identifiersError)
     }
 
-    return await lockUnlockEnvironment(httpClient, args, true)
+    return await lockUnlockEnvironment(this.httpClient, args, true)
   }
 
   /**
@@ -328,7 +334,7 @@ export function environmentsAPI(httpClient: HttpClient) {
    * @param args.name - The name or id of the environment to unlock.
    * @returns A promise that resolves to the unlock result or an error response.
    */
-  async function unlock(args: LockEnvironmentArgs) {
+  async unlock(args: LockEnvironmentArgs) {
     const { project, name } = args
 
     const identifiersError = checkValidProjectEnv(project, name)
@@ -337,20 +343,6 @@ export function environmentsAPI(httpClient: HttpClient) {
       return responseFailure(identifiersError)
     }
 
-    return await lockUnlockEnvironment(httpClient, args, false)
-  }
-
-  return {
-    get,
-    load,
-    loadOrThrow,
-    list,
-    create,
-    rename,
-    duplicate,
-    updateType,
-    lock,
-    unlock,
-    remove,
+    return await lockUnlockEnvironment(this.httpClient, args, false)
   }
 }
