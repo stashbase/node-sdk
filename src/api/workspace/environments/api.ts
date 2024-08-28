@@ -41,10 +41,10 @@ export const checkValidProjectEnv = (projectName: string, environmentName: strin
 }
 
 export class EnvironmentsAPI {
-  private httpClient: HttpClient;
+  private httpClient: HttpClient
 
   constructor(httpClient: HttpClient) {
-    this.httpClient = httpClient;
+    this.httpClient = httpClient
   }
 
   /**
@@ -193,13 +193,13 @@ export class EnvironmentsAPI {
   }
 
   /**
-   * Removes an environment from a project.
+   * Deletes an environment from a project.
    * @param args - The arguments for removing an environment.
    * @param args.environment - The name or id of the environment to remove.
    * @param args.project - The name or id of the project containing the environment.
    * @returns A promise that resolves to the removal result or an error response.
    */
-  async remove(args: DeleteEnvironmentArgs) {
+  async delete(args: DeleteEnvironmentArgs) {
     const { environment, project } = args
 
     const identifiersError = checkValidProjectEnv(project, environment)
