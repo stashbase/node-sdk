@@ -2,7 +2,7 @@ import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { WebhookSigningSecret } from '../../../../types/webhooks'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-import { GetWebhookError, GetWebhookSigningSecretError } from '../../../../types/errors/webhooks'
+import { GetWebhookError, RotateWebhookSigningSecretError } from '../../../../types/errors/webhooks'
 
 export interface RotateWebhookSigningSecretArgst {
   webhookId: string
@@ -11,7 +11,7 @@ export interface RotateWebhookSigningSecretArgst {
 async function rotateWebhookSigningSecret(
   envClient: HttpClient,
   webhookId: string
-): Promise<ApiResponse<WebhookSigningSecret, GetWebhookSigningSecretError>> {
+): Promise<ApiResponse<WebhookSigningSecret, RotateWebhookSigningSecretError>> {
   try {
     const webhook = await envClient.post<WebhookSigningSecret>({
       path: `/v1/webhooks/${webhookId}/signing-secret`,
