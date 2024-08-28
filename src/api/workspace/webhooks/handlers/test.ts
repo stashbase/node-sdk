@@ -1,0 +1,36 @@
+import { HttpClient } from '../../../../http/client'
+import { TestWebhookResponse } from '../../../../types/webhooks'
+import { createApiErrorFromResponse } from '../../../../errors'
+import { GetWebhookError as SharedGetWebhookError } from '../../../../types/errors/webhooks'
+import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
+import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
+
+export type TestWebhookArgs = ProjectEnvHandlerArgs<{
+  webhookId: string
+}>
+
+export type TestWebhookError =
+  | SharedGetWebhookError
+  | ProjectNotFoundError
+  | EnvironmentNotFoundError
+
+async function testWebhook(
+  client: HttpClient,
+  args: TestWebhookArgs
+): Promise<ApiResponse<TestWebhookResponse, TestWebhookError>> {
+  const { project, environment, webhookId } = args
+
+  try {
+    const webhook = await client.post<TestWebhookResponse>({
+      path: `/v1/projects/${project}/environments/${environment}/webhooks/${webhookId}/test`,
+    })
+
+    return responseSuccess(webhook)
+  } catch (error) {
+    const apiError = createApiErrorFromResponse<TestWebhookError>(error)
+    return responseFailure(apiError)
+  }
+}
+
+export { testWebhook }

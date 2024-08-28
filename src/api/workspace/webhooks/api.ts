@@ -4,6 +4,7 @@ import { deleteWebhook, DeleteWebhookArgs } from './handlers/delete'
 import { getWebhook, GetWebhookArgs } from './handlers/get'
 import { listWebhooks, ListWebhooksArgs } from './handlers/list'
 import { listWebhookLogs, ListWebhookLogsArgs } from './handlers/listLogs'
+import { testWebhook, TestWebhookArgs } from './handlers/test'
 import { updateWebhookStatus, UpdateWebhookStatusArgs } from './handlers/updateStatus'
 export class WebhooksAPI {
   private httpClient: HttpClient
@@ -92,6 +93,17 @@ export class WebhooksAPI {
   }
   /**
   /**
+   * Tests a webhook in a specific project and environment.
+   *
+   * @param args - The arguments for testing a webhook.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.webhookId - The id of the webhook to test.
+   * @returns A promise that resolves to the test result or an error response.
+   */
+  async test(args: TestWebhookArgs) {
+    return await testWebhook(this.httpClient, args)
+  }
   /**
    * Deletes a webhook from a specific project and environment.
    *
