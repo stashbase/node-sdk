@@ -2,6 +2,7 @@ import { HttpClient } from '../../../http/client'
 import { createWebhook, CreateWebhookArgs } from './handlers/create'
 import { deleteWebhook, DeleteWebhookArgs } from './handlers/delete'
 import { getWebhook, GetWebhookArgs } from './handlers/get'
+import { getWebhookSigningSecret, GetWebhookSigningSecretArgs } from './handlers/getSecret'
 import { listWebhooks, ListWebhooksArgs } from './handlers/list'
 import { listWebhookLogs, ListWebhookLogsArgs } from './handlers/listLogs'
 import { testWebhook, TestWebhookArgs } from './handlers/test'
@@ -133,4 +134,15 @@ export class WebhooksAPI {
   }
 
   /**
+   * Retrieves the signing secret for a specific webhook in a project and environment.
+   *
+   * @param args - The arguments for retrieving the signing secret.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.webhookId - The id of the webhook.
+   * @returns A promise that resolves to the signing secret or an error response.
+   */
+  async getSigningSecret(args: GetWebhookSigningSecretArgs) {
+    return await getWebhookSigningSecret(this.httpClient, args)
+  }
 }
