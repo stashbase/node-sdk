@@ -8,6 +8,7 @@ import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
 import { getSecret } from './handlers/secrets/get'
 import {
   isValidSecretKey,
+  isValidWebhookId,
   validateCreateSecretsInput,
   validateSecretKeys,
   validateSetSecretsInput,
@@ -35,6 +36,16 @@ import { getWebhookSigningSecret } from './handlers/webhooks/getSecret'
 import { updateWebhookStatus } from './handlers/webhooks/updateStatus'
 import { updateWebhook, UpdateWebhookData } from './handlers/webhooks/update'
 import { testWebhook } from './handlers/webhooks/test'
+import { invalidWebhookIdError } from '../../errors/webhooks'
+
+const validateWebhookIdForMethod = (webhookId: string) => {
+  const isValid = isValidWebhookId(webhookId)
+
+  if (!isValid) {
+    const error = invalidWebhookIdError
+    return responseFailure(error)
+  }
+}
 
 class EnvironmentsAPI {
   constructor(private httpClient: HttpClient) {}
@@ -243,6 +254,12 @@ class WebhooksAPI {
 
   /** Retrieves a single webhook associated with the current API key environment. */
   async get(webhookId: string, withSecret?: boolean) {
+    const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
+
+    if (invalidWebhookIdError) {
+      return invalidWebhookIdError
+    }
+
     return await getWebhook(this.httpClient, { webhookId, withSecret: withSecret ?? false })
   }
 
@@ -255,6 +272,12 @@ class WebhooksAPI {
       limit?: number
     }
   ) {
+    const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
+
+    if (invalidWebhookIdError) {
+      return invalidWebhookIdError
+    }
+
     const opts = options ?? {}
     return await listWebhookLogs(this.httpClient, { webhookId, ...opts })
   }
@@ -264,30 +287,72 @@ class WebhooksAPI {
   }
 
   async enable(webhookId: string) {
+    const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
+
+    if (invalidWebhookIdError) {
+      return invalidWebhookIdError
+    }
+
     return await updateWebhookStatus(this.httpClient, webhookId, true)
   }
 
   async disable(webhookId: string) {
+    const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
+
+    if (invalidWebhookIdError) {
+      return invalidWebhookIdError
+    }
+
     return await updateWebhookStatus(this.httpClient, webhookId, false)
   }
 
   async update(webhookId: string, data: UpdateWebhookData) {
+    const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
+
+    if (invalidWebhookIdError) {
+      return invalidWebhookIdError
+    }
+
     return await updateWebhook(this.httpClient, { webhookId, data })
   }
 
   async test(webhookId: string) {
+    const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
+
+    if (invalidWebhookIdError) {
+      return invalidWebhookIdError
+    }
+
     return await testWebhook(this.httpClient, webhookId)
   }
 
   async delete(webhookId: string) {
+    const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
+
+    if (invalidWebhookIdError) {
+      return invalidWebhookIdError
+    }
+
     return await deleteWebhook(this.httpClient, webhookId)
   }
 
   async getSigningSecret(webhookId: string) {
+    const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
+
+    if (invalidWebhookIdError) {
+      return invalidWebhookIdError
+    }
+
     return await getWebhookSigningSecret(this.httpClient, webhookId)
   }
 
   async rotateSigningSecret(webhookId: string) {
+    const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
+
+    if (invalidWebhookIdError) {
+      return invalidWebhookIdError
+    }
+
     return await rotateWebhookSigningSecret(this.httpClient, webhookId)
   }
 }
