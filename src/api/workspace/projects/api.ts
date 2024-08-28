@@ -21,10 +21,10 @@ import { getProject } from './handlers/get'
 import { ListProjectsOpts, listProjects } from './handlers/list'
 
 export class ProjectsAPI {
-  private httpClient: HttpClient;
+  private httpClient: HttpClient
 
   constructor(httpClient: HttpClient) {
-    this.httpClient = httpClient;
+    this.httpClient = httpClient
   }
 
   /**
@@ -122,11 +122,11 @@ export class ProjectsAPI {
   }
 
   /**
-   * Removes a project by its name or id.
+   * Deletes a project by its name or id.
    * @param projectNameOrId - The name or id of the project to remove.
    * @returns A promise that resolves to null on successful deletion or an error response.
    */
-  async remove(projectNameOrId: string) {
+  async delete(projectNameOrId: string) {
     const invaliIdentifier = !isValidProjectIdentifier(projectNameOrId)
 
     if (invaliIdentifier) {
