@@ -24,6 +24,7 @@ import { LoadEnvironmentOpts } from '../../types/environments'
 import { deleteAllEnvironmentSecrets } from './handlers/secrets/deleteAll'
 import { GetSecretOptions, ListSecretsOptions } from '../../types/secrets'
 import { SecretKey } from '../../types/secretKey'
+import { listWebhooks } from './handlers/webhooks/list'
 
 class EnvironmentsAPI {
   constructor(private httpClient: HttpClient) {}
@@ -224,5 +225,10 @@ class EnvSecretsAPI {
 
 class WebhooksAPI {
   constructor(private httpClient: HttpClient) {}
+
+  /** Retrieves a list of webhooks associated with the current API key environment. */
+  async list() {
+    return await listWebhooks(this.httpClient)
   }
+
 export default EnvironmentsAPI
