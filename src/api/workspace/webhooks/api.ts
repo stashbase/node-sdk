@@ -1,5 +1,6 @@
 import { HttpClient } from '../../../http/client'
 import { createWebhook, CreateWebhookArgs } from './handlers/create'
+import { deleteWebhook, DeleteWebhookArgs } from './handlers/delete'
 import { getWebhook, GetWebhookArgs } from './handlers/get'
 import { listWebhooks, ListWebhooksArgs } from './handlers/list'
 import { listWebhookLogs, ListWebhookLogsArgs } from './handlers/listLogs'
@@ -89,4 +90,20 @@ export class WebhooksAPI {
   async disable(args: GetWebhookArgs) {
     return await updateWebhookStatus(this.httpClient, args, false)
   }
+  /**
+  /**
+  /**
+   * Deletes a webhook from a specific project and environment.
+   *
+   * @param args - The arguments for deleting a webhook.
+   * @param args.project - The name or id of the project.
+   * @param args.environment - The name or id of the environment.
+   * @param args.webhookId - The id of the webhook to delete.
+   * @returns A promise that resolves to null on success or an error response.
+   */
+  async delete(args: DeleteWebhookArgs) {
+    return await deleteWebhook(this.httpClient, args)
+  }
+
+  /**
 }
