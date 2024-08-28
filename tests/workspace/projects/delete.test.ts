@@ -6,7 +6,7 @@ describe('Delete project', () => {
   test('OK', async () => {
     const envEase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await envEase.projects.remove('TO-DELETE')
+    const { data, error } = await envEase.projects.delete('TO-DELETE')
 
     console.log(data)
     console.log(error)
