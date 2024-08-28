@@ -25,19 +25,21 @@ import { deleteAllEnvironmentSecrets } from './handlers/secrets/deleteAll'
 import { GetSecretOptions, ListSecretsOptions } from '../../types/secrets'
 import { SecretKey } from '../../types/secretKey'
 
-function environmentsAPI(httpClient: HttpClient) {
+class EnvironmentsAPI {
+  constructor(private httpClient: HttpClient) {}
+
   /**
    * Loads the environment and injects the secrets into the process.
    *
    * @param options - Options for loading the environment.
    * @returns A promise that resolves to a null, error (if any), and success status.
    */
-  async function load(options?: LoadEnvironmentOpts) {
+  async load(options?: LoadEnvironmentOpts) {
     if (options?.enabled === false) {
       return { data: null, error: null, ok: null }
     }
 
-    return await loadEnvironment(httpClient, options)
+    return await loadEnvironment(this.httpClient, options)
   }
 
   /**
@@ -47,12 +49,12 @@ function environmentsAPI(httpClient: HttpClient) {
    * @returns A promise that resolves to an object containing the loaded data, error (if any), and success status.
    * @throws Error if the loading process fails.
    */
-  async function loadOrThrow(options?: LoadEnvironmentOpts) {
+  async loadOrThrow(options?: LoadEnvironmentOpts) {
     if (options?.enabled === false) {
       return { data: null, error: null, ok: null }
     }
 
-    const { error } = await loadEnvironment(httpClient, options)
+    const { error } = await loadEnvironment(this.httpClient, options)
 
     if (error) {
       throw new Error(error?.code)
@@ -64,21 +66,16 @@ function environmentsAPI(httpClient: HttpClient) {
    *
    * @returns A promise that resolves to the retrieved secret or an error response.
    */
-  async function get() {
-    return await getEnvironment(httpClient)
+  async get() {
+    return await getEnvironment(this.httpClient)
   }
 
-  const secrets = envSecretsAPI(httpClient)
-
-  return {
-    load,
-    loadOrThrow,
-    get,
-    secrets,
-  }
+  secrets = new EnvSecretsAPI(this.httpClient)
 }
 
-function envSecretsAPI(httpClient: HttpClient) {
+class EnvSecretsAPI {
+  constructor(private httpClient: HttpClient) {}
+
   /**
    * Retrieves a single secret by its key.
    *
@@ -86,12 +83,13 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param options - Additional options for retrieving the secret.
    * @returns A promise that resolves to the retrieved secret or an error response.
    */
-  async function get(key: string, options?: GetSecretOptions) {
+  async get(key: string, options?: GetSecretOptions) {
     if (!isValidSecretKey(key)) {
       const error = invalidSecretKeyError()
       return responseFailure(error)
     }
-    return getSecret(httpClient, key, options)
+
+    return getSecret(this.httpClient, key, options)
   }
 
   /**
@@ -100,11 +98,11 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param options - Options for listing secrets.
    * @returns A promise that resolves to an array of secrets or an error response.
    */
-  async function list(options?: ListSecretsOptions) {
-    return await listSecrets(httpClient, options)
+  async list(options?: ListSecretsOptions) {
+    return await listSecrets(this.httpClient, options)
   }
 
-  async function listOnly(only: SecretKey[], options?: ListSecretsOptions) {
+  async listOnly(only: SecretKey[], options?: ListSecretsOptions) {
     if (!Array.isArray(only) || only.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
@@ -117,7 +115,7 @@ function envSecretsAPI(httpClient: HttpClient) {
       return responseFailure(error)
     }
 
-    return await listSecrets(httpClient, { ...options, only: only })
+    return await listSecrets(this.httpClient, { ...options, only: only })
   }
 
   /**
@@ -127,7 +125,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param options - Additional options for listing secrets.
    * @returns A promise that resolves to an array of secrets excluding the specified secrets by their keys or an error response.
    */
-  async function listExclude(exclude: SecretKey[], options?: ListSecretsOptions) {
+  async listExclude(exclude: SecretKey[], options?: ListSecretsOptions) {
     if (!Array.isArray(exclude) || exclude.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
@@ -140,7 +138,7 @@ function envSecretsAPI(httpClient: HttpClient) {
       return responseFailure(error)
     }
 
-    return await listSecrets(httpClient, { ...options, exclude: exclude })
+    return await listSecrets(this.httpClient, { ...options, exclude: exclude })
   }
 
   /**
@@ -149,14 +147,14 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param data - An array of secrets to create.
    * @returns A promise that resolves to an object containing the count of created secrets and any duplicate secrets (keys), or an error response.
    */
-  async function create(data: CreateSecretsData) {
+  async create(data: CreateSecretsData) {
     const validationError = validateCreateSecretsInput(data)
 
     if (validationError) {
       return responseFailure(validationError)
     }
 
-    return await createSecrets(httpClient, data)
+    return await createSecrets(this.httpClient, data)
   }
 
   /**
@@ -165,14 +163,14 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param data - An array of secrets to set.
    * @returns A promise that resolves to null on success or an error response.
    */
-  async function set(data: SetSecretsData) {
+  async set(data: SetSecretsData) {
     const validationError = validateSetSecretsInput(data)
 
     if (validationError) {
       return responseFailure(validationError)
     }
 
-    return await setSecrets(httpClient, data)
+    return await setSecrets(this.httpClient, data)
   }
 
   /**
@@ -181,14 +179,14 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param data - An array of secrets to update.
    * @returns A promise that resolves to an object containing the count of updated secrets and any secrets (keys) not found, or an error response.
    */
-  async function update(data: UpdateSecretsData) {
+  async update(data: UpdateSecretsData) {
     const validationError = validateUpdateSecretsInput(data)
 
     if (validationError) {
       return responseFailure(validationError)
     }
 
-    return await updateSecrets(httpClient, data)
+    return await updateSecrets(this.httpClient, data)
   }
 
   /**
@@ -197,7 +195,7 @@ function envSecretsAPI(httpClient: HttpClient) {
    * @param keys - An array of secret keys to remove.
    * @returns A promise that resolves to an object containing the count of deleted secrets and any secrets (keys) not found, or an error response.
    */
-  async function remove(keys: Uppercase<string>[]) {
+  async remove(keys: Uppercase<string>[]) {
     if (keys.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
@@ -210,7 +208,7 @@ function envSecretsAPI(httpClient: HttpClient) {
       return responseFailure(error)
     }
 
-    return await deleteEnvironmentSecrets(httpClient, keys)
+    return await deleteEnvironmentSecrets(this.httpClient, keys)
   }
 
   /**
@@ -218,21 +216,9 @@ function envSecretsAPI(httpClient: HttpClient) {
    *
    * @returns A promise that resolves to an object containing the count of deleted secrets, or an error response.
    */
-  async function removeAll() {
-    return await deleteAllEnvironmentSecrets(httpClient)
-  }
-
-  return {
-    get,
-    list,
-    listOnly,
-    listExclude,
-    create,
-    set,
-    update,
-    remove,
-    removeAll,
+  async removeAll() {
+    return await deleteAllEnvironmentSecrets(this.httpClient)
   }
 }
 
-export default environmentsAPI
+export default EnvironmentsAPI
