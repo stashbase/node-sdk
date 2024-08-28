@@ -247,12 +247,22 @@ class EnvSecretsAPI {
 class WebhooksAPI {
   constructor(private httpClient: HttpClient) {}
 
-  /** Retrieves a list of webhooks associated with the current API key environment. */
+  /**
+   * Retrieves a list of webhooks associated with the current API key environment.
+   *
+   * @returns A promise that resolves to an array of webhooks or an error response.
+   */
   async list() {
     return await listWebhooks(this.httpClient)
   }
 
-  /** Retrieves a single webhook associated with the current API key environment. */
+  /**
+   * Retrieves a single webhook associated with the current API key environment.
+   *
+   * @param webhookId - The ID of the webhook to retrieve.
+   * @param withSecret - Whether to include the signing secret in the response.
+   * @returns A promise that resolves to the retrieved webhook or an error response.
+   */
   async get(webhookId: string, withSecret?: boolean) {
     const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
 
@@ -263,6 +273,13 @@ class WebhooksAPI {
     return await getWebhook(this.httpClient, { webhookId, withSecret: withSecret ?? false })
   }
 
+  /**
+   * Retrieves a list of logs for a specific webhooka.
+   *
+   * @param webhookId - The ID of the webhook to retrieve logs for.
+   * @param options - Options for listing logs.
+   * @returns A promise that resolves to an array of logs or an error response.
+   */
   async listLogs(
     webhookId: string,
     options?: {
@@ -282,10 +299,22 @@ class WebhooksAPI {
     return await listWebhookLogs(this.httpClient, { webhookId, ...opts })
   }
 
+  /**
+   * Creates a new webhook.
+   *
+   * @param data - Data for creating the webhook.
+   * @returns A promise that resolves to the created webhook or an error response.
+   */
   async create(data: CreateWebhookData) {
     return await createWebhook(this.httpClient, data)
   }
 
+  /**
+   * Enables a webhook.
+   *
+   * @param webhookId - The ID of the webhook to enable.
+   * @returns A promise that resolves to null on success or an error response.
+   */
   async enable(webhookId: string) {
     const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
 
@@ -296,6 +325,12 @@ class WebhooksAPI {
     return await updateWebhookStatus(this.httpClient, webhookId, true)
   }
 
+  /**
+   * Disables a webhook.
+   *
+   * @param webhookId - The ID of the webhook to disable.
+   * @returns A promise that resolves to null on success or an error response.
+   */
   async disable(webhookId: string) {
     const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
 
@@ -306,6 +341,13 @@ class WebhooksAPI {
     return await updateWebhookStatus(this.httpClient, webhookId, false)
   }
 
+  /**
+   * Updates an existing webhook.
+   *
+   * @param webhookId - The ID of the webhook to update.
+   * @param data - Data for updating the webhook.
+   * @returns A promise that resolves to null on success or an error response.
+   */
   async update(webhookId: string, data: UpdateWebhookData) {
     const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
 
@@ -316,6 +358,12 @@ class WebhooksAPI {
     return await updateWebhook(this.httpClient, { webhookId, data })
   }
 
+  /**
+   * Tests a webhook by sending a test payload.
+   *
+   * @param webhookId - The ID of the webhook to test.
+   * @returns A promise that resolves to result object on success or an error response.
+   */
   async test(webhookId: string) {
     const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
 
@@ -326,6 +374,12 @@ class WebhooksAPI {
     return await testWebhook(this.httpClient, webhookId)
   }
 
+  /**
+   * Deletes a webhook.
+   *
+   * @param webhookId - The ID of the webhook to delete.
+   * @returns A promise that resolves to null on success or an error response.
+   */
   async delete(webhookId: string) {
     const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
 
@@ -336,6 +390,12 @@ class WebhooksAPI {
     return await deleteWebhook(this.httpClient, webhookId)
   }
 
+  /**
+   * Retrieves the signing secret for a webhook.
+   *
+   * @param webhookId - The ID of the webhook to retrieve the signing secret for.
+   * @returns A promise that resolves to the signing secret or an error response.
+   */
   async getSigningSecret(webhookId: string) {
     const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
 
@@ -346,6 +406,12 @@ class WebhooksAPI {
     return await getWebhookSigningSecret(this.httpClient, webhookId)
   }
 
+  /**
+   * Rotates the signing secret for a webhook.
+   *
+   * @param webhookId - The ID of the webhook to rotate the signing secret for.
+   * @returns A promise that resolves to the new signing secret or an error response.
+   */
   async rotateSigningSecret(webhookId: string) {
     const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
 
