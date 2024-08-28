@@ -28,6 +28,8 @@ import { listWebhooks } from './handlers/webhooks/list'
 import { getWebhook } from './handlers/webhooks/get'
 import { listWebhookLogs } from './handlers/webhooks/listLogs'
 import { deleteWebhook } from './handlers/webhooks/delete'
+import { createWebhook } from './handlers/webhooks/create'
+import { CreateWebhookData } from './handlers/webhooks/create'
 
 class EnvironmentsAPI {
   constructor(private httpClient: HttpClient) {}
@@ -250,6 +252,10 @@ class WebhooksAPI {
   ) {
     const opts = options ?? {}
     return await listWebhookLogs(this.httpClient, { webhookId, ...opts })
+  }
+
+  async create(data: CreateWebhookData) {
+    return await createWebhook(this.httpClient, data)
   }
   async delete(webhookId: string) {
     return await deleteWebhook(this.httpClient, webhookId)
