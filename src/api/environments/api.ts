@@ -27,6 +27,7 @@ import { SecretKey } from '../../types/secretKey'
 import { listWebhooks } from './handlers/webhooks/list'
 import { getWebhook } from './handlers/webhooks/get'
 import { listWebhookLogs } from './handlers/webhooks/listLogs'
+import { deleteWebhook } from './handlers/webhooks/delete'
 
 class EnvironmentsAPI {
   constructor(private httpClient: HttpClient) {}
@@ -249,5 +250,8 @@ class WebhooksAPI {
   ) {
     const opts = options ?? {}
     return await listWebhookLogs(this.httpClient, { webhookId, ...opts })
+  }
+  async delete(webhookId: string) {
+    return await deleteWebhook(this.httpClient, webhookId)
   }
 export default EnvironmentsAPI
