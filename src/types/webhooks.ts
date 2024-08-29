@@ -1,4 +1,5 @@
 import { PaginationMetadata } from './pagination'
+import { AtLeastOne } from './util'
 
 export interface Webhook {
   /** The unique identifier of the webhook */
@@ -65,3 +66,11 @@ export interface TestWebhookResponse {
   /** The error code of failed webhook delivery attempt */
   error: string | null
 }
+
+// request
+export type UpdateWebhookData = AtLeastOne<{
+  /** The target URL of the webhook (must use HTTPS) */
+  url: string
+  /** The description of the webhook */
+  description: string | null
+}>
