@@ -1,5 +1,9 @@
 import { invalidEnvironmentIdentifierError, invalidProjectIdentifierError } from '../../../errors'
-import { invalidWebhookIdError } from '../../../errors/webhooks'
+import {
+  invalidWebhookIdError,
+  invalidWebhookLogsLimitError,
+  invalidWebhookLogsPageError,
+} from '../../../errors/webhooks'
 import { HttpClient } from '../../../http/client'
 import { responseFailure } from '../../../http/response'
 import { isValidProjectIdentifier, isValidWebhookId } from '../../../utils/inputValidation'
@@ -64,6 +68,24 @@ export class WebhooksAPI {
   async listLogs(args: ListWebhookLogsArgs) {
     const validationError = validateArgs(args)
     if (validationError) return responseFailure(validationError)
+
+    if (args?.page !== undefined) {
+      const page = args.page
+
+      if (page <= 0 || page > 1000 || typeof page !== 'number') {
+        const error = invalidWebhookLogsPageError
+        return responseFailure(error)
+      }
+    }
+
+    if (args?.limit !== undefined) {
+      const limit = args.limit
+
+      if (limit < 2 || limit > 1000 || typeof limit !== 'number') {
+        const error = invalidWebhookLogsLimitError
+        return responseFailure(error)
+      }
+    }
 
     return await listWebhookLogs(this.httpClient, args)
   }
