@@ -36,6 +36,7 @@ import { getWebhookSigningSecret } from './handlers/webhooks/getSecret'
 import { updateWebhookStatus } from './handlers/webhooks/updateStatus'
 import { updateWebhook, UpdateWebhookData } from './handlers/webhooks/update'
 import { testWebhook } from './handlers/webhooks/test'
+import { invalidWebhookLogsLimitError, invalidWebhookLogsPageError } from '../../errors/webhooks'
 
 class EnvironmentsAPI {
   constructor(private httpClient: HttpClient) {}
@@ -283,6 +284,24 @@ class WebhooksAPI {
 
     if (invalidWebhookIdError) {
       return invalidWebhookIdError
+    }
+
+    if (options?.page !== undefined) {
+      const page = options.page
+
+      if (page <= 0 || page > 1000 || typeof page !== 'number') {
+        const error = invalidWebhookLogsPageError
+        return responseFailure(error)
+      }
+    }
+
+    if (options?.limit !== undefined) {
+      const limit = options.limit
+
+      if (limit < 2 || limit > 1000 || typeof limit !== 'number') {
+        const error = invalidWebhookLogsLimitError
+        return responseFailure(error)
+      }
     }
 
     const opts = options ?? {}
