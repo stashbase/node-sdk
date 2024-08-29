@@ -35,7 +35,7 @@ import { CreateWebhookData } from './handlers/webhooks/create'
 import { rotateWebhookSigningSecret } from './handlers/webhooks/rotateSecret'
 import { getWebhookSigningSecret } from './handlers/webhooks/getSecret'
 import { updateWebhookStatus } from './handlers/webhooks/updateStatus'
-import { updateWebhook, UpdateWebhookData } from './handlers/webhooks/update'
+import { updateWebhook } from './handlers/webhooks/update'
 import { testWebhook } from './handlers/webhooks/test'
 import {
   invalidWebhookLogsLimitError,
@@ -43,6 +43,7 @@ import {
   invalidWebhookUrlError,
   webhookMissingPropertiesToUpdateError,
 } from '../../errors/webhooks'
+import { UpdateWebhookData } from '../../types/webhooks'
 
 class EnvironmentsAPI {
   constructor(private httpClient: HttpClient) {}

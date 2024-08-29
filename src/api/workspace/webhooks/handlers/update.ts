@@ -4,7 +4,7 @@ import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments
 import { GetWebhookError as SharedGetWebhookError } from '../../../../types/errors/webhooks'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
-import { UpdateWebhookData } from '../../../environments/handlers/webhooks/update'
+import { UpdateWebhookData } from '../../../../types/webhooks'
 
 export type UpdateWebhookArgs = SingleWebhookProjectEnvHandlerArgs<{
   data: UpdateWebhookData
