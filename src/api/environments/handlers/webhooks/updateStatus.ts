@@ -1,11 +1,10 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
+import { SingleWebhookArgs } from '../../../../types/aruguments'
 import { UpdateWebhookStatusError } from '../../../../types/errors/webhooks'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
-export interface UpdateWebhookStatusArgs {
-  webhookId: string
-}
+export type UpdateWebhookStatusArgs = SingleWebhookArgs<undefined>
 
 async function updateWebhookStatus(
   envClient: HttpClient,
