@@ -298,7 +298,7 @@ class WebhooksAPI {
     if (options?.limit !== undefined) {
       const limit = options.limit
 
-      if (limit < 2 || limit > 1000 || typeof limit !== 'number') {
+      if (limit < 2 || limit > 30 || typeof limit !== 'number') {
         const error = invalidWebhookLogsLimitError
         return responseFailure(error)
       }
