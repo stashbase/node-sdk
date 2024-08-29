@@ -9,6 +9,8 @@ import {
   noDataProvidedError,
   selfReferencingSecretsError,
 } from '../errors/secrets'
+import { invalidWebhookIdError } from '../errors/webhooks'
+import { responseFailure } from '../http/response'
 import {
   DuplicateNewSecretKeysValidationError,
   DuplicateSecretsKeysValidationError,
@@ -101,6 +103,15 @@ export const isResourceIdFormat = (resource: Resource, input: string) => {
 }
 
 export const isValidWebhookId = (webhookId: string) => isResourceIdFormat('webhook', webhookId)
+
+export const validateWebhookIdForMethod = (webhookId: string) => {
+  const isValid = isValidWebhookId(webhookId)
+
+  if (!isValid) {
+    const error = invalidWebhookIdError
+    return responseFailure(error)
+  }
+}
 
 export const secretHasSelfReference = (secretKey: string, value: string): boolean => {
   const regex = /\${(.*?)}/g
