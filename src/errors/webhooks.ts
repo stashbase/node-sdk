@@ -25,14 +25,6 @@ export const invalidWebhookUrlError: InvalidWebhookUrlValidationError = createAp
   },
 })
 
-export const webhookUrlHttpsRequiredError: WebhookUrlHttpsRequiredValidationError = createApiError({
-  code: 'validation.webhook_url_https_required',
-  message: `The webhook URL must use HTTPS for secure communication. Please provide a URL that starts with 'https://'.`,
-  details: {
-    validUrlExample: 'https://my-endpoint.com',
-  },
-})
-
 export const webhookMissingPropertiesToUpdateError: WebhookMissingPropertiesToUpdateValidationError =
   createApiError({
     code: 'validation.missing_properties_to_update',
