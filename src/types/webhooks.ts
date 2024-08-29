@@ -63,5 +63,5 @@ export interface TestWebhookResponse {
   status: number
 
   /** The error code of failed webhook delivery attempt */
-  error: string
+  error: string | null
 }
