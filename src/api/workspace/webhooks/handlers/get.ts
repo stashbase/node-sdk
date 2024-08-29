@@ -1,13 +1,13 @@
 import { HttpClient } from '../../../../http/client'
 import { Webhook } from '../../../../types/webhooks'
 import { createApiErrorFromResponse } from '../../../../errors'
+import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
 import { GetWebhookError as SharedGetWebhookError } from '../../../../types/errors/webhooks'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 
-export type GetWebhookArgs = ProjectEnvHandlerArgs<{
-  webhookId: string
+export type GetWebhookArgs = SingleWebhookProjectEnvHandlerArgs<{
+  //* Return the signing secret with the webhook
   withSecret?: boolean // Change this to be required and always boolean
 }>
 
