@@ -7,6 +7,7 @@ import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
 import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
 import { getSecret } from './handlers/secrets/get'
 import {
+  isValidHttpsUrl,
   isValidSecretKey,
   validateCreateSecretsInput,
   validateSecretKeys,
@@ -36,7 +37,12 @@ import { getWebhookSigningSecret } from './handlers/webhooks/getSecret'
 import { updateWebhookStatus } from './handlers/webhooks/updateStatus'
 import { updateWebhook, UpdateWebhookData } from './handlers/webhooks/update'
 import { testWebhook } from './handlers/webhooks/test'
-import { invalidWebhookLogsLimitError, invalidWebhookLogsPageError } from '../../errors/webhooks'
+import {
+  invalidWebhookLogsLimitError,
+  invalidWebhookLogsPageError,
+  invalidWebhookUrlError,
+  webhookMissingPropertiesToUpdateError,
+} from '../../errors/webhooks'
 
 class EnvironmentsAPI {
   constructor(private httpClient: HttpClient) {}
@@ -315,6 +321,13 @@ class WebhooksAPI {
    * @returns A promise that resolves to the created webhook or an error response.
    */
   async create(data: CreateWebhookData) {
+    const isValidUrl = isValidHttpsUrl(data.url)
+
+    if (!isValidUrl) {
+      const error = invalidWebhookUrlError
+      return responseFailure(error)
+    }
+
     return await createWebhook(this.httpClient, data)
   }
 
@@ -362,6 +375,20 @@ class WebhooksAPI {
 
     if (invalidWebhookIdError) {
       return invalidWebhookIdError
+    }
+
+    if (data.url === undefined && data.description === undefined) {
+      const error = webhookMissingPropertiesToUpdateError
+      return responseFailure(error)
+    }
+
+    if (data.url !== undefined) {
+      const isValidUrl = isValidHttpsUrl(data.url)
+
+      if (!isValidUrl) {
+        const error = invalidWebhookUrlError
+        return responseFailure(error)
+      }
     }
 
     return await updateWebhook(this.httpClient, { webhookId, data })
