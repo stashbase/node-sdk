@@ -3,10 +3,16 @@ import {
   invalidWebhookIdError,
   invalidWebhookLogsLimitError,
   invalidWebhookLogsPageError,
+  invalidWebhookUrlError,
+  webhookMissingPropertiesToUpdateError,
 } from '../../../errors/webhooks'
 import { HttpClient } from '../../../http/client'
 import { responseFailure } from '../../../http/response'
-import { isValidProjectIdentifier, isValidWebhookId } from '../../../utils/inputValidation'
+import {
+  isValidHttpsUrl,
+  isValidProjectIdentifier,
+  isValidWebhookId,
+} from '../../../utils/inputValidation'
 import { createWebhook, CreateWebhookArgs } from './handlers/create'
 import { deleteWebhook, DeleteWebhookArgs } from './handlers/delete'
 import { getWebhook, GetWebhookArgs } from './handlers/get'
@@ -121,6 +127,13 @@ export class WebhooksAPI {
     const validationError = validateArgs(args)
     if (validationError) return responseFailure(validationError)
 
+    const isValidUrl = isValidHttpsUrl(args.data.url)
+
+    if (!isValidUrl) {
+      const error = invalidWebhookUrlError
+      return responseFailure(error)
+    }
+
     return await createWebhook(this.httpClient, args)
   }
 
@@ -169,6 +182,22 @@ export class WebhooksAPI {
   async update(args: UpdateWebhookArgs) {
     const validationError = validateArgs(args)
     if (validationError) return responseFailure(validationError)
+
+    const data = args.data
+
+    if (data.url === undefined && data.description === undefined) {
+      const error = webhookMissingPropertiesToUpdateError
+      return responseFailure(error)
+    }
+
+    if (data.url !== undefined) {
+      const isValidUrl = isValidHttpsUrl(data.url)
+
+      if (!isValidUrl) {
+        const error = invalidWebhookUrlError
+        return responseFailure(error)
+      }
+    }
 
     return await updateWebhook(this.httpClient, args)
   }
