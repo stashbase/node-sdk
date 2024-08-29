@@ -37,6 +37,13 @@ export type WebhookUrlHttpsRequiredValidationError = ValidationApiError<
   }
 >
 
+export type InvalidWebhookUrlValidationError = ValidationApiError<
+  'invalid_webhook_url',
+  {
+    validUrlExample: string
+  }
+>
+
 export type WebhookMissingPropertiesToUpdateValidationError = ValidationApiError<
   'missing_properties_to_update',
   {
