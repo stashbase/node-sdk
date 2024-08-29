@@ -8,11 +8,11 @@ import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
 import { getSecret } from './handlers/secrets/get'
 import {
   isValidSecretKey,
-  isValidWebhookId,
   validateCreateSecretsInput,
   validateSecretKeys,
   validateSetSecretsInput,
   validateUpdateSecretsInput,
+  validateWebhookIdForMethod,
 } from '../../utils/inputValidation'
 import { SetSecretsData, setSecrets } from './handlers/secrets/set'
 import {
@@ -36,16 +36,6 @@ import { getWebhookSigningSecret } from './handlers/webhooks/getSecret'
 import { updateWebhookStatus } from './handlers/webhooks/updateStatus'
 import { updateWebhook, UpdateWebhookData } from './handlers/webhooks/update'
 import { testWebhook } from './handlers/webhooks/test'
-import { invalidWebhookIdError } from '../../errors/webhooks'
-
-const validateWebhookIdForMethod = (webhookId: string) => {
-  const isValid = isValidWebhookId(webhookId)
-
-  if (!isValid) {
-    const error = invalidWebhookIdError
-    return responseFailure(error)
-  }
-}
 
 class EnvironmentsAPI {
   constructor(private httpClient: HttpClient) {}
