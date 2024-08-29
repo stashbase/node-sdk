@@ -54,4 +54,28 @@ export type WebhookAlreadyDisabledConflictError = ConflictApiError<
   undefined
 >
 
+export type InvalidWebhookLogsLimitError = ValidationApiError<
+  'invalid_limit',
+  {
+    /** Min possbile value for the limit */
+    min: number
+    /** Max possible value for the limit */
+    max: number
+    /** Default value for the limit */
+    default: number
+  }
+>
+
+export type InvalidWebhookLogsPageError = ValidationApiError<
+  'invalid_page',
+  {
+    /** Min possbile value for the limit */
+    min: number
+    /** Max possible value for the limit */
+    max: number
+    /** Default value for the limit */
+    default: number
+  }
+>
+
 type WebhookNotFoundError = ResourceApiError<'webhook_not_found', undefined>

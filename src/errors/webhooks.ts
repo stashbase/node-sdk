@@ -1,6 +1,8 @@
 import { createApiError } from '.'
 import {
   InvalidWebhookIdError,
+  InvalidWebhookLogsLimitError,
+  InvalidWebhookLogsPageError,
   WebhookMissingPropertiesToUpdateValidationError,
   WebhookUrlHttpsRequiredValidationError,
 } from '../types/errors/webhooks'
@@ -30,3 +32,23 @@ export const webhookMissingPropertiesToUpdateError: WebhookMissingPropertiesToUp
       possibleProperties: ['url', 'description'],
     },
   })
+
+export const invalidWebhookLogsPageError: InvalidWebhookLogsPageError = createApiError({
+  code: 'validation.invalid_page',
+  message: 'Page number must a number between 1 and 1000.',
+  details: {
+    min: 1,
+    max: 1000,
+    default: 1,
+  },
+})
+
+export const invalidWebhookLogsLimitError: InvalidWebhookLogsLimitError = createApiError({
+  code: 'validation.invalid_limit',
+  message: 'Limit must be a number between 2 and 30, defaulting to 10.',
+  details: {
+    min: 2,
+    max: 30,
+    default: 10,
+  },
+})
