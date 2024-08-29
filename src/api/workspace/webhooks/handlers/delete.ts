@@ -1,13 +1,10 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { GetWebhookError } from '../../../../types/errors/webhooks'
+import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 
-export type DeleteWebhookArgs = ProjectEnvHandlerArgs<{
-  /** The id of the webhook to delete */
-  webhookId: string
-}>
+export type DeleteWebhookArgs = SingleWebhookProjectEnvHandlerArgs<undefined>
 
 async function deleteWebhook(
   client: HttpClient,

@@ -1,14 +1,12 @@
 import { HttpClient } from '../../../../http/client'
-import { TestWebhookResponse } from '../../../../types/webhooks'
 import { createApiErrorFromResponse } from '../../../../errors'
+import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
 import { GetWebhookError as SharedGetWebhookError } from '../../../../types/errors/webhooks'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 import { UpdateWebhookData } from '../../../environments/handlers/webhooks/update'
 
-export type UpdateWebhookArgs = ProjectEnvHandlerArgs<{
-  webhookId: string
+export type UpdateWebhookArgs = SingleWebhookProjectEnvHandlerArgs<{
   data: UpdateWebhookData
 }>
 

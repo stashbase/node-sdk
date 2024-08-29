@@ -1,14 +1,12 @@
 import { HttpClient } from '../../../../http/client'
 import { WebhookSigningSecret } from '../../../../types/webhooks'
 import { createApiErrorFromResponse } from '../../../../errors'
+import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
 import { GetWebhookError as SharedGetWebhookError } from '../../../../types/errors/webhooks'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 
-export type RotateWebhookSigningSecretArgs = ProjectEnvHandlerArgs<{
-  webhookId: string
-}>
+export type RotateWebhookSigningSecretArgs = SingleWebhookProjectEnvHandlerArgs<undefined>
 
 export type RotateWebhookSigningSecretError =
   | SharedGetWebhookError
