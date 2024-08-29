@@ -104,6 +104,11 @@ export const isResourceIdFormat = (resource: Resource, input: string) => {
 
 export const isValidWebhookId = (webhookId: string) => isResourceIdFormat('webhook', webhookId)
 
+export const isValidHttpsUrl = (url: string): boolean => {
+  const httpsUrlPattern = /^https:\/\/(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(?:\/[^\s]*)?$/
+  return httpsUrlPattern.test(url)
+}
+
 export const validateWebhookIdForMethod = (webhookId: string) => {
   const isValid = isValidWebhookId(webhookId)
 
