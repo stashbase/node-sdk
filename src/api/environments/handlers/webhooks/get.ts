@@ -1,13 +1,14 @@
 import { HttpClient } from '../../../../http/client'
 import { Webhook } from '../../../../types/webhooks'
 import { createApiErrorFromResponse } from '../../../../errors'
+import { SingleWebhookArgs } from '../../../../types/aruguments'
 import { GetWebhookError } from '../../../../types/errors/webhooks'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
-export interface GetWebhookArgs {
-  webhookId: string
-  withSecret: boolean // Change this to be required and always boolean
-}
+export type GetWebhookArgs = SingleWebhookArgs<{
+  /** Whether to include the webhook's signing secret in the response */
+  withSecret: boolean
+}>
 
 // Update the type to use a boolean instead of boolean | undefined
 // type WebhookWithConditionalSecret<T extends boolean> = Omit<Webhook, 'signingSecret'> & {
