@@ -1,4 +1,8 @@
+import { invalidEnvironmentIdentifierError, invalidProjectIdentifierError } from '../../../errors'
+import { invalidWebhookIdError } from '../../../errors/webhooks'
 import { HttpClient } from '../../../http/client'
+import { responseFailure } from '../../../http/response'
+import { isValidProjectIdentifier, isValidWebhookId } from '../../../utils/inputValidation'
 import { createWebhook, CreateWebhookArgs } from './handlers/create'
 import { deleteWebhook, DeleteWebhookArgs } from './handlers/delete'
 import { getWebhook, GetWebhookArgs } from './handlers/get'
@@ -9,6 +13,25 @@ import { rotateWebhookSigningSecret, RotateWebhookSigningSecretArgs } from './ha
 import { testWebhook, TestWebhookArgs } from './handlers/test'
 import { updateWebhook, UpdateWebhookArgs } from './handlers/update'
 import { updateWebhookStatus, UpdateWebhookStatusArgs } from './handlers/updateStatus'
+
+const validateArgs = (args: { project: string; environment: string; webhookId?: string }) => {
+  const { project, environment, webhookId } = args
+
+  if (!isValidProjectIdentifier(project)) {
+    const error = invalidProjectIdentifierError
+    return error
+  }
+
+  if (!isValidProjectIdentifier(environment)) {
+    const error = invalidEnvironmentIdentifierError
+    return error
+  }
+
+  if (webhookId && !isValidWebhookId(webhookId)) {
+    const error = invalidWebhookIdError
+    return error
+  }
+}
 
 export class WebhooksAPI {
   private httpClient: HttpClient
@@ -39,6 +62,9 @@ export class WebhooksAPI {
    * @returns A promise that resolves to an array of webhook log objects with pagination metadata or an error response.
    */
   async listLogs(args: ListWebhookLogsArgs) {
+    const validationError = validateArgs(args)
+    if (validationError) return responseFailure(validationError)
+
     return await listWebhookLogs(this.httpClient, args)
   }
 
@@ -53,6 +79,9 @@ export class WebhooksAPI {
    * @returns A promise that resolves to the webhook object identifiers (id, name) or an error response.
    */
   async get(args: GetWebhookArgs) {
+    const validationError = validateArgs(args)
+    if (validationError) return responseFailure(validationError)
+
     const withSecret = args.withSecret ?? false
     return await getWebhook(this.httpClient, { ...args, withSecret })
   }
@@ -67,6 +96,9 @@ export class WebhooksAPI {
    * @returns A promise that resolves to the created webhook object or an error response.
    */
   async create(args: CreateWebhookArgs) {
+    const validationError = validateArgs(args)
+    if (validationError) return responseFailure(validationError)
+
     return await createWebhook(this.httpClient, args)
   }
 
@@ -80,6 +112,9 @@ export class WebhooksAPI {
    * @returns A promise that resolves to the updated webhook object or an error response.
    */
   async enable(args: UpdateWebhookStatusArgs) {
+    const validationError = validateArgs(args)
+    if (validationError) return responseFailure(validationError)
+
     return await updateWebhookStatus(this.httpClient, args, true)
   }
 
@@ -93,6 +128,9 @@ export class WebhooksAPI {
    * @returns A promise that resolves to the updated webhook object or an error response.
    */
   async disable(args: GetWebhookArgs) {
+    const validationError = validateArgs(args)
+    if (validationError) return responseFailure(validationError)
+
     return await updateWebhookStatus(this.httpClient, args, false)
   }
 
@@ -107,6 +145,9 @@ export class WebhooksAPI {
    * @returns A promise that resolves to the updated webhook object or an error response.
    */
   async update(args: UpdateWebhookArgs) {
+    const validationError = validateArgs(args)
+    if (validationError) return responseFailure(validationError)
+
     return await updateWebhook(this.httpClient, args)
   }
 
@@ -120,6 +161,9 @@ export class WebhooksAPI {
    * @returns A promise that resolves to the test result or an error response.
    */
   async test(args: TestWebhookArgs) {
+    const validationError = validateArgs(args)
+    if (validationError) return responseFailure(validationError)
+
     return await testWebhook(this.httpClient, args)
   }
 
@@ -133,6 +177,9 @@ export class WebhooksAPI {
    * @returns A promise that resolves to null on success or an error response.
    */
   async delete(args: DeleteWebhookArgs) {
+    const validationError = validateArgs(args)
+    if (validationError) return responseFailure(validationError)
+
     return await deleteWebhook(this.httpClient, args)
   }
 
@@ -146,6 +193,9 @@ export class WebhooksAPI {
    * @returns A promise that resolves to the signing secret or an error response.
    */
   async getSigningSecret(args: GetWebhookSigningSecretArgs) {
+    const validationError = validateArgs(args)
+    if (validationError) return responseFailure(validationError)
+
     return await getWebhookSigningSecret(this.httpClient, args)
   }
 
@@ -159,6 +209,9 @@ export class WebhooksAPI {
    * @returns A promise that resolves to the new signing secret or an error response.
    */
   async rotateSigningSecret(args: RotateWebhookSigningSecretArgs) {
+    const validationError = validateArgs(args)
+    if (validationError) return responseFailure(validationError)
+
     return await rotateWebhookSigningSecret(this.httpClient, args)
   }
 }
