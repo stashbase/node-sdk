@@ -1,13 +1,14 @@
 import { AtLeastOne } from '../../../../types/util'
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
+import { SingleWebhookArgs } from '../../../../types/aruguments'
 import { UpdateWebhookError } from '../../../../types/errors/webhooks'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 
-export interface UpdateWebhookArgs {
-  webhookId: string
+export type UpdateWebhookArgs = SingleWebhookArgs<{
+  /** The data to update the webhook with */
   data: UpdateWebhookData
-}
+}>
 
 export type UpdateWebhookData = AtLeastOne<{
   /** The target URL of the webhook (must use HTTPS) */

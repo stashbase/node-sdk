@@ -1,14 +1,16 @@
 import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
+import { SingleWebhookArgs } from '../../../../types/aruguments'
 import { ListWebhookLogsResponse } from '../../../../types/webhooks'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { ListWebhookLogsError, ListWebhooksError } from '../../../../types/errors/webhooks'
 
-export type ListWebhookLogsArgs = {
-  webhookId: string
+export type ListWebhookLogsArgs = SingleWebhookArgs<{
+  /** The page number to retrieve */
   page?: number
+  /** The number of logs to retrieve per page */
   limit?: number
-}
+}>
 
 async function listWebhookLogs(
   envClient: HttpClient,

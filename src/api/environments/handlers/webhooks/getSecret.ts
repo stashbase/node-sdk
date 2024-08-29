@@ -3,10 +3,9 @@ import { createApiErrorFromResponse } from '../../../../errors'
 import { WebhookSigningSecret } from '../../../../types/webhooks'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { GetWebhookError, GetWebhookSigningSecretError } from '../../../../types/errors/webhooks'
+import { SingleWebhookArgs } from '../../../../types/aruguments'
 
-export interface GetWebhookSigningSecretArgs {
-  webhookId: string
-}
+export type GetWebhookSigningSecretArgs = SingleWebhookArgs<undefined>
 
 async function getWebhookSigningSecret(
   envClient: HttpClient,
