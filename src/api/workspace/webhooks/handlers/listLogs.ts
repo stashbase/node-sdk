@@ -1,14 +1,12 @@
 import { createApiErrorFromResponse } from '../../../../errors'
 import { HttpClient } from '../../../../http/client'
 import { ListWebhookLogsResponse } from '../../../../types/webhooks'
-import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
+import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { ListWebhooksError as SharedListWebhooksError } from '../../../../types/errors/webhooks'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 
-export type ListWebhookLogsArgs = ProjectEnvHandlerArgs<{
-  /** The webhook id */
-  webhookId: string
+export type ListWebhookLogsArgs = SingleWebhookProjectEnvHandlerArgs<{
   /** The page number */
   page?: number
   /** The limit of items per page */
