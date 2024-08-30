@@ -11,6 +11,8 @@ import { HttpClient } from '../../../http/client'
 import { responseFailure } from '../../../http/response'
 import { CreateWebhookData, UpdateWebhookData } from '../../../types/webhooks'
 import {
+  isValidEnvironmentIdentifier,
+  isValidEnvironmentName,
   isValidHttpsUrl,
   isValidProjectIdentifier,
   isValidWebhookDescription,
@@ -50,7 +52,7 @@ export class WebhooksAPI {
       return error
     }
 
-    if (!isValidProjectIdentifier(environment)) {
+    if (!isValidEnvironmentIdentifier(environment)) {
       const error = invalidEnvironmentIdentifierError
       return error
     }
