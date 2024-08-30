@@ -3,6 +3,7 @@ import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { ProjectNotFoundError, GenericApiError } from '../../../../types/errors'
 import { Environment } from '../../../../types/environments'
+import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
 
 // ???
 // export interface GetEnvironmentOpts {
@@ -10,9 +11,7 @@ import { Environment } from '../../../../types/environments'
 //   perPage: number
 // }
 //
-export interface ListEnvironmentArgs {
-  /** Project name or id. */
-  project: string
+export interface ListEnvironmentOptions {
   /** The field to sort by. */
   sortBy?: 'name' | 'locked' | 'createdAt' | 'secretCount'
   /** Whether to sort in ascending or descending order, default: 'asc'. */
@@ -24,23 +23,23 @@ export interface ListEnvironmentArgs {
 type ListEnvironmentsError = GenericApiError | ProjectNotFoundError
 
 async function listEnvironments(
-  client: HttpClient,
-  args: ListEnvironmentArgs
+  args: EnvironmentHandlerArgs<{ opts?: ListEnvironmentOptions }>
 ): Promise<ApiResponse<Array<Environment>, ListEnvironmentsError>> {
-  const { project } = args
+  const { client, project } = args
+  const opts = args.opts
 
   const query: Record<string, string | number | boolean> = {}
 
-  if (args.sortBy) {
-    query['sort-by'] = args.sortBy
+  if (opts?.sortBy) {
+    query['sort-by'] = opts.sortBy
   }
 
-  if (args.order) {
+  if (opts?.order) {
     query.order = true
   }
 
-  if (args.search) {
-    query.search = args.search
+  if (opts?.search) {
+    query.search = opts.search
   }
 
   try {

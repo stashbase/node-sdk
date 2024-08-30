@@ -1,4 +1,3 @@
-import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import {
@@ -10,13 +9,12 @@ import {
   ProjectNotFoundError,
   GenericApiError,
 } from '../../../../types/errors'
+import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
 
-export type DuplicateEnvironmentArgs = {
-  project: string
-  //
-  environment: string
+export type DuplicateEnvironmentArgs = EnvironmentHandlerArgs<{
+  envNameOrId: string
   duplicateName: string
-}
+}>
 
 type DulicateEnvironmentError =
   | GenericApiError
@@ -31,14 +29,13 @@ interface DuplicateEnvironmentResData {
 }
 
 async function duplicateEnvironment(
-  client: HttpClient,
   args: DuplicateEnvironmentArgs
 ): Promise<ApiResponse<DuplicateEnvironmentResData, DulicateEnvironmentError>> {
-  const { project, environment, duplicateName } = args
+  const { client, project, envNameOrId, duplicateName } = args
 
   try {
     const data = await client.post<DuplicateEnvironmentResData>({
-      path: `/v1/projects/${project}/environments/${environment}/duplicate`,
+      path: `/v1/projects/${project}/environments/${envNameOrId}/duplicate`,
       data: { name: duplicateName },
     })
 
