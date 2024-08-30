@@ -3,7 +3,7 @@ import { createApiErrorFromResponse } from '../../../../errors'
 import { GetWebhookError } from '../../../../types/errors/webhooks'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
-import { CreateWebhookData } from '../../../environments/handlers/webhooks/create'
+import { CreateWebhookData } from '../../../../types/webhooks'
 import { CreateWebhookResponse } from '../../../../types/webhooks'
 
 export type CreateWebhookArgs = ProjectEnvHandlerArgs<{
