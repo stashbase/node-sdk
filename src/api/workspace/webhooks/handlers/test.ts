@@ -1,4 +1,3 @@
-import { HttpClient } from '../../../../http/client'
 import { TestWebhookResponse } from '../../../../types/webhooks'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
@@ -14,10 +13,9 @@ export type TestWebhookError =
   | EnvironmentNotFoundError
 
 async function testWebhook(
-  client: HttpClient,
   args: TestWebhookArgs
 ): Promise<ApiResponse<TestWebhookResponse, TestWebhookError>> {
-  const { project, environment, webhookId } = args
+  const { client, project, environment, webhookId } = args
 
   try {
     const testRes = await client.post<TestWebhookResponse>({
