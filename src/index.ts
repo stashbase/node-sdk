@@ -19,14 +19,15 @@ export function createWorkspaceClient(workspaceApiKey: string) {
 
   const secrets = new SecretsAPI(client)
   const projects = new ProjectsAPI(client)
-  const webhooks = new WsWebhooksAPI(client)
   const environments = new WsEnvironmentsAPI(client)
 
   return {
     projects,
     environments,
     secrets,
-    webhooks,
+    webhooks: (projectId: string, environmentId: string) => {
+      return new WsWebhooksAPI(client, projectId, environmentId)
+    },
   }
 }
 
