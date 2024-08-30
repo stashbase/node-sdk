@@ -32,7 +32,6 @@ import { getWebhook } from './handlers/webhooks/get'
 import { listWebhookLogs } from './handlers/webhooks/listLogs'
 import { deleteWebhook } from './handlers/webhooks/delete'
 import { createWebhook } from './handlers/webhooks/create'
-import { CreateWebhookData } from './handlers/webhooks/create'
 import { rotateWebhookSigningSecret } from './handlers/webhooks/rotateSecret'
 import { getWebhookSigningSecret } from './handlers/webhooks/getSecret'
 import { updateWebhookStatus } from './handlers/webhooks/updateStatus'
@@ -45,7 +44,7 @@ import {
   invalidWebhookUrlError,
   webhookMissingPropertiesToUpdateError,
 } from '../../errors/webhooks'
-import { UpdateWebhookData } from '../../types/webhooks'
+import { CreateWebhookData, UpdateWebhookData } from '../../types/webhooks'
 
 class EnvironmentsAPI {
   constructor(private httpClient: HttpClient) {}

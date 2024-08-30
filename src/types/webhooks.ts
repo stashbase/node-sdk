@@ -43,6 +43,15 @@ export interface ListWebhookLogsResponse {
   pagination: PaginationMetadata
 }
 
+export interface CreateWebhookData {
+  /** The target URL of the webhook (must use HTTPS) */
+  url: string
+  /** Whether the webhook is enabled  or not (default: false) */
+  enabled?: boolean
+  /** The description of the webhook */
+  description?: string | null
+}
+
 export interface CreateWebhookResponse {
   /** The unique identifier of the webhook */
   id: string
