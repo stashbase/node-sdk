@@ -12,12 +12,12 @@ async function updateWebhookStatus(
   enabled: boolean
 ): Promise<ApiResponse<null, UpdateWebhookStatusError>> {
   try {
-    const webhook = await envClient.patch<null>({
+    const updateRes = await envClient.patch<null>({
       path: `/v1/webhooks/${webhookId}/status`,
       data: { enabled },
     })
 
-    return responseSuccess(webhook)
+    return responseSuccess(updateRes)
   } catch (error) {
     const apiError = createApiErrorFromResponse<UpdateWebhookStatusError>(error)
     return responseFailure(apiError)

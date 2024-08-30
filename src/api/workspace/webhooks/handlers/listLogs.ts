@@ -25,11 +25,11 @@ async function listWebhookLogs(
   const { project, environment, webhookId } = args
 
   try {
-    const webhooks = await client.get<ListWebhookLogsResponse>({
+    const webhookLogs = await client.get<ListWebhookLogsResponse>({
       path: `/v1/projects/${project}/environments/${environment}/webhooks/${webhookId}/logs`,
     })
 
-    return responseSuccess(webhooks)
+    return responseSuccess(webhookLogs)
   } catch (error) {
     const apiError = createApiErrorFromResponse<ListWebhookLogsError>(error)
     return responseFailure(apiError)

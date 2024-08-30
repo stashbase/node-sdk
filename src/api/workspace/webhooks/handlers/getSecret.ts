@@ -20,11 +20,11 @@ async function getWebhookSigningSecret(
   const { project, environment, webhookId } = args
 
   try {
-    const webhook = await client.get<WebhookSigningSecret>({
+    const secretRes = await client.get<WebhookSigningSecret>({
       path: `/v1/projects/${project}/environments/${environment}/webhooks/${webhookId}/signing-secret`,
     })
 
-    return responseSuccess(webhook)
+    return responseSuccess(secretRes)
   } catch (error) {
     const apiError = createApiErrorFromResponse<GetWebhookSigningSecretError>(error)
     return responseFailure(apiError)

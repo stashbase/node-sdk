@@ -9,12 +9,12 @@ async function createWebhook(
   data: CreateWebhookData
 ): Promise<ApiResponse<CreateWebhookResponse, CreateWebhookError>> {
   try {
-    const webhook = await envClient.post<CreateWebhookResponse>({
+    const createdWebhook = await envClient.post<CreateWebhookResponse>({
       path: '/v1/webhooks',
       data,
     })
 
-    return responseSuccess(webhook)
+    return responseSuccess(createdWebhook)
   } catch (error) {
     const apiError = createApiErrorFromResponse<CreateWebhookError>(error)
     return responseFailure(apiError)

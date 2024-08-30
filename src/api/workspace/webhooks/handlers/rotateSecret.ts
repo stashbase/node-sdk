@@ -20,11 +20,11 @@ async function rotateWebhookSigningSecret(
   const { project, environment, webhookId } = args
 
   try {
-    const webhook = await client.post<WebhookSigningSecret>({
+    const newSecretRes = await client.post<WebhookSigningSecret>({
       path: `/v1/projects/${project}/environments/${environment}/webhooks/${webhookId}/signing-secret`,
     })
 
-    return responseSuccess(webhook)
+    return responseSuccess(newSecretRes)
   } catch (error) {
     const apiError = createApiErrorFromResponse<RotateWebhookSigningSecretError>(error)
     return responseFailure(apiError)

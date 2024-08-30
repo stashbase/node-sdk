@@ -29,12 +29,12 @@ async function listWebhookLogs(
   }
 
   try {
-    const webhooks = await envClient.get<ListWebhookLogsResponse>({
+    const webhookLogsRes = await envClient.get<ListWebhookLogsResponse>({
       path: `/v1/webhooks/${args.webhookId}/logs`,
       query: Object.keys(query).length > 0 ? query : undefined,
     })
 
-    return responseSuccess(webhooks)
+    return responseSuccess(webhookLogsRes)
   } catch (error) {
     const apiError = createApiErrorFromResponse<ListWebhooksError>(error)
     return responseFailure(apiError)

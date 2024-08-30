@@ -12,11 +12,11 @@ async function getWebhookSigningSecret(
   webhookId: string
 ): Promise<ApiResponse<WebhookSigningSecret, GetWebhookSigningSecretError>> {
   try {
-    const webhook = await envClient.get<WebhookSigningSecret>({
+    const secretRes = await envClient.get<WebhookSigningSecret>({
       path: `/v1/webhooks/${webhookId}/signing-secret`,
     })
 
-    return responseSuccess(webhook)
+    return responseSuccess(secretRes)
   } catch (error) {
     const apiError = createApiErrorFromResponse<GetWebhookError>(error)
     return responseFailure(apiError)

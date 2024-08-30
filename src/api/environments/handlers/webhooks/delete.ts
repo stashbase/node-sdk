@@ -8,11 +8,11 @@ async function deleteWebhook(
   webhookId: string
 ): Promise<ApiResponse<null, GetWebhookError>> {
   try {
-    const webhook = await envClient.del<null>({
+    const res = await envClient.del<null>({
       path: `/v1/webhooks/${webhookId}`,
     })
 
-    return responseSuccess(webhook)
+    return responseSuccess(res)
   } catch (error) {
     const apiError = createApiErrorFromResponse<GetWebhookError>(error)
     return responseFailure(apiError)

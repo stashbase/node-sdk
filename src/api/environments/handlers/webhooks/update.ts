@@ -17,12 +17,12 @@ async function updateWebhook(
   const { webhookId, data } = args
 
   try {
-    const webhook = await envClient.patch<null>({
+    const updateRes = await envClient.patch<null>({
       path: `/v1/webhooks/${webhookId}`,
       data,
     })
 
-    return responseSuccess(webhook)
+    return responseSuccess(updateRes)
   } catch (error) {
     const apiError = createApiErrorFromResponse<UpdateWebhookError>(error)
     return responseFailure(apiError)
