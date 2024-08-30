@@ -1,4 +1,3 @@
-import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import {
@@ -6,26 +5,23 @@ import {
   ProjectNotFoundError,
   GenericApiError,
 } from '../../../../types/errors'
+import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
 
-export interface LockEnvironmentArgs {
-  project: string
-  // NOTE: naming ???
-  // environment: string
-  name: string
-}
+export type LockEnvironmentArgs = EnvironmentHandlerArgs<{
+  envNameOrId: string
+  lock: boolean
+}>
 
 type LockEnvironmentError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
 async function lockUnlockEnvironment(
-  client: HttpClient,
-  args: LockEnvironmentArgs,
-  lock: boolean
+  args: LockEnvironmentArgs
 ): Promise<ApiResponse<null, LockEnvironmentError>> {
-  const { project, name } = args
+  const { client, project, envNameOrId, lock } = args
 
   try {
     const data = await client.patch<null>({
-      path: `/v1/projects/${project}/environments/${name}/${lock ? 'lock' : 'unlock'}`,
+      path: `/v1/projects/${project}/environments/${envNameOrId}/${lock ? 'lock' : 'unlock'}`,
     })
 
     return responseSuccess(data)

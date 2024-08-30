@@ -1,4 +1,3 @@
-import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import {
@@ -7,23 +6,22 @@ import {
   GenericApiError,
 } from '../../../../types/errors'
 import { Environment } from '../../../../types/environments'
+import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
 
-export interface GetEnvironmentArgs {
-  project: string
-  environment: string
-}
+export type GetEnvironmentArgs = EnvironmentHandlerArgs<{
+  envNameOrId: string
+}>
 
 type GetEnvironmentError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
 async function getEnvironment(
-  client: HttpClient,
   args: GetEnvironmentArgs
 ): Promise<ApiResponse<Environment, GetEnvironmentError>> {
-  const { project, environment } = args
+  const { client, project, envNameOrId } = args
 
   try {
     const data = await client.get<Environment>({
-      path: `/v1/projects/${project}/environments/${environment}`,
+      path: `/v1/projects/${project}/environments/${envNameOrId}`,
     })
 
     return responseSuccess(data)

@@ -13,32 +13,32 @@ import {
   LoadEnvironmentQueryParams,
   LoadEnvironmentResponse,
 } from '../../../../types/environments'
+import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
 
 type LoadEnvironmentError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
-export type LoadEnvironmentArgs = {
-  project: string
-  environment: string
-} & LoadEnvironmentOpts
+export type LoadEnvironmentArgs = EnvironmentHandlerArgs<{
+  envNameOrId: string
+  opts?: LoadEnvironmentOpts
+}>
 
 async function loadEnvironment(
-  client: HttpClient,
   args: LoadEnvironmentArgs
 ): Promise<ApiResponse<null, LoadEnvironmentError>> {
-  const { project, environment: environmentName } = args
+  const { client, project, envNameOrId } = args
 
   const query: LoadEnvironmentQueryParams = {
     omit: 'description',
     'with-environment': ['type'].join(','),
   }
 
-  if (args?.expandRefs) {
+  if (args?.opts?.expandRefs) {
     query['expand-refs'] = true
   }
 
   try {
     const data = await client.get<LoadEnvironmentResponse>({
-      path: `/v1/projects/${project}/environments/${environmentName}/secrets`,
+      path: `/v1/projects/${project}/environments/${envNameOrId}/secrets`,
       query: query as Record<string, string | boolean>,
     })
 
@@ -48,7 +48,7 @@ async function loadEnvironment(
     } = data
 
     if (secrets.length === 0) {
-      console.log(`\nLoaded environment: ${environmentName} (${environmentType})`)
+      console.log(`\nLoaded environment: ${envNameOrId} (${environmentType})`)
       console.log(`No secrets found`)
 
       return responseSuccess(null)
@@ -65,9 +65,9 @@ async function loadEnvironment(
 
     dotenvExpand.expand(dotenv)
 
-    console.log(`\nLoaded environment: ${environmentName} (${environmentType})`)
+    console.log(`\nLoaded environment: ${envNameOrId} (${environmentType})`)
 
-    const printType = args?.print
+    const printType = args?.opts?.print
 
     if (printType === 'key' || printType === 'key-value') {
       if (printType === 'key') {
