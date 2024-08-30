@@ -109,6 +109,11 @@ export const isValidHttpsUrl = (url: string): boolean => {
   return httpsUrlPattern.test(url)
 }
 
+export const isValidWebhookDescription = (description: string): boolean => {
+  const maxLength = 200
+  return description.length <= maxLength
+}
+
 export const validateWebhookIdForMethod = (webhookId: string) => {
   const isValid = isValidWebhookId(webhookId)
 
