@@ -77,6 +77,8 @@ const isValidEnvironmentName = (environmentName: string) =>
   containsMaxOneDash(environmentName) &&
   isAlphanumericWithHyphensAndUnderscores(environmentName)
 
+export const isValidEnvironmentIdentifier = isValidEnvironmentName
+
 //
 function isAlphanumericUppercaseWithUnderscore(inputString: string): boolean {
   const pattern = /[^A-Z0-9_]/
