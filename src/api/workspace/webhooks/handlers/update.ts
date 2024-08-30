@@ -1,10 +1,11 @@
-import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
 import { GetWebhookError as SharedGetWebhookError } from '../../../../types/errors/webhooks'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 import { UpdateWebhookData } from '../../../../types/webhooks'
+import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
+import { InvalidIdentifierProjectError } from '../../../../types/errors/projects'
 
 export type UpdateWebhookArgs = SingleWebhookProjectEnvHandlerArgs<{
   data: UpdateWebhookData
@@ -16,10 +17,9 @@ export type UpdateWebhookError =
   | EnvironmentNotFoundError
 
 async function updateWebhook(
-  client: HttpClient,
   args: UpdateWebhookArgs
 ): Promise<ApiResponse<null, UpdateWebhookError>> {
-  const { project, environment, webhookId, data } = args
+  const { client, project, environment, webhookId, data } = args
 
   try {
     await client.patch<null>({
