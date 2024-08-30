@@ -1,4 +1,3 @@
-import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import {
@@ -6,14 +5,17 @@ import {
   EnvironmentLimitReachedError,
 } from '../../../../types/errors/environments'
 import { ProjectNotFoundError, GenericApiError } from '../../../../types/errors'
+import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
 
-export interface CreateEnvironmentArgs {
-  project: string
-  //
+export interface CreateEnvironmentData {
   name: string
   description?: string | null
   type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
 }
+
+export type CreateEnvironmentArgs = EnvironmentHandlerArgs<{
+  data: CreateEnvironmentData
+}>
 
 interface CreateEnvironmentResponseData {
   id: string
@@ -27,15 +29,14 @@ type CreateEnvironmentError =
   | EnvironmentLimitReachedError
 
 async function createEnvironment(
-  client: HttpClient,
   args: CreateEnvironmentArgs
 ): Promise<ApiResponse<CreateEnvironmentResponseData, CreateEnvironmentError>> {
-  const { project } = args
+  const { client, project } = args
 
   try {
     const data = await client.post<CreateEnvironmentResponseData>({
       path: `/v1/projects/${project}/environments`,
-      data: { ...args, project: undefined },
+      data: args.data,
     })
 
     return responseSuccess(data)

@@ -1,4 +1,3 @@
-import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import {
@@ -10,13 +9,12 @@ import {
   ProjectNotFoundError,
   GenericApiError,
 } from '../../../../types/errors'
+import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
 
-export interface RenameEnvironmentArgs {
-  project: string
-  //
-  environment: string
+export type RenameEnvironmentArgs = EnvironmentHandlerArgs<{
+  envNameOrId: string
   newName: string
-}
+}>
 
 type RenameEnvironmentError =
   | GenericApiError
@@ -26,14 +24,13 @@ type RenameEnvironmentError =
   | EnvironmentLockedError
 
 async function renameEnvironment(
-  client: HttpClient,
   args: RenameEnvironmentArgs
 ): Promise<ApiResponse<null, RenameEnvironmentError>> {
-  const { project, environment, newName } = args
+  const { client, project, envNameOrId, newName } = args
 
   try {
     const data = await client.patch<null>({
-      path: `/v1/projects/${project}/environments/${environment}`,
+      path: `/v1/projects/${project}/environments/${envNameOrId}`,
       data: { name: newName },
     })
 
