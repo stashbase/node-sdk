@@ -1,4 +1,3 @@
-import { HttpClient } from '../../../../http/client'
 import { WebhookSigningSecret } from '../../../../types/webhooks'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
@@ -14,10 +13,9 @@ export type RotateWebhookSigningSecretError =
   | EnvironmentNotFoundError
 
 async function rotateWebhookSigningSecret(
-  client: HttpClient,
   args: RotateWebhookSigningSecretArgs
 ): Promise<ApiResponse<WebhookSigningSecret, RotateWebhookSigningSecretError>> {
-  const { project, environment, webhookId } = args
+  const { client, project, environment, webhookId } = args
 
   try {
     const newSecretRes = await client.post<WebhookSigningSecret>({
