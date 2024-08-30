@@ -17,12 +17,12 @@ async function createWebhook(
   const { project, environment, data } = args
 
   try {
-    const webhook = await client.post<CreateWebhookResponse>({
+    const createdWebhook = await client.post<CreateWebhookResponse>({
       path: `/v1/projects/${project}/environments/${environment}/webhooks`,
       data,
     })
 
-    return responseSuccess(webhook)
+    return responseSuccess(createdWebhook)
   } catch (error) {
     const apiError = createApiErrorFromResponse<GetWebhookError>(error)
     return responseFailure(apiError)
