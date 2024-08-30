@@ -44,6 +44,13 @@ export type InvalidWebhookUrlValidationError = ValidationApiError<
   }
 >
 
+export type InvalidWebhookDescriptionValidationError = ValidationApiError<
+  'invalid_webhook_description',
+  {
+    maxLength: number
+  }
+>
+
 export type WebhookMissingPropertiesToUpdateValidationError = ValidationApiError<
   'missing_properties_to_update',
   {

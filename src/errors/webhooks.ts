@@ -1,11 +1,11 @@
 import { createApiError } from '.'
 import {
+  InvalidWebhookDescriptionValidationError,
   InvalidWebhookIdError,
   InvalidWebhookLogsLimitError,
   InvalidWebhookLogsPageError,
   InvalidWebhookUrlValidationError,
   WebhookMissingPropertiesToUpdateValidationError,
-  WebhookUrlHttpsRequiredValidationError,
 } from '../types/errors/webhooks'
 
 export const invalidWebhookIdError: InvalidWebhookIdError = createApiError({
@@ -24,6 +24,15 @@ export const invalidWebhookUrlError: InvalidWebhookUrlValidationError = createAp
     validUrlExample: 'https://my-endpoint.com',
   },
 })
+
+export const invalidWebhookDescriptionError: InvalidWebhookDescriptionValidationError =
+  createApiError({
+    code: 'validation.invalid_webhook_description',
+    message: 'The description must be a string no longer than 200 characters.',
+    details: {
+      maxLength: 200,
+    },
+  })
 
 export const webhookMissingPropertiesToUpdateError: WebhookMissingPropertiesToUpdateValidationError =
   createApiError({
