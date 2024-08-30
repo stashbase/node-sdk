@@ -9,11 +9,11 @@ async function testWebhook(
   webhookId: string
 ): Promise<ApiResponse<TestWebhookResponse, TestWebhookError>> {
   try {
-    const webhook = await envClient.post<TestWebhookResponse>({
+    const testRes = await envClient.post<TestWebhookResponse>({
       path: `/v1/webhooks/${webhookId}/test`,
     })
 
-    return responseSuccess(webhook)
+    return responseSuccess(testRes)
   } catch (error) {
     const apiError = createApiErrorFromResponse<TestWebhookError>(error)
     return responseFailure(apiError)

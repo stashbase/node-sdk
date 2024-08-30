@@ -12,11 +12,11 @@ async function rotateWebhookSigningSecret(
   webhookId: string
 ): Promise<ApiResponse<WebhookSigningSecret, RotateWebhookSigningSecretError>> {
   try {
-    const webhook = await envClient.post<WebhookSigningSecret>({
+    const newSecretRes = await envClient.post<WebhookSigningSecret>({
       path: `/v1/webhooks/${webhookId}/signing-secret`,
     })
 
-    return responseSuccess(webhook)
+    return responseSuccess(newSecretRes)
   } catch (error) {
     const apiError = createApiErrorFromResponse<GetWebhookError>(error)
     return responseFailure(apiError)
