@@ -1,9 +1,10 @@
 import EnvironmentsAPI from './api/environments/api'
 import { ProjectsAPI } from './api/workspace/projects/api'
-import { EnvironmentsAPI as WsEnvironmentsAPI } from './api/workspace/environments/api'
 import { SecretsAPI } from './api/workspace/secrets/api'
 import { createHttpClient } from './http/client'
 import verifyWebhook from './webhooks/verify'
+import { WebhooksAPI as WsWebhooksAPI } from './api/workspace/webhooks/api'
+import { EnvironmentsAPI as WsEnvironmentsAPI } from './api/workspace/environments/api'
 
 /**
  * Creates an SDK object that encapsulates functionality for managing projects, environments, and secrets.
@@ -18,12 +19,14 @@ export function createWorkspaceClient(workspaceApiKey: string) {
 
   const secrets = new SecretsAPI(client)
   const projects = new ProjectsAPI(client)
+  const webhooks = new WsWebhooksAPI(client)
   const environments = new WsEnvironmentsAPI(client)
 
   return {
     projects,
     environments,
     secrets,
+    webhooks,
   }
 }
 

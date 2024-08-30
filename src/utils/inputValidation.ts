@@ -9,6 +9,8 @@ import {
   noDataProvidedError,
   selfReferencingSecretsError,
 } from '../errors/secrets'
+import { invalidWebhookIdError } from '../errors/webhooks'
+import { responseFailure } from '../http/response'
 import {
   DuplicateNewSecretKeysValidationError,
   DuplicateSecretsKeysValidationError,
@@ -82,10 +84,10 @@ function isAlphanumericUppercaseWithUnderscore(inputString: string): boolean {
   return !pattern.test(inputString)
 }
 
-type Resource = 'project' | 'environment'
+type Resource = 'project' | 'environment' | 'webhook'
 
 export const isResourceIdFormat = (resource: Resource, input: string) => {
-  const prefix = resource === 'project' ? 'pr_' : 'ev_'
+  const prefix = resource === 'project' ? 'pr_' : resource === 'webhook' ? 'wh_' : 'ev_'
 
   if (input?.length !== 25 || !input.startsWith(prefix)) {
     return false
@@ -97,6 +99,27 @@ export const isResourceIdFormat = (resource: Resource, input: string) => {
     return true
   } else {
     return false
+  }
+}
+
+export const isValidWebhookId = (webhookId: string) => isResourceIdFormat('webhook', webhookId)
+
+export const isValidHttpsUrl = (url: string): boolean => {
+  const httpsUrlPattern = /^https:\/\/(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(?:\/[^\s]*)?$/
+  return httpsUrlPattern.test(url)
+}
+
+export const isValidWebhookDescription = (description: string): boolean => {
+  const maxLength = 200
+  return description.length <= maxLength
+}
+
+export const validateWebhookIdForMethod = (webhookId: string) => {
+  const isValid = isValidWebhookId(webhookId)
+
+  if (!isValid) {
+    const error = invalidWebhookIdError
+    return responseFailure(error)
   }
 }
 
