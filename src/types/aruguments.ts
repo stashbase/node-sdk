@@ -1,5 +1,13 @@
 import { HttpClient } from '../http/client'
 
+export type EnvironmentHandlerArgs<T extends Record<string, unknown> | undefined> =
+  T extends undefined
+    ? {
+        client: HttpClient
+        project: string
+      }
+    : { client: HttpClient; project: string } & T
+
 export type ProjectEnvHandlerArgs<T extends Record<string, unknown> | undefined> =
   T extends undefined
     ? {
