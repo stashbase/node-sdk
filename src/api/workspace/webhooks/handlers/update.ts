@@ -4,8 +4,6 @@ import { GetWebhookError as SharedGetWebhookError } from '../../../../types/erro
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 import { UpdateWebhookData } from '../../../../types/webhooks'
-import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
-import { InvalidIdentifierProjectError } from '../../../../types/errors/projects'
 
 export type UpdateWebhookArgs = SingleWebhookProjectEnvHandlerArgs<{
   data: UpdateWebhookData
