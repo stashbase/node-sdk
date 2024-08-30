@@ -27,25 +27,6 @@ import { testWebhook } from './handlers/test'
 import { updateWebhook } from './handlers/update'
 import { updateWebhookStatus } from './handlers/updateStatus'
 
-const validateArgs = (args: { project: string; environment: string; webhookId?: string }) => {
-  const { project, environment, webhookId } = args
-
-  if (!isValidProjectIdentifier(project)) {
-    const error = invalidProjectIdentifierError
-    return error
-  }
-
-  if (!isValidProjectIdentifier(environment)) {
-    const error = invalidEnvironmentIdentifierError
-    return error
-  }
-
-  if (webhookId && !isValidWebhookId(webhookId)) {
-    const error = invalidWebhookIdError
-    return error
-  }
-}
-
 export class WebhooksAPI {
   private httpClient: HttpClient
   public project: string
