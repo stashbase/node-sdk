@@ -1,5 +1,6 @@
 import { invalidEnvironmentIdentifierError, invalidProjectIdentifierError } from '../../../errors'
 import {
+  invalidWebhookDescriptionError,
   invalidWebhookIdError,
   invalidWebhookLogsLimitError,
   invalidWebhookLogsPageError,
@@ -11,6 +12,7 @@ import { responseFailure } from '../../../http/response'
 import {
   isValidHttpsUrl,
   isValidProjectIdentifier,
+  isValidWebhookDescription,
   isValidWebhookId,
 } from '../../../utils/inputValidation'
 import { createWebhook, CreateWebhookArgs } from './handlers/create'
@@ -127,11 +129,21 @@ export class WebhooksAPI {
     const validationError = validateArgs(args)
     if (validationError) return responseFailure(validationError)
 
-    const isValidUrl = isValidHttpsUrl(args.data.url)
+    const { data } = args
+    const isValidUrl = isValidHttpsUrl(data.url)
 
     if (!isValidUrl) {
       const error = invalidWebhookUrlError
       return responseFailure(error)
+    }
+
+    if (data.description) {
+      const isValidDescription = isValidWebhookDescription(data.description)
+
+      if (!isValidDescription) {
+        const error = invalidWebhookDescriptionError
+        return responseFailure(error)
+      }
     }
 
     return await createWebhook(this.httpClient, args)
@@ -195,6 +207,15 @@ export class WebhooksAPI {
 
       if (!isValidUrl) {
         const error = invalidWebhookUrlError
+        return responseFailure(error)
+      }
+    }
+
+    if (data.description) {
+      const isValidDescription = isValidWebhookDescription(data.description)
+
+      if (!isValidDescription) {
+        const error = invalidWebhookDescriptionError
         return responseFailure(error)
       }
     }
