@@ -9,6 +9,7 @@ import { getSecret } from './handlers/secrets/get'
 import {
   isValidHttpsUrl,
   isValidSecretKey,
+  isValidWebhookDescription,
   validateCreateSecretsInput,
   validateSecretKeys,
   validateSetSecretsInput,
@@ -38,6 +39,7 @@ import { updateWebhookStatus } from './handlers/webhooks/updateStatus'
 import { updateWebhook } from './handlers/webhooks/update'
 import { testWebhook } from './handlers/webhooks/test'
 import {
+  invalidWebhookDescriptionError,
   invalidWebhookLogsLimitError,
   invalidWebhookLogsPageError,
   invalidWebhookUrlError,
@@ -329,6 +331,15 @@ class WebhooksAPI {
       return responseFailure(error)
     }
 
+    if (data.description) {
+      const isValidDescription = isValidWebhookDescription(data.description)
+
+      if (!isValidDescription) {
+        const error = invalidWebhookDescriptionError
+        return responseFailure(error)
+      }
+    }
+
     return await createWebhook(this.httpClient, data)
   }
 
@@ -388,6 +399,15 @@ class WebhooksAPI {
 
       if (!isValidUrl) {
         const error = invalidWebhookUrlError
+        return responseFailure(error)
+      }
+    }
+
+    if (data.description) {
+      const isValidDescription = isValidWebhookDescription(data.description)
+
+      if (!isValidDescription) {
+        const error = invalidWebhookDescriptionError
         return responseFailure(error)
       }
     }
