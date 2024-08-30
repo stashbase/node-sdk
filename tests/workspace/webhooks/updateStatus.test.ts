@@ -4,11 +4,9 @@ import { createWorkspaceClient } from '../../../src'
 test('Disable webhook', async () => {
   const stashbase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-  const { data, error } = await stashbase.webhooks.disable({
-    project: 'name',
-    environment: '123',
-    webhookId: 'wh_4i1gbnewYBnCTZg3Sbye2c',
-  })
+  const { data, error } = await stashbase
+    .webhooks('name', '123')
+    .disable('wh_4i1gbnewYBnCTZg3Sbye2c')
 
   if (error) {
     const { code } = error
