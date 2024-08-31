@@ -217,7 +217,7 @@ class EnvSecretsAPI {
    * @param keys - An array of secret keys to remove.
    * @returns A promise that resolves to an object containing the count of deleted secrets and any secrets (keys) not found, or an error response.
    */
-  async delete(keys: Uppercase<string>[]) {
+  async delete(keys: SecretKey[]) {
     if (keys.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
