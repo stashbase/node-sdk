@@ -150,7 +150,7 @@ export class SecretsAPI {
    * @param data - The secret data to create.
    * @returns A promise that resolves to an object containing the count of created secrets and any duplicate keys, or an error response.
    */
-  async create(data: Array<CreateSecretsItem>) {
+  async create(data: CreateSecretsItem[]) {
     const validationError = validateCreateSecretsInput(data)
     if (validationError) return responseFailure(validationError)
 
@@ -167,7 +167,7 @@ export class SecretsAPI {
    * @param data - The secret data to set.
    * @returns A promise that resolves to null on success or an error response.
    */
-  async set(data: Array<SetSecretsItem>) {
+  async set(data: SetSecretsItem[]) {
     const identifierValidationError = this.validateIdentifiers()
     if (identifierValidationError) return responseFailure(identifierValidationError)
 
@@ -186,7 +186,7 @@ export class SecretsAPI {
    * @param data - The secret data to update.
    * @returns A promise that resolves to an object containing the count of updated secrets and any keys not found, or an error response.
    */
-  async update(data: Array<UpdateSecretsItem>) {
+  async update(data: UpdateSecretsItem[]) {
     const identifierValidationError = this.validateIdentifiers()
     if (identifierValidationError) return responseFailure(identifierValidationError)
 
