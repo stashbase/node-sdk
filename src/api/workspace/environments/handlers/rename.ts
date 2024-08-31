@@ -9,10 +9,9 @@ import {
   ProjectNotFoundError,
   GenericApiError,
 } from '../../../../types/errors'
-import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
+import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
 
-export type RenameEnvironmentArgs = EnvironmentHandlerArgs<{
-  envNameOrId: string
+export type RenameEnvironmentArgs = SingleEnvironmentHandlerArgs<{
   newName: string
 }>
 

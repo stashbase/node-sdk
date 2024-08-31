@@ -8,6 +8,11 @@ export type EnvironmentHandlerArgs<T extends Record<string, unknown> | undefined
       }
     : { client: HttpClient; project: string } & T
 
+export type SingleEnvironmentHandlerArgs<T extends Record<string, unknown> | undefined> =
+  T extends undefined
+    ? EnvironmentHandlerArgs<{ envNameOrId: string }>
+    : { client: HttpClient; project: string; envNameOrId: string } & T
+
 export type ProjectEnvHandlerArgs<T extends Record<string, unknown> | undefined> =
   T extends undefined
     ? {

@@ -6,11 +6,9 @@ import {
   ProjectNotFoundError,
   GenericApiError,
 } from '../../../../types/errors'
-import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
+import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
 
-export type DeleteEnvironmentArgs = EnvironmentHandlerArgs<{
-  envNameOrId: string
-}>
+export type DeleteEnvironmentArgs = SingleEnvironmentHandlerArgs<undefined>
 
 type DeleteEnvironmentError =
   | GenericApiError

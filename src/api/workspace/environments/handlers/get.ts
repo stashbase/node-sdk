@@ -6,11 +6,9 @@ import {
   GenericApiError,
 } from '../../../../types/errors'
 import { Environment } from '../../../../types/environments'
-import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
+import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
 
-export type GetEnvironmentArgs = EnvironmentHandlerArgs<{
-  envNameOrId: string
-}>
+export type GetEnvironmentArgs = SingleEnvironmentHandlerArgs<undefined>
 
 type GetEnvironmentError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
