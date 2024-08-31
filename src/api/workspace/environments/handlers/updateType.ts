@@ -7,10 +7,11 @@ import {
   GenericApiError,
 } from '../../../../types/errors'
 import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
+import { EnvironmentType } from '../../../../types/environments'
 
 type NewType = EnvironmentHandlerArgs<{
   envNameOrId: string
-  type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
+  type: EnvironmentType
 }>
 
 export type UpdateEnvironmentTypeArgs = NewType
