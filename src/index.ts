@@ -20,23 +20,29 @@ export function createWorkspaceClient(workspaceApiKey: string) {
   return new WorkspaceClient(client)
 }
 
+/** Client for interacting with Stashbase resources using a workspace API key with a given permissions. */
 class WorkspaceClient {
   private client: HttpClient
-  public projects: ProjectsAPI
 
   constructor(client: HttpClient) {
     this.client = client
     this.projects = new ProjectsAPI(client)
   }
 
+  /** API for interacting with projects. */
+  public projects: ProjectsAPI
+
+  /** API for interacting with environments. */
   public environments(projectNameOrId: string) {
     return new WsEnvironmentsAPI(this.client, projectNameOrId)
   }
 
+  /** API for interacting with secrets. */
   public secrets(projectNameOrId: string, envNameOrId: string) {
     return new SecretsAPI(this.client, projectNameOrId, envNameOrId)
   }
 
+  /** API for interacting with webhooks. */
   public webhooks(projectNameOrId: string, envNameOrId: string) {
     return new WsWebhooksAPI(this.client, projectNameOrId, envNameOrId)
   }
