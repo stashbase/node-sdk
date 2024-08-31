@@ -12,15 +12,11 @@ import {
   GenericApiError,
 } from '../../../../types/errors'
 import { SecretKey } from '../../../../types/secretKey'
+import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 
 type ListSecretsError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
-type ListSecretsBaseArgs = {
-  /* Project name or id */
-  project: string
-  /* Environment name or id */
-  environment: string
-} & ListSecretsOptions
+type ListSecretsBaseArgs = ProjectEnvHandlerArgs<{ options?: ListSecretsOptions }>
 
 export type ListSecretsArgs = ListSecretsBaseArgs
 
@@ -35,12 +31,12 @@ export type ListExcludeSecretsArgs = ListSecretsBaseArgs & {
 }
 
 async function listSecrets(
-  envClient: HttpClient,
   args: ListSecretsBaseArgs & { only?: SecretKey[]; exclude?: SecretKey[] }
-  // options?: ListSecretsOpts
 ): Promise<ApiResponse<ListSecretsResData, ListSecretsError>> {
-  const { project, environment, omit } = args
+  const { client, project, environment } = args
   const { only, exclude } = args
+
+  const omit = args.options?.omit
 
   const queryObj: ListSecretsQueryParams = {}
 
@@ -64,7 +60,7 @@ async function listSecrets(
     Object.keys(queryObj).length > 0 ? (queryObj as Record<string, string | boolean>) : undefined
 
   try {
-    const secrets = await envClient.get<ListSecretsResData>({
+    const secrets = await client.get<ListSecretsResData>({
       path: `/v1/projects/${project}/environments/${environment}/secrets`,
       query: query,
     })

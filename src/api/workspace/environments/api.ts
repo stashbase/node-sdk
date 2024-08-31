@@ -1,32 +1,36 @@
 import { HttpClient } from '../../../http/client'
 import {
-  createApiError,
   environmentNameUsesIdFormatError,
   invalidEnvironmentIdentifierError,
   invalidEnvironmentOrderError,
   invalidEnvironmentSearchError,
   invalidEnvironmentSortByError,
   invalidNewEnvironmentNameError,
-  invalidNewProjectNameError,
   invalidProjectIdentifierError,
   newEnvironmentNameEqualsOriginal,
 } from '../../../errors'
 import {
   isResourceIdFormat,
+  isValidEnvironmentIdentifier,
   isValidEnvironmentName,
   isValidProjectIdentifier,
-  isValidProjectName,
 } from '../../../utils/inputValidation'
-import { CreateEnvironmentArgs, createEnvironment } from './handlers/create'
-import { DeleteEnvironmentArgs, deleteEnvironment } from './handlers/delete'
-import { DuplicateEnvironmentArgs, duplicateEnvironment } from './handlers/duplicate'
-import { GetEnvironmentArgs, getEnvironment } from './handlers/get'
-import { ListEnvironmentArgs, listEnvironments } from './handlers/list'
-import { LoadEnvironmentArgs, loadEnvironment } from './handlers/load'
-import { LockEnvironmentArgs, lockUnlockEnvironment } from './handlers/lock'
-import { RenameEnvironmentArgs, renameEnvironment } from './handlers/rename'
-import { UpdateEnvironmentTypeArgs, updateEnvironmentType } from './handlers/updateType'
-import { responseFailure, responseSuccess } from '../../../http/response'
+import { createEnvironment } from './handlers/create'
+import { deleteEnvironment } from './handlers/delete'
+import { duplicateEnvironment } from './handlers/duplicate'
+import { getEnvironment } from './handlers/get'
+import { listEnvironments } from './handlers/list'
+import { loadEnvironment } from './handlers/load'
+import { lockUnlockEnvironment } from './handlers/lock'
+import { renameEnvironment } from './handlers/rename'
+import { updateEnvironmentType } from './handlers/updateType'
+import { responseFailure } from '../../../http/response'
+import {
+  CreateEnvironmentData,
+  EnvironmentType,
+  ListEnvironmentOptions,
+  LoadEnvironmentOptions,
+} from '../../../types/environments'
 
 export const checkValidProjectEnv = (projectName: string, environmentName: string) => {
   if (!isValidProjectIdentifier(projectName)) {
@@ -42,53 +46,63 @@ export const checkValidProjectEnv = (projectName: string, environmentName: strin
 
 export class EnvironmentsAPI {
   private httpClient: HttpClient
+  public project: string
 
-  constructor(httpClient: HttpClient) {
+  constructor(httpClient: HttpClient, project: string) {
     this.httpClient = httpClient
+    this.project = project
+  }
+
+  private getHandlerArgs() {
+    return { client: this.httpClient, project: this.project }
+  }
+
+  private validateIdentifiers(envNameOrId?: string) {
+    const { project } = this
+
+    if (!isValidProjectIdentifier(project)) {
+      const error = invalidProjectIdentifierError
+      return error
+    }
+
+    if (envNameOrId !== undefined && !isValidEnvironmentIdentifier(envNameOrId)) {
+      const error = invalidEnvironmentIdentifierError
+      return error
+    }
   }
 
   /**
    * Retrieves an environment by its name within a project.
-   * @param args - The arguments for getting an environment.
-   * @param args.environment - The name or id of the environment to retrieve.
-   * @param args.project - The name or the id of the project containing the environment.
+   * @param envNameOrId - The name or id of the environment to retrieve.
    * @returns A promise that resolves to the environment data or an error response.
    */
-  async get(args: GetEnvironmentArgs) {
-    const { environment, project } = args
+  async get(envNameOrId: string) {
+    const identifiersError = this.validateIdentifiers(envNameOrId)
+    if (identifiersError) return responseFailure(identifiersError)
 
-    const identifiersError = checkValidProjectEnv(project, environment)
-
-    if (identifiersError) {
-      return responseFailure(identifiersError)
-    }
-
-    return await getEnvironment(this.httpClient, args)
+    return await getEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId })
   }
 
   /**
    * Loads an environment and injects its secrets into the process, throwing an error if it fails.
-   * @param args - The arguments for loading an environment.
-   * @param args.environment - The name or id of the environment to load.
-   * @param args.project - The name or id of the project containing the environment.
-   * @param args.enabled - Whether this methods is enabled (optional).
+   * @param envNameOrId - The name or id of the environment to load.
+   * @param options - Additional options for loading the environment.
    * @throws Error with the error code if loading fails.
    * @returns A promise that resolves to null if successful.
    */
-  async loadOrThrow(args: LoadEnvironmentArgs) {
-    const { environment, project } = args
-
-    if (args?.enabled === false) {
+  async loadOrThrow(envNameOrId: string, options?: LoadEnvironmentOptions) {
+    if (options?.enabled === false) {
       return { data: null, error: null, ok: null }
     }
 
-    const identifiersError = checkValidProjectEnv(project, environment)
+    const identifiersError = this.validateIdentifiers(envNameOrId)
+    if (identifiersError) return responseFailure(identifiersError)
 
-    if (identifiersError) {
-      return responseFailure(identifiersError)
-    }
-
-    const { error } = await loadEnvironment(this.httpClient, args)
+    const { error } = await loadEnvironment({
+      ...this.getHandlerArgs(),
+      environment: envNameOrId,
+      options,
+    })
 
     // throws only error code
     if (error) {
@@ -98,42 +112,32 @@ export class EnvironmentsAPI {
 
   /**
    * Loads an environment and injects its secrets into the process.
-   * @param args - The arguments for loading an environment.
-   * @param args.environment - The name or id of the environment to load.
-   * @param args.project - The name of the project containing the environment.
-   * @param args.enabled - Whether the loading is enabled (optional).
-   * @returns A promise that resolves to the load result or an error response.
+   * @param envNameOrId - The name or id of the environment to load.
+   * @param options - Additional options for loading the environment.
+   * @returns A promise that resolves to null if successful or and error response.
    */
-  async load(args: LoadEnvironmentArgs) {
-    const { environment, project } = args
-
-    if (args?.enabled === false) {
+  async load(envNameOrId: string, options?: LoadEnvironmentOptions) {
+    if (options?.enabled === false) {
       return { data: null, error: null, ok: null }
     }
 
-    const identifiersError = checkValidProjectEnv(project, environment)
+    const identifiersError = this.validateIdentifiers(envNameOrId)
+    if (identifiersError) return responseFailure(identifiersError)
 
-    if (identifiersError) {
-      return responseFailure(identifiersError)
-    }
-
-    return await loadEnvironment(this.httpClient, args)
+    return await loadEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId, options })
   }
 
   /**
    * Lists all environments within a project.
-   * @param args - The arguments for listing environments.
-   * @param args.project - The name or id of the project to list environments from.
+   * @param options - Options for listing environments.
    * @returns A promise that resolves to an array of environments or an error response.
    */
-  async list(args: ListEnvironmentArgs) {
-    if (!isValidProjectIdentifier(args.project)) {
-      const error = invalidProjectIdentifierError
-      return responseFailure(error)
-    }
+  async list(options?: ListEnvironmentOptions) {
+    const identifiersError = this.validateIdentifiers()
+    if (identifiersError) return responseFailure(identifiersError)
 
-    if (args.sortBy) {
-      const sortBy = args.sortBy
+    if (options?.sortBy) {
+      const sortBy = options.sortBy
 
       if (sortBy !== 'name' && sortBy !== 'createdAt' && sortBy !== 'secretCount') {
         const error = invalidEnvironmentSortByError
@@ -141,8 +145,8 @@ export class EnvironmentsAPI {
       }
     }
 
-    if (args.order) {
-      const order = args.order
+    if (options?.order) {
+      const order = options.order
 
       if (order !== 'asc' && order !== 'desc') {
         const error = invalidEnvironmentOrderError
@@ -150,83 +154,61 @@ export class EnvironmentsAPI {
       }
     }
 
-    if (args.search) {
-      if (!isValidEnvironmentName(args.search)) {
+    if (options?.search) {
+      if (!isValidEnvironmentName(options.search)) {
         const error = invalidEnvironmentSearchError
         return responseFailure(error)
       }
     }
 
-    return await listEnvironments(this.httpClient, args)
+    return await listEnvironments({ ...this.getHandlerArgs(), options })
   }
 
   /**
    * Creates a new environment within a project.
-   * @param args - The arguments for creating an environment.
-   * @param args.project - The name or id of the project to create the environment in.
-   * @param args.name - The name of the new environment.
+   * @param data - The data for creating the environment.
    * @returns A promise that resolves to the creation result or an error response.
    */
-  async create(args: CreateEnvironmentArgs) {
-    const { project, name } = args
+  async create(data: CreateEnvironmentData) {
+    const validationError = this.validateIdentifiers()
+    if (validationError) return responseFailure(validationError)
 
-    const projectIdentifierError = isValidProjectIdentifier(project)
-
-    if (projectIdentifierError) {
-      const error = invalidProjectIdentifierError
-      return responseFailure(error)
-    }
-
-    if (!isValidEnvironmentName(name)) {
+    if (!isValidEnvironmentName(data.name)) {
       const error = invalidNewEnvironmentNameError
       return responseFailure(error)
     }
 
-    const nameHasIdFormat = isResourceIdFormat('environment', name)
+    const nameHasIdFormat = isResourceIdFormat('environment', data.name)
 
     if (nameHasIdFormat) {
       const error = environmentNameUsesIdFormatError
       return responseFailure(error)
     }
 
-    return await createEnvironment(this.httpClient, args)
+    return await createEnvironment({ ...this.getHandlerArgs(), data })
   }
 
   /**
    * Deletes an environment from a project.
-   * @param args - The arguments for removing an environment.
-   * @param args.environment - The name or id of the environment to remove.
-   * @param args.project - The name or id of the project containing the environment.
+   * @param envNameOrId - The name or id of the environment to remove.
    * @returns A promise that resolves to the removal result or an error response.
    */
-  async delete(args: DeleteEnvironmentArgs) {
-    const { environment, project } = args
+  async delete(envNameOrId: string) {
+    const identifiersError = this.validateIdentifiers(envNameOrId)
+    if (identifiersError) return responseFailure(identifiersError)
 
-    const identifiersError = checkValidProjectEnv(project, environment)
-
-    if (identifiersError) {
-      return responseFailure(identifiersError)
-    }
-
-    return await deleteEnvironment(this.httpClient, args)
+    return await deleteEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId })
   }
 
   /**
    * Renames an environment within a project.
-   * @param args - The arguments for renaming an environment.
-   * @param args.project - The name or id of the project containing the environment.
-   * @param args.name - The current name or id of the environment.
-   * @param args.newName - The new name for the environment.
+   * @param envNameOrId - The current name or id of the environment.
+   * @param newName - The new name for the environment.
    * @returns A promise that resolves to the rename result or an error response.
    */
-  async rename(args: RenameEnvironmentArgs) {
-    const { project, newName, environment } = args
-
-    const identifiersError = checkValidProjectEnv(project, environment)
-
-    if (identifiersError) {
-      return responseFailure(identifiersError)
-    }
+  async rename(envNameOrId: string, newName: string) {
+    const identifiersError = this.validateIdentifiers(envNameOrId)
+    if (identifiersError) return responseFailure(identifiersError)
 
     if (!isValidEnvironmentName(newName)) {
       const error = invalidNewEnvironmentNameError
@@ -240,32 +222,25 @@ export class EnvironmentsAPI {
       return responseFailure(error)
     }
 
-    const environmentHasIdFormat = isResourceIdFormat('environment', environment)
+    const environmentHasIdFormat = isResourceIdFormat('environment', envNameOrId)
 
-    if (!environmentHasIdFormat && newName === environment) {
+    if (!environmentHasIdFormat && newName === envNameOrId) {
       const error = newEnvironmentNameEqualsOriginal
       return responseFailure(error)
     }
 
-    return await renameEnvironment(this.httpClient, args)
+    return await renameEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId, newName })
   }
 
   /**
    * Duplicates an environment within a project.
-   * @param args - The arguments for duplicating an environment.
-   * @param args.project - The name or id of the project containing the environment.
-   * @param args.name - The name or id of the environment to duplicate.
-   * @param args.duplicateName - The name for the new duplicate environment.
+   * @param envNameOrId - The name or id of the environment to duplicate.
+   * @param duplicateName - The name for the new duplicate environment.
    * @returns A promise that resolves to the duplication result or an error response.
    */
-  async duplicate(args: DuplicateEnvironmentArgs) {
-    const { project, duplicateName, environment } = args
-
-    const identifiersError = checkValidProjectEnv(project, environment)
-
-    if (identifiersError) {
-      return responseFailure(identifiersError)
-    }
+  async duplicate(envNameOrId: string, duplicateName: string) {
+    const identifiersError = this.validateIdentifiers(envNameOrId)
+    if (identifiersError) return responseFailure(identifiersError)
 
     if (!isValidEnvironmentName(duplicateName)) {
       const error = invalidEnvironmentIdentifierError
@@ -279,70 +254,66 @@ export class EnvironmentsAPI {
       return responseFailure(error)
     }
 
-    const environmentHasIdFormat = isResourceIdFormat('environment', environment)
+    const environmentHasIdFormat = isResourceIdFormat('environment', envNameOrId)
 
-    if (!environmentHasIdFormat && duplicateName === environment) {
+    if (!environmentHasIdFormat && duplicateName === envNameOrId) {
       const error = newEnvironmentNameEqualsOriginal
       return responseFailure(error)
     }
 
-    return await duplicateEnvironment(this.httpClient, args)
+    return await duplicateEnvironment({
+      ...this.getHandlerArgs(),
+      environment: envNameOrId,
+      duplicateName,
+    })
   }
 
   /**
    * Updates the type of an environment.
-   * @param args - The arguments for updating the environment type.
-   * @param args.project - The name or id of the project containing the environment.
-   * @param args.name - The name or id of the environment to update.
+   * @param envNameOrId - The name or id of the environment to update.
+   * @param type - The new type for the environment.
    * @returns A promise that resolves to the update result or an error response.
    */
-  async updateType(args: UpdateEnvironmentTypeArgs) {
-    const { project, environment } = args
+  async updateType(envNameOrId: string, type: EnvironmentType) {
+    const identifiersError = this.validateIdentifiers(envNameOrId)
+    if (identifiersError) return responseFailure(identifiersError)
 
-    const identifiersError = checkValidProjectEnv(project, environment)
-
-    if (identifiersError) {
-      return responseFailure(identifiersError)
-    }
-
-    return await updateEnvironmentType(this.httpClient, args)
+    return await updateEnvironmentType({
+      ...this.getHandlerArgs(),
+      environment: envNameOrId,
+      type,
+    })
   }
 
   /**
    * Locks an environment to prevent modifications.
-   * @param args - The arguments for locking an environment.
-   * @param args.project - The name or id of the project containing the environment.
-   * @param args.name - The name or id of the environment to lock.
+   * @param envNameOrId - The name or id of the environment to lock.
    * @returns A promise that resolves to the lock result or an error response.
    */
-  async lock(args: LockEnvironmentArgs) {
-    const { project, name } = args
+  async lock(envNameOrId: string) {
+    const identifiersError = this.validateIdentifiers(envNameOrId)
+    if (identifiersError) return responseFailure(identifiersError)
 
-    const identifiersError = checkValidProjectEnv(project, name)
-
-    if (identifiersError) {
-      return responseFailure(identifiersError)
-    }
-
-    return await lockUnlockEnvironment(this.httpClient, args, true)
+    return await lockUnlockEnvironment({
+      ...this.getHandlerArgs(),
+      environment: envNameOrId,
+      lock: true,
+    })
   }
 
   /**
    * Unlocks a previously locked environment.
-   * @param args - The arguments for unlocking an environment.
-   * @param args.project - The name or id of the project containing the environment.
-   * @param args.name - The name or id of the environment to unlock.
+   * @param envNameOrId - The name or id of the environment to unlock.
    * @returns A promise that resolves to the unlock result or an error response.
    */
-  async unlock(args: LockEnvironmentArgs) {
-    const { project, name } = args
+  async unlock(envNameOrId: string) {
+    const identifiersError = this.validateIdentifiers(envNameOrId)
+    if (identifiersError) return responseFailure(identifiersError)
 
-    const identifiersError = checkValidProjectEnv(project, name)
-
-    if (identifiersError) {
-      return responseFailure(identifiersError)
-    }
-
-    return await lockUnlockEnvironment(this.httpClient, args, false)
+    return await lockUnlockEnvironment({
+      ...this.getHandlerArgs(),
+      environment: envNameOrId,
+      lock: true,
+    })
   }
 }

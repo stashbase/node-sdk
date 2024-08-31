@@ -1,7 +1,7 @@
 import EnvironmentsAPI from './api/environments/api'
 import { ProjectsAPI } from './api/workspace/projects/api'
 import { SecretsAPI } from './api/workspace/secrets/api'
-import { createHttpClient } from './http/client'
+import { createHttpClient, HttpClient } from './http/client'
 import verifyWebhook from './webhooks/verify'
 import { WebhooksAPI as WsWebhooksAPI } from './api/workspace/webhooks/api'
 import { EnvironmentsAPI as WsEnvironmentsAPI } from './api/workspace/environments/api'
@@ -17,16 +17,34 @@ export function createWorkspaceClient(workspaceApiKey: string) {
     authorization: { workspaceApiKey },
   })
 
-  const secrets = new SecretsAPI(client)
-  const projects = new ProjectsAPI(client)
-  const webhooks = new WsWebhooksAPI(client)
-  const environments = new WsEnvironmentsAPI(client)
+  return new WorkspaceClient(client)
+}
 
-  return {
-    projects,
-    environments,
-    secrets,
-    webhooks,
+/** Client for interacting with Stashbase resources using a workspace API key with a given permissions. */
+class WorkspaceClient {
+  private client: HttpClient
+
+  constructor(client: HttpClient) {
+    this.client = client
+    this.projects = new ProjectsAPI(client)
+  }
+
+  /** API for interacting with projects. */
+  public projects: ProjectsAPI
+
+  /** API for interacting with environments. */
+  public environments(projectNameOrId: string) {
+    return new WsEnvironmentsAPI(this.client, projectNameOrId)
+  }
+
+  /** API for interacting with secrets. */
+  public secrets(projectNameOrId: string, envNameOrId: string) {
+    return new SecretsAPI(this.client, projectNameOrId, envNameOrId)
+  }
+
+  /** API for interacting with webhooks. */
+  public webhooks(projectNameOrId: string, envNameOrId: string) {
+    return new WsWebhooksAPI(this.client, projectNameOrId, envNameOrId)
   }
 }
 

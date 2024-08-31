@@ -1,4 +1,3 @@
-import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { EnvironmentLockedError } from '../../../../types/errors/environments'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
@@ -7,11 +6,9 @@ import {
   ProjectNotFoundError,
   GenericApiError,
 } from '../../../../types/errors'
+import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
 
-export interface DeleteEnvironmentArgs {
-  project: string
-  environment: string
-}
+export type DeleteEnvironmentArgs = SingleEnvironmentHandlerArgs<undefined>
 
 type DeleteEnvironmentError =
   | GenericApiError
@@ -20,14 +17,13 @@ type DeleteEnvironmentError =
   | EnvironmentLockedError
 
 async function deleteEnvironment(
-  client: HttpClient,
   args: DeleteEnvironmentArgs
 ): Promise<ApiResponse<null, DeleteEnvironmentError>> {
-  const { project } = args
+  const { client, project, environment } = args
 
   try {
     const data = await client.del<null>({
-      path: `/v1/projects/${project}/environments/${args.environment}`,
+      path: `/v1/projects/${project}/environments/${environment}`,
     })
 
     return responseSuccess(data)

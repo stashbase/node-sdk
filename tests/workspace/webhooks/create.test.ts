@@ -4,14 +4,10 @@ import { createWorkspaceClient } from '../../../src'
 test('Create webhook', async () => {
   const stashbase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-  const { data, error } = await stashbase.webhooks.create({
-    project: 'name',
-    environment: '123',
-    data: {
-      enabled: true,
-      url: 'https://very-last-url.com',
-      description: 'Very last description',
-    },
+  const { data, error } = await stashbase.webhooks('name', '123').create({
+    enabled: true,
+    url: 'https://very-last-url.com',
+    description: 'Very last description',
   })
 
   if (error) {

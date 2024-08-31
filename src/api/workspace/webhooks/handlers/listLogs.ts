@@ -1,17 +1,16 @@
 import { createApiErrorFromResponse } from '../../../../errors'
-import { HttpClient } from '../../../../http/client'
 import { ListWebhookLogsResponse } from '../../../../types/webhooks'
-import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { ListWebhooksError as SharedListWebhooksError } from '../../../../types/errors/webhooks'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
+import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
 
-export type ListWebhookLogsArgs = SingleWebhookProjectEnvHandlerArgs<{
+export type ListWebhookLogsOptions = {
   /** The page number */
   page?: number
   /** The limit of items per page */
   limit?: number
-}>
+}
 
 export type ListWebhookLogsError =
   | SharedListWebhooksError
@@ -19,14 +18,24 @@ export type ListWebhookLogsError =
   | EnvironmentNotFoundError
 
 async function listWebhookLogs(
-  client: HttpClient,
-  args: ListWebhookLogsArgs
+  args: SingleWebhookProjectEnvHandlerArgs<{ options?: ListWebhookLogsOptions }>
 ): Promise<ApiResponse<ListWebhookLogsResponse, ListWebhookLogsError>> {
-  const { project, environment, webhookId } = args
+  const { client, webhookId, project, environment, options } = args
+
+  const query: Record<string, string | number> = {}
+
+  if (options?.page) {
+    query.page = options.page
+  }
+
+  if (options?.limit) {
+    query.limit = options.limit
+  }
 
   try {
     const webhookLogs = await client.get<ListWebhookLogsResponse>({
       path: `/v1/projects/${project}/environments/${environment}/webhooks/${webhookId}/logs`,
+      query,
     })
 
     return responseSuccess(webhookLogs)
