@@ -27,6 +27,7 @@ import { updateEnvironmentType } from './handlers/updateType'
 import { responseFailure } from '../../../http/response'
 import {
   CreateEnvironmentData,
+  EnvironmentType,
   ListEnvironmentOptions,
   LoadEnvironmentOpts,
 } from '../../../types/environments'
@@ -273,10 +274,7 @@ export class EnvironmentsAPI {
    * @param type - The new type for the environment.
    * @returns A promise that resolves to the update result or an error response.
    */
-  async updateType(
-    envNameOrId: string,
-    type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
-  ) {
+  async updateType(envNameOrId: string, type: EnvironmentType) {
     const identifiersError = this.validateIdentifiers(envNameOrId)
     if (identifiersError) return responseFailure(identifiersError)
 
