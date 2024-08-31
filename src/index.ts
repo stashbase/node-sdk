@@ -18,11 +18,12 @@ export function createWorkspaceClient(workspaceApiKey: string) {
   })
 
   const projects = new ProjectsAPI(client)
-  const environments = new WsEnvironmentsAPI(client)
 
   return {
     projects,
-    environments,
+    environments: (projectNameOrId: string) => {
+      return new WsEnvironmentsAPI(client, projectNameOrId)
+    },
     secrets: (projectNameOrId: string, envNameOrId: string) => {
       return new SecretsAPI(client, projectNameOrId, envNameOrId)
     },
