@@ -11,13 +11,13 @@ type GetSecretResponse = Promise<ApiResponse<GetSecretResData, GetSecretError>>
 
 export type GetSecretArgs = ProjectEnvHandlerArgs<{
   key: SecretKey
-  opts?: GetSecretOptions
+  options?: GetSecretOptions
 }>
 
 async function getSecret(args: GetSecretArgs): GetSecretResponse {
   const { client, project, environment, key } = args
-  const omit = args.opts?.omit
-  const expandRefs = args.opts?.expandRefs
+  const omit = args.options?.omit
+  const expandRefs = args.options?.expandRefs
 
   const query: GetSecretQueryParams = {}
 
