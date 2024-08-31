@@ -4,13 +4,13 @@ import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 import { GetSecretError as SharedGetSecretsError } from '../../../../types/errors/secrets'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
+import { SecretKey } from '../../../../types/secretKey'
 
 type GetSecretError = SharedGetSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
 type GetSecretResponse = Promise<ApiResponse<GetSecretResData, GetSecretError>>
 
 export type GetSecretArgs = ProjectEnvHandlerArgs<{
-  // secret key
-  key: Uppercase<string>
+  key: SecretKey
   opts?: GetSecretOptions
 }>
 
