@@ -76,7 +76,7 @@ export class SecretsAPI {
     const validationError = this.validateIdentifiers(key)
     if (validationError) return responseFailure(validationError)
 
-    return await getSecret({ key, ...(options ?? {}), ...this.getHandlerArgs() })
+    return await getSecret({ key, options, ...this.getHandlerArgs() })
   }
 
   /**
