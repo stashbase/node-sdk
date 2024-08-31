@@ -68,10 +68,8 @@ export class SecretsAPI {
   /**
    * Retrieves a single secret by its key from a specific project and environment.
    *
-   * @param args - The arguments for retrieving a secret.
-   * @param args.project - The name or id of the project.
-   * @param args.environment - The name or id of the environment.
-   * @param args.key - The key of the secret to retrieve.
+   * @param key - The key of the secret to retrieve.
+   * @param options - Optional parameters for retrieving the secret.
    * @returns A promise that resolves to the secret object or an error response.
    */
   async get(key: SecretKey, options?: GetSecretOptions) {
@@ -84,9 +82,7 @@ export class SecretsAPI {
   /**
    * Lists all secrets for a specific project and environment.
    *
-   * @param args - The arguments for listing secrets.
-   * @param args.project - The name or id of the project.
-   * @param args.environment - The name or id of the environment.
+   * @param options - Optional parameters for listing secrets.
    * @returns A promise that resolves to an array of secret objects or an error response.
    */
   async list(options?: ListSecretsOptions) {
@@ -99,13 +95,8 @@ export class SecretsAPI {
   /**
    * Lists specific secrets for a project and environment.
    *
-   * @param args - The arguments for listing specific secrets.
-   * @param args.project - The name or id of the project.
-   * @param args.environment - The name or id of the environment.
-   * @param args.only - An array of secret keys to retrieve.
-   * @param args.expandRefs - Whether to expand references to other secrets.
-   * @param args.omit - An array of secret properties to omit.
-   *
+   * @param only - An array of secret keys to retrieve.
+   * @param options - Optional parameters for listing secrets.
    * @returns A promise that resolves to an array of specified secret objects or an error response.
    */
   async listOnly(only: SecretKey[], options?: ListSecretsOptions) {
@@ -130,12 +121,8 @@ export class SecretsAPI {
   /**
    * Lists secrets for a project and environment, excluding secrets with specified keys.
    *
-   * @param args - The arguments for listing secrets with exclusions.
-   * @param args.project - The name or id of the project.
-   * @param args.environment - The name or id of the environment.
-   * @param args.exclude - An array of secret keys to exclude from the list.
-   * @param args.expandRefs - Whether to expand references to other secrets.
-   * @param args.omit - An array of secret properties to omit.
+   * @param exclude - An array of secret keys to exclude from the response.
+   * @param options - Optional parameters for listing secrets.
    * @returns A promise that resolves to an array of secret objects (excluding specified keys) or an error response.
    */
   async listExclude(exclude: SecretKey[], options?: ListSecretsOptions) {
@@ -160,11 +147,7 @@ export class SecretsAPI {
   /**
    * Creates new secrets in a specific project and environment.
    *
-   * @param args - The arguments for creating secrets.
-   * @param args.project - The name or id of the project.
-   * @param args.environment - The name or id of the environment.
-   * @param args.data - The secret data to create.
-   *
+   * @param data - The secret data to create.
    * @returns A promise that resolves to an object containing the count of created secrets and any duplicate keys, or an error response.
    */
   async create(data: Array<CreateSecretsItem>) {
@@ -181,10 +164,7 @@ export class SecretsAPI {
   /**
    * Sets secrets in a specific project and environment, overwriting existing ones with the same keys.
    *
-   * @param args - The arguments for setting secrets.
-   * @param args.project - The name or id of the project.
-   * @param args.environment - The name or id of the environment.
-   * @param args.data - The secret data to set.
+   * @param data - The secret data to set.
    * @returns A promise that resolves to null on success or an error response.
    */
   async set(data: Array<SetSecretsItem>) {
@@ -203,10 +183,7 @@ export class SecretsAPI {
   /**
    * Updates existing secrets in a specific project and environment.
    *
-   * @param args - The arguments for updating secrets.
-   * @param args.project - The name or id of the project.
-   * @param args.environment - The name or id of the environment.
-   * @param args.data - The secret data to update.
+   * @param data - The secret data to update.
    * @returns A promise that resolves to an object containing the count of updated secrets and any keys not found, or an error response.
    */
   async update(data: Array<UpdateSecretsItem>) {
@@ -223,12 +200,9 @@ export class SecretsAPI {
   }
 
   /**
-   * Deleetes specific secrets from a project and environment.
+   * Deletes specific secrets from a project and environment.
    *
-   * @param args - The arguments for removing secrets.
-   * @param args.project - The name or id of the project.
-   * @param args.environment - The name or id of the environment.
-   * @param args.keys - An array of secret keys to remove.
+   * @param keys - An array of secret keys to remove.
    * @returns A promise that resolves to an object containing the count of deleted secrets and any keys not found, or an error response.
    */
   async delete(keys: SecretKey[]) {
@@ -253,9 +227,6 @@ export class SecretsAPI {
   /**
    * Deletes all secrets from a specific project and environment.
    *
-   * @param args - The arguments for removing all secrets.
-   * @param args.project - The name or id of the project.
-   * @param args.environment - The name or id of the environment.
    * @returns A promise that resolves to an object containing the count of deleted secrets, or an error response.
    */
   async deleteAll() {
