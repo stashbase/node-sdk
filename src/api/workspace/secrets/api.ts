@@ -23,12 +23,11 @@ import {
   validateSetSecretsInput,
   validateUpdateSecretsInput,
 } from '../../../utils/inputValidation'
-import { checkValidProjectEnv } from '../environments/api'
 import { createSecrets } from './handlers/create'
 import { deleteSecrets } from './handlers/delete'
 import { deleteAllSecrets } from './handlers/deleteAll'
 import { getSecret } from './handlers/get'
-import { ListOnlySecretsArgs, listSecrets } from './handlers/list'
+import { listSecrets } from './handlers/list'
 import { setSecrets } from './handlers/set'
 import { updateSecrets } from './handlers/update'
 
