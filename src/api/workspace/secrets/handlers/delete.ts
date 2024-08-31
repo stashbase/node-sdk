@@ -4,11 +4,12 @@ import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 import { DeleteSecretsError as SharedDeleteSecretsError } from '../../../../types/errors/secrets'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
+import { SecretKey } from '../../../../types/secretKey'
 
 type DeleteSecretsError = ProjectNotFoundError | EnvironmentNotFoundError | SharedDeleteSecretsError
 
 export type DeleteSecretsArgs = ProjectEnvHandlerArgs<{
-  keys: Array<Uppercase<string>>
+  keys: Array<SecretKey>
 }>
 
 async function deleteSecrets(
