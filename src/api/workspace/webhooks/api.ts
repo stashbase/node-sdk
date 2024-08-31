@@ -88,17 +88,17 @@ export class WebhooksAPI {
    * Lists logs for a specific webhook.
    *
    * @param webhookId - The id of the webhook.
-   * @param opts - Optional parameters for listing webhook logs.
-   * @param opts.page - The page number for pagination (optional).
-   * @param opts.limit - The number of logs to return per page (optional).
+   * @param options - Optional parameters for listing webhook logs.
+   * @param options.page - The page number for pagination (optional).
+   * @param options.limit - The number of logs to return per page (optional).
    * @returns A promise that resolves to an array of webhook log objects with pagination metadata or an error response.
    */
-  async listLogs(webhookId: string, opts?: ListWebhookLogsOptions) {
+  async listLogs(webhookId: string, options?: ListWebhookLogsOptions) {
     const validationError = this.validateIdentifiers(webhookId)
     if (validationError) return responseFailure(validationError)
 
-    if (opts?.page !== undefined) {
-      const page = opts.page
+    if (options?.page !== undefined) {
+      const page = options.page
 
       if (page <= 0 || page > 1000 || typeof page !== 'number') {
         const error = invalidWebhookLogsPageError
@@ -106,8 +106,8 @@ export class WebhooksAPI {
       }
     }
 
-    if (opts?.limit !== undefined) {
-      const limit = opts.limit
+    if (options?.limit !== undefined) {
+      const limit = options.limit
 
       if (limit < 2 || limit > 1000 || typeof limit !== 'number') {
         const error = invalidWebhookLogsLimitError
@@ -118,7 +118,7 @@ export class WebhooksAPI {
     return await listWebhookLogs({
       ...this.getHandlerArgs(),
       webhookId,
-      opts,
+      options,
     })
   }
 

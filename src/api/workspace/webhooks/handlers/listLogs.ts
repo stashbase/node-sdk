@@ -18,18 +18,18 @@ export type ListWebhookLogsError =
   | EnvironmentNotFoundError
 
 async function listWebhookLogs(
-  args: SingleWebhookProjectEnvHandlerArgs<{ opts?: ListWebhookLogsOptions }>
+  args: SingleWebhookProjectEnvHandlerArgs<{ options?: ListWebhookLogsOptions }>
 ): Promise<ApiResponse<ListWebhookLogsResponse, ListWebhookLogsError>> {
-  const { client, webhookId, project, environment, opts } = args
+  const { client, webhookId, project, environment, options } = args
 
   const query: Record<string, string | number> = {}
 
-  if (opts?.page) {
-    query.page = opts.page
+  if (options?.page) {
+    query.page = options.page
   }
 
-  if (opts?.limit) {
-    query.limit = opts.limit
+  if (options?.limit) {
+    query.limit = options.limit
   }
 
   try {
