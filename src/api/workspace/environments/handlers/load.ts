@@ -13,12 +13,11 @@ import {
   LoadEnvironmentQueryParams,
   LoadEnvironmentResponse,
 } from '../../../../types/environments'
-import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
+import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
 
 type LoadEnvironmentError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
-export type LoadEnvironmentArgs = EnvironmentHandlerArgs<{
-  envNameOrId: string
+export type LoadEnvironmentArgs = SingleEnvironmentHandlerArgs<{
   options?: LoadEnvironmentOpts
 }>
 
