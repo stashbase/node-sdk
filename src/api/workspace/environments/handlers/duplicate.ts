@@ -30,11 +30,11 @@ interface DuplicateEnvironmentResData {
 async function duplicateEnvironment(
   args: DuplicateEnvironmentArgs
 ): Promise<ApiResponse<DuplicateEnvironmentResData, DulicateEnvironmentError>> {
-  const { client, project, envNameOrId, duplicateName } = args
+  const { client, project, environment, duplicateName } = args
 
   try {
     const data = await client.post<DuplicateEnvironmentResData>({
-      path: `/v1/projects/${project}/environments/${envNameOrId}/duplicate`,
+      path: `/v1/projects/${project}/environments/${environment}/duplicate`,
       data: { name: duplicateName },
     })
 
