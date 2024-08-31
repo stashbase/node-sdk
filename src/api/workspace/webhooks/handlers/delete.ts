@@ -1,4 +1,3 @@
-import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { GetWebhookError } from '../../../../types/errors/webhooks'
 import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
@@ -6,11 +5,8 @@ import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/
 
 export type DeleteWebhookArgs = SingleWebhookProjectEnvHandlerArgs<undefined>
 
-async function deleteWebhook(
-  client: HttpClient,
-  args: DeleteWebhookArgs
-): Promise<ApiResponse<null, GetWebhookError>> {
-  const { project, environment, webhookId } = args
+async function deleteWebhook(args: DeleteWebhookArgs): Promise<ApiResponse<null, GetWebhookError>> {
+  const { client, project, environment, webhookId } = args
 
   try {
     const deleteRes = await client.del<null>({

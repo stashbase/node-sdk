@@ -1,4 +1,3 @@
-import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { DeleteAllSecretsResData } from '../../../../types/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
@@ -7,19 +6,16 @@ import {
   GenericApiError,
   ProjectNotFoundError,
 } from '../../../../types/errors'
+import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 
 type DeleteAllSecretsError = ProjectNotFoundError | EnvironmentNotFoundError | GenericApiError
 
-export interface DeleteAllSecretsArgs {
-  project: string
-  environment: string
-}
+export type DeleteAllSecretsArgs = ProjectEnvHandlerArgs<undefined>
 
 async function deleteAllSecrets(
-  client: HttpClient,
   args: DeleteAllSecretsArgs
 ): Promise<ApiResponse<DeleteAllSecretsResData, DeleteAllSecretsError>> {
-  const { project, environment } = args
+  const { client, project, environment } = args
 
   try {
     const data = await client.del<DeleteAllSecretsResData>({

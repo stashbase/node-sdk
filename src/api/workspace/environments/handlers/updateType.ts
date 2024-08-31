@@ -1,4 +1,3 @@
-import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentLockedError } from '../../../../types/errors/environments'
@@ -7,13 +6,14 @@ import {
   ProjectNotFoundError,
   GenericApiError,
 } from '../../../../types/errors'
+import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
+import { EnvironmentType } from '../../../../types/environments'
 
-export interface UpdateEnvironmentTypeArgs {
-  project: string
-  //
-  environment: string
-  type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
-}
+type NewType = SingleEnvironmentHandlerArgs<{
+  type: EnvironmentType
+}>
+
+export type UpdateEnvironmentTypeArgs = NewType
 
 type UpdateEnvironmentTypeError =
   | GenericApiError
@@ -22,10 +22,9 @@ type UpdateEnvironmentTypeError =
   | EnvironmentLockedError
 
 async function updateEnvironmentType(
-  client: HttpClient,
   args: UpdateEnvironmentTypeArgs
 ): Promise<ApiResponse<null, UpdateEnvironmentTypeError>> {
-  const { project, environment, type } = args
+  const { client, project, environment, type } = args
 
   try {
     const data = await client.patch<null>({

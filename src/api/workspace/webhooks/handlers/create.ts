@@ -1,19 +1,18 @@
-import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { GetWebhookError } from '../../../../types/errors/webhooks'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 import { CreateWebhookData } from '../../../../types/webhooks'
 import { CreateWebhookResponse } from '../../../../types/webhooks'
+import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 
 export type CreateWebhookArgs = ProjectEnvHandlerArgs<{
   data: CreateWebhookData
 }>
 
 async function createWebhook(
-  client: HttpClient,
   args: CreateWebhookArgs
 ): Promise<ApiResponse<CreateWebhookResponse, GetWebhookError>> {
+  const { client } = args
   const { project, environment, data } = args
 
   try {

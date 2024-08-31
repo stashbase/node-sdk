@@ -5,7 +5,7 @@ import { createApiErrorFromResponse } from '../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../http/response'
 import { GenericApiError } from '../../../types/errors'
 import {
-  LoadEnvironmentOpts,
+  LoadEnvironmentOptions,
   LoadEnvironmentQueryParams,
   LoadEnvironmentResponse,
 } from '../../../types/environments'
@@ -14,7 +14,7 @@ type LoadEnvironmentError = GenericApiError
 
 async function loadEnvironment(
   client: HttpClient,
-  options?: LoadEnvironmentOpts
+  options?: LoadEnvironmentOptions
 ): Promise<ApiResponse<null, LoadEnvironmentError>> {
   const printType = options?.print
 

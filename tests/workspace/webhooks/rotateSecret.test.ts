@@ -4,11 +4,9 @@ import { createWorkspaceClient } from '../../../src'
 test('Rotate webhook signing secret', async () => {
   const stashbase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-  const { data, error } = await stashbase.webhooks.rotateSigningSecret({
-    project: 'name',
-    environment: '123',
-    webhookId: 'wh_4i1gbnewYBnCTZg3Sbye2c',
-  })
+  const { data, error } = await stashbase
+    .webhooks('name', '123')
+    .getSigningSecret('wh_4i1gbnewYBnCTZg3Sbye2c')
 
   if (error) {
     const { code } = error

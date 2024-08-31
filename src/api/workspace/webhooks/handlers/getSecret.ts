@@ -1,4 +1,3 @@
-import { HttpClient } from '../../../../http/client'
 import { WebhookSigningSecret } from '../../../../types/webhooks'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
@@ -14,10 +13,9 @@ export type GetWebhookSigningSecretError =
   | EnvironmentNotFoundError
 
 async function getWebhookSigningSecret(
-  client: HttpClient,
   args: GetWebhookSigningSecretArgs
 ): Promise<ApiResponse<WebhookSigningSecret, GetWebhookSigningSecretError>> {
-  const { project, environment, webhookId } = args
+  const { client, project, environment, webhookId } = args
 
   try {
     const secretRes = await client.get<WebhookSigningSecret>({

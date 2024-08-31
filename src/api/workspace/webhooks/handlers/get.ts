@@ -1,33 +1,30 @@
 import { HttpClient } from '../../../../http/client'
 import { Webhook } from '../../../../types/webhooks'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
 import { GetWebhookError as SharedGetWebhookError } from '../../../../types/errors/webhooks'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
-
-export type GetWebhookArgs = SingleWebhookProjectEnvHandlerArgs<{
-  //* Return the signing secret with the webhook
-  withSecret?: boolean // Change this to be required and always boolean
-}>
 
 export type GetWebhookError =
   | SharedGetWebhookError
   | ProjectNotFoundError
   | EnvironmentNotFoundError
 
-type WebhookWithConditionalSecret<T extends boolean | undefined> = T extends true
-  ? Webhook & { signingSecret: string }
-  : Webhook & { signingSecret: undefined }
-
-async function getWebhook<T extends boolean>(
-  client: HttpClient,
-  args: GetWebhookArgs & { withSecret: T }
-): Promise<ApiResponse<WebhookWithConditionalSecret<T>, GetWebhookError>> {
-  const { project, environment, webhookId, withSecret } = args
+async function getWebhook<T extends boolean>(args: {
+  client: HttpClient
+  project: string
+  environment: string
+  webhookId: string
+  withSecret?: T
+}): Promise<
+  ApiResponse<Webhook & { signingSecret: T extends true ? string : undefined }, GetWebhookError>
+> {
+  const { client, project, environment, webhookId, withSecret } = args
 
   try {
-    const webhook = await client.get<WebhookWithConditionalSecret<T>>({
+    const webhook = await client.get<
+      Webhook & { signingSecret: T extends true ? string : undefined }
+    >({
       path: `/v1/projects/${project}/environments/${environment}/webhooks/${webhookId}`,
       query: withSecret ? { 'with-secret': true } : undefined,
     })
