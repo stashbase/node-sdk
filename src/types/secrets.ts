@@ -1,4 +1,5 @@
 import { SecretKey } from './secretKey'
+import { AtLeastOne } from './util'
 
 export interface Secret {
   /** The key of the secret, always in uppercase */
@@ -11,6 +12,7 @@ export interface Secret {
 
 export type GetSecretResData = Secret
 export type ListSecretsResData = Array<Secret>
+export type ListSecretsOptions = GetSecretOptions
 
 export interface CreateSecretsResData {
   /** The number of secrets successfully created */
@@ -74,4 +76,23 @@ export interface GetSecretOptions {
   omit?: Array<'value' | 'description'>
 }
 
-export type ListSecretsOptions = GetSecretOptions
+export type CreateSecretsData = Array<CreateSecretsItem>
+
+export type CreateSecretsItem = {
+  /** The key of the secret */
+  key: SecretKey
+  /** The value of the secret */
+  value: string
+  /** The description of the secret (optional) */
+  description?: string | null
+}
+
+export type SetSecretsItem = CreateSecretsItem
+
+export type UpdateSecretsItem = {
+  key: SecretKey
+} & AtLeastOne<{
+  newKey: SecretKey
+  value: string
+  description: string | null
+}>

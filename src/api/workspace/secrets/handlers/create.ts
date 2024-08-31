@@ -1,5 +1,9 @@
 import { createApiErrorFromResponse } from '../../../../errors'
-import { CreateSecretsResData } from '../../../../types/secrets'
+import {
+  CreateSecretsData,
+  CreateSecretsItem,
+  CreateSecretsResData,
+} from '../../../../types/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 import { CreateSecretsError as SharedCreateSecretsError } from '../../../../types/errors/secrets'
@@ -8,14 +12,8 @@ import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 type CreateSecretsError = SharedCreateSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
 
 export type CreateSecretsArgs = ProjectEnvHandlerArgs<{
-  data: Array<CreateSecretData>
+  data: CreateSecretsItem[]
 }>
-
-export type CreateSecretData = {
-  key: Uppercase<string>
-  value: string
-  description?: string | null
-}
 
 async function createSecrets(
   args: CreateSecretsArgs

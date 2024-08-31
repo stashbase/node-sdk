@@ -1,7 +1,5 @@
-import { AtLeastOne } from '../../../../types/util'
-import { SecretKey } from '../../../../types/secretKey'
 import { createApiErrorFromResponse } from '../../../../errors'
-import { UpdateSecretsResData } from '../../../../types/secrets'
+import { UpdateSecretsItem, UpdateSecretsResData } from '../../../../types/secrets'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 import { UpdateSecretsError as SharedUpdateSecretsError } from '../../../../types/errors/secrets'
@@ -10,15 +8,7 @@ import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 type UpdateSecretsError = SharedUpdateSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
 
 export type UpdateSecretsArgs = ProjectEnvHandlerArgs<{
-  data: Array<UpdateSecretData>
-}>
-
-export type UpdateSecretData = {
-  key: SecretKey
-} & AtLeastOne<{
-  newKey: Uppercase<string>
-  value: string
-  description: string | null
+  data: Array<UpdateSecretsItem>
 }>
 
 async function updateSecrets(

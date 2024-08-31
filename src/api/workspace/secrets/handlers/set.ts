@@ -1,5 +1,4 @@
-import { SecretKey } from '../../../../types/secretKey'
-import { SetSecretsResData } from '../../../../types/secrets'
+import { SetSecretsItem, SetSecretsResData } from '../../../../types/secrets'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
@@ -9,14 +8,8 @@ import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 type SetSecretsError = SharedSetSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
 
 export type SetSecretsArgs = ProjectEnvHandlerArgs<{
-  data: Array<SetSecretData>
+  data: Array<SetSecretsItem>
 }>
-
-export type SetSecretData = {
-  key: SecretKey
-  value: string
-  description?: string | null
-}
 
 async function setSecrets(
   args: SetSecretsArgs

@@ -7,7 +7,13 @@ import {
 import { HttpClient } from '../../../http/client'
 import { responseFailure } from '../../../http/response'
 import { SecretKey } from '../../../types/secretKey'
-import { GetSecretOptions, ListSecretsOptions } from '../../../types/secrets'
+import {
+  CreateSecretsItem,
+  GetSecretOptions,
+  ListSecretsOptions,
+  SetSecretsItem,
+  UpdateSecretsItem,
+} from '../../../types/secrets'
 import {
   isValidEnvironmentIdentifier,
   isValidProjectIdentifier,
@@ -18,13 +24,13 @@ import {
   validateUpdateSecretsInput,
 } from '../../../utils/inputValidation'
 import { checkValidProjectEnv } from '../environments/api'
-import { CreateSecretData, createSecrets } from './handlers/create'
+import { createSecrets } from './handlers/create'
 import { deleteSecrets } from './handlers/delete'
 import { deleteAllSecrets } from './handlers/deleteAll'
 import { getSecret } from './handlers/get'
 import { ListOnlySecretsArgs, listSecrets } from './handlers/list'
-import { SetSecretData, setSecrets } from './handlers/set'
-import { UpdateSecretData, updateSecrets } from './handlers/update'
+import { setSecrets } from './handlers/set'
+import { updateSecrets } from './handlers/update'
 
 export class SecretsAPI {
   private httpClient: HttpClient
@@ -167,7 +173,7 @@ export class SecretsAPI {
    *
    * @returns A promise that resolves to an object containing the count of created secrets and any duplicate keys, or an error response.
    */
-  async create(data: Array<CreateSecretData>) {
+  async create(data: Array<CreateSecretsItem>) {
     const validationError = validateCreateSecretsInput(data)
     if (validationError) return responseFailure(validationError)
 
@@ -187,7 +193,7 @@ export class SecretsAPI {
    * @param args.data - The secret data to set.
    * @returns A promise that resolves to null on success or an error response.
    */
-  async set(data: Array<SetSecretData>) {
+  async set(data: Array<SetSecretsItem>) {
     const identifierValidationError = this.validateIdentifiers()
     if (identifierValidationError) return responseFailure(identifierValidationError)
 
@@ -209,7 +215,7 @@ export class SecretsAPI {
    * @param args.data - The secret data to update.
    * @returns A promise that resolves to an object containing the count of updated secrets and any keys not found, or an error response.
    */
-  async update(data: Array<UpdateSecretData>) {
+  async update(data: Array<UpdateSecretsItem>) {
     const identifierValidationError = this.validateIdentifiers()
     if (identifierValidationError) return responseFailure(identifierValidationError)
 
