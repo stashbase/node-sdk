@@ -16,7 +16,7 @@ import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 
 type ListSecretsError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
-type ListSecretsBaseArgs = ProjectEnvHandlerArgs<{ opts?: ListSecretsOptions }>
+type ListSecretsBaseArgs = ProjectEnvHandlerArgs<{ options?: ListSecretsOptions }>
 
 export type ListSecretsArgs = ListSecretsBaseArgs
 
@@ -36,7 +36,7 @@ async function listSecrets(
   const { client, project, environment } = args
   const { only, exclude } = args
 
-  const omit = args.opts?.omit
+  const omit = args.options?.omit
 
   const queryObj: ListSecretsQueryParams = {}
 
