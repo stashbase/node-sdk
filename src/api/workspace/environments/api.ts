@@ -29,7 +29,7 @@ import {
   CreateEnvironmentData,
   EnvironmentType,
   ListEnvironmentOptions,
-  LoadEnvironmentOpts,
+  LoadEnvironmentOptions,
 } from '../../../types/environments'
 
 export const checkValidProjectEnv = (projectName: string, environmentName: string) => {
@@ -90,7 +90,7 @@ export class EnvironmentsAPI {
    * @throws Error with the error code if loading fails.
    * @returns A promise that resolves to null if successful.
    */
-  async loadOrThrow(envNameOrId: string, options?: LoadEnvironmentOpts) {
+  async loadOrThrow(envNameOrId: string, options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
       return { data: null, error: null, ok: null }
     }
@@ -116,7 +116,7 @@ export class EnvironmentsAPI {
    * @param options - Additional options for loading the environment.
    * @returns A promise that resolves to null if successful or and error response.
    */
-  async load(envNameOrId: string, options?: LoadEnvironmentOpts) {
+  async load(envNameOrId: string, options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
       return { data: null, error: null, ok: null }
     }
