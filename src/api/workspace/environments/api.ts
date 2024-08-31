@@ -72,9 +72,7 @@ export class EnvironmentsAPI {
 
   /**
    * Retrieves an environment by its name within a project.
-   * @param args - The arguments for getting an environment.
-   * @param args.environment - The name or id of the environment to retrieve.
-   * @param args.project -project The name or the id of the project containing the environment.
+   * @param envNameOrId - The name or id of the environment to retrieve.
    * @returns A promise that resolves to the environment data or an error response.
    */
   async get(envNameOrId: string) {
@@ -86,10 +84,8 @@ export class EnvironmentsAPI {
 
   /**
    * Loads an environment and injects its secrets into the process, throwing an error if it fails.
-   * @param args - The arguments for loading an environment.
-   * @param args.environment - The name or id of the environment to load.
-   * @param args.project - The name or id of the project containing the environment.
-   * @param args.enabled - Whether this methods is enabled (optional).
+   * @param envNameOrId - The name or id of the environment to load.
+   * @param options - Additional options for loading the environment.
    * @throws Error with the error code if loading fails.
    * @returns A promise that resolves to null if successful.
    */
@@ -115,11 +111,9 @@ export class EnvironmentsAPI {
 
   /**
    * Loads an environment and injects its secrets into the process.
-   * @param args - The arguments for loading an environment.
-   * @param args.environment - The name or id of the environment to load.
-   * @param args.project - The name of the project containing the environment.
-   * @param args.enabled - Whether the loading is enabled (optional).
-   * @returns A promise that resolves to the load result or an error response.
+   * @param envNameOrId - The name or id of the environment to load.
+   * @param options - Additional options for loading the environment.
+   * @returns A promise that resolves to null if successful or and error response.
    */
   async load(envNameOrId: string, options?: LoadEnvironmentOpts) {
     if (options?.enabled === false) {
@@ -134,8 +128,7 @@ export class EnvironmentsAPI {
 
   /**
    * Lists all environments within a project.
-   * @param args - The arguments for listing environments.
-   * @param args.project - The name or id of the project to list environments from.
+   * @param options - Options for listing environments.
    * @returns A promise that resolves to an array of environments or an error response.
    */
   async list(options?: ListEnvironmentOptions) {
@@ -172,9 +165,7 @@ export class EnvironmentsAPI {
 
   /**
    * Creates a new environment within a project.
-   * @param args - The arguments for creating an environment.
-   * @param args.project - The name or id of the project to create the environment in.
-   * @param args.name - The name of the new environment.
+   * @param data - The data for creating the environment.
    * @returns A promise that resolves to the creation result or an error response.
    */
   async create(data: CreateEnvironmentData) {
@@ -198,9 +189,7 @@ export class EnvironmentsAPI {
 
   /**
    * Deletes an environment from a project.
-   * @param args - The arguments for removing an environment.
-   * @param args.environment - The name or id of the environment to remove.
-   * @param args.project - The name or id of the project containing the environment.
+   * @param envNameOrId - The name or id of the environment to remove.
    * @returns A promise that resolves to the removal result or an error response.
    */
   async delete(envNameOrId: string) {
@@ -212,10 +201,8 @@ export class EnvironmentsAPI {
 
   /**
    * Renames an environment within a project.
-   * @param args - The arguments for renaming an environment.
-   * @param args.project - The name or id of the project containing the environment.
-   * @param args.name - The current name or id of the environment.
-   * @param args.newName - The new name for the environment.
+   * @param envNameOrId - The current name or id of the environment.
+   * @param newName - The new name for the environment.
    * @returns A promise that resolves to the rename result or an error response.
    */
   async rename(envNameOrId: string, newName: string) {
@@ -246,10 +233,8 @@ export class EnvironmentsAPI {
 
   /**
    * Duplicates an environment within a project.
-   * @param args - The arguments for duplicating an environment.
-   * @param args.project - The name or id of the project containing the environment.
-   * @param args.name - The name or id of the environment to duplicate.
-   * @param args.duplicateName - The name for the new duplicate environment.
+   * @param envNameOrId - The name or id of the environment to duplicate.
+   * @param duplicateName - The name for the new duplicate environment.
    * @returns A promise that resolves to the duplication result or an error response.
    */
   async duplicate(envNameOrId: string, duplicateName: string) {
@@ -284,9 +269,8 @@ export class EnvironmentsAPI {
 
   /**
    * Updates the type of an environment.
-   * @param args - The arguments for updating the environment type.
-   * @param args.project - The name or id of the project containing the environment.
-   * @param args.name - The name or id of the environment to update.
+   * @param envNameOrId - The name or id of the environment to update.
+   * @param type - The new type for the environment.
    * @returns A promise that resolves to the update result or an error response.
    */
   async updateType(
@@ -305,9 +289,7 @@ export class EnvironmentsAPI {
 
   /**
    * Locks an environment to prevent modifications.
-   * @param args - The arguments for locking an environment.
-   * @param args.project - The name or id of the project containing the environment.
-   * @param args.name - The name or id of the environment to lock.
+   * @param envNameOrId - The name or id of the environment to lock.
    * @returns A promise that resolves to the lock result or an error response.
    */
   async lock(envNameOrId: string) {
@@ -323,9 +305,7 @@ export class EnvironmentsAPI {
 
   /**
    * Unlocks a previously locked environment.
-   * @param args - The arguments for unlocking an environment.
-   * @param args.project - The name or id of the project containing the environment.
-   * @param args.name - The name or id of the environment to unlock.
+   * @param envNameOrId - The name or id of the environment to unlock.
    * @returns A promise that resolves to the unlock result or an error response.
    */
   async unlock(envNameOrId: string) {
