@@ -19,7 +19,7 @@ type LoadEnvironmentError = GenericApiError | ProjectNotFoundError | Environment
 
 export type LoadEnvironmentArgs = EnvironmentHandlerArgs<{
   envNameOrId: string
-  opts?: LoadEnvironmentOpts
+  options?: LoadEnvironmentOpts
 }>
 
 async function loadEnvironment(
@@ -32,7 +32,7 @@ async function loadEnvironment(
     'with-environment': ['type'].join(','),
   }
 
-  if (args?.opts?.expandRefs) {
+  if (args?.options?.expandRefs) {
     query['expand-refs'] = true
   }
 
@@ -67,7 +67,7 @@ async function loadEnvironment(
 
     console.log(`\nLoaded environment: ${envNameOrId} (${environmentType})`)
 
-    const printType = args?.opts?.print
+    const printType = args?.options?.print
 
     if (printType === 'key' || printType === 'key-value') {
       if (printType === 'key') {

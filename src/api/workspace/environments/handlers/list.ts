@@ -13,10 +13,10 @@ import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
 type ListEnvironmentsError = GenericApiError | ProjectNotFoundError
 
 async function listEnvironments(
-  args: EnvironmentHandlerArgs<{ opts?: ListEnvironmentOptions }>
+  args: EnvironmentHandlerArgs<{ options?: ListEnvironmentOptions }>
 ): Promise<ApiResponse<Array<Environment>, ListEnvironmentsError>> {
   const { client, project } = args
-  const opts = args.opts
+  const opts = args.options
 
   const query: Record<string, string | number | boolean> = {}
 

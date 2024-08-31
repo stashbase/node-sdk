@@ -93,15 +93,15 @@ export class EnvironmentsAPI {
    * @throws Error with the error code if loading fails.
    * @returns A promise that resolves to null if successful.
    */
-  async loadOrThrow(envNameOrId: string, opts?: LoadEnvironmentOpts) {
-    if (opts?.enabled === false) {
+  async loadOrThrow(envNameOrId: string, options?: LoadEnvironmentOpts) {
+    if (options?.enabled === false) {
       return { data: null, error: null, ok: null }
     }
 
     const identifiersError = this.validateIdentifiers(envNameOrId)
     if (identifiersError) return responseFailure(identifiersError)
 
-    const { error } = await loadEnvironment({ ...this.getHandlerArgs(), envNameOrId, opts })
+    const { error } = await loadEnvironment({ ...this.getHandlerArgs(), envNameOrId, options })
 
     // throws only error code
     if (error) {
@@ -117,15 +117,15 @@ export class EnvironmentsAPI {
    * @param args.enabled - Whether the loading is enabled (optional).
    * @returns A promise that resolves to the load result or an error response.
    */
-  async load(envNameOrId: string, opts?: LoadEnvironmentOpts) {
-    if (opts?.enabled === false) {
+  async load(envNameOrId: string, options?: LoadEnvironmentOpts) {
+    if (options?.enabled === false) {
       return { data: null, error: null, ok: null }
     }
 
     const identifiersError = this.validateIdentifiers(envNameOrId)
     if (identifiersError) return responseFailure(identifiersError)
 
-    return await loadEnvironment({ ...this.getHandlerArgs(), envNameOrId, opts })
+    return await loadEnvironment({ ...this.getHandlerArgs(), envNameOrId, options })
   }
 
   /**
@@ -134,12 +134,12 @@ export class EnvironmentsAPI {
    * @param args.project - The name or id of the project to list environments from.
    * @returns A promise that resolves to an array of environments or an error response.
    */
-  async list(opts?: ListEnvironmentOptions) {
+  async list(options?: ListEnvironmentOptions) {
     const identifiersError = this.validateIdentifiers()
     if (identifiersError) return responseFailure(identifiersError)
 
-    if (opts?.sortBy) {
-      const sortBy = opts.sortBy
+    if (options?.sortBy) {
+      const sortBy = options.sortBy
 
       if (sortBy !== 'name' && sortBy !== 'createdAt' && sortBy !== 'secretCount') {
         const error = invalidEnvironmentSortByError
@@ -147,8 +147,8 @@ export class EnvironmentsAPI {
       }
     }
 
-    if (opts?.order) {
-      const order = opts.order
+    if (options?.order) {
+      const order = options.order
 
       if (order !== 'asc' && order !== 'desc') {
         const error = invalidEnvironmentOrderError
@@ -156,14 +156,14 @@ export class EnvironmentsAPI {
       }
     }
 
-    if (opts?.search) {
-      if (!isValidEnvironmentName(opts.search)) {
+    if (options?.search) {
+      if (!isValidEnvironmentName(options.search)) {
         const error = invalidEnvironmentSearchError
         return responseFailure(error)
       }
     }
 
-    return await listEnvironments({ ...this.getHandlerArgs(), opts })
+    return await listEnvironments({ ...this.getHandlerArgs(), options })
   }
 
   /**
