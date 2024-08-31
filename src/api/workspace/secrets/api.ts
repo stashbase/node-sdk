@@ -75,11 +75,11 @@ export class SecretsAPI {
    * @param args.key - The key of the secret to retrieve.
    * @returns A promise that resolves to the secret object or an error response.
    */
-  async get(key: SecretKey, opts?: GetSecretOptions) {
+  async get(key: SecretKey, options?: GetSecretOptions) {
     const validationError = this.validateIdentifiers(key)
     if (validationError) return responseFailure(validationError)
 
-    return await getSecret({ key, ...(opts ?? {}), ...this.getHandlerArgs() })
+    return await getSecret({ key, ...(options ?? {}), ...this.getHandlerArgs() })
   }
 
   /**
@@ -90,11 +90,11 @@ export class SecretsAPI {
    * @param args.environment - The name or id of the environment.
    * @returns A promise that resolves to an array of secret objects or an error response.
    */
-  async list(opts?: ListSecretsOptions) {
+  async list(options?: ListSecretsOptions) {
     const validationError = this.validateIdentifiers()
     if (validationError) return responseFailure(validationError)
 
-    return await listSecrets({ ...this.getHandlerArgs(), opts })
+    return await listSecrets({ ...this.getHandlerArgs(), options })
   }
 
   /**
@@ -125,7 +125,7 @@ export class SecretsAPI {
       return responseFailure(error)
     }
 
-    return await listSecrets({ ...this.getHandlerArgs(), only, opts: options })
+    return await listSecrets({ ...this.getHandlerArgs(), only, options })
   }
 
   /**
@@ -139,7 +139,7 @@ export class SecretsAPI {
    * @param args.omit - An array of secret properties to omit.
    * @returns A promise that resolves to an array of secret objects (excluding specified keys) or an error response.
    */
-  async listExclude(exclude: SecretKey[], opts?: ListSecretsOptions) {
+  async listExclude(exclude: SecretKey[], options?: ListSecretsOptions) {
     const validationError = this.validateIdentifiers()
     if (validationError) return responseFailure(validationError)
 
@@ -155,7 +155,7 @@ export class SecretsAPI {
       return responseFailure(error)
     }
 
-    return await listSecrets({ ...this.getHandlerArgs(), opts, exclude })
+    return await listSecrets({ ...this.getHandlerArgs(), exclude, options })
   }
 
   /**
