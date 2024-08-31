@@ -3,7 +3,7 @@ import { ListSecretsQueryParams } from './secrets'
 
 export type EnvironmentType = 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
 
-export type LoadEnvironmentOpts = {
+export type LoadEnvironmentOptions = {
   /** Whether this methid is enabled or not. */
   enabled?: boolean
   /** Specifies how to print the environment variables. */

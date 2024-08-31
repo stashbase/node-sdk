@@ -9,7 +9,7 @@ import {
   GenericApiError,
 } from '../../../../types/errors'
 import {
-  LoadEnvironmentOpts,
+  LoadEnvironmentOptions,
   LoadEnvironmentQueryParams,
   LoadEnvironmentResponse,
 } from '../../../../types/environments'
@@ -18,7 +18,7 @@ import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
 type LoadEnvironmentError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
 export type LoadEnvironmentArgs = SingleEnvironmentHandlerArgs<{
-  options?: LoadEnvironmentOpts
+  options?: LoadEnvironmentOptions
 }>
 
 async function loadEnvironment(
