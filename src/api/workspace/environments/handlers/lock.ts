@@ -16,11 +16,11 @@ type LockEnvironmentError = GenericApiError | ProjectNotFoundError | Environment
 async function lockUnlockEnvironment(
   args: LockEnvironmentArgs
 ): Promise<ApiResponse<null, LockEnvironmentError>> {
-  const { client, project, envNameOrId, lock } = args
+  const { client, project, environment, lock } = args
 
   try {
     const data = await client.patch<null>({
-      path: `/v1/projects/${project}/environments/${envNameOrId}/${lock ? 'lock' : 'unlock'}`,
+      path: `/v1/projects/${project}/environments/${environment}/${lock ? 'lock' : 'unlock'}`,
     })
 
     return responseSuccess(data)
