@@ -45,6 +45,7 @@ import {
   webhookMissingPropertiesToUpdateError,
 } from '../../errors/webhooks'
 import { CreateWebhookData, UpdateWebhookData } from '../../types/webhooks'
+import { ListWebhookLogsOptions } from '../workspace/webhooks/handlers/listLogs'
 
 class EnvironmentsAPI {
   constructor(private httpClient: HttpClient) {}
@@ -279,15 +280,7 @@ class WebhooksAPI {
    * @param options - Options for listing logs.
    * @returns A promise that resolves to an array of logs or an error response.
    */
-  async listLogs(
-    webhookId: string,
-    options?: {
-      /** The current page number (min 1, max 1000, default 1). */
-      page?: number
-      /** The number of items per page (min 2, max 30, default 10). */
-      limit?: number
-    }
-  ) {
+  async listLogs(webhookId: string, options?: ListWebhookLogsOptions) {
     const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
 
     if (invalidWebhookIdError) {
