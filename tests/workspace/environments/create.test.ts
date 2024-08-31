@@ -5,15 +5,16 @@ describe('Create environment', () => {
   test('', async () => {
     const envEase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await envEase.environments.create({
-      project: 'pr_nVpZPsL5nQTUP9yXU2GKYJ',
-      name: 'ev_3NCdY7kmbLJpZcpMg4W6wk-dev',
+    const { data, error } = await envEase.environments('pr_nVpZPsL5nQTUP9yXU2GKYJ').create({
+      name: 'app-dev',
       type: 'DEVELOPMENT',
     })
 
+    console.log(data)
+
     if (error?.isConflictError()) {
       const code = error.code === 'conflict.environment_already_exists'
-      console.log('Is isValidationError')
+      console.log('Is conflictError')
     }
   })
 })
