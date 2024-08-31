@@ -1,7 +1,7 @@
 import EnvironmentsAPI from './api/environments/api'
 import { ProjectsAPI } from './api/workspace/projects/api'
 import { SecretsAPI } from './api/workspace/secrets/api'
-import { createHttpClient } from './http/client'
+import { createHttpClient, HttpClient } from './http/client'
 import verifyWebhook from './webhooks/verify'
 import { WebhooksAPI as WsWebhooksAPI } from './api/workspace/webhooks/api'
 import { EnvironmentsAPI as WsEnvironmentsAPI } from './api/workspace/environments/api'
@@ -17,19 +17,28 @@ export function createWorkspaceClient(workspaceApiKey: string) {
     authorization: { workspaceApiKey },
   })
 
-  const projects = new ProjectsAPI(client)
+  return new WorkspaceClient(client)
+}
 
-  return {
-    projects,
-    environments: (projectNameOrId: string) => {
-      return new WsEnvironmentsAPI(client, projectNameOrId)
-    },
-    secrets: (projectNameOrId: string, envNameOrId: string) => {
-      return new SecretsAPI(client, projectNameOrId, envNameOrId)
-    },
-    webhooks: (projectId: string, environmentId: string) => {
-      return new WsWebhooksAPI(client, projectId, environmentId)
-    },
+class WorkspaceClient {
+  private client: HttpClient
+  public projects: ProjectsAPI
+
+  constructor(client: HttpClient) {
+    this.client = client
+    this.projects = new ProjectsAPI(client)
+  }
+
+  public environments(projectNameOrId: string) {
+    return new WsEnvironmentsAPI(this.client, projectNameOrId)
+  }
+
+  public secrets(projectNameOrId: string, envNameOrId: string) {
+    return new SecretsAPI(this.client, projectNameOrId, envNameOrId)
+  }
+
+  public webhooks(projectNameOrId: string, envNameOrId: string) {
+    return new WsWebhooksAPI(this.client, projectNameOrId, envNameOrId)
   }
 }
 
