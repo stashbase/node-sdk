@@ -109,14 +109,9 @@ export class SecretsAPI {
    *
    * @returns A promise that resolves to an array of specified secret objects or an error response.
    */
-  async listOnly(args: ListOnlySecretsArgs) {
-    const { project, environment, only } = args
-
-    const namesError = checkValidProjectEnv(project, environment)
-
-    if (namesError) {
-      return responseFailure(namesError)
-    }
+  async listOnly(only: SecretKey[], options?: ListSecretsOptions) {
+    const identifierValidationError = this.validateIdentifiers()
+    if (identifierValidationError) return responseFailure(identifierValidationError)
 
     if (!Array.isArray(only) || only.length === 0) {
       const error = noDataProvidedError()
@@ -130,7 +125,7 @@ export class SecretsAPI {
       return responseFailure(error)
     }
 
-    return await listSecrets({ ...this.getHandlerArgs(), ...args })
+    return await listSecrets({ ...this.getHandlerArgs(), only, opts: options })
   }
 
   /**
