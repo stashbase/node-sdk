@@ -5,10 +5,9 @@ import {
   ProjectNotFoundError,
   GenericApiError,
 } from '../../../../types/errors'
-import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
+import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
 
-export type LockEnvironmentArgs = EnvironmentHandlerArgs<{
-  envNameOrId: string
+export type LockEnvironmentArgs = SingleEnvironmentHandlerArgs<{
   lock: boolean
 }>
 

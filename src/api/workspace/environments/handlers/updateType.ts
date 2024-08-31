@@ -6,11 +6,10 @@ import {
   ProjectNotFoundError,
   GenericApiError,
 } from '../../../../types/errors'
-import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
+import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
 import { EnvironmentType } from '../../../../types/environments'
 
-type NewType = EnvironmentHandlerArgs<{
-  envNameOrId: string
+type NewType = SingleEnvironmentHandlerArgs<{
   type: EnvironmentType
 }>
 
