@@ -24,7 +24,7 @@ export type LoadEnvironmentArgs = SingleEnvironmentHandlerArgs<{
 async function loadEnvironment(
   args: LoadEnvironmentArgs
 ): Promise<ApiResponse<null, LoadEnvironmentError>> {
-  const { client, project, envNameOrId } = args
+  const { client, project, environment } = args
 
   const query: LoadEnvironmentQueryParams = {
     omit: 'description',
@@ -37,7 +37,7 @@ async function loadEnvironment(
 
   try {
     const data = await client.get<LoadEnvironmentResponse>({
-      path: `/v1/projects/${project}/environments/${envNameOrId}/secrets`,
+      path: `/v1/projects/${project}/environments/${environment}/secrets`,
       query: query as Record<string, string | boolean>,
     })
 
@@ -47,7 +47,7 @@ async function loadEnvironment(
     } = data
 
     if (secrets.length === 0) {
-      console.log(`\nLoaded environment: ${envNameOrId} (${environmentType})`)
+      console.log(`\nLoaded environment: ${environment} (${environmentType})`)
       console.log(`No secrets found`)
 
       return responseSuccess(null)
@@ -64,7 +64,7 @@ async function loadEnvironment(
 
     dotenvExpand.expand(dotenv)
 
-    console.log(`\nLoaded environment: ${envNameOrId} (${environmentType})`)
+    console.log(`\nLoaded environment: ${environment} (${environmentType})`)
 
     const printType = args?.options?.print
 

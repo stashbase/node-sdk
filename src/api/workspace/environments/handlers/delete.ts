@@ -19,11 +19,11 @@ type DeleteEnvironmentError =
 async function deleteEnvironment(
   args: DeleteEnvironmentArgs
 ): Promise<ApiResponse<null, DeleteEnvironmentError>> {
-  const { client, project } = args
+  const { client, project, environment } = args
 
   try {
     const data = await client.del<null>({
-      path: `/v1/projects/${project}/environments/${args.envNameOrId}`,
+      path: `/v1/projects/${project}/environments/${environment}`,
     })
 
     return responseSuccess(data)

@@ -15,11 +15,11 @@ type GetEnvironmentError = GenericApiError | ProjectNotFoundError | EnvironmentN
 async function getEnvironment(
   args: GetEnvironmentArgs
 ): Promise<ApiResponse<Environment, GetEnvironmentError>> {
-  const { client, project, envNameOrId } = args
+  const { client, project, environment } = args
 
   try {
     const data = await client.get<Environment>({
-      path: `/v1/projects/${project}/environments/${envNameOrId}`,
+      path: `/v1/projects/${project}/environments/${environment}`,
     })
 
     return responseSuccess(data)

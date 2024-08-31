@@ -24,11 +24,11 @@ type UpdateEnvironmentTypeError =
 async function updateEnvironmentType(
   args: UpdateEnvironmentTypeArgs
 ): Promise<ApiResponse<null, UpdateEnvironmentTypeError>> {
-  const { client, project, envNameOrId, type } = args
+  const { client, project, environment, type } = args
 
   try {
     const data = await client.patch<null>({
-      path: `/v1/projects/${project}/environments/${envNameOrId}`,
+      path: `/v1/projects/${project}/environments/${environment}`,
       data: { type },
     })
 

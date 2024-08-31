@@ -25,11 +25,11 @@ type RenameEnvironmentError =
 async function renameEnvironment(
   args: RenameEnvironmentArgs
 ): Promise<ApiResponse<null, RenameEnvironmentError>> {
-  const { client, project, envNameOrId, newName } = args
+  const { client, project, environment, newName } = args
 
   try {
     const data = await client.patch<null>({
-      path: `/v1/projects/${project}/environments/${envNameOrId}`,
+      path: `/v1/projects/${project}/environments/${environment}`,
       data: { name: newName },
     })
 
