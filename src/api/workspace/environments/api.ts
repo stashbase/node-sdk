@@ -81,7 +81,7 @@ export class EnvironmentsAPI {
     const identifiersError = this.validateIdentifiers(envNameOrId)
     if (identifiersError) return responseFailure(identifiersError)
 
-    return await getEnvironment({ ...this.getHandlerArgs(), envNameOrId })
+    return await getEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId })
   }
 
   /**
@@ -101,7 +101,11 @@ export class EnvironmentsAPI {
     const identifiersError = this.validateIdentifiers(envNameOrId)
     if (identifiersError) return responseFailure(identifiersError)
 
-    const { error } = await loadEnvironment({ ...this.getHandlerArgs(), envNameOrId, options })
+    const { error } = await loadEnvironment({
+      ...this.getHandlerArgs(),
+      environment: envNameOrId,
+      options,
+    })
 
     // throws only error code
     if (error) {
@@ -125,7 +129,7 @@ export class EnvironmentsAPI {
     const identifiersError = this.validateIdentifiers(envNameOrId)
     if (identifiersError) return responseFailure(identifiersError)
 
-    return await loadEnvironment({ ...this.getHandlerArgs(), envNameOrId, options })
+    return await loadEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId, options })
   }
 
   /**
@@ -203,7 +207,7 @@ export class EnvironmentsAPI {
     const identifiersError = this.validateIdentifiers(envNameOrId)
     if (identifiersError) return responseFailure(identifiersError)
 
-    return await deleteEnvironment({ ...this.getHandlerArgs(), envNameOrId })
+    return await deleteEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId })
   }
 
   /**
@@ -237,7 +241,7 @@ export class EnvironmentsAPI {
       return responseFailure(error)
     }
 
-    return await renameEnvironment({ ...this.getHandlerArgs(), envNameOrId, newName })
+    return await renameEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId, newName })
   }
 
   /**
@@ -271,7 +275,11 @@ export class EnvironmentsAPI {
       return responseFailure(error)
     }
 
-    return await duplicateEnvironment({ ...this.getHandlerArgs(), envNameOrId, duplicateName })
+    return await duplicateEnvironment({
+      ...this.getHandlerArgs(),
+      environment: envNameOrId,
+      duplicateName,
+    })
   }
 
   /**
@@ -290,7 +298,7 @@ export class EnvironmentsAPI {
 
     return await updateEnvironmentType({
       ...this.getHandlerArgs(),
-      envNameOrId,
+      environment: envNameOrId,
       type,
     })
   }
@@ -306,7 +314,11 @@ export class EnvironmentsAPI {
     const identifiersError = this.validateIdentifiers(envNameOrId)
     if (identifiersError) return responseFailure(identifiersError)
 
-    return await lockUnlockEnvironment({ ...this.getHandlerArgs(), envNameOrId, lock: true })
+    return await lockUnlockEnvironment({
+      ...this.getHandlerArgs(),
+      environment: envNameOrId,
+      lock: true,
+    })
   }
 
   /**
@@ -320,6 +332,10 @@ export class EnvironmentsAPI {
     const identifiersError = this.validateIdentifiers(envNameOrId)
     if (identifiersError) return responseFailure(identifiersError)
 
-    return await lockUnlockEnvironment({ ...this.getHandlerArgs(), envNameOrId, lock: true })
+    return await lockUnlockEnvironment({
+      ...this.getHandlerArgs(),
+      environment: envNameOrId,
+      lock: true,
+    })
   }
 }
