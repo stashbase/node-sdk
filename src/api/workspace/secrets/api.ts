@@ -59,7 +59,7 @@ export class SecretsAPI {
       return error
     }
 
-    if (secretKey && !isValidSecretKey(secretKey)) {
+    if (secretKey !== undefined && !isValidSecretKey(secretKey)) {
       const error = invalidSecretKeyError()
       return error
     }
