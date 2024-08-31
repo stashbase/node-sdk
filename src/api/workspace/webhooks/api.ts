@@ -57,7 +57,7 @@ export class WebhooksAPI {
       return error
     }
 
-    if (webhookId && !isValidWebhookId(webhookId)) {
+    if (webhookId !== undefined && !isValidWebhookId(webhookId)) {
       const error = invalidWebhookIdError
       return error
     }
