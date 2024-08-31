@@ -15,17 +15,21 @@ import {
   isValidEnvironmentName,
   isValidProjectIdentifier,
 } from '../../../utils/inputValidation'
-import { CreateEnvironmentData, createEnvironment } from './handlers/create'
+import { createEnvironment } from './handlers/create'
 import { deleteEnvironment } from './handlers/delete'
 import { duplicateEnvironment } from './handlers/duplicate'
 import { getEnvironment } from './handlers/get'
-import { ListEnvironmentOptions, listEnvironments } from './handlers/list'
+import { listEnvironments } from './handlers/list'
 import { loadEnvironment } from './handlers/load'
 import { lockUnlockEnvironment } from './handlers/lock'
 import { renameEnvironment } from './handlers/rename'
 import { updateEnvironmentType } from './handlers/updateType'
 import { responseFailure } from '../../../http/response'
-import { LoadEnvironmentOpts } from '../../../types/environments'
+import {
+  CreateEnvironmentData,
+  ListEnvironmentOptions,
+  LoadEnvironmentOpts,
+} from '../../../types/environments'
 
 export const checkValidProjectEnv = (projectName: string, environmentName: string) => {
   if (!isValidProjectIdentifier(projectName)) {

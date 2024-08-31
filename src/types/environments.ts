@@ -1,6 +1,8 @@
 import { SecretKey } from './secretKey'
 import { ListSecretsQueryParams } from './secrets'
 
+export type EnvironmentType = 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
+
 export type LoadEnvironmentOpts = {
   /** Whether this methid is enabled or not. */
   enabled?: boolean
@@ -8,6 +10,15 @@ export type LoadEnvironmentOpts = {
   print?: 'key-value' | 'key' | 'none'
   /** Expand all referred secrets to their values. */
   expandRefs?: boolean
+}
+
+export interface ListEnvironmentOptions {
+  /** The field to sort by. */
+  sortBy?: 'name' | 'locked' | 'createdAt' | 'secretCount'
+  /** Whether to sort in ascending or descending order, default: 'asc'. */
+  order?: 'asc' | 'desc'
+  /** A search query (min 2, max 40 characters). */
+  search?: string
 }
 
 export type LoadEnvironmentQueryParams = ListSecretsQueryParams
@@ -50,3 +61,8 @@ export type EnvironmentWithProject = Environment & {
   }
 }
 
+export interface CreateEnvironmentData {
+  name: string
+  description?: string | null
+  type: EnvironmentType
+}

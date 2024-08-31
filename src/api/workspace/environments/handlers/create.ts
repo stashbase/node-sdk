@@ -6,12 +6,7 @@ import {
 } from '../../../../types/errors/environments'
 import { ProjectNotFoundError, GenericApiError } from '../../../../types/errors'
 import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
-
-export interface CreateEnvironmentData {
-  name: string
-  description?: string | null
-  type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
-}
+import { CreateEnvironmentData } from '../../../../types/environments'
 
 export type CreateEnvironmentArgs = EnvironmentHandlerArgs<{
   data: CreateEnvironmentData
