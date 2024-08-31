@@ -1,8 +1,7 @@
-import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { ProjectNotFoundError, GenericApiError } from '../../../../types/errors'
-import { Environment } from '../../../../types/environments'
+import { Environment, ListEnvironmentOptions } from '../../../../types/environments'
 import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
 
 // ???
@@ -11,15 +10,6 @@ import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
 //   perPage: number
 // }
 //
-export interface ListEnvironmentOptions {
-  /** The field to sort by. */
-  sortBy?: 'name' | 'locked' | 'createdAt' | 'secretCount'
-  /** Whether to sort in ascending or descending order, default: 'asc'. */
-  order?: 'asc' | 'desc'
-  /** A search query (min 2, max 40 characters). */
-  search?: string
-}
-
 type ListEnvironmentsError = GenericApiError | ProjectNotFoundError
 
 async function listEnvironments(
