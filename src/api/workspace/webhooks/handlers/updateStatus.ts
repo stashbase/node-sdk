@@ -1,11 +1,10 @@
-import { HttpClient } from '../../../../http/client'
 import { createApiErrorFromResponse } from '../../../../errors'
 import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
 import { GetWebhookError as SharedGetWebhookError } from '../../../../types/errors/webhooks'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 
-export type UpdateWebhookStatusArgs = SingleWebhookProjectEnvHandlerArgs<undefined>
+export type UpdateWebhookStatusArgs = SingleWebhookProjectEnvHandlerArgs<{ enabled: boolean }>
 
 export type UpdateWebhookStatusError =
   | SharedGetWebhookError
@@ -13,14 +12,12 @@ export type UpdateWebhookStatusError =
   | EnvironmentNotFoundError
 
 async function updateWebhookStatus(
-  cliient: HttpClient,
-  args: UpdateWebhookStatusArgs,
-  enabled: boolean
+  args: UpdateWebhookStatusArgs
 ): Promise<ApiResponse<null, UpdateWebhookStatusError>> {
-  const { project, environment, webhookId } = args
+  const { client, project, environment, webhookId, enabled } = args
 
   try {
-    await cliient.patch<null>({
+    await client.patch<null>({
       path: `/v1/projects/${project}/environments/${environment}/webhooks/${webhookId}/status`,
       data: { enabled },
     })
