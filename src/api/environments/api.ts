@@ -23,7 +23,7 @@ import {
   noDataProvidedError,
 } from '../../errors/secrets'
 import { responseFailure } from '../../http/response'
-import { LoadEnvironmentOpts } from '../../types/environments'
+import { LoadEnvironmentOptions } from '../../types/environments'
 import { deleteAllEnvironmentSecrets } from './handlers/secrets/deleteAll'
 import { GetSecretOptions, ListSecretsOptions } from '../../types/secrets'
 import { SecretKey } from '../../types/secretKey'
@@ -55,7 +55,7 @@ class EnvironmentsAPI {
    * @param options - Options for loading the environment.
    * @returns A promise that resolves to a null, error (if any), and success status.
    */
-  async load(options?: LoadEnvironmentOpts) {
+  async load(options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
       return { data: null, error: null, ok: null }
     }
@@ -70,7 +70,7 @@ class EnvironmentsAPI {
    * @returns A promise that resolves to an object containing the loaded data, error (if any), and success status.
    * @throws Error if the loading process fails.
    */
-  async loadOrThrow(options?: LoadEnvironmentOpts) {
+  async loadOrThrow(options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
       return { data: null, error: null, ok: null }
     }
