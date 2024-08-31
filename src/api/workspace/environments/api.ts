@@ -65,7 +65,7 @@ export class EnvironmentsAPI {
       return error
     }
 
-    if (envNameOrId && !isValidEnvironmentIdentifier(envNameOrId)) {
+    if (envNameOrId !== undefined && !isValidEnvironmentIdentifier(envNameOrId)) {
       const error = invalidEnvironmentIdentifierError
       return error
     }
