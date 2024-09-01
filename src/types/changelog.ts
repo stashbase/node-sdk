@@ -132,3 +132,8 @@ export type ListChangelogResponse<T extends boolean | undefined = undefined> = {
   /** The pagination metadata. */
   pagination: PaginationMetadata
 }
+
+export interface RevertChangeResponse {
+  /** The ID of the new changelog record. */
+  id: string
+}
