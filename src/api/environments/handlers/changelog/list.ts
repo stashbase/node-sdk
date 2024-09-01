@@ -18,7 +18,7 @@ async function listChangelog(
   const query: Record<string, string | number> = {}
 
   if (args.withValues) {
-    query['show-values'] = 'true'
+    query['with-values'] = 'true'
   }
 
   if (options?.page) {
