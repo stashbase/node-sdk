@@ -22,7 +22,7 @@ import {
   invalidSecretKeysError,
   noDataProvidedError,
 } from '../../errors/secrets'
-import { responseFailure } from '../../http/response'
+import { ApiResponse, responseFailure } from '../../http/response'
 import { LoadEnvironmentOptions } from '../../types/environments'
 import { deleteAllEnvironmentSecrets } from './handlers/secrets/deleteAll'
 import { GetSecretOptions, ListSecretsOptions } from '../../types/secrets'
@@ -46,6 +46,13 @@ import {
 } from '../../errors/webhooks'
 import { CreateWebhookData, UpdateWebhookData } from '../../types/webhooks'
 import { ListWebhookLogsOptions } from '../workspace/webhooks/handlers/listLogs'
+import { listChangelog } from './handlers/changelog/list'
+import { ListChangelogOptions, ListChangelogResponse } from '../../types/changelog'
+import {
+  invalidChangelogPageError,
+  invalidChangelogChangeIdError,
+  invalidChangelogLimitError,
+} from '../../errors/changelog'
 
 class EnvironmentsAPI {
   constructor(private httpClient: HttpClient) {}
@@ -475,6 +482,38 @@ class WebhooksAPI {
 
 class ChangelogAPI {
   constructor(private httpClient: HttpClient) {}
+
+  /**
+   * Lists the changelog items.
+   *
+   * @param withValues - Whether to include values in the changelog items.
+   * @param options - Options for listing the changelog items.
+   * @returns A promise that resolves to the list of changelog items or an error response.
+   */
+  public async list<T extends boolean | undefined = undefined>(
+    withValues?: T,
+    options?: ListChangelogOptions
+  ): Promise<ApiResponse<ListChangelogResponse<T>, ListChangelogError>> {
+    if (options) {
+      if (
+        (options.page !== undefined && (options.page <= 0 || options.page > 1000)) ||
+        typeof options.page !== 'number'
+      ) {
+        const error = invalidChangelogPageError
+        return responseFailure(error)
+      }
+
+      if (
+        (options.limit !== undefined && (options.limit < 2 || options.limit > 10)) ||
+        typeof options.limit !== 'number'
+      ) {
+        const error = invalidChangelogLimitError
+        return responseFailure(error)
+      }
+    }
+
+    return listChangelog({ client: this.httpClient, withValues, options })
+  }
 }
 
 export default EnvironmentsAPI
