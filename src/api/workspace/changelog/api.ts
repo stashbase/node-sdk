@@ -16,6 +16,8 @@ import {
 } from '../../../utils/inputValidation'
 import { getChangelogChange } from './handlers/get'
 import { listChangelog, ListChangelogError } from './handlers/list'
+import { revertChangelogChange } from './handlers/revert'
+
 export class ChangelogAPI {
   private httpClient: HttpClient
   public project: string
@@ -26,6 +28,7 @@ export class ChangelogAPI {
     this.project = project
     this.environment = environment
   }
+
   private getHandlerArgs() {
     return { client: this.httpClient, project: this.project, environment: this.environment }
   }
@@ -99,5 +102,18 @@ export class ChangelogAPI {
     if (validationError) return responseFailure(validationError)
 
     return getChangelogChange({ ...this.getHandlerArgs(), client: this.httpClient, changeId })
+  }
+
+  /**
+   * Reverts a specific changelog item by its ID.
+   *
+   * @param changeId - The ID of the changelog item to revert.
+   * @returns A promise that resolves to null on success or an error response.
+   */
+  public async revert(changeId: string) {
+    const validationError = this.validateIdentifiers(changeId)
+    if (validationError) return responseFailure(validationError)
+
+    return revertChangelogChange({ ...this.getHandlerArgs(), client: this.httpClient, changeId })
   }
 }
