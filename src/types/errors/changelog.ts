@@ -1,22 +1,25 @@
 import { ConflictApiError, GenericApiError, ResourceApiError, ValidationApiError } from '.'
 
-export type ListChangelogError = GenericApiError | InvalidChangelogLimitError
+export type ListChangelogError =
+  | GenericApiError
+  | InvalidChangelogLimitError
+  | InvalidChangelogPageError
 
 /** Error when trying to get a changelog change */
 export type GetChangelogChangeError =
   | GenericApiError
   | InvalidChangelogChangeIdError
-  | ChangelogChangeNotFoundError
+  | ChangeNotFoundError
 
 /** Error when trying to revert a changelog change */
 export type RevertChangelogChangeError =
   | GenericApiError
   | InvalidChangelogChangeIdError
-  | ChangelogChangeNotFoundError
-  | ChangelogChangeIsCurrentStateError
+  | ChangeNotFoundError
+  | ChangeIsCurrentStateError
 
 /** Nothing to revert */
-export type ChangelogChangeIsCurrentStateError = ConflictApiError<'is_current_state', undefined>
+export type ChangeIsCurrentStateError = ConflictApiError<'is_current_state', undefined>
 
 export type InvalidChangelogChangeIdError = ValidationApiError<
   'invalid_change_id',
@@ -52,4 +55,4 @@ export type InvalidChangelogPageError = ValidationApiError<
 >
 
 /** Change with the given ID does not exist */
-type ChangelogChangeNotFoundError = ResourceApiError<'change_not_found', undefined>
+type ChangeNotFoundError = ResourceApiError<'change_not_found', undefined>
