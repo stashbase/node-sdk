@@ -94,6 +94,7 @@ class EnvironmentsAPI {
 
   secrets = new EnvSecretsAPI(this.httpClient)
   webhooks = new WebhooksAPI(this.httpClient)
+  changelog = new ChangelogAPI(this.httpClient)
 }
 
 class EnvSecretsAPI {
@@ -470,6 +471,10 @@ class WebhooksAPI {
 
     return await rotateWebhookSigningSecret(this.httpClient, webhookId)
   }
+}
+
+class ChangelogAPI {
+  constructor(private httpClient: HttpClient) {}
 }
 
 export default EnvironmentsAPI
