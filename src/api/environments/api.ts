@@ -51,6 +51,7 @@ import { listChangelog } from './handlers/changelog/list'
 import { ListChangelogOptions, ListChangelogResponse } from '../../types/changelog'
 import { GetChangelogChangeError, ListChangelogError } from '../../types/errors/changelog'
 import { getChangelogChange } from './handlers/changelog/get'
+import { revertChangelogChange } from './handlers/changelog/revert'
 import {
   invalidChangelogPageError,
   invalidChangelogChangeIdError,
@@ -530,6 +531,25 @@ class ChangelogAPI {
       const error = invalidChangelogChangeIdError
       return responseFailure(error)
     }
+
+    return getChangelogChange({ client: this.httpClient, changeId })
+  }
+
+  /**
+   * Reverts a specific changelog item by its ID.
+   *
+   * @param changeId - The ID of the changelog item to revert.
+   * @returns A promise that resolves to null on success or an error response.
+   */
+  public async revert(changeId: string) {
+    const validationError = !isValidChangelogChangeId(changeId)
+    if (validationError) {
+      const error = invalidChangelogChangeIdError
+      return responseFailure(error)
+    }
+
+    return revertChangelogChange({ client: this.httpClient, changeId })
+  }
 }
 
 export default EnvironmentsAPI
