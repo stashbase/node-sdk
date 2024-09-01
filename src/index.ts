@@ -4,6 +4,7 @@ import { SecretsAPI } from './api/workspace/secrets/api'
 import { createHttpClient, HttpClient } from './http/client'
 import verifyWebhook from './webhooks/verify'
 import { WebhooksAPI as WsWebhooksAPI } from './api/workspace/webhooks/api'
+import { ChangelogAPI as WsChangelogAPI } from './api/workspace/changelog/api'
 import { EnvironmentsAPI as WsEnvironmentsAPI } from './api/workspace/environments/api'
 
 /**
@@ -40,6 +41,11 @@ class WorkspaceClient {
   /** API for interacting with secrets. */
   public secrets(projectNameOrId: string, envNameOrId: string) {
     return new SecretsAPI(this.client, projectNameOrId, envNameOrId)
+  }
+
+  /** API for interacting with secrets changelog (change history). */
+  public changelog(projectNameOrId: string, envNameOrId: string) {
+    return new WsChangelogAPI(this.client, projectNameOrId, envNameOrId)
   }
 
   /** API for interacting with webhooks. */
