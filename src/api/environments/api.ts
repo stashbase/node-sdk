@@ -7,6 +7,7 @@ import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
 import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
 import { getSecret } from './handlers/secrets/get'
 import {
+  isValidChangelogChangeId,
   isValidHttpsUrl,
   isValidSecretKey,
   isValidWebhookDescription,
@@ -48,6 +49,8 @@ import { CreateWebhookData, UpdateWebhookData } from '../../types/webhooks'
 import { ListWebhookLogsOptions } from '../workspace/webhooks/handlers/listLogs'
 import { listChangelog } from './handlers/changelog/list'
 import { ListChangelogOptions, ListChangelogResponse } from '../../types/changelog'
+import { GetChangelogChangeError, ListChangelogError } from '../../types/errors/changelog'
+import { getChangelogChange } from './handlers/changelog/get'
 import {
   invalidChangelogPageError,
   invalidChangelogChangeIdError,
@@ -514,6 +517,19 @@ class ChangelogAPI {
 
     return listChangelog({ client: this.httpClient, withValues, options })
   }
+
+  /**
+   * Retrieves a specific changelog item by its ID.
+   *
+   * @param changeId - The ID of the changelog item to retrieve.
+   * @returns A promise that resolves to the changelog item or an error response.
+   */
+  public async get(changeId: string) {
+    const validationError = !isValidChangelogChangeId(changeId)
+    if (validationError) {
+      const error = invalidChangelogChangeIdError
+      return responseFailure(error)
+    }
 }
 
 export default EnvironmentsAPI
