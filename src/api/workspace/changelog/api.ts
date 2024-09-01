@@ -14,6 +14,7 @@ import {
   isValidEnvironmentIdentifier,
   isValidProjectIdentifier,
 } from '../../../utils/inputValidation'
+import { getChangelogChange } from './handlers/get'
 import { listChangelog, ListChangelogError } from './handlers/list'
 export class ChangelogAPI {
   private httpClient: HttpClient
@@ -85,5 +86,18 @@ export class ChangelogAPI {
     }
 
     return listChangelog({ ...this.getHandlerArgs(), client: this.httpClient, withValues, options })
+  }
+
+  /**
+   * Retrieves a specific changelog item by its ID.
+   *
+   * @param changeId - The ID of the changelog item to retrieve.
+   * @returns A promise that resolves to the changelog item or an error response.
+   */
+  public async get(changeId: string) {
+    const validationError = this.validateIdentifiers(changeId)
+    if (validationError) return responseFailure(validationError)
+
+    return getChangelogChange({ ...this.getHandlerArgs(), client: this.httpClient, changeId })
   }
 }
