@@ -4,7 +4,7 @@ import { createEnvClient } from '../../../src'
 test('Get webhook signing secret', async () => {
   const stashbase = createEnvClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
-  const { data, error } = await stashbase.webhooks.rotateSigningSecret('wh_mtGrLXUhsUvA6rEhUJjrcd')
+  const { data, error } = await stashbase.webhooks.rotateSigningSecret('whk_mtGrLXUhsUvA6rEhUJjrcd')
 
   if (error) {
     const { code } = error

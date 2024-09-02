@@ -6,7 +6,7 @@ describe('Delete environment', () => {
     const envEase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
     const { data, error } = await envEase
-      .environments('pr_nVpZPsL5nQTUP9yXU2GKYJ')
+      .environments('proj_nVpZPsL5nQTUP9yXU2GKYJ')
       .delete('app-dev')
 
     console.log(data)
