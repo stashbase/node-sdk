@@ -6,7 +6,7 @@ test('Disable webhook', async () => {
 
   const { data, error } = await stashbase
     .webhooks('name', '123')
-    .disable('wh_4i1gbnewYBnCTZg3Sbye2c')
+    .disable('whk_4i1gbnewYBnCTZg3Sbye2c')
 
   if (error) {
     const { code } = error

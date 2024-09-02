@@ -6,7 +6,7 @@ test('Get webhook signing secret', async () => {
 
   const { data, error } = await stashbase
     .webhooks('name', '123')
-    .getSigningSecret('wh_4i1gbnewYBnCTZg3Sbye2c')
+    .getSigningSecret('whk_4i1gbnewYBnCTZg3Sbye2c')
 
   if (error) {
     const { code } = error

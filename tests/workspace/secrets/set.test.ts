@@ -6,7 +6,7 @@ describe('Set secrets', () => {
     const envEase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
     const { data, error } = await envEase
-      .secrets('pr_iBgCx5tegfVaKzjywTg2ck', 'ev_3NCdY7kmbLJpZcpMg4W6wk')
+      .secrets('proj_iBgCx5tegfVaKzjywTg2ck', 'env_3NCdY7kmbLJpZcpMg4W6wk')
       .set([
         {
           key: 'KEYS',

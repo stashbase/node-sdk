@@ -6,7 +6,7 @@ test('List webhook logs', async () => {
 
   const { data, error } = await stashbase
     .webhooks('name', '123')
-    .listLogs('wh_4i1gbnewYBnCTZg3Sbye2c', {
+    .listLogs('whk_4i1gbnewYBnCTZg3Sbye2c', {
       page: 1,
       limit: 20,
     })

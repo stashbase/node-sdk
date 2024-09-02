@@ -5,7 +5,7 @@ describe('Create environment', () => {
   test('', async () => {
     const envEase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await envEase.environments('pr_nVpZPsL5nQTUP9yXU2GKYJ').create({
+    const { data, error } = await envEase.environments('proj_nVpZPsL5nQTUP9yXU2GKYJ').create({
       name: 'app-dev',
       type: 'DEVELOPMENT',
     })

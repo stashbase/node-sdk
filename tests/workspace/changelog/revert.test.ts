@@ -6,7 +6,7 @@ test('Revert change', async () => {
 
   const { data, error } = await stashbase
     .changelog('test', 'api-dev')
-    .revert('ch_tUQ1mCim2wtH5gdsMT2iWo')
+    .revert('echg_tUQ1mCim2wtH5gdsMT2iWo')
 
   if (error) {
     const { code } = error

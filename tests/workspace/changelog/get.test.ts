@@ -6,7 +6,7 @@ test('Get change', async () => {
 
   const { data, error } = await stashbase
     .changelog('test', 'api-dev')
-    .get('ch_tUQ1mCim2wtH5gdsMT2iWo')
+    .get('echg_tUQ1mCim2wtH5gdsMT2iWo')
 
   if (error) {
     const { code } = error

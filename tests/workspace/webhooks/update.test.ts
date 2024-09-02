@@ -6,7 +6,7 @@ test('Update webhook', async () => {
 
   const { data, error } = await stashbase
     .webhooks('name', '123')
-    .update('wh_4i1gbnewYBnCTZg3Sbye2c', {
+    .update('whk_4i1gbnewYBnCTZg3Sbye2c', {
       description: 'This is a new description for the webhook',
     })
 
