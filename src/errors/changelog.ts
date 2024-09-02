@@ -5,9 +5,9 @@ import { InvalidWebhookLogsLimitError } from '../types/errors/webhooks'
 export const invalidChangelogChangeIdError: InvalidChangelogChangeIdError = createApiError({
   code: 'validation.invalid_change_id',
   message:
-    "Provided change id is not valid. Change ids have prefix 'ch_' and must be 25 characters long.",
+    "Provided change id is not valid. Change ids have prefix 'chng_' followed by 22 alphanumeric characters.",
   details: {
-    exampleChangeId: 'ch_m1DAScGeaJfFLSFUzTjiq8',
+    exampleChangeId: 'chng_12345678901234567890123456789012',
   },
 })
 

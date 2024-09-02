@@ -67,39 +67,39 @@ export const invalidEnvironmentIdentifierError: InvalidEnvironmentIdentifierErro
   code: 'validation.invalid_environment_identifier',
   details: {
     nameExamples: ['staging', 'dev_copy', 'api-prod'],
-    idExample: 'ev_2vKmcBluEENNfFKtXzrHBS',
+    idExample: 'env_2vKmcBluEENNfFKtXzrHBS',
   },
   message:
-    "Invalid environment identifier. Either a name or Id can be used. The name must be alphanumeric, may include underscores (_) and one hyphen (-) as a separator, and must be between 2 and 40 characters long. The Id must start with the prefix 'ev_' followd by 22 alphanumeric characters.",
+    "Invalid environment identifier. Either a name or Id can be used. The name must be alphanumeric, may include underscores (_) and one hyphen (-) as a separator, and must be between 2 and 40 characters long. The Id must start with the prefix 'env_' followd by 22 alphanumeric characters.",
 })
 
 export const invalidProjectIdentifierError: InvalidIdentifierProjectError = createApiError({
   code: 'validation.invalid_project_identifier',
   details: {
     nameExamples: ['my-project', 'booking-app-1', 'super_app'],
-    idExample: 'pr_9Ve7ijuUMuwh9fb1j7CyBq',
+    idExample: 'proj_9Ve7ijuUMuwh9fb1j7CyBq',
   },
   message:
-    "Invalid project identifier. Either a name or Id can be used. The name must be alphanumeric, may include underscores (_) and hyphens (-), and must be between 2 and 40 characters long. The Id must start with the prefix 'pr_' followed by 22 alphanumeric characters.",
+    "Invalid project identifier. Either a name or Id can be used. The name must be alphanumeric, may include underscores (_) and hyphens (-), and must be between 2 and 40 characters long. The Id must start with the prefix 'proj_' followed by 22 alphanumeric characters.",
 })
 
 export const projectNameUsesIdFormat: ProjectNameUsesIdFormatError = createApiError({
   code: 'validation.project_name_uses_id_format',
   message:
-    "The provided project name appears to be in Id format. Please use a valid name format: alphanumeric, with optional underscores (_) and hyphens (-), between 2 and 40 characters long. Project names must not start with the prefix 'pr_' followed by 22 alphanumeric characters.",
+    "The provided project name appears to be in Id format. Please use a valid name format: alphanumeric, with optional underscores (_) and hyphens (-), between 2 and 40 characters long. Project names must not start with the prefix 'proj_' followed by 22 alphanumeric characters.",
   details: {
     validNameExamples: ['my-project', 'booking-app-1', 'super_app'],
-    invalidNameExamples: ['pr_nVe7ijuUMuwh9fb1j7CyBq', 'pr_2vKmcBluEENNfFKtXzrHBS'],
+    invalidNameExamples: ['proj_nVe7ijuUMuwh9fb1j7CyBq', 'proj_2vKmcBluEENNfFKtXzrHBS'],
   },
 })
 
 export const environmentNameUsesIdFormatError: EnvironmentNameUsesIdFormatError = createApiError({
   code: 'validation.environment_name_uses_id_format',
   message:
-    "The provided environment name appears to be in Id format. Please use a valid name format: alphanumeric, with optional underscores (_) and a single hyphen (-) as a separator, between 2 and 40 characters long. Environment names must not start with the prefix 'en_' followed by 22 alphanumeric characters.",
+    "The provided environment name appears to be in Id format. Please use a valid name format: alphanumeric, with optional underscores (_) and a single hyphen (-) as a separator, between 2 and 40 characters long. Environment names must not start with the prefix 'env_' followed by 22 alphanumeric characters.",
   details: {
     validNameExamples: ['staging', 'dev_copy', 'api-prod'],
-    invalidNameExamples: ['ev_pTFmJBTuEENNfFKtXzrMQG', 'ev_9Ve7ijuUMuwh9fb1j7CyBq'],
+    invalidNameExamples: ['env_pTFmJBTuEENNfFKtXzrMQG', 'env_9Ve7ijuUMuwh9fb1j7CyBq'],
   },
 })
 
@@ -206,4 +206,3 @@ export const invalidEnvironmentSearchError: InvalidEnvironmentSearchError = crea
     invalidSearchExamples: ['#dev', 'api-dev-1', 'service--dev'],
   },
 })
-
