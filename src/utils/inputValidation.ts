@@ -89,10 +89,10 @@ function isAlphanumericUppercaseWithUnderscore(inputString: string): boolean {
 type Resource = 'project' | 'environment' | 'webhook' | 'changelog'
 
 const resourcePrefixes = {
-  project: 'pr_',
-  webhook: 'wh_',
-  changelog: 'ch_',
-  environment: 'ev_',
+  project: 'proj_',
+  webhook: 'whk_',
+  changelog: 'chng_', // secrets changelog
+  environment: 'env_',
 }
 
 export const isResourceIdFormat = (resource: Resource, input: string) => {
