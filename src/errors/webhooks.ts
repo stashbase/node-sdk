@@ -11,9 +11,9 @@ import {
 export const invalidWebhookIdError: InvalidWebhookIdError = createApiError({
   code: 'validation.invalid_webhook_id',
   message:
-    "Provided webhook Id is is not valid. Webhook Ids have prefix 'wh_' and must be 25 characters long.",
+    "Provided webhook Id is is not valid. Webhook Ids have prefix 'whk_' followed by 22 alphanumeric characters.",
   details: {
-    exampleWebhookId: 'wh_m1DAScGeaJfFLSFUzTjiq8',
+    exampleWebhookId: 'whk_m1DAScGeaJfFLSFUzTjiq8',
   },
 })
 
