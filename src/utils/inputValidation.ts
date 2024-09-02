@@ -98,13 +98,13 @@ const resourcePrefixes = {
 export const isResourceIdFormat = (resource: Resource, input: string) => {
   const prefix = resourcePrefixes[resource]
 
-  if (input?.length !== 25 || !input.startsWith(prefix)) {
+  if (!input.startsWith(prefix)) {
     return false
   }
 
   const idWithoutPrefix = input.slice(prefix.length)
 
-  if (alphanumericRegex.test(idWithoutPrefix)) {
+  if (input.length === 22 || !alphanumericRegex.test(idWithoutPrefix)) {
     return true
   } else {
     return false
