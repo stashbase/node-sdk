@@ -104,7 +104,7 @@ export const isResourceIdFormat = (resource: Resource, input: string) => {
 
   const idWithoutPrefix = input.slice(prefix.length)
 
-  if (input.length === 22 || !alphanumericRegex.test(idWithoutPrefix)) {
+  if (idWithoutPrefix.length === 22 && alphanumericRegex.test(idWithoutPrefix)) {
     return true
   } else {
     return false
