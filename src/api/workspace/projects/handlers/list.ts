@@ -1,6 +1,5 @@
 import { HttpClient } from '../../../../http/client'
-import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ApiResponse } from '../../../../http/response'
 import { GenericApiError } from '../../../../types/errors'
 import { PaginationMetadata } from '../../../../types/pagination'
 import { Project } from '../../../../types/projects'
@@ -51,15 +50,9 @@ export async function listProjects(
     query.order = options.order
   }
 
-  try {
-    const data = await client.get<ListProjectsResponse>({
-      path: `/v1/projects`,
-      query: Object.keys(query).length > 0 ? query : undefined,
-    })
-
-    return responseSuccess(data)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<ListProjectsError>(error)
-    return responseFailure(apiError)
-  }
+  return await client.sendApiRequest<ListProjectsResponse, ListProjectsError>({
+    method: 'GET',
+    path: `/v1/projects`,
+    query: Object.keys(query).length > 0 ? query : undefined,
+  })
 }

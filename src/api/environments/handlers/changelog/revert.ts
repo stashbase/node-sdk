@@ -1,6 +1,5 @@
-import { createApiErrorFromResponse } from '../../../../errors'
 import { HttpClient } from '../../../../http/client'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ApiResponse } from '../../../../http/response'
 import { RevertChangeResponse } from '../../../../types/changelog'
 import { RevertChangelogChangeError } from '../../../../types/errors/changelog'
 
@@ -14,16 +13,12 @@ async function revertChangelogChange(
 ): Promise<ApiResponse<RevertChangeResponse, RevertChangelogChangeError>> {
   const { client, changeId } = args
 
-  try {
-    const changelog = await client.post<RevertChangeResponse>({
-      path: `/v1/changelog/${changeId}/revert`,
-    })
+  const path = `/v1/changelog/${changeId}/revert`
 
-    return responseSuccess(changelog)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<RevertChangelogChangeError>(error)
-    return responseFailure(apiError)
-  }
+  return client.sendApiRequest<RevertChangeResponse, RevertChangelogChangeError>({
+    method: 'POST',
+    path,
+  })
 }
 
 export { revertChangelogChange }

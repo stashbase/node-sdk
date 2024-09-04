@@ -1,11 +1,9 @@
-import { HttpClient } from '../../../../http/client'
 import {
   ListSecretsOptions,
   ListSecretsQueryParams,
   ListSecretsResData,
 } from '../../../../types/secrets'
-import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ApiResponse } from '../../../../http/response'
 import {
   EnvironmentNotFoundError,
   ProjectNotFoundError,
@@ -59,17 +57,13 @@ async function listSecrets(
   const query =
     Object.keys(queryObj).length > 0 ? (queryObj as Record<string, string | boolean>) : undefined
 
-  try {
-    const secrets = await client.get<ListSecretsResData>({
-      path: `/v1/projects/${project}/environments/${environment}/secrets`,
-      query: query,
-    })
+  const path = `/v1/projects/${project}/environments/${environment}/secrets`
 
-    return responseSuccess(secrets)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<ListSecretsError>(error)
-    return responseFailure(apiError)
-  }
+  return await client.sendApiRequest<ListSecretsResData, ListSecretsError>({
+    method: 'GET',
+    path,
+    query,
+  })
 }
 
 export { listSecrets }

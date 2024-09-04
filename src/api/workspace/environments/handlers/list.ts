@@ -1,5 +1,4 @@
-import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ApiResponse } from '../../../../http/response'
 import { ProjectNotFoundError, GenericApiError } from '../../../../types/errors'
 import { Environment, ListEnvironmentOptions } from '../../../../types/environments'
 import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
@@ -31,17 +30,13 @@ async function listEnvironments(
   if (opts?.search) {
     query.search = opts.search
   }
+  const path = `/v1/projects/${project}/environments`
 
-  try {
-    const data = await client.get<Array<Environment>>({
-      path: `/v1/projects/${project}/environments`,
-    })
-
-    return responseSuccess(data)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<ListEnvironmentsError>(error)
-    return responseFailure(apiError)
-  }
+  return await client.sendApiRequest<Array<Environment>, ListEnvironmentsError>({
+    method: 'GET',
+    path,
+    query,
+  })
 }
 
 export { listEnvironments }

@@ -1,10 +1,9 @@
-import { createApiErrorFromResponse } from '../../../../errors'
 import {
   CreateSecretsData,
   CreateSecretsItem,
   CreateSecretsResData,
 } from '../../../../types/secrets'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ApiResponse } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 import { CreateSecretsError as SharedCreateSecretsError } from '../../../../types/errors/secrets'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
@@ -18,19 +17,14 @@ export type CreateSecretsArgs = ProjectEnvHandlerArgs<{
 async function createSecrets(
   args: CreateSecretsArgs
 ): Promise<ApiResponse<CreateSecretsResData, CreateSecretsError>> {
-  try {
-    const { client, project, environment, data } = args
+  const { client, project, environment, data } = args
+  const path = `/v1/projects/${project}/environments/${environment}/secrets`
 
-    const resData = await client.post<CreateSecretsResData>({
-      path: `/v1/projects/${project}/environments/${environment}/secrets`,
-      data,
-    })
-
-    return responseSuccess(resData)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<CreateSecretsError>(error)
-    return responseFailure(apiError)
-  }
+  return await client.sendApiRequest<CreateSecretsResData, CreateSecretsError>({
+    method: 'POST',
+    path,
+    data,
+  })
 }
 
 export { createSecrets }

@@ -1,8 +1,7 @@
+import { ApiResponse } from '../../../../http/response'
 import { WebhookSigningSecret } from '../../../../types/webhooks'
-import { createApiErrorFromResponse } from '../../../../errors'
 import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
 import { GetWebhookError as SharedGetWebhookError } from '../../../../types/errors/webhooks'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 
 export type GetWebhookSigningSecretArgs = SingleWebhookProjectEnvHandlerArgs<undefined>
@@ -16,17 +15,12 @@ async function getWebhookSigningSecret(
   args: GetWebhookSigningSecretArgs
 ): Promise<ApiResponse<WebhookSigningSecret, GetWebhookSigningSecretError>> {
   const { client, project, environment, webhookId } = args
+  const path = `/v1/projects/${project}/environments/${environment}/webhooks/${webhookId}/signing-secret`
 
-  try {
-    const secretRes = await client.get<WebhookSigningSecret>({
-      path: `/v1/projects/${project}/environments/${environment}/webhooks/${webhookId}/signing-secret`,
-    })
-
-    return responseSuccess(secretRes)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<GetWebhookSigningSecretError>(error)
-    return responseFailure(apiError)
-  }
+  return await client.sendApiRequest<WebhookSigningSecret, GetWebhookSigningSecretError>({
+    method: 'GET',
+    path,
+  })
 }
 
 export { getWebhookSigningSecret }
