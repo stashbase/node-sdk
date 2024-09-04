@@ -1,6 +1,5 @@
+import { ApiResponse } from '../../../../http/response'
 import { SetSecretsItem, SetSecretsResData } from '../../../../types/secrets'
-import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 import { SetSecretsError as SharedSetSecretsError } from '../../../../types/errors/secrets'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
@@ -14,19 +13,14 @@ export type SetSecretsArgs = ProjectEnvHandlerArgs<{
 async function setSecrets(
   args: SetSecretsArgs
 ): Promise<ApiResponse<SetSecretsResData, SetSecretsError>> {
-  try {
-    const { client, project, environment, data } = args
+  const { client, project, environment, data } = args
+  const path = `/v1/projects/${project}/environments/${environment}/secrets`
 
-    const resData = await client.put<SetSecretsResData>({
-      path: `/v1/projects/${project}/environments/${environment}/secrets`,
-      data,
-    })
-
-    return responseSuccess(resData)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<SetSecretsError>(error)
-    return responseFailure(apiError)
-  }
+  return await client.sendApiRequest<SetSecretsResData, SetSecretsError>({
+    method: 'PUT',
+    path,
+    data,
+  })
 }
 
 export { setSecrets }

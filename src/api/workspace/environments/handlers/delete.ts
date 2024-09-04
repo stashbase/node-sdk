@@ -1,6 +1,5 @@
-import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse } from '../../../../http/response'
 import { EnvironmentLockedError } from '../../../../types/errors/environments'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import {
   EnvironmentNotFoundError,
   ProjectNotFoundError,
@@ -20,17 +19,12 @@ async function deleteEnvironment(
   args: DeleteEnvironmentArgs
 ): Promise<ApiResponse<null, DeleteEnvironmentError>> {
   const { client, project, environment } = args
+  const path = `/v1/projects/${project}/environments/${environment}`
 
-  try {
-    const data = await client.del<null>({
-      path: `/v1/projects/${project}/environments/${environment}`,
-    })
-
-    return responseSuccess(data)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<DeleteEnvironmentError>(error)
-    return responseFailure(apiError)
-  }
+  return await client.sendApiRequest<null, DeleteEnvironmentError>({
+    method: 'DELETE',
+    path,
+  })
 }
 
 export { deleteEnvironment }

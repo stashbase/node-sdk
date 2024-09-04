@@ -1,5 +1,4 @@
-import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ApiResponse } from '../../../../http/response'
 import {
   EnvironmentAlreadyExistsError,
   EnvironmentLimitReachedError,
@@ -27,18 +26,13 @@ async function createEnvironment(
   args: CreateEnvironmentArgs
 ): Promise<ApiResponse<CreateEnvironmentResponseData, CreateEnvironmentError>> {
   const { client, project } = args
+  const path = `/v1/projects/${project}/environments`
 
-  try {
-    const data = await client.post<CreateEnvironmentResponseData>({
-      path: `/v1/projects/${project}/environments`,
-      data: args.data,
-    })
-
-    return responseSuccess(data)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<CreateEnvironmentError>(error)
-    return responseFailure(apiError)
-  }
+  return await client.sendApiRequest<CreateEnvironmentResponseData, CreateEnvironmentError>({
+    method: 'POST',
+    path,
+    data: args.data,
+  })
 }
 
 export { createEnvironment }

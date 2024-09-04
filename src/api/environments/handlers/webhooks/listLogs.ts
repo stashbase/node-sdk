@@ -1,9 +1,8 @@
 import { HttpClient } from '../../../../http/client'
-import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse } from '../../../../http/response'
 import { SingleWebhookArgs } from '../../../../types/aruguments'
 import { ListWebhookLogsResponse } from '../../../../types/webhooks'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-import { ListWebhookLogsError, ListWebhooksError } from '../../../../types/errors/webhooks'
+import { ListWebhookLogsError } from '../../../../types/errors/webhooks'
 
 export type ListWebhookLogsArgs = SingleWebhookArgs<{
   /** The page number to retrieve */
@@ -28,17 +27,11 @@ async function listWebhookLogs(
     query.limit = limit
   }
 
-  try {
-    const webhookLogsRes = await envClient.get<ListWebhookLogsResponse>({
-      path: `/v1/webhooks/${args.webhookId}/logs`,
-      query: Object.keys(query).length > 0 ? query : undefined,
-    })
-
-    return responseSuccess(webhookLogsRes)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<ListWebhooksError>(error)
-    return responseFailure(apiError)
-  }
+  return await envClient.sendApiRequest<ListWebhookLogsResponse, ListWebhookLogsError>({
+    method: 'GET',
+    path: `/v1/webhooks/${args.webhookId}/logs`,
+    query: Object.keys(query).length > 0 ? query : undefined,
+  })
 }
 
 export { listWebhookLogs }

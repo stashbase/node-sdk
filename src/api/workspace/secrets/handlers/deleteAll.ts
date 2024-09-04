@@ -1,6 +1,5 @@
-import { createApiErrorFromResponse } from '../../../../errors'
 import { DeleteAllSecretsResData } from '../../../../types/secrets'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ApiResponse } from '../../../../http/response'
 import {
   EnvironmentNotFoundError,
   GenericApiError,
@@ -16,17 +15,12 @@ async function deleteAllSecrets(
   args: DeleteAllSecretsArgs
 ): Promise<ApiResponse<DeleteAllSecretsResData, DeleteAllSecretsError>> {
   const { client, project, environment } = args
+  const path = `/v1/projects/${project}/environments/${environment}/secrets/all`
 
-  try {
-    const data = await client.del<DeleteAllSecretsResData>({
-      path: `/v1/projects/${project}/environments/${environment}/secrets/all`,
-    })
-
-    return responseSuccess(data)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<DeleteAllSecretsError>(error)
-    return responseFailure(apiError)
-  }
+  return await client.sendApiRequest<DeleteAllSecretsResData, DeleteAllSecretsError>({
+    method: 'DELETE',
+    path,
+  })
 }
 
 export { deleteAllSecrets }

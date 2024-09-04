@@ -27,54 +27,52 @@ async function loadEnvironment(
     query['expand-refs'] = true
   }
 
-  try {
-    const data = await client.get<LoadEnvironmentResponse>({
-      path: '/v1/secrets',
-      query: query as Record<string, string | boolean>,
-    })
+  const { data, error } = await client.sendApiRequest<
+    LoadEnvironmentResponse,
+    LoadEnvironmentError
+  >({
+    method: 'GET',
+    path: '/v1/secrets',
+    query: query as Record<string, string | boolean>,
+  })
 
-    const { environment, secrets } = data
+  if (error) {
+    // console.log('\nFailed to load environment')
+    // console.log(error)
+    return responseFailure(error)
+  }
 
-    if (secrets.length === 0) {
-      console.log(`\nLoaded environment: ${environment.name} (${environment.type})`)
-      console.log(`No secrets found`)
+  const { environment, secrets } = data
 
-      return responseSuccess(null)
-    }
-
-    const secretsObj = (secrets ?? []).reduce((obj: { [key: string]: string }, item) => {
-      obj[item.key] = item.value
-      return obj
-    }, {})
-
-    const dotenv = {
-      parsed: secretsObj,
-    }
-
-    dotenvExpand.expand(dotenv)
-
+  if (secrets.length === 0) {
     console.log(`\nLoaded environment: ${environment.name} (${environment.type})`)
-
-    if (printType === 'key' || printType === 'key-value') {
-      if (printType === 'key') {
-        printSecretsTable.keys(secrets)
-      } else {
-        printSecretsTable.keyValues(secrets)
-      }
-    }
+    console.log(`No secrets found`)
 
     return responseSuccess(null)
-  } catch (error: any) {
-    console.log('\nFailed to load environment')
-    console.log(error)
-
-    const apiError = createApiErrorFromResponse<LoadEnvironmentError>(error)
-    return responseFailure(apiError)
-
-    // if (shouldThrow || shouldThrow === undefined) {
-    //   throw error
-    // }
   }
+
+  const secretsObj = (secrets ?? []).reduce((obj: { [key: string]: string }, item) => {
+    obj[item.key] = item.value
+    return obj
+  }, {})
+
+  const dotenv = {
+    parsed: secretsObj,
+  }
+
+  dotenvExpand.expand(dotenv)
+
+  console.log(`\nLoaded environment: ${environment.name} (${environment.type})`)
+
+  if (printType === 'key' || printType === 'key-value') {
+    if (printType === 'key') {
+      printSecretsTable.keys(secrets)
+    } else {
+      printSecretsTable.keyValues(secrets)
+    }
+  }
+
+  return responseSuccess(null)
 }
 
 export { loadEnvironment }
