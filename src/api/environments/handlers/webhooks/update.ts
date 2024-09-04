@@ -1,8 +1,7 @@
 import { HttpClient } from '../../../../http/client'
-import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse } from '../../../../http/response'
 import { SingleWebhookArgs } from '../../../../types/aruguments'
 import { UpdateWebhookError } from '../../../../types/errors/webhooks'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { UpdateWebhookData } from '../../../../types/webhooks'
 
 export type UpdateWebhookArgs = SingleWebhookArgs<{
@@ -16,17 +15,11 @@ async function updateWebhook(
 ): Promise<ApiResponse<null, UpdateWebhookError>> {
   const { webhookId, data } = args
 
-  try {
-    const updateRes = await envClient.patch<null>({
-      path: `/v1/webhooks/${webhookId}`,
-      data,
-    })
-
-    return responseSuccess(updateRes)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<UpdateWebhookError>(error)
-    return responseFailure(apiError)
-  }
+  return await envClient.sendApiRequest<null, UpdateWebhookError>({
+    method: 'PATCH',
+    path: `/v1/webhooks/${webhookId}`,
+    data,
+  })
 }
 
 export { updateWebhook }

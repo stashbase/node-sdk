@@ -1,8 +1,7 @@
-import { createApiErrorFromResponse } from '../../../../errors'
 import { HttpClient } from '../../../../http/client'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ApiResponse } from '../../../../http/response'
 import { ListChangelogOptions, ListChangelogResponse } from '../../../../types/changelog'
-import { GetChangelogChangeError, ListChangelogError } from '../../../../types/errors/changelog'
+import { ListChangelogError } from '../../../../types/errors/changelog'
 
 export interface ListChangelogArgs {
   client: HttpClient
@@ -29,17 +28,13 @@ async function listChangelog(
     query.limit = options.limit
   }
 
-  try {
-    const changelog = await client.get<ListChangelogResponse<typeof args.withValues>>({
-      path: '/v1/changelog',
-      query,
-    })
+  const path = '/v1/changelog'
 
-    return responseSuccess(changelog)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<ListChangelogError>(error)
-    return responseFailure(apiError)
-  }
+  return client.sendApiRequest<ListChangelogResponse<typeof args.withValues>, ListChangelogError>({
+    method: 'GET',
+    path,
+    query,
+  })
 }
 
 export { listChangelog }
