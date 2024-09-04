@@ -1,6 +1,5 @@
-import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse } from '../../../../http/response'
 import { UpdateSecretsItem, UpdateSecretsResData } from '../../../../types/secrets'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 import { UpdateSecretsError as SharedUpdateSecretsError } from '../../../../types/errors/secrets'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
@@ -15,18 +14,13 @@ async function updateSecrets(
   args: UpdateSecretsArgs
 ): Promise<ApiResponse<UpdateSecretsResData, UpdateSecretsError>> {
   const { client, project, environment, data } = args
+  const path = `/v1/projects/${project}/environments/${environment}/secrets`
 
-  try {
-    const resData = await client.patch<UpdateSecretsResData>({
-      path: `/v1/projects/${project}/environments/${environment}/secrets`,
-      data,
-    })
-
-    return responseSuccess(resData)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<UpdateSecretsError>(error)
-    return responseFailure(apiError)
-  }
+  return await client.sendApiRequest<UpdateSecretsResData, UpdateSecretsError>({
+    method: 'PATCH',
+    path,
+    data,
+  })
 }
 
 export { updateSecrets }

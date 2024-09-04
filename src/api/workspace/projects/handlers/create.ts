@@ -1,6 +1,5 @@
 import { HttpClient } from '../../../../http/client'
-import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ApiResponse } from '../../../../http/response'
 import {
   ProjectAlreadyExistsError,
   ProjectLimitReachedError,
@@ -23,15 +22,9 @@ export async function createProject(
   envClient: HttpClient,
   data: CreateProjectData
 ): Promise<ApiResponse<CreateProjectResponseData, CreateSecretsError>> {
-  try {
-    const resData = await envClient.post<CreateProjectResponseData>({
-      path: '/v1/projects',
-      data,
-    })
-
-    return responseSuccess(resData)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<CreateSecretsError>(error)
-    return responseFailure(apiError)
-  }
+  return await envClient.sendApiRequest<CreateProjectResponseData, CreateSecretsError>({
+    method: 'POST',
+    path: '/v1/projects',
+    data,
+  })
 }

@@ -1,5 +1,4 @@
-import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ApiResponse } from '../../../../http/response'
 import {
   EnvironmentAlreadyExistsError,
   EnvironmentLockedError,
@@ -26,18 +25,13 @@ async function renameEnvironment(
   args: RenameEnvironmentArgs
 ): Promise<ApiResponse<null, RenameEnvironmentError>> {
   const { client, project, environment, newName } = args
+  const path = `/v1/projects/${project}/environments/${environment}`
 
-  try {
-    const data = await client.patch<null>({
-      path: `/v1/projects/${project}/environments/${environment}`,
-      data: { name: newName },
-    })
-
-    return responseSuccess(data)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<RenameEnvironmentError>(error)
-    return responseFailure(apiError)
-  }
+  return await client.sendApiRequest<null, RenameEnvironmentError>({
+    method: 'PATCH',
+    path,
+    data: { name: newName },
+  })
 }
 
 export { renameEnvironment }

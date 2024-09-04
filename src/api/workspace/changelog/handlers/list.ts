@@ -1,5 +1,4 @@
-import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ApiResponse } from '../../../../http/response'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 import { ListChangelogOptions, ListChangelogResponse } from '../../../../types/changelog'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
@@ -38,17 +37,16 @@ async function listChangelog(
     query.limit = options.limit
   }
 
-  try {
-    const changelog = await client.get<ListChangelogResponse<typeof args.withValues>>({
-      path: `/v1/projects/${project}/environments/${environment}/changelog`,
-      query,
-    })
+  const path = `/v1/projects/${project}/environments/${environment}/changelog`
 
-    return responseSuccess(changelog)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<ListChangelogError>(error)
-    return responseFailure(apiError)
-  }
+  return await client.sendApiRequest<
+    ListChangelogResponse<typeof args.withValues>,
+    ListChangelogError
+  >({
+    method: 'GET',
+    path,
+    query,
+  })
 }
 
 export { listChangelog }
