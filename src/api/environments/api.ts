@@ -500,16 +500,16 @@ class ChangelogAPI {
   ): Promise<ApiResponse<ListChangelogResponse<T>, ListChangelogError>> {
     if (options) {
       if (
-        (options.page !== undefined && (options.page <= 0 || options.page > 1000)) ||
-        typeof options.page !== 'number'
+        options.page !== undefined &&
+        (options.page <= 0 || options.page > 1000 || typeof options.page !== 'number')
       ) {
         const error = invalidChangelogPageError
         return responseFailure(error)
       }
 
       if (
-        (options.limit !== undefined && (options.limit < 2 || options.limit > 10)) ||
-        typeof options.limit !== 'number'
+        options.limit !== undefined &&
+        (options.limit < 2 || options.limit > 10 || typeof options.limit !== 'number')
       ) {
         const error = invalidChangelogLimitError
         return responseFailure(error)
