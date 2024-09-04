@@ -1,5 +1,4 @@
-import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ApiResponse } from '../../../../http/response'
 import {
   EnvironmentNotFoundError,
   ProjectNotFoundError,
@@ -18,16 +17,12 @@ async function lockUnlockEnvironment(
 ): Promise<ApiResponse<null, LockEnvironmentError>> {
   const { client, project, environment, lock } = args
 
-  try {
-    const data = await client.patch<null>({
-      path: `/v1/projects/${project}/environments/${environment}/${lock ? 'lock' : 'unlock'}`,
-    })
+  const path = `/v1/projects/${project}/environments/${environment}/${lock ? 'lock' : 'unlock'}`
 
-    return responseSuccess(data)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<LockEnvironmentError>(error)
-    return responseFailure(apiError)
-  }
+  return await client.sendApiRequest<null, LockEnvironmentError>({
+    method: 'PATCH',
+    path,
+  })
 }
 
 export { lockUnlockEnvironment }

@@ -1,5 +1,4 @@
-import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ApiResponse } from '../../../../http/response'
 import { EnvironmentLockedError } from '../../../../types/errors/environments'
 import {
   EnvironmentNotFoundError,
@@ -26,17 +25,12 @@ async function updateEnvironmentType(
 ): Promise<ApiResponse<null, UpdateEnvironmentTypeError>> {
   const { client, project, environment, type } = args
 
-  try {
-    const data = await client.patch<null>({
-      path: `/v1/projects/${project}/environments/${environment}`,
-      data: { type },
-    })
-
-    return responseSuccess(data)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<UpdateEnvironmentTypeError>(error)
-    return responseFailure(apiError)
-  }
+  const path = `/v1/projects/${project}/environments/${environment}`
+  return await client.sendApiRequest<null, UpdateEnvironmentTypeError>({
+    method: 'PATCH',
+    path,
+    data: { type },
+  })
 }
 
 export { updateEnvironmentType }

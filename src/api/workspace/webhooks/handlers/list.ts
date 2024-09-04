@@ -1,6 +1,5 @@
-import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse } from '../../../../http/response'
 import { ListWebhooksResponse } from '../../../../types/webhooks'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { ListWebhooksError as SharedListWebhooksError } from '../../../../types/errors/webhooks'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
@@ -14,17 +13,12 @@ async function listWebhooks(
   args: ProjectEnvHandlerArgs<undefined>
 ): Promise<ApiResponse<ListWebhooksResponse, ListWebhooksError>> {
   const { client, project, environment } = args
+  const path = `/v1/projects/${project}/environments/${environment}/webhooks`
 
-  try {
-    const webhooks = await client.get<ListWebhooksResponse>({
-      path: `/v1/projects/${project}/environments/${environment}/webhooks`,
-    })
-
-    return responseSuccess(webhooks)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<ListWebhooksError>(error)
-    return responseFailure(apiError)
-  }
+  return await client.sendApiRequest<ListWebhooksResponse, ListWebhooksError>({
+    method: 'GET',
+    path,
+  })
 }
 
 export { listWebhooks }

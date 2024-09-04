@@ -1,7 +1,6 @@
-import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse } from '../../../../http/response'
 import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
 import { GetWebhookError as SharedGetWebhookError } from '../../../../types/errors/webhooks'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 
 export type UpdateWebhookStatusArgs = SingleWebhookProjectEnvHandlerArgs<{ enabled: boolean }>
@@ -15,18 +14,13 @@ async function updateWebhookStatus(
   args: UpdateWebhookStatusArgs
 ): Promise<ApiResponse<null, UpdateWebhookStatusError>> {
   const { client, project, environment, webhookId, enabled } = args
+  const path = `/v1/projects/${project}/environments/${environment}/webhooks/${webhookId}/status`
 
-  try {
-    await client.patch<null>({
-      path: `/v1/projects/${project}/environments/${environment}/webhooks/${webhookId}/status`,
-      data: { enabled },
-    })
-
-    return responseSuccess(null)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<UpdateWebhookStatusError>(error)
-    return responseFailure(apiError)
-  }
+  return await client.sendApiRequest<null, UpdateWebhookStatusError>({
+    method: 'PATCH',
+    path,
+    data: { enabled },
+  })
 }
 
 export { updateWebhookStatus }
