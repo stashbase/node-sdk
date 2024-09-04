@@ -1,7 +1,5 @@
 import dotenvExpand from 'dotenv-expand'
-import { HttpClient } from '../../../../http/client'
 import { printSecretsTable } from '../../../../utils/table'
-import { createApiErrorFromResponse } from '../../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import {
   EnvironmentNotFoundError,
@@ -35,52 +33,55 @@ async function loadEnvironment(
     query['expand-refs'] = true
   }
 
-  try {
-    const data = await client.get<LoadEnvironmentResponse>({
-      path: `/v1/projects/${project}/environments/${environment}/secrets`,
-      query: query as Record<string, string | boolean>,
-    })
+  const { data, error } = await client.sendApiRequest<
+    LoadEnvironmentResponse,
+    LoadEnvironmentError
+  >({
+    method: 'GET',
+    path: `/v1/projects/${project}/environments/${environment}/secrets`,
+    query: query as Record<string, string | boolean>,
+  })
 
-    const {
-      environment: { type: environmentType },
-      secrets,
-    } = data
+  if (error) {
+    return responseFailure(error)
+  }
 
-    if (secrets.length === 0) {
-      console.log(`\nLoaded environment: ${environment} (${environmentType})`)
-      console.log(`No secrets found`)
+  const {
+    environment: { type: environmentType },
+    secrets,
+  } = data
 
-      return responseSuccess(null)
-    }
-
-    const secretsObj = (secrets ?? []).reduce((obj: { [key: string]: string }, item) => {
-      obj[item.key] = item.value
-      return obj
-    }, {})
-
-    const dotenv = {
-      parsed: secretsObj,
-    }
-
-    dotenvExpand.expand(dotenv)
-
+  if (secrets.length === 0) {
     console.log(`\nLoaded environment: ${environment} (${environmentType})`)
-
-    const printType = args?.options?.print
-
-    if (printType === 'key' || printType === 'key-value') {
-      if (printType === 'key') {
-        printSecretsTable.keys(secrets)
-      } else {
-        printSecretsTable.keyValues(secrets)
-      }
-    }
+    console.log(`No secrets found`)
 
     return responseSuccess(null)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<LoadEnvironmentError>(error)
-    return responseFailure(apiError)
   }
+
+  const secretsObj = (secrets ?? []).reduce((obj: { [key: string]: string }, item) => {
+    obj[item.key] = item.value
+    return obj
+  }, {})
+
+  const dotenv = {
+    parsed: secretsObj,
+  }
+
+  dotenvExpand.expand(dotenv)
+
+  console.log(`\nLoaded environment: ${environment} (${environmentType})`)
+
+  const printType = args?.options?.print
+
+  if (printType === 'key' || printType === 'key-value') {
+    if (printType === 'key') {
+      printSecretsTable.keys(secrets)
+    } else {
+      printSecretsTable.keyValues(secrets)
+    }
+  }
+
+  return responseSuccess(null)
 }
 
 export { loadEnvironment }

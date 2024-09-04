@@ -1,7 +1,6 @@
 import { HttpClient } from '../../../../http/client'
-import { createApiErrorFromResponse } from '../../../../errors'
 import { GetSecretError } from '../../../../types/errors/secrets'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ApiResponse } from '../../../../http/response'
 import { GetSecretOptions, GetSecretQueryParams, GetSecretResData } from '../../../../types/secrets'
 
 async function getSecret(
@@ -28,17 +27,13 @@ async function getSecret(
     }
   }
 
-  try {
-    const secrets = await envClient.get<GetSecretResData>({
-      path: `/v1/secrets/${key}`,
-      query: Object.keys(query).length > 0 ? query : undefined,
-    })
+  const path = `/v1/secrets/${key}`
 
-    return responseSuccess(secrets)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<GetSecretError>(error)
-    return responseFailure(apiError)
-  }
+  return envClient.sendApiRequest<GetSecretResData, GetSecretError>({
+    method: 'GET',
+    path,
+    query: Object.keys(query).length > 0 ? query : undefined,
+  })
 }
 
 export { getSecret }

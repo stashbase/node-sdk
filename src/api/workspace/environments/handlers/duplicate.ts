@@ -1,5 +1,4 @@
-import { createApiErrorFromResponse } from '../../../../errors'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ApiResponse } from '../../../../http/response'
 import {
   EnvironmentAlreadyExistsError,
   EnvironmentLockedError,
@@ -31,18 +30,13 @@ async function duplicateEnvironment(
   args: DuplicateEnvironmentArgs
 ): Promise<ApiResponse<DuplicateEnvironmentResData, DulicateEnvironmentError>> {
   const { client, project, environment, duplicateName } = args
+  const path = `/v1/projects/${project}/environments/${environment}/duplicate`
 
-  try {
-    const data = await client.post<DuplicateEnvironmentResData>({
-      path: `/v1/projects/${project}/environments/${environment}/duplicate`,
-      data: { name: duplicateName },
-    })
-
-    return responseSuccess(data)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<DulicateEnvironmentError>(error)
-    return responseFailure(apiError)
-  }
+  return await client.sendApiRequest<DuplicateEnvironmentResData, DulicateEnvironmentError>({
+    method: 'POST',
+    path,
+    data: { name: duplicateName },
+  })
 }
 
 export { duplicateEnvironment }
