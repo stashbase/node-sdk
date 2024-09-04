@@ -1,71 +1,63 @@
 import fetchWithRetry from './retry'
+import { createApiErrorFromResponse } from '../errors'
+import { responseFailure, responseSuccess } from './response'
 
 const baseURL: string = 'http://0.0.0.0:5000'
 
-// type BasePath = 'environments' | 'projects' | ''
-
 type RequestWithData = { path: string; data?: { [key: string]: any } | any[] }
-
 type Query = Record<string, string | number | boolean>
 
-export type HttpClient = {
-  get: <T>(args: { path: string; query?: Query }) => Promise<T>
-  del: <T>(args: { path: string; query?: Query }) => Promise<T>
+export class HttpClient {
+  private headers: Record<string, string>
 
-  put: <T>(args: RequestWithData) => Promise<T>
-  post: <T>(args: RequestWithData) => Promise<T>
-  patch: <T>(args: RequestWithData) => Promise<T>
-}
+  constructor(args: {
+    version?: string
+    authorization: {
+      envApiKey?: string
+      workspaceApiKey?: string
+    }
+  }) {
+    const {
+      authorization: { envApiKey, workspaceApiKey },
+    } = args
 
-export function createHttpClient(args: {
-  version?: string
-  authorization: {
-    envApiKey?: string
-    workspaceApiKey?: string
-  }
-}): HttpClient {
-  const {
-    authorization: { envApiKey, workspaceApiKey },
-  } = args
+    const headers = {
+      'Content-Type': 'application/json',
+      'User-Agent': 'EnvEase SDK/0.0.1',
+    } as Record<string, string>
 
-  const headers = {
-    'Content-Type': 'application/json',
-    'User-Agent': 'EnvEase SDK/0.0.1',
-  } as Record<string, string>
+    if (envApiKey) {
+      headers['x-api-key'] = envApiKey
+    }
 
-  if (envApiKey) {
-    headers['x-api-key'] = envApiKey
-  }
+    if (workspaceApiKey) {
+      // headers['x-admin-token'] = workspaceToken
+      headers['x-api-key'] = workspaceApiKey
+    }
 
-  if (workspaceApiKey) {
-    // headers['x-admin-token'] = workspaceToken
-    headers['x-api-key'] = workspaceApiKey
+    this.headers = headers
   }
 
-  async function get<T>(args: { path: string; query?: Query }): Promise<T> {
-    // let url = `${baseURL}${basePath === '' ? '' : `/${basePath}`}${args.path ?? ''}`
+  private async get<T>(args: { path: string; query?: Query }): Promise<T> {
     let url = `${baseURL}${args.path ?? ''}`
 
     if (args.query) {
       const query = args.query
-
       const queryString = Object.keys(query)
         .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(query[k]))
         .join('&')
-
       url += '?' + queryString
     }
 
     try {
       const response = await fetchWithRetry(url, {
         method: 'GET',
-        headers,
+        headers: this.headers,
       })
 
       if (!response.ok) {
-        // TODO: errors
-        const errorData = await response.json() // Parse error response
-        throw errorData // Throw the entire error response object
+        const errorData = await response.json()
+        throw errorData
       }
 
       const data = await response.json()
@@ -80,82 +72,26 @@ export function createHttpClient(args: {
     }
   }
 
-  async function post<T>(args: {
-    path: string
-    data?: { [key: string]: any } | any[]
-  }): Promise<T> {
-    const reqHeaders = headers
-
-    if (!args.data) {
-      delete reqHeaders['Content-Type']
-    }
-
-    return await requestWithData<T>({
-      method: 'POST',
-      headers: reqHeaders,
-      path: args.path,
-      data: args.data,
-    })
-  }
-
-  async function patch<T>(args: {
-    path: string
-    data?: { [key: string]: any } | any[]
-  }): Promise<T> {
-    const reqHeaders = headers
-
-    if (!args.data) {
-      delete reqHeaders['Content-Type']
-    }
-
-    console.log({ reqHeaders })
-
-    return await requestWithData<T>({
-      method: 'PATCH',
-      headers: reqHeaders,
-      path: args.path,
-      data: args.data,
-    })
-  }
-
-  async function put<T>(args: { path: string; data?: { [key: string]: any } | any[] }): Promise<T> {
-    const reqHeaders = headers
-
-    if (!args.data) {
-      delete reqHeaders['Content-Type']
-    }
-
-    return await requestWithData<T>({
-      method: 'PUT',
-      headers: reqHeaders,
-      path: args.path,
-      data: args.data,
-    })
-  }
-
-  async function del<T>(args: { path: string; query?: Query }): Promise<T> {
+  private async delete<T>(args: { path: string; query?: Query }): Promise<T> {
     let url = `${baseURL}${args.path ?? ''}`
 
     if (args.query) {
       const query = args.query
-
       const queryString = Object.keys(query)
         .map((k) => encodeURIComponent(k) + '=' + encodeURIComponent(query[k]))
         .join('&')
-
       url += '?' + queryString
     }
 
     try {
       const response = await fetchWithRetry(url, {
         method: 'DELETE',
-        headers,
+        headers: this.headers,
       })
 
       if (!response.ok) {
-        // TODO: errors
-        const errorData = await response.json() // Parse error response
-        throw errorData // Throw the entire error response object
+        const errorData = await response.json()
+        throw errorData
       }
 
       if (response.status === 204) {
@@ -175,53 +111,104 @@ export function createHttpClient(args: {
     }
   }
 
-  return {
-    del,
-    get,
-    put,
-    post,
-    patch,
+  private async put<T>(args: RequestWithData): Promise<T> {
+    return await this.requestWithData<T>({
+      method: 'PUT',
+      headers: this.headers,
+      path: args.path,
+      data: args.data,
+    })
+  }
+
+  private async post<T>(args: RequestWithData): Promise<T> {
+    return await this.requestWithData<T>({
+      method: 'POST',
+      headers: this.headers,
+      path: args.path,
+      data: args.data,
+    })
+  }
+
+  private async patch<T>(args: RequestWithData): Promise<T> {
+    return await this.requestWithData<T>({
+      method: 'PATCH',
+      headers: this.headers,
+      path: args.path,
+      data: args.data,
+    })
+  }
+
+  public async sendApiRequest<T = object, E = object>(args: {
+    method: 'GET' | 'DELETE' | 'POST' | 'PATCH' | 'PUT'
+    path: string
+    data?: { [key: string]: any } | any[]
+    query?: Record<string, string | number | boolean>
+  }) {
+    const { method, path, data, query } = args
+    try {
+      let response: T
+
+      if (method === 'GET' || method === 'DELETE') {
+        const m = method === 'GET' ? 'get' : 'delete'
+        response = await this[m]<T>({ path, query })
+      } else {
+        response = await this.requestWithData<T>({ method, path, data, headers: this.headers })
+      }
+
+      return responseSuccess(response)
+    } catch (error) {
+      const apiError = createApiErrorFromResponse<E>(error)
+      return responseFailure(apiError)
+    }
+  }
+
+  private async requestWithData<T>(args: {
+    method: 'POST' | 'PATCH' | 'PUT'
+    headers: Record<string, string>
+    path: string
+    data?: { [key: string]: any } | any[]
+  }): Promise<T> {
+    const { method, headers, path, data } = args
+    const url = `${baseURL}${path ?? ''}`
+    console.log(url)
+
+    try {
+      const response = await fetchWithRetry(url, {
+        method,
+        headers,
+        body: data ? JSON.stringify(data) : undefined,
+      })
+
+      if (!response.ok) {
+        const errorData = await response.json()
+        console.error(errorData)
+        throw errorData
+      }
+
+      if (response.status === 204) {
+        console.log('No content')
+        return null as T
+      }
+
+      const responseData = await response.json()
+      return responseData as T
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error('A network-related error occurred:', error.message)
+        throw error
+      } else {
+        throw error
+      }
+    }
   }
 }
 
-async function requestWithData<T>(args: {
-  method: 'POST' | 'PATCH' | 'PUT'
-  headers: Record<string, string>
-  path: string
-  data?: { [key: string]: any } | any[]
-}): Promise<T> {
-  const { method, headers, path, data } = args
-
-  // const url = `${baseURL}${basePath == '' ? '' : basePath}${path ?? ''}`
-  const url = `${baseURL}${path ?? ''}`
-  console.log(url)
-
-  try {
-    const response = await fetchWithRetry(url, {
-      method,
-      headers,
-      body: data ? JSON.stringify(data) : undefined,
-    })
-
-    if (!response.ok) {
-      const errorData = await response.json() // Parse error response
-      console.error(errorData)
-      throw errorData // Throw the entire error response object
-    }
-
-    if (response.status === 204) {
-      console.log('No content')
-      return null as T
-    }
-
-    const responseData = await response.json()
-    return responseData as T
-  } catch (error) {
-    if (error instanceof Error) {
-      console.error('A network-related error occurred:', error.message)
-      throw error
-    } else {
-      throw error
-    }
+export function createHttpClient(args: {
+  version?: string
+  authorization: {
+    envApiKey?: string
+    workspaceApiKey?: string
   }
+}): HttpClient {
+  return new HttpClient(args)
 }
