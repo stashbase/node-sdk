@@ -1,9 +1,8 @@
 import { HttpClient } from '../../../../http/client'
 import { Webhook } from '../../../../types/webhooks'
-import { createApiErrorFromResponse } from '../../../../errors'
 import { SingleWebhookArgs } from '../../../../types/aruguments'
 import { GetWebhookError } from '../../../../types/errors/webhooks'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
+import { ApiResponse } from '../../../../http/response'
 
 export type GetWebhookArgs = SingleWebhookArgs<{
   /** Whether to include the webhook's signing secret in the response */
@@ -27,17 +26,11 @@ async function getWebhook<T extends boolean>(
 ): Promise<ApiResponse<WebhookWithConditionalSecret<T>, GetWebhookError>> {
   const { webhookId, withSecret } = args
 
-  try {
-    const webhook = await envClient.get<WebhookWithConditionalSecret<T>>({
-      path: `/v1/webhooks/${webhookId}`,
-      query: withSecret ? { 'with-secret': true } : undefined,
-    })
-
-    return responseSuccess(webhook)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<GetWebhookError>(error)
-    return responseFailure(apiError)
-  }
+  return envClient.sendApiRequest<WebhookWithConditionalSecret<T>, GetWebhookError>({
+    method: 'GET',
+    path: `/v1/webhooks/${webhookId}`,
+    query: withSecret ? { 'with-secret': true } : undefined,
+  })
 }
 
 export { getWebhook }

@@ -1,7 +1,6 @@
 import { HttpClient } from '../../../../http/client'
-import { createApiErrorFromResponse } from '../../../../errors'
+import { ApiResponse } from '../../../../http/response'
 import { ListSecretsError } from '../../../../types/errors/secrets'
-import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import {
   ListSecretsOptions,
   ListSecretsQueryParams,
@@ -42,17 +41,13 @@ async function listSecrets(
   const query =
     Object.keys(queryObj).length > 0 ? (queryObj as Record<string, string | boolean>) : undefined
 
-  try {
-    const secrets = await envClient.get<ListSecretsResData>({
-      path: '/v1/secrets',
-      query,
-    })
+  const path = '/v1/secrets'
 
-    return responseSuccess(secrets)
-  } catch (error) {
-    const apiError = createApiErrorFromResponse<ListSecretsError>(error)
-    return responseFailure(apiError)
-  }
+  return envClient.sendApiRequest<ListSecretsResData, ListSecretsError>({
+    method: 'GET',
+    path,
+    query,
+  })
 }
 
 export { listSecrets }
