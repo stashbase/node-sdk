@@ -92,7 +92,7 @@ interface ChangelogItemBase {
  */
 export type ChangelogItem = ChangelogItemBase & {
   /** The change details. */
-  change: {
+  secrets: {
     /** The new secrets. */
     new?: NewSecret[]
     /** The renamed secrets. */
@@ -109,7 +109,7 @@ export type ChangelogItem = ChangelogItemBase & {
  */
 export type ChangelogItemWithValues = ChangelogItemBase & {
   /** The change details with values. */
-  change: {
+  secrets: {
     /** The new secrets with values. */
     new?: NewSecretWithValues[]
     /** The renamed secrets with values. */
