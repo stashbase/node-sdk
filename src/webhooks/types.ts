@@ -28,18 +28,43 @@ export type Event = {
   testMode: boolean
 
   /**
-   * @summary Event data
+   * @summary Event Data
    */
   data: {
     /**
-     * @summary Id of the workspace
+     * @summary Workspace Data
      */
-    workspaceId: string
+    workspace: {
+      /**
+       * @summary Unique Workspace ID
+       */
+      id: string
+
+      /**
+       * @summary Workspace Name
+       */
+      name: string
+
+      /**
+       * @summary Unique Workspace Slug
+       */
+      slug: string
+    }
 
     /**
-     * @summary Name of the project
+     * @summary Project Data
      */
-    project: string
+    project: {
+      /**
+       * @summary Unique Project ID
+       */
+      id: string
+
+      /**
+       * @summary Project Name
+       */
+      name: string
+    }
 
     /**
      * @summary Environment Data
