@@ -42,9 +42,19 @@ export type Event = {
     project: string
 
     /**
-     * @summary Name of the environment
+     * @summary Environment Data
      */
-    environment: string
+    environment: {
+      /**
+       * @summary Unique Environment ID
+       */
+      id: string
+
+      /**
+       * @summary Environment Name
+       */
+      name: string
+    }
   }
 }
 
