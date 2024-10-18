@@ -23,7 +23,7 @@ export type Event = {
 
   /**
    * @summary Test mode
-   * @description Whether the event triggered in test mode
+   * @description Whether the event was triggered in test mode
    */
   testMode: boolean
 
