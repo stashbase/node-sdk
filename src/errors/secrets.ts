@@ -41,7 +41,7 @@ export const invalidSecretNameError = (): InvalidSecretNameValidationError =>
     details: undefined,
   })
 
-export const duplicateSecretKeysError = (
+export const duplicateSecretNamesError = (
   secretNames: Array<string>
 ): DuplicateSecretsNamesValidationError =>
   createSecretsError({
@@ -52,7 +52,7 @@ export const duplicateSecretKeysError = (
     },
   })
 
-export const duplicateNewSecretKeysError = (
+export const duplicateNewSecretNamesError = (
   secretNames: Array<string>
 ): DuplicateNewSecretNamesValidationError =>
   createSecretsError({
@@ -96,7 +96,7 @@ export const invalidNewSecretNamesError = (
     },
   })
 
-export const newNamesSameAsNames = (
+export const newSecretNamesSameAsNamesError = (
   secretNames: Array<string>
 ): NewSecretNamesSameAsNamesValidationError =>
   createSecretsError({
