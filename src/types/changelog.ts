@@ -12,8 +12,8 @@ export interface ListChangelogOptions {
  * Represents a new secret.
  */
 export interface NewSecret {
-  /** The new key of the secret. */
-  newKey: string
+  /** The new name of the secret. */
+  newName: string
 }
 
 /**
@@ -28,8 +28,8 @@ export type NewSecretWithValues = NewSecret & {
  * Represents an updated secret.
  */
 export interface UpdatedSecret {
-  /** The key of the updated secret. */
-  key: string
+  /** The name of the updated secret. */
+  name: string
 }
 
 /**
@@ -46,8 +46,8 @@ export type UpdatedSecretWithValues = UpdatedSecret & {
  * Represents a deleted secret change.
  */
 export interface DeletedSecret {
-  /** The old key of the deleted secret. */
-  oldKey: string
+  /** The old name of the deleted secret. */
+  oldName: string
 }
 
 /**
@@ -62,10 +62,10 @@ export type DeletedSecretWithValues = DeletedSecret & {
  * Represents a renamed secret.
  */
 export interface RenamedSecret {
-  /** The old key of the renamed secret. */
-  oldKey: string
-  /** The new key of the renamed secret. */
-  newKey: string
+  /** The old name of the renamed secret. */
+  oldName: string
+  /** The new name of the renamed secret. */
+  newName: string
 }
 
 /**
