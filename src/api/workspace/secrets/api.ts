@@ -6,8 +6,8 @@ import {
 } from '../../../errors/secrets'
 import { HttpClient } from '../../../http/client'
 import { responseFailure } from '../../../http/response'
-import { SecretKey } from '../../../types/secretKey'
 import {
+  SecretName,
   CreateSecretsItem,
   GetSecretOptions,
   ListSecretsOptions,
@@ -66,17 +66,17 @@ export class SecretsAPI {
   }
 
   /**
-   * Retrieves a single secret by its key from a specific project and environment.
+   * Retrieves a single secret by its name from a specific project and environment.
    *
-   * @param key - The key of the secret to retrieve.
+   * @param name - The name of the secret to retrieve.
    * @param options - Optional parameters for retrieving the secret.
    * @returns A promise that resolves to the secret object or an error response.
    */
-  async get(key: SecretKey, options?: GetSecretOptions) {
-    const validationError = this.validateIdentifiers(key)
+  async get(name: SecretName, options?: GetSecretOptions) {
+    const validationError = this.validateIdentifiers(name)
     if (validationError) return responseFailure(validationError)
 
-    return await getSecret({ key, options, ...this.getHandlerArgs() })
+    return await getSecret({ name, options, ...this.getHandlerArgs() })
   }
 
   /**
@@ -95,11 +95,11 @@ export class SecretsAPI {
   /**
    * Lists specific secrets for a project and environment.
    *
-   * @param only - An array of secret keys to retrieve.
+   * @param only - An array of secret names to retrieve.
    * @param options - Optional parameters for listing secrets.
    * @returns A promise that resolves to an array of specified secret objects or an error response.
    */
-  async listOnly(only: SecretKey[], options?: ListSecretsOptions) {
+  async listOnly(only: SecretName[], options?: ListSecretsOptions) {
     const identifierValidationError = this.validateIdentifiers()
     if (identifierValidationError) return responseFailure(identifierValidationError)
 
@@ -121,11 +121,11 @@ export class SecretsAPI {
   /**
    * Lists secrets for a project and environment, excluding secrets with specified keys.
    *
-   * @param exclude - An array of secret keys to exclude from the response.
+   * @param exclude - An array of secret names to exclude from the response.
    * @param options - Optional parameters for listing secrets.
-   * @returns A promise that resolves to an array of secret objects (excluding specified keys) or an error response.
+   * @returns A promise that resolves to an array of secret objects (excluding specified names) or an error response.
    */
-  async listExclude(exclude: SecretKey[], options?: ListSecretsOptions) {
+  async listExclude(exclude: SecretName[], options?: ListSecretsOptions) {
     const validationError = this.validateIdentifiers()
     if (validationError) return responseFailure(validationError)
 
@@ -148,7 +148,7 @@ export class SecretsAPI {
    * Creates new secrets in a specific project and environment.
    *
    * @param data - The secret data to create.
-   * @returns A promise that resolves to an object containing the count of created secrets and any duplicate keys, or an error response.
+   * @returns A promise that resolves to an object containing the count of created secrets and any duplicate names, or an error response.
    */
   async create(data: CreateSecretsItem[]) {
     const validationError = validateCreateSecretsInput(data)
@@ -162,7 +162,7 @@ export class SecretsAPI {
   }
 
   /**
-   * Sets secrets in a specific project and environment, overwriting existing ones with the same keys.
+   * Sets secrets in a specific project and environment, overwriting existing ones with the same names.
    *
    * @param data - The secret data to set.
    * @returns A promise that resolves to null on success or an error response.
@@ -184,7 +184,7 @@ export class SecretsAPI {
    * Updates existing secrets in a specific project and environment.
    *
    * @param data - The secret data to update.
-   * @returns A promise that resolves to an object containing the count of updated secrets and any keys not found, or an error response.
+   * @returns A promise that resolves to an object containing the count of updated secrets and any names not found, or an error response.
    */
   async update(data: UpdateSecretsItem[]) {
     const identifierValidationError = this.validateIdentifiers()
@@ -202,26 +202,26 @@ export class SecretsAPI {
   /**
    * Deletes specific secrets from a project and environment.
    *
-   * @param keys - An array of secret keys to remove.
-   * @returns A promise that resolves to an object containing the count of deleted secrets and any keys not found, or an error response.
+   * @param names - An array of secret names to remove.
+   * @returns A promise that resolves to an object containing the count of deleted secrets and any names not found, or an error response.
    */
-  async delete(keys: SecretKey[]) {
+  async delete(names: SecretName[]) {
     const identifierValidationError = this.validateIdentifiers()
     if (identifierValidationError) return responseFailure(identifierValidationError)
 
-    if (keys.length === 0) {
+    if (names.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
     }
 
-    const { invalidSecretNames } = validateSecretNames(keys)
+    const { invalidSecretNames } = validateSecretNames(names)
 
     if (invalidSecretNames.length > 0) {
       const error = invalidSecretNamesError(invalidSecretNames)
       return responseFailure(error)
     }
 
-    return await deleteSecrets({ ...this.getHandlerArgs(), keys })
+    return await deleteSecrets({ ...this.getHandlerArgs(), names })
   }
 
   /**
