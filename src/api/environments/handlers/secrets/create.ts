@@ -4,7 +4,7 @@ import { CreateSecretsResData } from '../../../../types/secrets'
 import { ApiResponse } from '../../../../http/response'
 
 export type CreateSecretsData = Array<{
-  key: Uppercase<string>
+  name: Uppercase<string>
   value: string
   description?: string | null
 }>

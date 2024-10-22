@@ -4,7 +4,7 @@ import { SetSecretsError } from '../../../../types/errors/secrets'
 import { ApiResponse } from '../../../../http/response'
 
 export type SetSecretsData = Array<{
-  key: Uppercase<string>
+  name: Uppercase<string>
   value: string
   description?: string | null
 }>

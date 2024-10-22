@@ -2,15 +2,15 @@ import { HttpClient } from '../../../../http/client'
 import { ApiResponse } from '../../../../http/response'
 import { ListSecretsError } from '../../../../types/errors/secrets'
 import {
+  SecretName,
   ListSecretsOptions,
-  ListSecretsQueryParams,
   ListSecretsResData,
+  ListSecretsQueryParams,
 } from '../../../../types/secrets'
-import { SecretKey } from '../../../../types/secretKey'
 
 async function listSecrets(
   envClient: HttpClient,
-  options?: ListSecretsOptions & { only?: SecretKey[]; exclude?: SecretKey[] }
+  options?: ListSecretsOptions & { only?: SecretName[]; exclude?: SecretName[] }
 ): Promise<ApiResponse<ListSecretsResData, ListSecretsError>> {
   const { omit, expandRefs, only, exclude } = options || {}
 

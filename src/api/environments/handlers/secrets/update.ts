@@ -1,14 +1,14 @@
 import { HttpClient } from '../../../../http/client'
 import { AtLeastOne } from '../../../../types/util'
-import { UpdateSecretsResData } from '../../../../types/secrets'
+import { SecretName, UpdateSecretsResData } from '../../../../types/secrets'
 import { UpdateSecretsError } from '../../../../types/errors/secrets'
 import { ApiResponse } from '../../../../http/response'
 
 export type UpdateSecretsData = Array<
   {
-    key: Uppercase<string>
+    name: SecretName
   } & AtLeastOne<{
-    newKey: Uppercase<string>
+    newName: SecretName
     value: string
     description: string | null
   }>
