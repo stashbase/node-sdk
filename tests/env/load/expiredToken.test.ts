@@ -5,7 +5,7 @@ test('Returns exipred token error', async () => {
   const envApi = createEnvClient('5D0sqWbu8BzauYK76bFQ4hrIstkQKeqr')
 
   const { error } = await envApi.load({
-    print: 'key',
+    print: 'name',
   })
 
   if (error) {

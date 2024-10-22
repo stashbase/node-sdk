@@ -7,7 +7,7 @@ test('List environment secrets', async () => {
   const { data, error } = await envApi.secrets.list()
   if (error) {
     const { code } = error
-    console.log(code)
+    console.log(code )
   } else {
     console.log('Data:\n')
     console.log(data)
