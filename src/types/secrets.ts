@@ -1,5 +1,6 @@
-import { SecretName } from './secretKey'
 import { AtLeastOne } from './util'
+
+export type SecretName = Uppercase<string>
 
 export interface Secret {
   /** The name of the secret, always in uppercase */
