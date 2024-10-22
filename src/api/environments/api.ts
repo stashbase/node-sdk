@@ -19,8 +19,8 @@ import {
 } from '../../utils/inputValidation'
 import { SetSecretsData, setSecrets } from './handlers/secrets/set'
 import {
-  invalidSecretKeyError,
-  invalidSecretKeysError,
+  invalidSecretNameError,
+  invalidSecretNamesError,
   noDataProvidedError,
 } from '../../errors/secrets'
 import { ApiResponse, responseFailure } from '../../http/response'
@@ -120,7 +120,7 @@ class EnvSecretsAPI {
    */
   async get(key: string, options?: GetSecretOptions) {
     if (!isValidSecretKey(key)) {
-      const error = invalidSecretKeyError()
+      const error = invalidSecretNameError()
       return responseFailure(error)
     }
 
@@ -146,7 +146,7 @@ class EnvSecretsAPI {
     const { invalidSecretKeys } = validateSecretKeys(only)
 
     if (invalidSecretKeys.length > 0) {
-      const error = invalidSecretKeysError(invalidSecretKeys)
+      const error = invalidSecretNamesError(invalidSecretKeys)
       return responseFailure(error)
     }
 
@@ -169,7 +169,7 @@ class EnvSecretsAPI {
     const { invalidSecretKeys } = validateSecretKeys(exclude)
 
     if (invalidSecretKeys.length > 0) {
-      const error = invalidSecretKeysError(invalidSecretKeys)
+      const error = invalidSecretNamesError(invalidSecretKeys)
       return responseFailure(error)
     }
 
@@ -239,7 +239,7 @@ class EnvSecretsAPI {
     const { invalidSecretKeys } = validateSecretKeys(keys)
 
     if (invalidSecretKeys.length > 0) {
-      const error = invalidSecretKeysError(invalidSecretKeys)
+      const error = invalidSecretNamesError(invalidSecretKeys)
       return responseFailure(error)
     }
 
