@@ -1,20 +1,24 @@
 import { ApiResponse } from '../../../../http/response'
-import { GetSecretOptions, GetSecretQueryParams, GetSecretResData } from '../../../../types/secrets'
+import {
+  GetSecretOptions,
+  GetSecretQueryParams,
+  GetSecretResData,
+  SecretName,
+} from '../../../../types/secrets'
 import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 import { GetSecretError as SharedGetSecretsError } from '../../../../types/errors/secrets'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
-import { SecretKey } from '../../../../types/secretKey'
 
 type GetSecretError = SharedGetSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
 type GetSecretResponse = Promise<ApiResponse<GetSecretResData, GetSecretError>>
 
 export type GetSecretArgs = ProjectEnvHandlerArgs<{
-  key: SecretKey
+  name: SecretName
   options?: GetSecretOptions
 }>
 
 async function getSecret(args: GetSecretArgs): GetSecretResponse {
-  const { client, project, environment, key } = args
+  const { client, project, environment, name } = args
   const omit = args.options?.omit
   const expandRefs = args.options?.expandRefs
 
@@ -36,7 +40,7 @@ async function getSecret(args: GetSecretArgs): GetSecretResponse {
 
   return await client.sendApiRequest<GetSecretResData, GetSecretError>({
     method: 'GET',
-    path: `/v1/projects/${project}/environments/${environment}/secrets/${key}`,
+    path: `/v1/projects/${project}/environments/${environment}/secrets/${name}`,
     query: Object.keys(query).length > 0 ? query : undefined,
   })
 }

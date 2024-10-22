@@ -1,7 +1,8 @@
 import {
+  SecretName,
   ListSecretsOptions,
-  ListSecretsQueryParams,
   ListSecretsResData,
+  ListSecretsQueryParams,
 } from '../../../../types/secrets'
 import { ApiResponse } from '../../../../http/response'
 import {
@@ -9,7 +10,6 @@ import {
   ProjectNotFoundError,
   GenericApiError,
 } from '../../../../types/errors'
-import { SecretKey } from '../../../../types/secretKey'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 
 type ListSecretsError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
@@ -20,16 +20,16 @@ export type ListSecretsArgs = ListSecretsBaseArgs
 
 export type ListOnlySecretsArgs = ListSecretsBaseArgs & {
   /* List only secrets with these keys */
-  only: SecretKey[]
+  only: SecretName[]
 }
 
 export type ListExcludeSecretsArgs = ListSecretsBaseArgs & {
   /* Exclude secrets with these keys */
-  exclude: SecretKey[]
+  exclude: SecretName[]
 }
 
 async function listSecrets(
-  args: ListSecretsBaseArgs & { only?: SecretKey[]; exclude?: SecretKey[] }
+  args: ListSecretsBaseArgs & { only?: SecretName[]; exclude?: SecretName[] }
 ): Promise<ApiResponse<ListSecretsResData, ListSecretsError>> {
   const { client, project, environment } = args
   const { only, exclude } = args
