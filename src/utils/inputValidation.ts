@@ -373,10 +373,10 @@ export const validateSecretNames = (
   return { invalidSecretNames: Array.from(invalidSecretNames) }
 }
 
-const isValidSecretName = (key: string) =>
-  key.length >= 2 &&
-  key.length < 255 &&
-  isAlphanumericUppercaseWithUnderscore(key) &&
-  !startsWithNumber(key)
+const isValidSecretName = (name: string) =>
+  name.length >= 2 &&
+  name.length < 255 &&
+  isAlphanumericUppercaseWithUnderscore(name) &&
+  !startsWithNumber(name)
 
 export { isValidProjectName, isValidProjectIdentifier, isValidEnvironmentName, isValidSecretName }
