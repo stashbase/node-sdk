@@ -18,14 +18,14 @@ export type ListSecretsOptions = GetSecretOptions
 export interface CreateSecretsResData {
   /** The number of secrets successfully created */
   createdCount: number
-  /** An array of secret keys that were duplicates and not created */
+  /** An array of secret names that were duplicates and not created */
   duplicateSecrets: Array<SecretName>
 }
 
 export interface DeleteSecretsResData {
   /** The number of secrets successfully deleted */
   deletedCount: number
-  /** An array of secret keys that were not found and thus not deleted */
+  /** An array of secret names that were not found and thus not deleted */
   notFoundSecrets: Array<SecretName>
 }
 
@@ -44,7 +44,7 @@ export interface SetSecretsResData {
 export interface UpdateSecretsResData {
   /** The number of secrets successfully updated */
   updatedCount: number
-  /** An array of secret keys that were not found and thus not updated */
+  /** An array of secret names that were not found and thus not updated */
   notFoundSecrets: Array<SecretName>
 }
 
@@ -60,8 +60,8 @@ export interface ListSecretsQueryParams {
   /** A string specifying which secrets to exclude from the response */
   exclude?: string
 
-  // only?: Array<SecretKey>
-  // exclude?: Array<SecretKey>
+  // only?: Array<SecretName>
+  // exclude?: Array<SecretName>
 }
 
 export type GetSecretQueryParams = Pick<ListSecretsQueryParams, 'omit' | 'expand-refs'>
