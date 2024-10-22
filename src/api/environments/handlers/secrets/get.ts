@@ -5,7 +5,7 @@ import { GetSecretOptions, GetSecretQueryParams, GetSecretResData } from '../../
 
 async function getSecret(
   envClient: HttpClient,
-  key: string,
+  name: string,
   options?: GetSecretOptions
 ): Promise<ApiResponse<GetSecretResData, GetSecretError>> {
   const omit = options?.omit
@@ -27,7 +27,7 @@ async function getSecret(
     }
   }
 
-  const path = `/v1/secrets/${key}`
+  const path = `/v1/secrets/${name}`
 
   return envClient.sendApiRequest<GetSecretResData, GetSecretError>({
     method: 'GET',
