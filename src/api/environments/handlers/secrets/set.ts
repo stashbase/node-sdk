@@ -2,9 +2,10 @@ import { HttpClient } from '../../../../http/client'
 import { SetSecretsResData } from '../../../../types/secrets'
 import { SetSecretsError } from '../../../../types/errors/secrets'
 import { ApiResponse } from '../../../../http/response'
+import { SecretName } from '../../../../types/secrets'
 
 export type SetSecretsData = Array<{
-  name: Uppercase<string>
+  name: SecretName
   value: string
   description?: string | null
 }>
