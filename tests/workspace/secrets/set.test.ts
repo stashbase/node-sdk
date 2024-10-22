@@ -9,11 +9,11 @@ describe('Set secrets', () => {
       .secrets('proj_iBgCx5tegfVaKzjywTg2ck', 'env_3NCdY7kmbLJpZcpMg4W6wk')
       .set([
         {
-          key: 'KEYS',
+          name: 'KEYS',
           value: '123',
         },
         {
-          key: 'SECRET_234',
+          name: 'SECRET_234',
           value: 'SECRET_234',
         },
       ])

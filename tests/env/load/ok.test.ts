@@ -5,7 +5,7 @@ test('Load specific env with env token and inject the variables into the process
   const envApi = createEnvClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
   await envApi.load({
-    print: 'key-value',
+    print: 'name-value',
   })
 
   console.log(process.env.DB_URL)
