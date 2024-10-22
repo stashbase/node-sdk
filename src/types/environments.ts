@@ -1,5 +1,4 @@
-import { SecretKey } from './secretKey'
-import { ListSecretsQueryParams } from './secrets'
+import { ListSecretsQueryParams, SecretName } from './secrets'
 
 export type EnvironmentType = 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
 
@@ -7,7 +6,7 @@ export type LoadEnvironmentOptions = {
   /** Whether this methid is enabled or not. */
   enabled?: boolean
   /** Specifies how to print the environment variables. */
-  print?: 'key-value' | 'key' | 'none'
+  print?: 'name-value' | 'name' | 'none'
   /** Expand all referred secrets to their values. */
   expandRefs?: boolean
 }
@@ -32,7 +31,7 @@ export type LoadEnvironmentResponse = {
   }
 
   /** An array of secrets associated with the environment. */
-  secrets: Array<{ key: SecretKey; value: string }>
+  secrets: Array<{ name: SecretName; value: string }>
 }
 
 export interface Environment {
