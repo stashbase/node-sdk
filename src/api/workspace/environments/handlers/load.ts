@@ -58,8 +58,8 @@ async function loadEnvironment(
     return responseSuccess(null)
   }
 
-  const secretsObj = (secrets ?? []).reduce((obj: { [key: string]: string }, item) => {
-    obj[item.key] = item.value
+  const secretsObj = (secrets ?? []).reduce((obj: { [name: string]: string }, item) => {
+    obj[item.name] = item.value
     return obj
   }, {})
 
@@ -73,11 +73,11 @@ async function loadEnvironment(
 
   const printType = args?.options?.print
 
-  if (printType === 'key' || printType === 'key-value') {
-    if (printType === 'key') {
-      printSecretsTable.keys(secrets)
+  if (printType === 'name' || printType === 'name-value') {
+    if (printType === 'name') {
+      printSecretsTable.names(secrets)
     } else {
-      printSecretsTable.keyValues(secrets)
+      printSecretsTable.nameValues(secrets)
     }
   }
 

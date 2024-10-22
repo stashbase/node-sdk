@@ -1,8 +1,8 @@
 import Table from 'cli-table3'
 
-function printKeyValueTable(secrets: Array<{ key: string; value: string }>) {
+function printNameValueTable(secrets: Array<{ name: string; value: string }>) {
   const table = new Table({
-    head: ['Key', 'Value'],
+    head: ['Name', 'Value'],
     // colWidths: [40, 40],
     wordWrap: true,
     style: {
@@ -11,16 +11,16 @@ function printKeyValueTable(secrets: Array<{ key: string; value: string }>) {
     },
   })
 
-  for (const { key, value } of secrets) {
-    table.push([key, value])
+  for (const { name, value } of secrets) {
+    table.push([name, value])
   }
 
   console.log(table.toString())
 }
 
-function printKeyTable(secrets: Array<{ key: string; value: string }>) {
+function printNameTable(secrets: Array<{ name: string }>) {
   const table = new Table({
-    head: ['Key'],
+    head: ['Name'],
     wordWrap: true,
     style: {
       compact: true,
@@ -28,14 +28,14 @@ function printKeyTable(secrets: Array<{ key: string; value: string }>) {
     },
   })
 
-  for (const { key } of secrets) {
-    table.push([key])
+  for (const { name } of secrets) {
+    table.push([name])
   }
 
   console.log(table.toString())
 }
 
 export const printSecretsTable = {
-  keys: printKeyTable,
-  keyValues: printKeyValueTable,
+  names: printNameTable,
+  nameValues: printNameValueTable,
 }
