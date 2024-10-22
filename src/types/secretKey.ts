@@ -1,1 +1,1 @@
-export type SecretKey = Uppercase<string>
+export type SecretName = Uppercase<string>
