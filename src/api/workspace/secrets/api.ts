@@ -17,9 +17,9 @@ import {
 import {
   isValidEnvironmentIdentifier,
   isValidProjectIdentifier,
-  isValidSecretKey,
+  isValidSecretName,
   validateCreateSecretsInput,
-  validateSecretKeys,
+  validateSecretNames,
   validateSetSecretsInput,
   validateUpdateSecretsInput,
 } from '../../../utils/inputValidation'
@@ -46,7 +46,7 @@ export class SecretsAPI {
     return { client: this.httpClient, project: this.project, environment: this.environment }
   }
 
-  private validateIdentifiers(secretKey?: string) {
+  private validateIdentifiers(secretName?: string) {
     const { project, environment } = this
 
     if (!isValidProjectIdentifier(project)) {
@@ -59,7 +59,7 @@ export class SecretsAPI {
       return error
     }
 
-    if (secretKey !== undefined && !isValidSecretKey(secretKey)) {
+    if (secretName !== undefined && !isValidSecretName(secretName)) {
       const error = invalidSecretNameError()
       return error
     }
@@ -108,10 +108,10 @@ export class SecretsAPI {
       return responseFailure(error)
     }
 
-    const { invalidSecretKeys } = validateSecretKeys(only)
+    const { invalidSecretNames } = validateSecretNames(only)
 
-    if (invalidSecretKeys.length > 0) {
-      const error = invalidSecretNamesError(invalidSecretKeys)
+    if (invalidSecretNames.length > 0) {
+      const error = invalidSecretNamesError(invalidSecretNames)
       return responseFailure(error)
     }
 
@@ -134,10 +134,10 @@ export class SecretsAPI {
       return responseFailure(error)
     }
 
-    const { invalidSecretKeys } = validateSecretKeys(exclude)
+    const { invalidSecretNames } = validateSecretNames(exclude)
 
-    if (invalidSecretKeys.length > 0) {
-      const error = invalidSecretNamesError(invalidSecretKeys)
+    if (invalidSecretNames.length > 0) {
+      const error = invalidSecretNamesError(invalidSecretNames)
       return responseFailure(error)
     }
 
@@ -214,10 +214,10 @@ export class SecretsAPI {
       return responseFailure(error)
     }
 
-    const { invalidSecretKeys } = validateSecretKeys(keys)
+    const { invalidSecretNames } = validateSecretNames(keys)
 
-    if (invalidSecretKeys.length > 0) {
-      const error = invalidSecretNamesError(invalidSecretKeys)
+    if (invalidSecretNames.length > 0) {
+      const error = invalidSecretNamesError(invalidSecretNames)
       return responseFailure(error)
     }
 
