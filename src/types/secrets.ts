@@ -2,8 +2,8 @@ import { SecretKey } from './secretKey'
 import { AtLeastOne } from './util'
 
 export interface Secret {
-  /** The key of the secret, always in uppercase */
-  key: Uppercase<string>
+  /** The name of the secret, always in uppercase */
+  name: Uppercase<string>
   /** The value of the secret */
   value: string
   /** The description of the secret, can be null */
@@ -79,8 +79,8 @@ export interface GetSecretOptions {
 export type CreateSecretsData = Array<CreateSecretsItem>
 
 export type CreateSecretsItem = {
-  /** The key of the secret */
-  key: SecretKey
+  /** The name of the secret */
+  name: SecretKey
   /** The value of the secret */
   value: string
   /** The description of the secret (optional) */
@@ -90,9 +90,9 @@ export type CreateSecretsItem = {
 export type SetSecretsItem = CreateSecretsItem
 
 export type UpdateSecretsItem = {
-  key: SecretKey
+  name: SecretKey
 } & AtLeastOne<{
-  newKey: SecretKey
+  newName: SecretKey
   value: string
   description: string | null
 }>
