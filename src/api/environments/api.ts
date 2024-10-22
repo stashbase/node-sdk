@@ -26,8 +26,7 @@ import {
 import { ApiResponse, responseFailure } from '../../http/response'
 import { LoadEnvironmentOptions } from '../../types/environments'
 import { deleteAllEnvironmentSecrets } from './handlers/secrets/deleteAll'
-import { GetSecretOptions, ListSecretsOptions } from '../../types/secrets'
-import { SecretKey } from '../../types/secretKey'
+import { GetSecretOptions, ListSecretsOptions, SecretName } from '../../types/secrets'
 import { listWebhooks } from './handlers/webhooks/list'
 import { getWebhook } from './handlers/webhooks/get'
 import { listWebhookLogs } from './handlers/webhooks/listLogs'
@@ -112,19 +111,19 @@ class EnvSecretsAPI {
   constructor(private httpClient: HttpClient) {}
 
   /**
-   * Retrieves a single secret by its key.
+   * Retrieves a single secret by its name.
    *
-   * @param key - The key of the secret to retrieve.
+   * @param name - The name of the secret to retrieve.
    * @param options - Additional options for retrieving the secret.
    * @returns A promise that resolves to the retrieved secret or an error response.
    */
-  async get(key: string, options?: GetSecretOptions) {
-    if (!isValidSecretName(key)) {
+  async get(name: string, options?: GetSecretOptions) {
+    if (!isValidSecretName(name)) {
       const error = invalidSecretNameError()
       return responseFailure(error)
     }
 
-    return getSecret(this.httpClient, key, options)
+    return getSecret(this.httpClient, name, options)
   }
 
   /**
@@ -137,7 +136,7 @@ class EnvSecretsAPI {
     return await listSecrets(this.httpClient, options)
   }
 
-  async listOnly(only: SecretKey[], options?: ListSecretsOptions) {
+  async listOnly(only: SecretName[], options?: ListSecretsOptions) {
     if (!Array.isArray(only) || only.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
@@ -154,13 +153,13 @@ class EnvSecretsAPI {
   }
 
   /**
-   * Retrieves all secrets excluding the specified keys.
+   * Retrieves all secrets excluding the specified names.
    *
-   * @param exclude - An array of secret keys to exclude from the results.
+   * @param exclude - An array of secret names to exclude from the results.
    * @param options - Additional options for listing secrets.
-   * @returns A promise that resolves to an array of secrets excluding the specified secrets by their keys or an error response.
+   * @returns A promise that resolves to an array of secrets excluding the specified secrets by their names or an error response.
    */
-  async listExclude(exclude: SecretKey[], options?: ListSecretsOptions) {
+  async listExclude(exclude: SecretName[], options?: ListSecretsOptions) {
     if (!Array.isArray(exclude) || exclude.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
@@ -180,7 +179,7 @@ class EnvSecretsAPI {
    * Creates new secrets.
    *
    * @param data - An array of secrets to create.
-   * @returns A promise that resolves to an object containing the count of created secrets and any duplicate secrets (keys), or an error response.
+   * @returns A promise that resolves to an object containing the count of created secrets and any duplicate secrets (names), or an error response.
    */
   async create(data: CreateSecretsData) {
     const validationError = validateCreateSecretsInput(data)
@@ -212,7 +211,7 @@ class EnvSecretsAPI {
    * Updates existing secrets.
    *
    * @param data - An array of secrets to update.
-   * @returns A promise that resolves to an object containing the count of updated secrets and any secrets (keys) not found, or an error response.
+   * @returns A promise that resolves to an object containing the count of updated secrets and any secrets (names) not found, or an error response.
    */
   async update(data: UpdateSecretsData) {
     const validationError = validateUpdateSecretsInput(data)
@@ -227,23 +226,23 @@ class EnvSecretsAPI {
   /**
    * Delete specific secrets.
    *
-   * @param keys - An array of secret keys to remove.
-   * @returns A promise that resolves to an object containing the count of deleted secrets and any secrets (keys) not found, or an error response.
+   * @param names - An array of secret names to remove.
+   * @returns A promise that resolves to an object containing the count of deleted secrets and any secrets (names) not found, or an error response.
    */
-  async delete(keys: SecretKey[]) {
-    if (keys.length === 0) {
+  async delete(names: SecretName[]) {
+    if (names.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
     }
 
-    const { invalidSecretNames } = validateSecretNames(keys)
+    const { invalidSecretNames } = validateSecretNames(names)
 
     if (invalidSecretNames.length > 0) {
       const error = invalidSecretNamesError(invalidSecretNames)
       return responseFailure(error)
     }
 
-    return await deleteEnvironmentSecrets(this.httpClient, keys)
+    return await deleteEnvironmentSecrets(this.httpClient, names)
   }
 
   /**
