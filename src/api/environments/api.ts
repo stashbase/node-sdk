@@ -9,10 +9,10 @@ import { getSecret } from './handlers/secrets/get'
 import {
   isValidChangelogChangeId,
   isValidHttpsUrl,
-  isValidSecretKey,
+  isValidSecretName,
   isValidWebhookDescription,
   validateCreateSecretsInput,
-  validateSecretKeys,
+  validateSecretNames,
   validateSetSecretsInput,
   validateUpdateSecretsInput,
   validateWebhookIdForMethod,
@@ -119,7 +119,7 @@ class EnvSecretsAPI {
    * @returns A promise that resolves to the retrieved secret or an error response.
    */
   async get(key: string, options?: GetSecretOptions) {
-    if (!isValidSecretKey(key)) {
+    if (!isValidSecretName(key)) {
       const error = invalidSecretNameError()
       return responseFailure(error)
     }
@@ -143,10 +143,10 @@ class EnvSecretsAPI {
       return responseFailure(error)
     }
 
-    const { invalidSecretKeys } = validateSecretKeys(only)
+    const { invalidSecretNames } = validateSecretNames(only)
 
-    if (invalidSecretKeys.length > 0) {
-      const error = invalidSecretNamesError(invalidSecretKeys)
+    if (invalidSecretNames.length > 0) {
+      const error = invalidSecretNamesError(invalidSecretNames)
       return responseFailure(error)
     }
 
@@ -166,10 +166,10 @@ class EnvSecretsAPI {
       return responseFailure(error)
     }
 
-    const { invalidSecretKeys } = validateSecretKeys(exclude)
+    const { invalidSecretNames } = validateSecretNames(exclude)
 
-    if (invalidSecretKeys.length > 0) {
-      const error = invalidSecretNamesError(invalidSecretKeys)
+    if (invalidSecretNames.length > 0) {
+      const error = invalidSecretNamesError(invalidSecretNames)
       return responseFailure(error)
     }
 
@@ -236,10 +236,10 @@ class EnvSecretsAPI {
       return responseFailure(error)
     }
 
-    const { invalidSecretKeys } = validateSecretKeys(keys)
+    const { invalidSecretNames } = validateSecretNames(keys)
 
-    if (invalidSecretKeys.length > 0) {
-      const error = invalidSecretNamesError(invalidSecretKeys)
+    if (invalidSecretNames.length > 0) {
+      const error = invalidSecretNamesError(invalidSecretNames)
       return responseFailure(error)
     }
 
