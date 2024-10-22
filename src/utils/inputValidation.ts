@@ -1,23 +1,23 @@
-import { UpdateSecretData } from '../api/workspace/secrets/handlers/update'
+import { UpdateSecretsData } from '../api/environments/handlers/secrets/update'
 import {
-  duplicateNewSecretKeysError,
-  duplicateSecretKeysError,
-  invalidNewSecretKeysError,
-  invalidSecretKeysError,
+  duplicateNewSecretNamesError,
+  duplicateSecretNamesError,
+  invalidNewSecretNamesError,
+  invalidSecretNamesError,
   missingPropertiesToUpdateError,
-  newKeysSameAsKeys,
+  newSecretNamesSameAsNamesError,
   noDataProvidedError,
   selfReferencingSecretsError,
 } from '../errors/secrets'
 import { invalidWebhookIdError } from '../errors/webhooks'
 import { responseFailure } from '../http/response'
 import {
-  DuplicateNewSecretKeysValidationError,
-  DuplicateSecretsKeysValidationError,
-  InvalidNewSecretKeysValidationError,
-  InvalidSecretKeysValidationError,
+  DuplicateNewSecretNamesValidationError,
+  DuplicateSecretsNamesValidationError,
+  InvalidNewSecretNamesValidationError,
+  InvalidSecretNamesValidationError,
   MissingPropertiesToUpdateValidationError,
-  NewSecretKeysSameAsKeysValidationError,
+  NewSecretNamesSameAsNamesValidationError,
   NoDataProvidedValidationError,
   SelfReferencingSecretsValidationError,
 } from '../types/errors/secrets'
@@ -165,15 +165,15 @@ export const extractAllSecretsReferences = (secretKey: string): string[] => {
 }
 
 interface SetSecretsItem {
-  key: string
+  name: string
   value: string
   description?: string | null | undefined
 }
 
 type ValidateSetSecretsInputRes =
   | NoDataProvidedValidationError
-  | InvalidSecretKeysValidationError
-  | DuplicateSecretsKeysValidationError
+  | InvalidSecretNamesValidationError
+  | DuplicateSecretsNamesValidationError
   | SelfReferencingSecretsValidationError
   | null
 
@@ -185,44 +185,44 @@ export const validateSetSecretsInput = (
     const error = noDataProvidedError()
     return error
   }
-  const invalidSecretKeys = new Set<string>()
-  const keysWithSelfReference = new Set<string>()
+  const invalidSecretNames = new Set<string>()
+  const namesWithSelfReference = new Set<string>()
 
-  const keyOccurrences = new Map<string, number>()
+  const nameOccurrences = new Map<string, number>()
 
-  for (const { key, value, description: _ } of data) {
-    const isValid = isValidSecretKey(key)
-    if (!isValid) invalidSecretKeys.add(key)
+  for (const { name, value, description: _ } of data) {
+    const isValid = isValidSecretName(name)
+    if (!isValid) invalidSecretNames.add(name)
 
-    const hasSelfReference = secretHasSelfReference(key, value)
+    const hasSelfReference = secretHasSelfReference(name, value)
 
     if (hasSelfReference) {
-      keysWithSelfReference.add(key)
+      namesWithSelfReference.add(name)
     }
 
-    keyOccurrences.set(key, (keyOccurrences.get(key) || 0) + 1)
+    nameOccurrences.set(name, (nameOccurrences.get(name) || 0) + 1)
   }
 
-  if (invalidSecretKeys.size > 0) {
-    const secretKeys = Array.from(invalidSecretKeys)
-    const err = invalidSecretKeysError(secretKeys)
+  if (invalidSecretNames.size > 0) {
+    const secretNames = Array.from(invalidSecretNames)
+    const err = invalidSecretNamesError(secretNames)
     return err
   }
 
-  const duplicateSecretKeys = Array.from(keyOccurrences.entries())
+  const duplicateSecretNames = Array.from(nameOccurrences.entries())
     .filter(([, count]) => count > 1)
-    ?.map(([key]) => key)
+    ?.map(([name]) => name)
 
-  if (duplicateSecretKeys?.length > 0) {
-    const secretKeys = duplicateSecretKeys
-    const error = duplicateSecretKeysError(secretKeys)
+  if (duplicateSecretNames?.length > 0) {
+    const secretNames = duplicateSecretNames
+    const error = duplicateSecretNamesError(secretNames)
 
     return error
   }
 
-  if (keysWithSelfReference.size > 0) {
-    const secretKeys = Array.from(keysWithSelfReference)
-    const error = selfReferencingSecretsError(secretKeys)
+  if (namesWithSelfReference.size > 0) {
+    const secretNames = Array.from(namesWithSelfReference)
+    const error = selfReferencingSecretsError(secretNames)
 
     return error
   }
@@ -235,122 +235,122 @@ export const validateCreateSecretsInput = validateSetSecretsInput
 type ValidateUpdateSecretsInputRes =
   | NoDataProvidedValidationError
   | MissingPropertiesToUpdateValidationError
-  | InvalidSecretKeysValidationError
-  | InvalidNewSecretKeysValidationError
-  | DuplicateSecretsKeysValidationError
-  | DuplicateNewSecretKeysValidationError
+  | InvalidSecretNamesValidationError
+  | InvalidNewSecretNamesValidationError
+  | DuplicateSecretsNamesValidationError
+  | DuplicateNewSecretNamesValidationError
   | SelfReferencingSecretsValidationError
-  | NewSecretKeysSameAsKeysValidationError
+  | NewSecretNamesSameAsNamesValidationError
   | null
 
 export const validateUpdateSecretsInput = (
-  data: UpdateSecretData[]
+  data: UpdateSecretsData
 ): ValidateUpdateSecretsInputRes => {
   if (data.length === 0) {
     const error = noDataProvidedError()
     return error
   }
 
-  const keyOccurrences = new Map<string, number>()
-  const newKeyOccurrences = new Map<string, number>()
+  const nameOccurrences = new Map<string, number>()
+  const newNameOccurrences = new Map<string, number>()
 
-  const keysWithSelfReference = new Set<string>()
+  const namesWithSelfReference = new Set<string>()
 
-  const invalidSecretKeys = new Set<string>()
-  const invalidNewSecretKeys = new Set<string>()
+  const invalidSecretNames = new Set<string>()
+  const invalidNewSecretNames = new Set<string>()
 
-  const newKeySameAsKey = new Set<string>()
-  const missingPropertiesToUpdateKeys = new Set<string>()
+  const newNameSameAsName = new Set<string>()
+  const missingPropertiesToUpdateNames = new Set<string>()
 
-  for (const { key, newKey, value, description } of data) {
-    if (newKey === undefined && value === undefined && description === undefined) {
-      missingPropertiesToUpdateKeys.add(key)
+  for (const { name, newName, value, description } of data) {
+    if (newName === undefined && value === undefined && description === undefined) {
+      missingPropertiesToUpdateNames.add(name)
     }
 
-    if (!isValidSecretKey(key)) {
-      invalidSecretKeys.add(key)
+    if (!isValidSecretName(name)) {
+      invalidSecretNames.add(name)
     }
 
-    if (newKey !== undefined && !isValidSecretKey(newKey)) {
-      invalidNewSecretKeys.add(key)
+    if (newName !== undefined && !isValidSecretName(newName)) {
+      invalidNewSecretNames.add(newName)
     }
 
     if (value) {
-      if (newKey) {
-        const hasSelfReference = secretHasSelfReference(newKey, value)
+      if (newName) {
+        const hasSelfReference = secretHasSelfReference(newName, value)
 
         if (hasSelfReference) {
-          keysWithSelfReference.add(key)
+          namesWithSelfReference.add(name)
         }
       } else {
-        const hasSelfReference = secretHasSelfReference(key, value)
+        const hasSelfReference = secretHasSelfReference(name, value)
 
         if (hasSelfReference) {
-          keysWithSelfReference.add(key)
+          namesWithSelfReference.add(name)
         }
       }
     }
 
-    keyOccurrences.set(key, (keyOccurrences.get(key) || 0) + 1)
+    nameOccurrences.set(name, (nameOccurrences.get(name) || 0) + 1)
 
-    if (newKey !== undefined) {
-      newKeyOccurrences.set(newKey, (newKeyOccurrences.get(newKey) || 0) + 1)
+    if (newName !== undefined) {
+      newNameOccurrences.set(newName, (newNameOccurrences.get(newName) || 0) + 1)
 
-      if (key === newKey) {
-        newKeySameAsKey.add(key)
+      if (name === newName) {
+        newNameSameAsName.add(name)
       }
     }
   }
   // NOTE: invalid keys
-  if (invalidSecretKeys.size > 0) {
-    const error = invalidSecretKeysError(Array.from(invalidSecretKeys))
+  if (invalidSecretNames.size > 0) {
+    const error = invalidSecretNamesError(Array.from(invalidSecretNames))
     return error
   }
 
   // NOTE: invalid new secret keys
-  if (invalidNewSecretKeys.size > 0) {
-    const secretKeys = Array.from(invalidNewSecretKeys)
-    const error = invalidNewSecretKeysError(secretKeys)
+  if (invalidNewSecretNames.size > 0) {
+    const secretNames = Array.from(invalidNewSecretNames)
+    const error = invalidNewSecretNamesError(secretNames)
 
     return error
   }
 
   // NOTE: missing properties to update
-  if (missingPropertiesToUpdateKeys.size > 0) {
-    const error = missingPropertiesToUpdateError(Array.from(missingPropertiesToUpdateKeys))
+  if (missingPropertiesToUpdateNames.size > 0) {
+    const error = missingPropertiesToUpdateError(Array.from(missingPropertiesToUpdateNames))
     return error
   }
 
   // NOTE: duplicate secrets
-  const duplicateSecretKeys = Array.from(keyOccurrences.entries())
+  const duplicateSecretNames = Array.from(nameOccurrences.entries())
     .filter(([_, count]) => count > 1)
-    ?.map(([key]) => key)
+    ?.map(([name]) => name)
 
-  if (duplicateSecretKeys?.length > 0) {
-    const secretKeys = duplicateSecretKeys
-    const error = duplicateSecretKeysError(secretKeys)
+  if (duplicateSecretNames?.length > 0) {
+    const secretNames = duplicateSecretNames
+    const error = duplicateSecretNamesError(secretNames)
 
     return error
   }
 
   // NOTE: duplicate new secrets
-  const duplicateNewSecrets = Array.from(newKeyOccurrences.entries())
+  const duplicateNewSecrets = Array.from(newNameOccurrences.entries())
     .filter(([_, count]) => count > 1)
-    ?.map(([key]) => key)
+    ?.map(([name]) => name)
 
   if (duplicateNewSecrets?.length > 0) {
-    const error = duplicateNewSecretKeysError(duplicateNewSecrets)
+    const error = duplicateNewSecretNamesError(duplicateNewSecrets)
     return error
   }
 
-  if (newKeySameAsKey.size > 0) {
-    const error = newKeysSameAsKeys([...newKeySameAsKey.keys()])
+  if (newNameSameAsName.size > 0) {
+    const error = newSecretNamesSameAsNamesError([...newNameSameAsName.keys()])
     return error
   }
 
   // NOTE: self-referencing secrets
-  if (keysWithSelfReference.size > 0) {
-    const secretKeys = Array.from(keysWithSelfReference)
+  if (namesWithSelfReference.size > 0) {
+    const secretKeys = Array.from(namesWithSelfReference)
     const error = selfReferencingSecretsError(secretKeys)
 
     return error
@@ -359,22 +359,24 @@ export const validateUpdateSecretsInput = (
   return null
 }
 
-export const validateSecretKeys = (data: Array<string>): { invalidSecretKeys: Array<string> } => {
-  const invalidSecretKeys = new Set<string>()
+export const validateSecretNames = (
+  names: Array<string>
+): { invalidSecretNames: Array<string> } => {
+  const invalidSecretNames = new Set<string>()
 
-  for (const key of data) {
-    if (!isValidSecretKey(key)) {
-      invalidSecretKeys.add(key)
+  for (const name of names) {
+    if (!isValidSecretName(name)) {
+      invalidSecretNames.add(name)
     }
   }
 
-  return { invalidSecretKeys: Array.from(invalidSecretKeys) }
+  return { invalidSecretNames: Array.from(invalidSecretNames) }
 }
 
-const isValidSecretKey = (key: string) =>
+const isValidSecretName = (key: string) =>
   key.length >= 2 &&
   key.length < 255 &&
   isAlphanumericUppercaseWithUnderscore(key) &&
   !startsWithNumber(key)
 
-export { isValidProjectName, isValidProjectIdentifier, isValidEnvironmentName, isValidSecretKey }
+export { isValidProjectName, isValidProjectIdentifier, isValidEnvironmentName, isValidSecretName }
