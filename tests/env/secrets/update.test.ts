@@ -6,9 +6,9 @@ test('Update env secrets', async () => {
 
   const { data, error } = await envApi.secrets.update([
     {
-      key: 'NEW_APP_URL',
+      name: 'NEW_APP_URL',
       description: 'THidhoihsdofhais',
-      newKey: 'APP_URL',
+      newName: 'APP_URL',
     },
   ])
 

@@ -6,7 +6,7 @@ test('Update secrets', async () => {
 
   const { data, error } = await envEase.secrets('name', '123').update([
     {
-      key: 'KEYS',
+      name: 'KEYS',
       description: null,
     },
   ])

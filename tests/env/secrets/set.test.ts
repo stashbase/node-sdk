@@ -6,12 +6,12 @@ test('Set secrets (add new or update existing)', async () => {
 
   const { error } = await envApi.secrets.set([
     {
-      key: 'SECRET',
+      name: 'SECRET',
       value: 'VALUE_123',
       description: null,
     },
     {
-      key: 'APPP_URL',
+      name: 'APPP_URL',
       value: 'https://sss',
     },
   ])
