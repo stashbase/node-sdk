@@ -1,7 +1,7 @@
 import { invalidEnvironmentIdentifierError, invalidProjectIdentifierError } from '../../../errors'
 import {
-  invalidSecretKeyError,
-  invalidSecretKeysError,
+  invalidSecretNameError,
+  invalidSecretNamesError,
   noDataProvidedError,
 } from '../../../errors/secrets'
 import { HttpClient } from '../../../http/client'
@@ -60,7 +60,7 @@ export class SecretsAPI {
     }
 
     if (secretKey !== undefined && !isValidSecretKey(secretKey)) {
-      const error = invalidSecretKeyError()
+      const error = invalidSecretNameError()
       return error
     }
   }
@@ -111,7 +111,7 @@ export class SecretsAPI {
     const { invalidSecretKeys } = validateSecretKeys(only)
 
     if (invalidSecretKeys.length > 0) {
-      const error = invalidSecretKeysError(invalidSecretKeys)
+      const error = invalidSecretNamesError(invalidSecretKeys)
       return responseFailure(error)
     }
 
@@ -137,7 +137,7 @@ export class SecretsAPI {
     const { invalidSecretKeys } = validateSecretKeys(exclude)
 
     if (invalidSecretKeys.length > 0) {
-      const error = invalidSecretKeysError(invalidSecretKeys)
+      const error = invalidSecretNamesError(invalidSecretKeys)
       return responseFailure(error)
     }
 
@@ -217,7 +217,7 @@ export class SecretsAPI {
     const { invalidSecretKeys } = validateSecretKeys(keys)
 
     if (invalidSecretKeys.length > 0) {
-      const error = invalidSecretKeysError(invalidSecretKeys)
+      const error = invalidSecretNamesError(invalidSecretKeys)
       return responseFailure(error)
     }
 
