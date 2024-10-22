@@ -1,4 +1,4 @@
-import { SecretKey } from './secretKey'
+import { SecretName } from './secretKey'
 import { AtLeastOne } from './util'
 
 export interface Secret {
@@ -18,14 +18,14 @@ export interface CreateSecretsResData {
   /** The number of secrets successfully created */
   createdCount: number
   /** An array of secret keys that were duplicates and not created */
-  duplicateSecrets: Array<SecretKey>
+  duplicateSecrets: Array<SecretName>
 }
 
 export interface DeleteSecretsResData {
   /** The number of secrets successfully deleted */
   deletedCount: number
   /** An array of secret keys that were not found and thus not deleted */
-  notFoundSecrets: Array<SecretKey>
+  notFoundSecrets: Array<SecretName>
 }
 
 export interface DeleteAllSecretsResData {
@@ -44,7 +44,7 @@ export interface UpdateSecretsResData {
   /** The number of secrets successfully updated */
   updatedCount: number
   /** An array of secret keys that were not found and thus not updated */
-  notFoundSecrets: Array<SecretKey>
+  notFoundSecrets: Array<SecretName>
 }
 
 export interface ListSecretsQueryParams {
@@ -80,7 +80,7 @@ export type CreateSecretsData = Array<CreateSecretsItem>
 
 export type CreateSecretsItem = {
   /** The name of the secret */
-  name: SecretKey
+  name: SecretName
   /** The value of the secret */
   value: string
   /** The description of the secret (optional) */
@@ -90,9 +90,9 @@ export type CreateSecretsItem = {
 export type SetSecretsItem = CreateSecretsItem
 
 export type UpdateSecretsItem = {
-  name: SecretKey
+  name: SecretName
 } & AtLeastOne<{
-  newName: SecretKey
+  newName: SecretName
   value: string
   description: string | null
 }>
