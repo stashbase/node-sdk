@@ -119,7 +119,7 @@ export class SecretsAPI {
   }
 
   /**
-   * Lists secrets for a project and environment, excluding secrets with specified keys.
+   * Lists secrets for a project and environment, excluding secrets with specified names.
    *
    * @param exclude - An array of secret names to exclude from the response.
    * @param options - Optional parameters for listing secrets.
