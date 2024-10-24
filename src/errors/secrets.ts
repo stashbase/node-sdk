@@ -46,7 +46,7 @@ export const duplicateSecretNamesError = (
 ): DuplicateSecretsNamesValidationError =>
   createSecretsError({
     code: 'validation.duplicate_secret_names',
-    message: `One or more secrets with the same value of property 'key' provided in the request.`,
+    message: `One or more secrets with the same value of property 'name' provided in the request.`,
     details: {
       secretNames,
     },
@@ -57,7 +57,7 @@ export const duplicateNewSecretNamesError = (
 ): DuplicateNewSecretNamesValidationError =>
   createSecretsError({
     code: 'validation.duplicate_new_secret_names',
-    message: `One or more secrets with the same value of property 'newKey' provided in the request.`,
+    message: `One or more secrets with the same value of property 'newName' provided in the request.`,
     details: {
       secretNames,
     },
