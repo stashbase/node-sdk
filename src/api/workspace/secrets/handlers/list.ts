@@ -19,12 +19,12 @@ type ListSecretsBaseArgs = ProjectEnvHandlerArgs<{ options?: ListSecretsOptions 
 export type ListSecretsArgs = ListSecretsBaseArgs
 
 export type ListOnlySecretsArgs = ListSecretsBaseArgs & {
-  /* List only secrets with these keys */
+  /* List only secrets with these names */
   only: SecretName[]
 }
 
 export type ListExcludeSecretsArgs = ListSecretsBaseArgs & {
-  /* Exclude secrets with these keys */
+  /* Exclude secrets with these names */
   exclude: SecretName[]
 }
 
