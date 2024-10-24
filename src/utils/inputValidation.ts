@@ -135,12 +135,12 @@ export const validateWebhookIdForMethod = (webhookId: string) => {
   }
 }
 
-export const secretHasSelfReference = (secretKey: string, value: string): boolean => {
+export const secretHasSelfReference = (secretName: string, value: string): boolean => {
   const regex = /\${(.*?)}/g
   const matches = value.matchAll(regex)
 
   for (const match of matches) {
-    if (match[1] === secretKey) {
+    if (match[1] === secretName) {
       return true
     }
   }
@@ -148,9 +148,9 @@ export const secretHasSelfReference = (secretKey: string, value: string): boolea
   return false
 }
 
-export const extractAllSecretsReferences = (secretKey: string): string[] => {
+export const extractAllSecretsReferences = (secretName: string): string[] => {
   const regex = /\${(.*?)}/g
-  const matches = secretKey.matchAll(regex)
+  const matches = secretName.matchAll(regex)
 
   // Using a Set to store unique references
   const refs = new Set<string>()
@@ -301,13 +301,13 @@ export const validateUpdateSecretsInput = (
       }
     }
   }
-  // NOTE: invalid keys
+  // NOTE: invalid names
   if (invalidSecretNames.size > 0) {
     const error = invalidSecretNamesError(Array.from(invalidSecretNames))
     return error
   }
 
-  // NOTE: invalid new secret keys
+  // NOTE: invalid new secret names
   if (invalidNewSecretNames.size > 0) {
     const secretNames = Array.from(invalidNewSecretNames)
     const error = invalidNewSecretNamesError(secretNames)
@@ -350,8 +350,8 @@ export const validateUpdateSecretsInput = (
 
   // NOTE: self-referencing secrets
   if (namesWithSelfReference.size > 0) {
-    const secretKeys = Array.from(namesWithSelfReference)
-    const error = selfReferencingSecretsError(secretKeys)
+    const secretNames = Array.from(namesWithSelfReference)
+    const error = selfReferencingSecretsError(secretNames)
 
     return error
   }
