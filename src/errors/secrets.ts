@@ -112,20 +112,14 @@ export const newSecretNamesSameAsNamesError = (
 
 export const secretDescriptionsTooLongError = (
   secretNames: Array<string>
-): SecretDescriptionsTooLongValidationError => {
-  const maxLength = SECRET_DESCRIPTION_MAX_LENGTH
-  const code = 'validation.secret_descriptions_too_long'
-  const message = `One or more secret descriptions are too long. Description cannot be longer than ${maxLength} characters after formatting.`
-
-  return createSecretsError({
-    code,
-    message,
+): SecretDescriptionsTooLongValidationError =>
+  createSecretsError({
+    code: 'validation.secret_descriptions_too_long',
+    message: `One or more secret descriptions are too long. Description cannot be longer than ${SECRET_DESCRIPTION_MAX_LENGTH} characters after formatting.`,
     details: {
       secretNames,
-      maxLength,
     },
   })
-}
 
 export const noDataProvidedError = (): NoDataProvidedValidationError =>
   createSecretsError({
