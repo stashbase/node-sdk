@@ -22,6 +22,7 @@ import {
   SelfReferencingSecretsValidationError,
 } from '../types/errors/secrets'
 
+export const SECRET_DESCRIPTION_MAX_LENGTH = 5
 const alphanumericRegex = /[a-zA-Z0-9]/
 
 export function containsMaxOneDash(str: string) {
@@ -42,6 +43,8 @@ function isAlphanumericWithHyphensAndUnderscores(inputString: string): boolean {
 
   return pattern.test(inputString)
 }
+
+export const removeOuterNewlines = (str: string) => str.replace(/^\n+|\n+$/g, '')
 
 // TODO: validate max length
 const isValidProjectName = (projectName: string) =>
@@ -378,5 +381,14 @@ const isValidSecretName = (name: string) =>
   name.length < 255 &&
   isAlphanumericUppercaseWithUnderscore(name) &&
   !startsWithNumber(name)
+
+export const formatSecretDescription = (description: string) => {
+  return removeOuterNewlines(
+    description
+      .split('\n')
+      .map((line) => line.trimEnd())
+      .join('\n')
+  )
+}
 
 export { isValidProjectName, isValidProjectIdentifier, isValidEnvironmentName, isValidSecretName }
