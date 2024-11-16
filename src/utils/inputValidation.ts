@@ -24,7 +24,7 @@ import {
   SelfReferencingSecretsValidationError,
 } from '../types/errors/secrets'
 
-export const SECRET_DESCRIPTION_MAX_LENGTH = 5
+export const SECRET_DESCRIPTION_MAX_LENGTH = 512
 const alphanumericRegex = /[a-zA-Z0-9]/
 
 export function containsMaxOneDash(str: string) {
