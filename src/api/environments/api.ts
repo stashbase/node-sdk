@@ -7,6 +7,7 @@ import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
 import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
 import { getSecret } from './handlers/secrets/get'
 import {
+  formatSecretDescriptions,
   isValidChangelogChangeId,
   isValidHttpsUrl,
   isValidSecretName,
@@ -182,13 +183,14 @@ class EnvSecretsAPI {
    * @returns A promise that resolves to an object containing the count of created secrets and any duplicate secrets (names), or an error response.
    */
   async create(data: CreateSecretsData) {
-    const validationError = validateCreateSecretsInput(data)
+    const formattedData = formatSecretDescriptions(data)
+    const validationError = validateCreateSecretsInput(formattedData)
 
     if (validationError) {
       return responseFailure(validationError)
     }
 
-    return await createSecrets(this.httpClient, data)
+    return await createSecrets(this.httpClient, formattedData)
   }
 
   /**
@@ -198,13 +200,14 @@ class EnvSecretsAPI {
    * @returns A promise that resolves to null on success or an error response.
    */
   async set(data: SetSecretsData) {
-    const validationError = validateSetSecretsInput(data)
+    const formattedData = formatSecretDescriptions(data)
+    const validationError = validateSetSecretsInput(formattedData)
 
     if (validationError) {
       return responseFailure(validationError)
     }
 
-    return await setSecrets(this.httpClient, data)
+    return await setSecrets(this.httpClient, formattedData)
   }
 
   /**
@@ -214,13 +217,14 @@ class EnvSecretsAPI {
    * @returns A promise that resolves to an object containing the count of updated secrets and any secrets (names) not found, or an error response.
    */
   async update(data: UpdateSecretsData) {
-    const validationError = validateUpdateSecretsInput(data)
+    const formattedData = formatSecretDescriptions(data)
+    const validationError = validateUpdateSecretsInput(formattedData)
 
     if (validationError) {
       return responseFailure(validationError)
     }
 
-    return await updateSecrets(this.httpClient, data)
+    return await updateSecrets(this.httpClient, formattedData)
   }
 
   /**
