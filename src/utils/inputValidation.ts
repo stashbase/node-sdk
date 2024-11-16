@@ -376,6 +376,16 @@ export const validateSecretNames = (
   return { invalidSecretNames: Array.from(invalidSecretNames) }
 }
 
+// format descriptions for secrets
+export const formatSecretDescriptions = <T extends { description?: string | null }>(
+  data: Array<T>
+): Array<T> => {
+  return data.map(({ description: d, ...rest }) => ({
+    ...rest,
+    description: d !== undefined && d !== null ? formatSecretDescription(d) : d,
+  })) as T[]
+}
+
 const isValidSecretName = (name: string) =>
   name.length >= 2 &&
   name.length < 255 &&
