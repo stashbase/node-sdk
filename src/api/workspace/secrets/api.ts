@@ -15,6 +15,7 @@ import {
   UpdateSecretsItem,
 } from '../../../types/secrets'
 import {
+  formatSecretDescriptions,
   isValidEnvironmentIdentifier,
   isValidProjectIdentifier,
   isValidSecretName,
@@ -151,14 +152,16 @@ export class SecretsAPI {
    * @returns A promise that resolves to an object containing the count of created secrets and any duplicate names, or an error response.
    */
   async create(data: CreateSecretsItem[]) {
-    const validationError = validateCreateSecretsInput(data)
+    const formattedData = formatSecretDescriptions(data)
+
+    const validationError = validateCreateSecretsInput(formattedData)
     if (validationError) return responseFailure(validationError)
 
     if (validationError) {
       return responseFailure(validationError)
     }
 
-    return await createSecrets({ ...this.getHandlerArgs(), data })
+    return await createSecrets({ ...this.getHandlerArgs(), data: formattedData })
   }
 
   /**
@@ -171,13 +174,14 @@ export class SecretsAPI {
     const identifierValidationError = this.validateIdentifiers()
     if (identifierValidationError) return responseFailure(identifierValidationError)
 
-    const validationError = validateSetSecretsInput(data)
+    const formattedData = formatSecretDescriptions(data)
+    const validationError = validateSetSecretsInput(formattedData)
 
     if (validationError) {
       return responseFailure(validationError)
     }
 
-    return await setSecrets({ ...this.getHandlerArgs(), data })
+    return await setSecrets({ ...this.getHandlerArgs(), data: formattedData })
   }
 
   /**
@@ -190,13 +194,14 @@ export class SecretsAPI {
     const identifierValidationError = this.validateIdentifiers()
     if (identifierValidationError) return responseFailure(identifierValidationError)
 
-    const validationError = validateUpdateSecretsInput(data)
+    const formattedData = formatSecretDescriptions(data)
+    const validationError = validateUpdateSecretsInput(formattedData)
 
     if (validationError) {
       return responseFailure(validationError)
     }
 
-    return await updateSecrets({ ...this.getHandlerArgs(), data })
+    return await updateSecrets({ ...this.getHandlerArgs(), data: formattedData })
   }
 
   /**
