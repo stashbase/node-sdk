@@ -53,9 +53,7 @@ export type DuplicateSecretsNamesValidationError = ValidationApiError<
 
 export type SecretDescriptionsTooLongValidationError = ValidationApiError<
   'secret_descriptions_too_long',
-  SecretsErrorDetails & {
-    maxLength: number
-  }
+  SecretsErrorDetails
 >
 
 export type SelfReferencingSecretsValidationError =
