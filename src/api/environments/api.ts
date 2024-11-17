@@ -7,7 +7,7 @@ import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
 import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
 import { getSecret } from './handlers/secrets/get'
 import {
-  formatSecretDescriptions,
+  formatSecretsInputArray,
   isValidChangelogChangeId,
   isValidHttpsUrl,
   isValidSecretName,
@@ -183,7 +183,7 @@ class EnvSecretsAPI {
    * @returns A promise that resolves to an object containing the count of created secrets and any duplicate secrets (names), or an error response.
    */
   async create(data: CreateSecretsData) {
-    const formattedData = formatSecretDescriptions(data)
+    const formattedData = formatSecretsInputArray(data)
     const validationError = validateCreateSecretsInput(formattedData)
 
     if (validationError) {
@@ -200,7 +200,7 @@ class EnvSecretsAPI {
    * @returns A promise that resolves to null on success or an error response.
    */
   async set(data: SetSecretsData) {
-    const formattedData = formatSecretDescriptions(data)
+    const formattedData = formatSecretsInputArray(data)
     const validationError = validateSetSecretsInput(formattedData)
 
     if (validationError) {
@@ -217,7 +217,7 @@ class EnvSecretsAPI {
    * @returns A promise that resolves to an object containing the count of updated secrets and any secrets (names) not found, or an error response.
    */
   async update(data: UpdateSecretsData) {
-    const formattedData = formatSecretDescriptions(data)
+    const formattedData = formatSecretsInputArray(data)
     const validationError = validateUpdateSecretsInput(formattedData)
 
     if (validationError) {
