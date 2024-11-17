@@ -8,9 +8,11 @@ import {
   MissingPropertiesToUpdateValidationError,
   NewSecretNamesSameAsNamesValidationError,
   NoDataProvidedValidationError,
+  SecretDescriptionsTooLongValidationError,
   SecretsErrorDetails,
   SelfReferencingSecretsValidationError,
 } from '../types/errors/secrets'
+import { SECRET_DESCRIPTION_MAX_LENGTH } from '../utils/inputValidation'
 
 export const createSecretsError = <T extends string, D = undefined | SecretsErrorDetails>(args: {
   code: T
@@ -103,6 +105,17 @@ export const newSecretNamesSameAsNamesError = (
     code: 'validation.new_secret_names_same_as_names',
     message:
       "One or more values of property 'newName' match the provided 'name' values in the request.",
+    details: {
+      secretNames,
+    },
+  })
+
+export const secretDescriptionsTooLongError = (
+  secretNames: Array<string>
+): SecretDescriptionsTooLongValidationError =>
+  createSecretsError({
+    code: 'validation.secret_descriptions_too_long',
+    message: `One or more secret descriptions are too long. Description cannot be longer than ${SECRET_DESCRIPTION_MAX_LENGTH} characters after formatting.`,
     details: {
       secretNames,
     },
