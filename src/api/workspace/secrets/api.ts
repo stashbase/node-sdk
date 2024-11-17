@@ -153,7 +153,6 @@ export class SecretsAPI {
    */
   async create(data: CreateSecretsItem[]) {
     const formattedData = formatSecretsInputArray(data)
-
     const validationError = validateCreateSecretsInput(formattedData)
     if (validationError) return responseFailure(validationError)
 
