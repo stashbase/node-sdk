@@ -404,6 +404,12 @@ export const validateSecretNames = (
   return { invalidSecretNames: Array.from(invalidSecretNames) }
 }
 
+const isValidSecretName = (name: string) =>
+  name.length >= 2 &&
+  name.length < 255 &&
+  isAlphanumericUppercaseWithUnderscore(name) &&
+  !startsWithNumber(name)
+
 // format descriptions for secrets
 export const formatSecretDescriptions = <T extends { description?: string | null }>(
   data: Array<T>
@@ -413,12 +419,6 @@ export const formatSecretDescriptions = <T extends { description?: string | null
     description: d !== undefined && d !== null ? formatSecretDescription(d) : d,
   })) as T[]
 }
-
-const isValidSecretName = (name: string) =>
-  name.length >= 2 &&
-  name.length < 255 &&
-  isAlphanumericUppercaseWithUnderscore(name) &&
-  !startsWithNumber(name)
 
 export const formatSecretDescription = (description: string) => {
   return removeOuterNewlines(
