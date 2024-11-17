@@ -429,4 +429,13 @@ export const formatSecretDescription = (description: string) => {
   )
 }
 
+export const formatSecretsInputArray = <T extends { description?: string | null }>(
+  data: Array<T>
+): Array<T> => {
+  return data.map(({ description: d, ...rest }) => ({
+    ...rest,
+    description: d !== undefined && d !== null ? formatSecretDescription(d) : d,
+  })) as T[]
+}
+
 export { isValidProjectName, isValidProjectIdentifier, isValidEnvironmentName, isValidSecretName }
