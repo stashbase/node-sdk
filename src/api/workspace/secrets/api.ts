@@ -15,7 +15,7 @@ import {
   UpdateSecretsItem,
 } from '../../../types/secrets'
 import {
-  formatSecretDescriptions,
+  formatSecretsInputArray,
   isValidEnvironmentIdentifier,
   isValidProjectIdentifier,
   isValidSecretName,
@@ -152,7 +152,7 @@ export class SecretsAPI {
    * @returns A promise that resolves to an object containing the count of created secrets and any duplicate names, or an error response.
    */
   async create(data: CreateSecretsItem[]) {
-    const formattedData = formatSecretDescriptions(data)
+    const formattedData = formatSecretsInputArray(data)
 
     const validationError = validateCreateSecretsInput(formattedData)
     if (validationError) return responseFailure(validationError)
@@ -174,7 +174,7 @@ export class SecretsAPI {
     const identifierValidationError = this.validateIdentifiers()
     if (identifierValidationError) return responseFailure(identifierValidationError)
 
-    const formattedData = formatSecretDescriptions(data)
+    const formattedData = formatSecretsInputArray(data)
     const validationError = validateSetSecretsInput(formattedData)
 
     if (validationError) {
@@ -194,7 +194,7 @@ export class SecretsAPI {
     const identifierValidationError = this.validateIdentifiers()
     if (identifierValidationError) return responseFailure(identifierValidationError)
 
-    const formattedData = formatSecretDescriptions(data)
+    const formattedData = formatSecretsInputArray(data)
     const validationError = validateUpdateSecretsInput(formattedData)
 
     if (validationError) {
