@@ -15,6 +15,7 @@ export type CreateSecretsError =
   | DuplicateSecretsNamesValidationError
   | SelfReferencingSecretsValidationError
   | SecretDescriptionsTooLongValidationError
+  | SecretValuesTooLongValidationError
 
 export type DeleteSecretsError = GenericApiError | InvalidSecretNamesValidationError
 export type GetSecretError = GenericApiError | ResourceApiError<'secret_not_found', undefined>
@@ -27,6 +28,7 @@ export type SetSecretsError =
   | DuplicateSecretsNamesValidationError
   | SelfReferencingSecretsValidationError
   | SecretDescriptionsTooLongValidationError
+  | SecretValuesTooLongValidationError
 
 export type UpdateSecretsError =
   | GenericApiError
@@ -38,6 +40,7 @@ export type UpdateSecretsError =
   | InvalidNewSecretNamesValidationError
   | MissingPropertiesToUpdateValidationError
   | SecretDescriptionsTooLongValidationError
+  | SecretValuesTooLongValidationError
   | SelfReferencingSecretsConflictError
   | SecretsAlreadyExistConflictError
 
@@ -53,6 +56,11 @@ export type DuplicateSecretsNamesValidationError = ValidationApiError<
 
 export type SecretDescriptionsTooLongValidationError = ValidationApiError<
   'secret_descriptions_too_long',
+  SecretsErrorDetails
+>
+
+export type SecretValuesTooLongValidationError = ValidationApiError<
+  'secret_values_too_long',
   SecretsErrorDetails
 >
 

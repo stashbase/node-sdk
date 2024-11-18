@@ -9,10 +9,11 @@ import {
   NewSecretNamesSameAsNamesValidationError,
   NoDataProvidedValidationError,
   SecretDescriptionsTooLongValidationError,
+  SecretValuesTooLongValidationError,
   SecretsErrorDetails,
   SelfReferencingSecretsValidationError,
 } from '../types/errors/secrets'
-import { SECRET_DESCRIPTION_MAX_LENGTH } from '../utils/inputValidation'
+import { SECRET_DESCRIPTION_MAX_LENGTH, SECRET_VALUE_MAX_LENGTH } from '../utils/inputValidation'
 
 export const createSecretsError = <T extends string, D = undefined | SecretsErrorDetails>(args: {
   code: T
@@ -116,6 +117,17 @@ export const secretDescriptionsTooLongError = (
   createSecretsError({
     code: 'validation.secret_descriptions_too_long',
     message: `One or more secret descriptions are too long. Description cannot be longer than ${SECRET_DESCRIPTION_MAX_LENGTH} characters after formatting.`,
+    details: {
+      secretNames,
+    },
+  })
+
+export const secretValuesTooLongError = (
+  secretNames: Array<string>
+): SecretValuesTooLongValidationError =>
+  createSecretsError({
+    code: 'validation.secret_values_too_long',
+    message: `One or more secret values are too long. Secret value cannot be longer than ${SECRET_VALUE_MAX_LENGTH} characters.`,
     details: {
       secretNames,
     },
