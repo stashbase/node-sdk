@@ -127,7 +127,7 @@ export const secretValuesTooLongError = (
 ): SecretValuesTooLongValidationError =>
   createSecretsError({
     code: 'validation.secret_values_too_long',
-    message: `One or more secret values are too long. Secret value cannot be longer than ${SECRET_VALUE_MAX_LENGTH} characters after formatting.`,
+    message: `One or more secret values are too long. Secret value cannot be longer than ${SECRET_VALUE_MAX_LENGTH} characters.`,
     details: {
       secretNames,
     },
