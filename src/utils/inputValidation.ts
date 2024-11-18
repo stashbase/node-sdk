@@ -367,14 +367,6 @@ export const validateUpdateSecretsInput = (
     return error
   }
 
-  // NOTE: value too long
-  if (valueTooLongSecretNames.size > 0) {
-    const secretNames = Array.from(valueTooLongSecretNames)
-    const error = secretValuesTooLongError(secretNames)
-
-    return error
-  }
-
   // NOTE: duplicate secrets
   const duplicateSecretNames = Array.from(nameOccurrences.entries())
     .filter(([_, count]) => count > 1)
@@ -399,6 +391,14 @@ export const validateUpdateSecretsInput = (
 
   if (newNameSameAsName.size > 0) {
     const error = newSecretNamesSameAsNamesError([...newNameSameAsName.keys()])
+    return error
+  }
+
+  // NOTE: value too long
+  if (valueTooLongSecretNames.size > 0) {
+    const secretNames = Array.from(valueTooLongSecretNames)
+    const error = secretValuesTooLongError(secretNames)
+
     return error
   }
 
