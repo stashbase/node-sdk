@@ -8,6 +8,7 @@ import {
   newSecretNamesSameAsNamesError,
   noDataProvidedError,
   secretDescriptionsTooLongError,
+  secretValuesTooLongError,
   selfReferencingSecretsError,
 } from '../errors/secrets'
 import { invalidWebhookIdError } from '../errors/webhooks'
@@ -21,10 +22,13 @@ import {
   NewSecretNamesSameAsNamesValidationError,
   NoDataProvidedValidationError,
   SecretDescriptionsTooLongValidationError,
+  SecretValuesTooLongValidationError,
   SelfReferencingSecretsValidationError,
 } from '../types/errors/secrets'
 
 export const SECRET_DESCRIPTION_MAX_LENGTH = 512
+export const SECRET_VALUE_MAX_LENGTH = 4096
+
 const alphanumericRegex = /[a-zA-Z0-9]/
 
 export function containsMaxOneDash(str: string) {
@@ -181,6 +185,7 @@ type ValidateSetSecretsInputRes =
   | DuplicateSecretsNamesValidationError
   | SelfReferencingSecretsValidationError
   | SecretDescriptionsTooLongValidationError
+  | SecretValuesTooLongValidationError
   | null
 
 // return api error
@@ -194,7 +199,7 @@ export const validateSetSecretsInput = (
   const invalidSecretNames = new Set<string>()
   const namesWithSelfReference = new Set<string>()
   const descriptionTooLongSecretNames = new Set<string>()
-
+  const valueTooLongSecretNames = new Set<string>()
   const nameOccurrences = new Map<string, number>()
 
   for (const { name, value, description } of data) {
@@ -208,6 +213,10 @@ export const validateSetSecretsInput = (
     }
 
     nameOccurrences.set(name, (nameOccurrences.get(name) || 0) + 1)
+
+    if (value.length > SECRET_VALUE_MAX_LENGTH) {
+      valueTooLongSecretNames.add(name)
+    }
 
     if (description && description.length > SECRET_DESCRIPTION_MAX_LENGTH) {
       descriptionTooLongSecretNames.add(name)
@@ -227,6 +236,13 @@ export const validateSetSecretsInput = (
   if (duplicateSecretNames?.length > 0) {
     const secretNames = duplicateSecretNames
     const error = duplicateSecretNamesError(secretNames)
+
+    return error
+  }
+
+  if (valueTooLongSecretNames.size > 0) {
+    const secretNames = Array.from(valueTooLongSecretNames)
+    const error = secretValuesTooLongError(secretNames)
 
     return error
   }
@@ -260,6 +276,7 @@ type ValidateUpdateSecretsInputRes =
   | SelfReferencingSecretsValidationError
   | NewSecretNamesSameAsNamesValidationError
   | SecretDescriptionsTooLongValidationError
+  | SecretValuesTooLongValidationError
   | null
 
 export const validateUpdateSecretsInput = (
@@ -281,6 +298,7 @@ export const validateUpdateSecretsInput = (
   const newNameSameAsName = new Set<string>()
   const missingPropertiesToUpdateNames = new Set<string>()
   const descriptionTooLongSecretNames = new Set<string>()
+  const valueTooLongSecretNames = new Set<string>()
 
   for (const { name, newName, value, description } of data) {
     if (newName === undefined && value === undefined && description === undefined) {
@@ -319,6 +337,10 @@ export const validateUpdateSecretsInput = (
       if (name === newName) {
         newNameSameAsName.add(name)
       }
+    }
+
+    if (value && value.length > SECRET_VALUE_MAX_LENGTH) {
+      valueTooLongSecretNames.add(name)
     }
 
     if (description && description.length > SECRET_DESCRIPTION_MAX_LENGTH) {
@@ -369,6 +391,14 @@ export const validateUpdateSecretsInput = (
 
   if (newNameSameAsName.size > 0) {
     const error = newSecretNamesSameAsNamesError([...newNameSameAsName.keys()])
+    return error
+  }
+
+  // NOTE: value too long
+  if (valueTooLongSecretNames.size > 0) {
+    const secretNames = Array.from(valueTooLongSecretNames)
+    const error = secretValuesTooLongError(secretNames)
+
     return error
   }
 
