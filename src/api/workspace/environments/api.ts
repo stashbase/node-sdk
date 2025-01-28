@@ -17,7 +17,6 @@ import {
 } from '../../../utils/inputValidation'
 import { createEnvironment } from './handlers/create'
 import { deleteEnvironment } from './handlers/delete'
-import { duplicateEnvironment } from './handlers/duplicate'
 import { getEnvironment } from './handlers/get'
 import { listEnvironments } from './handlers/list'
 import { loadEnvironment } from './handlers/load'
@@ -230,42 +229,6 @@ export class EnvironmentsAPI {
     }
 
     return await renameEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId, newName })
-  }
-
-  /**
-   * Duplicates an environment within a project.
-   * @param envNameOrId - The name or id of the environment to duplicate.
-   * @param duplicateName - The name for the new duplicate environment.
-   * @returns A promise that resolves to the duplication result or an error response.
-   */
-  async duplicate(envNameOrId: string, duplicateName: string) {
-    const identifiersError = this.validateIdentifiers(envNameOrId)
-    if (identifiersError) return responseFailure(identifiersError)
-
-    if (!isValidEnvironmentName(duplicateName)) {
-      const error = invalidEnvironmentIdentifierError
-      return responseFailure(error)
-    }
-
-    const duplicateNameHasIdFormat = isResourceIdFormat('environment', duplicateName)
-
-    if (duplicateNameHasIdFormat) {
-      const error = environmentNameUsesIdFormatError
-      return responseFailure(error)
-    }
-
-    const environmentHasIdFormat = isResourceIdFormat('environment', envNameOrId)
-
-    if (!environmentHasIdFormat && duplicateName === envNameOrId) {
-      const error = newEnvironmentNameEqualsOriginal
-      return responseFailure(error)
-    }
-
-    return await duplicateEnvironment({
-      ...this.getHandlerArgs(),
-      environment: envNameOrId,
-      duplicateName,
-    })
   }
 
   /**
