@@ -8,7 +8,6 @@ import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
 import { getSecret } from './handlers/secrets/get'
 import {
   formatSecretsInputArray,
-  isValidChangelogChangeId,
   isValidHttpsUrl,
   isValidSecretName,
   isValidWebhookDescription,
@@ -47,16 +46,6 @@ import {
 } from '../../errors/webhooks'
 import { CreateWebhookData, UpdateWebhookData } from '../../types/webhooks'
 import { ListWebhookLogsOptions } from '../workspace/webhooks/handlers/listLogs'
-import { listChangelog } from './handlers/changelog/list'
-import { ListChangelogOptions, ListChangelogResponse } from '../../types/changelog'
-import { GetChangelogChangeError, ListChangelogError } from '../../types/errors/changelog'
-import { getChangelogChange } from './handlers/changelog/get'
-import { revertChangelogChange } from './handlers/changelog/revert'
-import {
-  invalidChangelogPageError,
-  invalidChangelogChangeIdError,
-  invalidChangelogLimitError,
-} from '../../errors/changelog'
 
 class EnvironmentsAPI {
   constructor(private httpClient: HttpClient) {}
@@ -105,7 +94,6 @@ class EnvironmentsAPI {
 
   secrets = new EnvSecretsAPI(this.httpClient)
   webhooks = new WebhooksAPI(this.httpClient)
-  changelog = new ChangelogAPI(this.httpClient)
 }
 
 class EnvSecretsAPI {
@@ -484,74 +472,6 @@ class WebhooksAPI {
     }
 
     return await rotateWebhookSigningSecret(this.httpClient, webhookId)
-  }
-}
-
-class ChangelogAPI {
-  constructor(private httpClient: HttpClient) {}
-
-  /**
-   * Lists the changelog items.
-   *
-   * @param withValues - Whether to include values in the changelog items.
-   * @param options - Options for listing the changelog items.
-   * @returns A promise that resolves to the list of changelog items or an error response.
-   */
-  public async list<T extends boolean | undefined = undefined>(
-    withValues?: T,
-    options?: ListChangelogOptions
-  ): Promise<ApiResponse<ListChangelogResponse<T>, ListChangelogError>> {
-    if (options) {
-      if (
-        options.page !== undefined &&
-        (options.page <= 0 || options.page > 1000 || typeof options.page !== 'number')
-      ) {
-        const error = invalidChangelogPageError
-        return responseFailure(error)
-      }
-
-      if (
-        options.limit !== undefined &&
-        (options.limit < 2 || options.limit > 10 || typeof options.limit !== 'number')
-      ) {
-        const error = invalidChangelogLimitError
-        return responseFailure(error)
-      }
-    }
-
-    return listChangelog({ client: this.httpClient, withValues, options })
-  }
-
-  /**
-   * Retrieves a specific changelog item by its ID.
-   *
-   * @param changeId - The ID of the changelog item to retrieve.
-   * @returns A promise that resolves to the changelog item or an error response.
-   */
-  public async get(changeId: string) {
-    const validationError = !isValidChangelogChangeId(changeId)
-    if (validationError) {
-      const error = invalidChangelogChangeIdError
-      return responseFailure(error)
-    }
-
-    return getChangelogChange({ client: this.httpClient, changeId })
-  }
-
-  /**
-   * Revert change (secrets) by its ID.
-   *
-   * @param changeId - The ID of the changelog item to revert.
-   * @returns A promise that resolves to null on success or an error response.
-   */
-  public async revert(changeId: string) {
-    const validationError = !isValidChangelogChangeId(changeId)
-    if (validationError) {
-      const error = invalidChangelogChangeIdError
-      return responseFailure(error)
-    }
-
-    return revertChangelogChange({ client: this.httpClient, changeId })
   }
 }
 

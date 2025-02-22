@@ -95,12 +95,11 @@ function isAlphanumericUppercaseWithUnderscore(inputString: string): boolean {
   return !pattern.test(inputString)
 }
 
-type Resource = 'project' | 'environment' | 'webhook' | 'changelog'
+type Resource = 'project' | 'environment' | 'webhook'
 
 const resourcePrefixes = {
   project: 'proj_',
   webhook: 'whk_',
-  changelog: 'chng_', // secrets changelog
   environment: 'env_',
 }
 
@@ -121,9 +120,6 @@ export const isResourceIdFormat = (resource: Resource, input: string) => {
 }
 
 export const isValidWebhookId = (webhookId: string) => isResourceIdFormat('webhook', webhookId)
-
-export const isValidChangelogChangeId = (changeId: string) =>
-  isResourceIdFormat('changelog', changeId)
 
 export const isValidHttpsUrl = (url: string): boolean => {
   const httpsUrlPattern = /^https:\/\/(?:www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(?:\/[^\s]*)?$/
