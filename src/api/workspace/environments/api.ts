@@ -22,11 +22,10 @@ import { listEnvironments } from './handlers/list'
 import { loadEnvironment } from './handlers/load'
 import { lockUnlockEnvironment } from './handlers/lock'
 import { renameEnvironment } from './handlers/rename'
-import { updateEnvironmentType } from './handlers/updateType'
+import { setIsProduction } from './handlers/setIsProduction'
 import { responseFailure } from '../../../http/response'
 import {
   CreateEnvironmentData,
-  EnvironmentType,
   ListEnvironmentOptions,
   LoadEnvironmentOptions,
 } from '../../../types/environments'
@@ -232,19 +231,19 @@ export class EnvironmentsAPI {
   }
 
   /**
-   * Updates the type of an environment.
+   * Mark the environment as a production or non-production environment.
    * @param envNameOrId - The name or id of the environment to update.
-   * @param type - The new type for the environment.
+   * @param isProduction - Whether the environment is a production environment or not.
    * @returns A promise that resolves to the update result or an error response.
    */
-  async updateType(envNameOrId: string, type: EnvironmentType) {
+  async setIsProduction(envNameOrId: string, isProduction: boolean) {
     const identifiersError = this.validateIdentifiers(envNameOrId)
     if (identifiersError) return responseFailure(identifiersError)
 
-    return await updateEnvironmentType({
+    return await setIsProduction({
       ...this.getHandlerArgs(),
       environment: envNameOrId,
-      type,
+      isProduction,
     })
   }
 
