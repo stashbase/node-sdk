@@ -24,8 +24,8 @@ export type LoadEnvironmentResponse = {
   environment: {
     /** The name of the environment. */
     name: string
-    /** The type of the environment. */
-    type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
+    /** Whether the environment is a production environment or not. */
+    isProduction: boolean
   }
 
   /** An array of secrets associated with the environment. */

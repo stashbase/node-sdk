@@ -44,8 +44,10 @@ async function loadEnvironment(
 
   const { environment, secrets } = data
 
+  const envType = environment.isProduction ? 'production' : 'non-production'
+
   if (secrets.length === 0) {
-    console.log(`\nLoaded environment: ${environment.name} (${environment.type})`)
+    console.log(`\nLoaded environment: ${environment.name} (${envType})`)
     console.log(`No secrets found`)
 
     return responseSuccess(null)
@@ -62,7 +64,7 @@ async function loadEnvironment(
 
   dotenvExpand.expand(dotenv)
 
-  console.log(`\nLoaded environment: ${environment.name} (${environment.type})`)
+  console.log(`\nLoaded environment: ${environment.name} (${envType})`)
 
   if (printType === 'name' || printType === 'name-value') {
     if (printType === 'name') {
