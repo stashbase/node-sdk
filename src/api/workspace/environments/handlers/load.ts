@@ -26,7 +26,7 @@ async function loadEnvironment(
 
   const query: LoadEnvironmentQueryParams = {
     omit: 'description',
-    'with-environment': ['type'].join(','),
+    'with-environment': ['name,is-production'].join(','),
   }
 
   if (args?.options?.expandRefs) {
@@ -47,12 +47,14 @@ async function loadEnvironment(
   }
 
   const {
-    environment: { type: environmentType },
+    environment: { isProduction },
     secrets,
   } = data
 
+  const envType = isProduction ? 'production' : 'non-production'
+
   if (secrets.length === 0) {
-    console.log(`\nLoaded environment: ${environment} (${environmentType})`)
+    console.log(`\nLoaded environment: ${environment} (${envType})`)
     console.log(`No secrets found`)
 
     return responseSuccess(null)
@@ -69,7 +71,7 @@ async function loadEnvironment(
 
   dotenvExpand.expand(dotenv)
 
-  console.log(`\nLoaded environment: ${environment} (${environmentType})`)
+  console.log(`\nLoaded environment: ${environment} (${envType})`)
 
   const printType = args?.options?.print
 
