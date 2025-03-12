@@ -1,7 +1,5 @@
 import { ListSecretsQueryParams, SecretName } from './secrets'
 
-export type EnvironmentType = 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
-
 export type LoadEnvironmentOptions = {
   /** Whether this methid is enabled or not. */
   enabled?: boolean
@@ -41,8 +39,10 @@ export interface Environment {
   createdAt: string
   /** The unique name of the environment. */
   name: string
+  /** Whether the environment is a production environment or not. */
+  isProduction: boolean
   /** The type of the environment. */
-  type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
+  // type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
   /** Whether the environment is locked or not. */
   locked: boolean
   /** The description of the environment. */
@@ -63,5 +63,5 @@ export type EnvironmentWithProject = Environment & {
 export interface CreateEnvironmentData {
   name: string
   description?: string | null
-  type: EnvironmentType
+  isProduction?: boolean
 }
