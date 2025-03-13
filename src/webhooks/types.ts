@@ -79,6 +79,11 @@ export type Event = {
        * @summary Environment Name
        */
       name: string
+
+      /**
+       * @summary Whether the environment is production
+       */
+      isProduction: boolean
     }
   }
 }
