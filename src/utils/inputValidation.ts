@@ -436,19 +436,19 @@ const isValidSecretName = (name: string) =>
   isAlphanumericUppercaseWithUnderscore(name) &&
   !startsWithNumber(name)
 
-// format descriptions for secrets
-export const formatSecretDescriptions = <T extends { description?: string | null }>(
+// format comments for secrets
+export const formatSecretComments = <T extends { comment?: string | null }>(
   data: Array<T>
 ): Array<T> => {
-  return data.map(({ description: d, ...rest }) => ({
+  return data.map(({ comment: c, ...rest }) => ({
     ...rest,
-    description: d !== undefined && d !== null ? formatSecretDescription(d) : d,
+    comment: c !== undefined && c !== null ? formatSecretComment(c) : c,
   })) as T[]
 }
 
-export const formatSecretDescription = (description: string) => {
+export const formatSecretComment = (comment: string) => {
   return removeOuterNewlines(
-    description
+    comment
       .split('\n')
       .map((line) => line.trimEnd())
       .join('\n')
@@ -460,7 +460,7 @@ export const formatSecretsInputArray = <T extends { comment?: string | null }>(
 ): Array<T> => {
   return data.map(({ comment: c, ...rest }) => ({
     ...rest,
-    comment: c !== undefined && c !== null ? formatSecretDescription(c) : c,
+    comment: c !== undefined && c !== null ? formatSecretComment(c) : c,
   })) as T[]
 }
 
