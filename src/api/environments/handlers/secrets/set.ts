@@ -7,7 +7,7 @@ import { SecretName } from '../../../../types/secrets'
 export type SetSecretsData = Array<{
   name: SecretName
   value: string
-  description?: string | null
+  comment?: string | null
 }>
 
 async function setSecrets(

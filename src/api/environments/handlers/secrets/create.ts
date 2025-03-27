@@ -6,7 +6,7 @@ import { ApiResponse } from '../../../../http/response'
 export type CreateSecretsData = Array<{
   name: Uppercase<string>
   value: string
-  description?: string | null
+  comment?: string | null
 }>
 
 async function createSecrets(
