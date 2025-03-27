@@ -20,7 +20,7 @@ async function getSecret(
   }
 
   if (omit && omit.length > 0) {
-    const omitStr = omit.filter((o) => o === 'value' || o === 'description').join(',')
+    const omitStr = omit.filter((o) => o === 'value' || o === 'comment').join(',')
 
     if (omitStr.length > 0) {
       query['omit'] = omitStr
