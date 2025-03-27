@@ -10,7 +10,7 @@ export type UpdateSecretsData = Array<
   } & AtLeastOne<{
     newName: SecretName
     value: string
-    description: string | null
+    comment: string | null
   }>
 >
 
