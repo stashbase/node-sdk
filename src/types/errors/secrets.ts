@@ -14,7 +14,7 @@ export type CreateSecretsError =
   | InvalidSecretNamesValidationError
   | DuplicateSecretsNamesValidationError
   | SelfReferencingSecretsValidationError
-  | SecretDescriptionsTooLongValidationError
+  | SecretCommentsTooLongValidationError
   | SecretValuesTooLongValidationError
 
 export type DeleteSecretsError = GenericApiError | InvalidSecretNamesValidationError
@@ -27,7 +27,7 @@ export type SetSecretsError =
   | InvalidSecretNamesValidationError
   | DuplicateSecretsNamesValidationError
   | SelfReferencingSecretsValidationError
-  | SecretDescriptionsTooLongValidationError
+  | SecretCommentsTooLongValidationError
   | SecretValuesTooLongValidationError
 
 export type UpdateSecretsError =
@@ -39,7 +39,7 @@ export type UpdateSecretsError =
   | SelfReferencingSecretsValidationError
   | InvalidNewSecretNamesValidationError
   | MissingPropertiesToUpdateValidationError
-  | SecretDescriptionsTooLongValidationError
+  | SecretCommentsTooLongValidationError
   | SecretValuesTooLongValidationError
   | SelfReferencingSecretsConflictError
   | SecretsAlreadyExistConflictError
@@ -54,8 +54,8 @@ export type DuplicateSecretsNamesValidationError = ValidationApiError<
   SecretsErrorDetails
 >
 
-export type SecretDescriptionsTooLongValidationError = ValidationApiError<
-  'secret_descriptions_too_long',
+export type SecretCommentsTooLongValidationError = ValidationApiError<
+  'secret_comments_too_long',
   SecretsErrorDetails
 >
 

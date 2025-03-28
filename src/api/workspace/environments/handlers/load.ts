@@ -25,7 +25,7 @@ async function loadEnvironment(
   const { client, project, environment } = args
 
   const query: LoadEnvironmentQueryParams = {
-    omit: 'description',
+    omit: 'comment',
     'with-environment': ['name,is-production'].join(','),
   }
 

@@ -8,7 +8,7 @@ test('Create new secrets (add them to environment)', async () => {
     {
       name: 'KEY',
       value: 'Some value',
-      description: 'This is description for this and this',
+      comment: 'This is comment for this and this',
     },
   ])
   if (error) {
