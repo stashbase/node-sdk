@@ -7,8 +7,8 @@ export interface Secret {
   name: Uppercase<string>
   /** The value of the secret */
   value: string
-  /** The description of the secret, can be null */
-  description: string | null
+  /** The comment of the secret, can be null */
+  comment: string | null
 }
 
 export type GetSecretResData = Secret
@@ -74,7 +74,7 @@ export interface GetSecretOptions {
   /**
    * Omit selected secret properties
    */
-  omit?: Array<'value' | 'description'>
+  omit?: Array<'value' | 'comment'>
 }
 
 export type CreateSecretsData = Array<CreateSecretsItem>
@@ -84,8 +84,8 @@ export type CreateSecretsItem = {
   name: SecretName
   /** The value of the secret */
   value: string
-  /** The description of the secret (optional) */
-  description?: string | null
+  /** The comment of the secret (optional) */
+  comment?: string | null
 }
 
 export type SetSecretsItem = CreateSecretsItem
@@ -95,5 +95,5 @@ export type UpdateSecretsItem = {
 } & AtLeastOne<{
   newName: SecretName
   value: string
-  description: string | null
+  comment: string | null
 }>

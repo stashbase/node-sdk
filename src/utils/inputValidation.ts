@@ -7,7 +7,7 @@ import {
   missingPropertiesToUpdateError,
   newSecretNamesSameAsNamesError,
   noDataProvidedError,
-  secretDescriptionsTooLongError,
+  secretCommentsTooLongError,
   secretValuesTooLongError,
   selfReferencingSecretsError,
 } from '../errors/secrets'
@@ -21,12 +21,12 @@ import {
   MissingPropertiesToUpdateValidationError,
   NewSecretNamesSameAsNamesValidationError,
   NoDataProvidedValidationError,
-  SecretDescriptionsTooLongValidationError,
+  SecretCommentsTooLongValidationError,
   SecretValuesTooLongValidationError,
   SelfReferencingSecretsValidationError,
 } from '../types/errors/secrets'
 
-export const SECRET_DESCRIPTION_MAX_LENGTH = 512
+export const SECRET_COMMENT_MAX_LENGTH = 512
 export const SECRET_VALUE_MAX_LENGTH = 4096
 
 const alphanumericRegex = /[a-zA-Z0-9]/
@@ -172,7 +172,7 @@ export const extractAllSecretsReferences = (secretName: string): string[] => {
 interface SetSecretsItem {
   name: string
   value: string
-  description?: string | null | undefined
+  comment?: string | null | undefined
 }
 
 type ValidateSetSecretsInputRes =
@@ -180,7 +180,7 @@ type ValidateSetSecretsInputRes =
   | InvalidSecretNamesValidationError
   | DuplicateSecretsNamesValidationError
   | SelfReferencingSecretsValidationError
-  | SecretDescriptionsTooLongValidationError
+  | SecretCommentsTooLongValidationError
   | SecretValuesTooLongValidationError
   | null
 
@@ -194,11 +194,11 @@ export const validateSetSecretsInput = (
   }
   const invalidSecretNames = new Set<string>()
   const namesWithSelfReference = new Set<string>()
-  const descriptionTooLongSecretNames = new Set<string>()
+  const commentTooLongSecretNames = new Set<string>()
   const valueTooLongSecretNames = new Set<string>()
   const nameOccurrences = new Map<string, number>()
 
-  for (const { name, value, description } of data) {
+  for (const { name, value, comment } of data) {
     const isValid = isValidSecretName(name)
     if (!isValid) invalidSecretNames.add(name)
 
@@ -214,8 +214,8 @@ export const validateSetSecretsInput = (
       valueTooLongSecretNames.add(name)
     }
 
-    if (description && description.length > SECRET_DESCRIPTION_MAX_LENGTH) {
-      descriptionTooLongSecretNames.add(name)
+    if (comment && comment.length > SECRET_COMMENT_MAX_LENGTH) {
+      commentTooLongSecretNames.add(name)
     }
   }
 
@@ -250,9 +250,9 @@ export const validateSetSecretsInput = (
     return error
   }
 
-  if (descriptionTooLongSecretNames.size > 0) {
-    const secretNames = Array.from(descriptionTooLongSecretNames)
-    const error = secretDescriptionsTooLongError(secretNames)
+  if (commentTooLongSecretNames.size > 0) {
+    const secretNames = Array.from(commentTooLongSecretNames)
+    const error = secretCommentsTooLongError(secretNames)
 
     return error
   }
@@ -271,7 +271,7 @@ type ValidateUpdateSecretsInputRes =
   | DuplicateNewSecretNamesValidationError
   | SelfReferencingSecretsValidationError
   | NewSecretNamesSameAsNamesValidationError
-  | SecretDescriptionsTooLongValidationError
+  | SecretCommentsTooLongValidationError
   | SecretValuesTooLongValidationError
   | null
 
@@ -293,11 +293,11 @@ export const validateUpdateSecretsInput = (
 
   const newNameSameAsName = new Set<string>()
   const missingPropertiesToUpdateNames = new Set<string>()
-  const descriptionTooLongSecretNames = new Set<string>()
+  const commentTooLongSecretNames = new Set<string>()
   const valueTooLongSecretNames = new Set<string>()
 
-  for (const { name, newName, value, description } of data) {
-    if (newName === undefined && value === undefined && description === undefined) {
+  for (const { name, newName, value, comment } of data) {
+    if (newName === undefined && value === undefined && comment === undefined) {
       missingPropertiesToUpdateNames.add(name)
     }
 
@@ -339,8 +339,8 @@ export const validateUpdateSecretsInput = (
       valueTooLongSecretNames.add(name)
     }
 
-    if (description && description.length > SECRET_DESCRIPTION_MAX_LENGTH) {
-      descriptionTooLongSecretNames.add(name)
+    if (comment && comment.length > SECRET_COMMENT_MAX_LENGTH) {
+      commentTooLongSecretNames.add(name)
     }
   }
   // NOTE: invalid names
@@ -406,9 +406,9 @@ export const validateUpdateSecretsInput = (
     return error
   }
 
-  if (descriptionTooLongSecretNames.size > 0) {
-    const secretNames = Array.from(descriptionTooLongSecretNames)
-    const error = secretDescriptionsTooLongError(secretNames)
+  if (commentTooLongSecretNames.size > 0) {
+    const secretNames = Array.from(commentTooLongSecretNames)
+    const error = secretCommentsTooLongError(secretNames)
 
     return error
   }
@@ -436,31 +436,31 @@ const isValidSecretName = (name: string) =>
   isAlphanumericUppercaseWithUnderscore(name) &&
   !startsWithNumber(name)
 
-// format descriptions for secrets
-export const formatSecretDescriptions = <T extends { description?: string | null }>(
+// format comments for secrets
+export const formatSecretComments = <T extends { comment?: string | null }>(
   data: Array<T>
 ): Array<T> => {
-  return data.map(({ description: d, ...rest }) => ({
+  return data.map(({ comment: c, ...rest }) => ({
     ...rest,
-    description: d !== undefined && d !== null ? formatSecretDescription(d) : d,
+    comment: c !== undefined && c !== null ? formatSecretComment(c) : c,
   })) as T[]
 }
 
-export const formatSecretDescription = (description: string) => {
+export const formatSecretComment = (comment: string) => {
   return removeOuterNewlines(
-    description
+    comment
       .split('\n')
       .map((line) => line.trimEnd())
       .join('\n')
   )
 }
 
-export const formatSecretsInputArray = <T extends { description?: string | null }>(
+export const formatSecretsInputArray = <T extends { comment?: string | null }>(
   data: Array<T>
 ): Array<T> => {
-  return data.map(({ description: d, ...rest }) => ({
+  return data.map(({ comment: c, ...rest }) => ({
     ...rest,
-    description: d !== undefined && d !== null ? formatSecretDescription(d) : d,
+    comment: c !== undefined && c !== null ? formatSecretComment(c) : c,
   })) as T[]
 }
 

@@ -39,7 +39,7 @@ async function listSecrets(
   const queryObj: ListSecretsQueryParams = {}
 
   if (omit && omit.length > 0) {
-    const omitStr = omit.filter((o) => o === 'value' || o === 'description').join(',')
+    const omitStr = omit.filter((o) => o === 'value' || o === 'comment').join(',')
 
     if (omitStr.length > 0) {
       queryObj['omit'] = omitStr

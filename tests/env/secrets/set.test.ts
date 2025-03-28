@@ -8,7 +8,7 @@ test('Set secrets (add new or update existing)', async () => {
     {
       name: 'SECRET',
       value: 'VALUE_123',
-      description: null,
+      comment: null,
     },
     {
       name: 'APPP_URL',
