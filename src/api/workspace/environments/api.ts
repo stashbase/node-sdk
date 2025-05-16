@@ -20,7 +20,6 @@ import { deleteEnvironment } from './handlers/delete'
 import { getEnvironment } from './handlers/get'
 import { listEnvironments } from './handlers/list'
 import { loadEnvironment } from './handlers/load'
-import { lockUnlockEnvironment } from './handlers/lock'
 import { renameEnvironment } from './handlers/rename'
 import { setIsProduction } from './handlers/setIsProduction'
 import { responseFailure } from '../../../http/response'
@@ -244,38 +243,6 @@ export class EnvironmentsAPI {
       ...this.getHandlerArgs(),
       environment: envNameOrId,
       isProduction,
-    })
-  }
-
-  /**
-   * Locks an environment to prevent modifications.
-   * @param envNameOrId - The name or id of the environment to lock.
-   * @returns A promise that resolves to the lock result or an error response.
-   */
-  async lock(envNameOrId: string) {
-    const identifiersError = this.validateIdentifiers(envNameOrId)
-    if (identifiersError) return responseFailure(identifiersError)
-
-    return await lockUnlockEnvironment({
-      ...this.getHandlerArgs(),
-      environment: envNameOrId,
-      lock: true,
-    })
-  }
-
-  /**
-   * Unlocks a previously locked environment.
-   * @param envNameOrId - The name or id of the environment to unlock.
-   * @returns A promise that resolves to the unlock result or an error response.
-   */
-  async unlock(envNameOrId: string) {
-    const identifiersError = this.validateIdentifiers(envNameOrId)
-    if (identifiersError) return responseFailure(identifiersError)
-
-    return await lockUnlockEnvironment({
-      ...this.getHandlerArgs(),
-      environment: envNameOrId,
-      lock: true,
     })
   }
 }
