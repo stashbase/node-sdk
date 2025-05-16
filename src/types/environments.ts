@@ -11,7 +11,7 @@ export type LoadEnvironmentOptions = {
 
 export interface ListEnvironmentOptions {
   /** The field to sort by. */
-  sortBy?: 'name' | 'locked' | 'createdAt' | 'secretCount'
+  sortBy?: 'name' | 'createdAt' | 'secretCount'
   /** Whether to sort in ascending or descending order, default: 'asc'. */
   order?: 'asc' | 'desc'
   /** A search query (min 2, max 40 characters). */
@@ -41,10 +41,6 @@ export interface Environment {
   name: string
   /** Whether the environment is a production environment or not. */
   isProduction: boolean
-  /** The type of the environment. */
-  // type: 'DEVELOPMENT' | 'TESTING' | 'STAGING' | 'PRODUCTION'
-  /** Whether the environment is locked or not. */
-  locked: boolean
   /** The description of the environment. */
   description: string | null
   /** The number of secrets in the environment. */
