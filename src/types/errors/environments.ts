@@ -5,7 +5,6 @@ export type EnvironmentAlreadyExistsError = ConflictApiError<
   'environment_already_exists',
   undefined
 >
-export type EnvironmentLockedError = ConflictApiError<'environment_locked', undefined>
 export type EnvironmentLimitReachedError = QuotaLimitApiError<
   'environment_limit_reached',
   undefined
@@ -68,4 +67,3 @@ export type InvalidEnvironmentSearchError = ValidationApiError<
     invalidSearchExamples: string[]
   }
 >
-
