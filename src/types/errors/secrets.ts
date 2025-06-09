@@ -13,7 +13,6 @@ export type CreateSecretsError =
   | GenericApiError
   | InvalidSecretNamesValidationError
   | DuplicateSecretsNamesValidationError
-  | SelfReferencingSecretsValidationError
   | SecretCommentsTooLongValidationError
   | SecretValuesTooLongValidationError
 
@@ -26,7 +25,6 @@ export type SetSecretsError =
   | NoDataProvidedValidationError
   | InvalidSecretNamesValidationError
   | DuplicateSecretsNamesValidationError
-  | SelfReferencingSecretsValidationError
   | SecretCommentsTooLongValidationError
   | SecretValuesTooLongValidationError
 
@@ -36,12 +34,10 @@ export type UpdateSecretsError =
   | InvalidSecretNamesValidationError
   | DuplicateSecretsNamesValidationError
   | DuplicateNewSecretNamesValidationError
-  | SelfReferencingSecretsValidationError
   | InvalidNewSecretNamesValidationError
   | MissingPropertiesToUpdateValidationError
   | SecretCommentsTooLongValidationError
   | SecretValuesTooLongValidationError
-  | SelfReferencingSecretsConflictError
   | SecretsAlreadyExistConflictError
 
 export type NoDataProvidedValidationError = ValidationApiError<'no_data_provided', undefined>
@@ -61,14 +57,6 @@ export type SecretCommentsTooLongValidationError = ValidationApiError<
 
 export type SecretValuesTooLongValidationError = ValidationApiError<
   'secret_values_too_long',
-  SecretsErrorDetails
->
-
-export type SelfReferencingSecretsValidationError =
-  SecretsValidationErrorWithDetails<'self_referencing_secrets'>
-
-export type SelfReferencingSecretsConflictError = ConflictApiError<
-  'self_referencing_secrets',
   SecretsErrorDetails
 >
 
