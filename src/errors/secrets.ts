@@ -11,7 +11,6 @@ import {
   SecretCommentsTooLongValidationError,
   SecretValuesTooLongValidationError,
   SecretsErrorDetails,
-  SelfReferencingSecretsValidationError,
 } from '../types/errors/secrets'
 import { SECRET_COMMENT_MAX_LENGTH, SECRET_VALUE_MAX_LENGTH } from '../utils/inputValidation'
 
@@ -61,17 +60,6 @@ export const duplicateNewSecretNamesError = (
   createSecretsError({
     code: 'validation.duplicate_new_secret_names',
     message: `One or more secrets with the same value of property 'newName' provided in the request.`,
-    details: {
-      secretNames,
-    },
-  })
-
-export const selfReferencingSecretsError = (
-  secretNames: Array<string>
-): SelfReferencingSecretsValidationError =>
-  createSecretsError({
-    code: 'validation.self_referencing_secrets',
-    message: 'One or more secrets would result in self-reference, which is not allowed.',
     details: {
       secretNames,
     },
