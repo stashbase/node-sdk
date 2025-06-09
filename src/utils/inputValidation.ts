@@ -9,7 +9,6 @@ import {
   noDataProvidedError,
   secretCommentsTooLongError,
   secretValuesTooLongError,
-  selfReferencingSecretsError,
 } from '../errors/secrets'
 import { invalidWebhookIdError } from '../errors/webhooks'
 import { responseFailure } from '../http/response'
@@ -23,7 +22,6 @@ import {
   NoDataProvidedValidationError,
   SecretCommentsTooLongValidationError,
   SecretValuesTooLongValidationError,
-  SelfReferencingSecretsValidationError,
 } from '../types/errors/secrets'
 
 export const SECRET_COMMENT_MAX_LENGTH = 512
@@ -140,18 +138,18 @@ export const validateWebhookIdForMethod = (webhookId: string) => {
   }
 }
 
-export const secretHasSelfReference = (secretName: string, value: string): boolean => {
-  const regex = /\${(.*?)}/g
-  const matches = value.matchAll(regex)
+// export const secretHasSelfReference = (secretName: string, value: string): boolean => {
+//   const regex = /\${(.*?)}/g
+//   const matches = value.matchAll(regex)
 
-  for (const match of matches) {
-    if (match[1] === secretName) {
-      return true
-    }
-  }
+//   for (const match of matches) {
+//     if (match[1] === secretName) {
+//       return true
+//     }
+//   }
 
-  return false
-}
+//   return false
+// }
 
 export const extractAllSecretsReferences = (secretName: string): string[] => {
   const regex = /\${(.*?)}/g
@@ -179,7 +177,6 @@ type ValidateSetSecretsInputRes =
   | NoDataProvidedValidationError
   | InvalidSecretNamesValidationError
   | DuplicateSecretsNamesValidationError
-  | SelfReferencingSecretsValidationError
   | SecretCommentsTooLongValidationError
   | SecretValuesTooLongValidationError
   | null
@@ -193,7 +190,6 @@ export const validateSetSecretsInput = (
     return error
   }
   const invalidSecretNames = new Set<string>()
-  const namesWithSelfReference = new Set<string>()
   const commentTooLongSecretNames = new Set<string>()
   const valueTooLongSecretNames = new Set<string>()
   const nameOccurrences = new Map<string, number>()
@@ -201,12 +197,6 @@ export const validateSetSecretsInput = (
   for (const { name, value, comment } of data) {
     const isValid = isValidSecretName(name)
     if (!isValid) invalidSecretNames.add(name)
-
-    const hasSelfReference = secretHasSelfReference(name, value)
-
-    if (hasSelfReference) {
-      namesWithSelfReference.add(name)
-    }
 
     nameOccurrences.set(name, (nameOccurrences.get(name) || 0) + 1)
 
@@ -243,13 +233,6 @@ export const validateSetSecretsInput = (
     return error
   }
 
-  if (namesWithSelfReference.size > 0) {
-    const secretNames = Array.from(namesWithSelfReference)
-    const error = selfReferencingSecretsError(secretNames)
-
-    return error
-  }
-
   if (commentTooLongSecretNames.size > 0) {
     const secretNames = Array.from(commentTooLongSecretNames)
     const error = secretCommentsTooLongError(secretNames)
@@ -269,7 +252,6 @@ type ValidateUpdateSecretsInputRes =
   | InvalidNewSecretNamesValidationError
   | DuplicateSecretsNamesValidationError
   | DuplicateNewSecretNamesValidationError
-  | SelfReferencingSecretsValidationError
   | NewSecretNamesSameAsNamesValidationError
   | SecretCommentsTooLongValidationError
   | SecretValuesTooLongValidationError
@@ -285,8 +267,6 @@ export const validateUpdateSecretsInput = (
 
   const nameOccurrences = new Map<string, number>()
   const newNameOccurrences = new Map<string, number>()
-
-  const namesWithSelfReference = new Set<string>()
 
   const invalidSecretNames = new Set<string>()
   const invalidNewSecretNames = new Set<string>()
@@ -307,22 +287,6 @@ export const validateUpdateSecretsInput = (
 
     if (newName !== undefined && !isValidSecretName(newName)) {
       invalidNewSecretNames.add(newName)
-    }
-
-    if (value) {
-      if (newName) {
-        const hasSelfReference = secretHasSelfReference(newName, value)
-
-        if (hasSelfReference) {
-          namesWithSelfReference.add(name)
-        }
-      } else {
-        const hasSelfReference = secretHasSelfReference(name, value)
-
-        if (hasSelfReference) {
-          namesWithSelfReference.add(name)
-        }
-      }
     }
 
     nameOccurrences.set(name, (nameOccurrences.get(name) || 0) + 1)
@@ -394,14 +358,6 @@ export const validateUpdateSecretsInput = (
   if (valueTooLongSecretNames.size > 0) {
     const secretNames = Array.from(valueTooLongSecretNames)
     const error = secretValuesTooLongError(secretNames)
-
-    return error
-  }
-
-  // NOTE: self-referencing secrets
-  if (namesWithSelfReference.size > 0) {
-    const secretNames = Array.from(namesWithSelfReference)
-    const error = selfReferencingSecretsError(secretNames)
 
     return error
   }
