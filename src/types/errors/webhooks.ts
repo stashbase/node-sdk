@@ -1,4 +1,10 @@
-import { ConflictApiError, GenericApiError, ResourceApiError, ValidationApiError } from '.'
+import {
+  ConflictApiError,
+  GenericApiError,
+  QuotaLimitApiError,
+  ResourceApiError,
+  ValidationApiError,
+} from '.'
 
 export type ListWebhooksError = GenericApiError
 export type CreateWebhookError = GenericApiError | WebhookLimitReachedError
@@ -94,4 +100,4 @@ export type InvalidWebhookLogsPageError = ValidationApiError<
 
 type WebhookNotFoundError = ResourceApiError<'webhook_not_found', undefined>
 
-type WebhookLimitReachedError = ResourceApiError<'webhook_limit_reached', undefined>
+type WebhookLimitReachedError = QuotaLimitApiError<'webhook_limit_reached', undefined>
