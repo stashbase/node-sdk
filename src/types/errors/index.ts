@@ -63,7 +63,7 @@ export type RateLimitApiError<T extends string, D = ApiErrorDetailsGenericType> 
 export type GenericApiError =
   | UnauthorizedApiError
   | TooManyRequestsApiError
-  | UnsupportedApiKeyError
+  | UnsupportedApiKeyTypeError
   | ExpiredApiKeyError
   | MissingPermissionError
   | InternalServerError
@@ -84,8 +84,8 @@ type MissingPermissionError = AccessApiError<
   }
 >
 
-type UnsupportedApiKeyError = AccessApiError<
-  'unsupported_api_key',
+type UnsupportedApiKeyTypeError = AccessApiError<
+  'unsupported_api_key_type',
   { supportedApiKeyTypes: string[] }
 >
 type ExpiredApiKeyError = AuthApiError<'expired_api_key', { expiredAt: string }>
