@@ -2,9 +2,9 @@ import { test } from 'vitest'
 import { createEnvClient } from '../../../src'
 
 test('Update env secrets', async () => {
-  const envApi = createEnvClient('duIwyuCWOhJYpWQM3zmcGm0uGAJanqBS')
+  const client = createEnvClient('duIwyuCWOhJYpWQM3zmcGm0uGAJanqBS')
 
-  const { data, error } = await envApi.secrets.update([
+  const { data, error } = await client.secrets.update([
     {
       name: 'NEW_APP_URL',
       comment: 'THidhoihsdofhais',

@@ -2,9 +2,9 @@ import { test } from 'vitest'
 import { createEnvClient } from '../../../src'
 
 test('List webhook logs', async () => {
-  const stashbase = createEnvClient(process.env.VITE_TEST_ENV_API_KEY as string)
+  const client = createEnvClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
-  const { data, error } = await stashbase.webhooks.listLogs('whk_mtGrLXUhsUvA6rEhUJjrcd', {
+  const { data, error } = await client.webhooks.listLogs('whk_mtGrLXUhsUvA6rEhUJjrcd', {
     limit: 30,
   })
 
