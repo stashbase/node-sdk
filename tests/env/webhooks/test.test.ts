@@ -2,9 +2,9 @@ import { test } from 'vitest'
 import { createEnvClient } from '../../../src'
 
 test('Get get single webhook', async () => {
-  const stashbase = createEnvClient(process.env.VITE_TEST_ENV_API_KEY as string)
+  const client = createEnvClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
-  const { data, error } = await stashbase.webhooks.test('whk_mtGrLXUhsUvA6rEhUJjrcd')
+  const { data, error } = await client.webhooks.test('whk_mtGrLXUhsUvA6rEhUJjrcd')
 
   if (error) {
     const { code } = error
