@@ -7,7 +7,7 @@ describe('Create environment', () => {
 
     const { data, error } = await envEase.environments('proj_nVpZPsL5nQTUP9yXU2GKYJ').create({
       name: 'app-dev',
-      type: 'DEVELOPMENT',
+      isProduction: false,
     })
 
     console.log(data)
