@@ -4,9 +4,9 @@ import { createWorkspaceClient } from '../../../src'
 
 describe('List projects', () => {
   test('OK', async () => {
-    const envEase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
+    const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await envEase.projects.list()
+    const { data, error } = await client.projects.list()
 
     console.log(data)
     console.log(error)

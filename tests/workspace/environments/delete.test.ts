@@ -3,9 +3,9 @@ import { createWorkspaceClient } from '../../../src'
 
 describe('Delete environment', () => {
   test('Invalid token', async () => {
-    const envEase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
+    const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await envEase
+    const { data, error } = await client
       .environments('proj_nVpZPsL5nQTUP9yXU2GKYJ')
       .delete('app-dev')
 

@@ -4,9 +4,9 @@ import { createWorkspaceClient } from '../../../src'
 
 describe('Create project', () => {
   test('OK', async () => {
-    const envEase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
+    const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await envEase.projects.create({
+    const { data, error } = await client.projects.create({
       name: 'created-from-sdk',
       description: 'this is a description',
     })

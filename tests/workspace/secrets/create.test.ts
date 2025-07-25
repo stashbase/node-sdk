@@ -3,9 +3,9 @@ import { createWorkspaceClient } from '../../../src'
 
 describe('Create secrets', () => {
   test('OK', async () => {
-    const envEase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
+    const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await envEase.secrets('hero-hub', 'vercel').create([
+    const { data, error } = await client.secrets('hero-hub', 'vercel').create([
       {
         name: 'SOME_KEY',
         value: 'SOME_VALUE',
