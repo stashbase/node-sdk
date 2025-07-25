@@ -1,5 +1,4 @@
 import { ApiResponse } from '../../../../http/response'
-import { EnvironmentLockedError } from '../../../../types/errors/environments'
 import {
   EnvironmentNotFoundError,
   ProjectNotFoundError,
@@ -8,12 +7,7 @@ import {
 import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
 
 export type DeleteEnvironmentArgs = SingleEnvironmentHandlerArgs<undefined>
-
-type DeleteEnvironmentError =
-  | GenericApiError
-  | ProjectNotFoundError
-  | EnvironmentNotFoundError
-  | EnvironmentLockedError
+type DeleteEnvironmentError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
 async function deleteEnvironment(
   args: DeleteEnvironmentArgs
