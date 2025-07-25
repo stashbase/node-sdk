@@ -3,9 +3,9 @@ import { createWorkspaceClient } from '../../../src'
 
 describe('Get environment', () => {
   test('OK', async () => {
-    const envEase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
+    const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await envEase.environments('hero-hub').get('vercel')
+    const { data, error } = await client.environments('hero-hub').get('vercel')
 
     const type = error?.getType()
 

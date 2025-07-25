@@ -2,9 +2,9 @@ import { test } from 'vitest'
 import { createWorkspaceClient } from '../../../src'
 
 test('Update webhook', async () => {
-  const stashbase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
+  const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-  const { data, error } = await stashbase
+  const { data, error } = await client
     .webhooks('name', '123')
     .update('whk_4i1gbnewYBnCTZg3Sbye2c', {
       description: 'This is a new description for the webhook',

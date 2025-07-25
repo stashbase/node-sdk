@@ -2,9 +2,9 @@ import { test } from 'vitest'
 import { createWorkspaceClient } from '../../../src'
 
 test('Update secrets', async () => {
-  const envEase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
+  const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-  const { data, error } = await envEase.secrets('name', '123').update([
+  const { data, error } = await client.secrets('name', '123').update([
     {
       name: 'KEYS',
       comment: null,

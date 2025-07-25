@@ -3,9 +3,9 @@ import { createWorkspaceClient } from '../../../src'
 
 describe('Set secrets', () => {
   test('', async () => {
-    const envEase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
+    const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await envEase
+    const { data, error } = await client
       .secrets('proj_iBgCx5tegfVaKzjywTg2ck', 'env_3NCdY7kmbLJpZcpMg4W6wk')
       .set([
         {

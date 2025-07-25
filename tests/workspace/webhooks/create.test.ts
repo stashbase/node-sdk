@@ -2,9 +2,9 @@ import { test } from 'vitest'
 import { createWorkspaceClient } from '../../../src'
 
 test('Create webhook', async () => {
-  const stashbase = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
+  const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-  const { data, error } = await stashbase.webhooks('name', '123').create({
+  const { data, error } = await client.webhooks('name', '123').create({
     enabled: true,
     url: 'https://very-last-url.com',
     description: 'Very last description',
