@@ -1,8 +1,5 @@
 import { ApiResponse } from '../../../../http/response'
-import {
-  EnvironmentAlreadyExistsError,
-  EnvironmentLockedError,
-} from '../../../../types/errors/environments'
+import { EnvironmentAlreadyExistsError } from '../../../../types/errors/environments'
 import {
   EnvironmentNotFoundError,
   ProjectNotFoundError,
@@ -19,7 +16,6 @@ type RenameEnvironmentError =
   | ProjectNotFoundError
   | EnvironmentNotFoundError
   | EnvironmentAlreadyExistsError
-  | EnvironmentLockedError
 
 async function renameEnvironment(
   args: RenameEnvironmentArgs

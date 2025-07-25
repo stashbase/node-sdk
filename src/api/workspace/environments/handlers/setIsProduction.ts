@@ -1,5 +1,4 @@
 import { ApiResponse } from '../../../../http/response'
-import { EnvironmentLockedError } from '../../../../types/errors/environments'
 import {
   EnvironmentNotFoundError,
   ProjectNotFoundError,
@@ -11,11 +10,7 @@ type SetIsProductionArgs = SingleEnvironmentHandlerArgs<{
   isProduction: boolean
 }>
 
-type SetIsProductionError =
-  | GenericApiError
-  | ProjectNotFoundError
-  | EnvironmentNotFoundError
-  | EnvironmentLockedError
+type SetIsProductionError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
 
 async function setIsProduction(
   args: SetIsProductionArgs
