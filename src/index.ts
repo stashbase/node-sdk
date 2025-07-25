@@ -9,12 +9,12 @@ import { EnvironmentsAPI as WsEnvironmentsAPI } from './api/workspace/environmen
 /**
  * Creates an SDK object that encapsulates functionality for managing projects, environments, and secrets.
  *
- * @param workspaceApiKey - The Worksapce API key.
+ * @param apiKey - Service or Personal API key.
  * @returns An object containing methods for interacting with projects, environments, and secrets.
  */
-export function createWorkspaceClient(workspaceApiKey: string) {
+export function createWorkspaceClient(apiKey: string) {
   const client = createHttpClient({
-    authorization: { workspaceApiKey },
+    authorization: { apiKey },
   })
 
   return new WorkspaceClient(client)
@@ -51,13 +51,12 @@ class WorkspaceClient {
 /**
  * Creates an API client for environment-specific operations using an environment API key.
  *
- * @param envApiKey - The environment API key.
+ * @param apiKey - Environment Account API key.
  * @returns An object containing methods for interacting with the environment.
  */
-export function createEnvClient(envApiKey: string) {
-  console.log(envApiKey)
+export function createEnvClient(apiKey: string) {
   const client = createHttpClient({
-    authorization: { envApiKey },
+    authorization: { apiKey },
   })
 
   return new EnvironmentsAPI(client)

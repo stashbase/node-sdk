@@ -13,12 +13,11 @@ export class HttpClient {
   constructor(args: {
     version?: string
     authorization: {
-      envApiKey?: string
-      workspaceApiKey?: string
+      apiKey: string
     }
   }) {
     const {
-      authorization: { envApiKey, workspaceApiKey },
+      authorization: { apiKey },
     } = args
 
     const headers = {
@@ -26,13 +25,8 @@ export class HttpClient {
       'User-Agent': 'EnvEase SDK/0.0.1',
     } as Record<string, string>
 
-    if (envApiKey) {
-      headers['x-api-key'] = envApiKey
-    }
-
-    if (workspaceApiKey) {
-      // headers['x-admin-token'] = workspaceToken
-      headers['x-api-key'] = workspaceApiKey
+    if (apiKey) {
+      headers['x-api-key'] = apiKey
     }
 
     this.headers = headers
@@ -206,8 +200,7 @@ export class HttpClient {
 export function createHttpClient(args: {
   version?: string
   authorization: {
-    envApiKey?: string
-    workspaceApiKey?: string
+    apiKey: string
   }
 }): HttpClient {
   return new HttpClient(args)
