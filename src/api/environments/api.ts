@@ -92,11 +92,11 @@ class EnvironmentsAPI {
     return await getEnvironment(this.httpClient)
   }
 
-  secrets = new EnvSecretsAPI(this.httpClient)
+  secrets = new SecretsAPI(this.httpClient)
   webhooks = new WebhooksAPI(this.httpClient)
 }
 
-class EnvSecretsAPI {
+class SecretsAPI {
   constructor(private httpClient: HttpClient) {}
 
   /**
