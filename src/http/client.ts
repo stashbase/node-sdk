@@ -3,6 +3,7 @@ import { createApiErrorFromResponse } from '../errors'
 import { responseFailure, responseSuccess } from './response'
 
 const baseURL: string = 'http://0.0.0.0:5000'
+const version: string = '0.0.1'
 
 type RequestWithData = { path: string; data?: { [key: string]: any } | any[] }
 type Query = Record<string, string | number | boolean>
@@ -22,7 +23,7 @@ export class HttpClient {
 
     const headers = {
       'Content-Type': 'application/json',
-      'User-Agent': 'EnvEase SDK/0.0.1',
+      'User-Agent': `stashbase/node-sdk/${version}`,
     } as Record<string, string>
 
     if (apiKey) {
