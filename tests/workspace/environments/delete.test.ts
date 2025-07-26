@@ -14,8 +14,8 @@ describe('Delete environment', () => {
   })
 
   test('Project not found', async () => {
-    const envEase = createWorkspaceClient('xPKDa2Xq0zWmfES1nLDoG45qZtR1z2qL')
-    const { data, error } = await envEase.environments('hero-hub1231231231').delete('dev-sdk')
+    const client = createWorkspaceClient('xPKDa2Xq0zWmfES1nLDoG45qZtR1z2qL')
+    const { data, error } = await client.environments('hero-hub1231231231').delete('dev-sdk')
 
     assert.equal(error?.code, 'project_not_found')
 
