@@ -6,6 +6,7 @@ import {
   invalidWebhookLogsPageError,
   invalidWebhookUrlError,
   webhookMissingPropertiesToUpdateError,
+  webhookUrlTooLongError,
 } from '../../../errors/webhooks'
 import { HttpClient } from '../../../http/client'
 import { responseFailure } from '../../../http/response'
@@ -156,6 +157,11 @@ export class WebhooksAPI {
       return responseFailure(error)
     }
 
+    if (data.url.length > 512) {
+      const error = webhookUrlTooLongError
+      return responseFailure(error)
+    }
+
     if (data.description) {
       const isValidDescription = isValidWebhookDescription(data.description)
 
@@ -224,6 +230,11 @@ export class WebhooksAPI {
 
       if (!isValidUrl) {
         const error = invalidWebhookUrlError
+        return responseFailure(error)
+      }
+
+      if (data.url.length > 512) {
+        const error = webhookUrlTooLongError
         return responseFailure(error)
       }
     }
