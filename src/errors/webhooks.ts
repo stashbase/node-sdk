@@ -39,7 +39,7 @@ export const invalidWebhookDescriptionError: InvalidWebhookDescriptionValidation
     code: 'validation.invalid_webhook_description',
     message: 'The description must be a string no longer than 200 characters.',
     details: {
-      maxLength: 200,
+      maxLength: 255,
     },
   })
 
