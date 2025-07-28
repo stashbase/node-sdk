@@ -125,7 +125,7 @@ export const isValidHttpsUrl = (url: string): boolean => {
 }
 
 export const isValidWebhookDescription = (description: string): boolean => {
-  const maxLength = 200
+  const maxLength = 255
   return description.length <= maxLength
 }
 
