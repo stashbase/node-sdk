@@ -6,7 +6,6 @@ import {
   invalidWebhookLogsPageError,
   invalidWebhookUrlError,
   webhookMissingPropertiesToUpdateError,
-  webhookUrlTooLongError,
 } from '../../../errors/webhooks'
 import { HttpClient } from '../../../http/client'
 import { responseFailure } from '../../../http/response'
@@ -14,10 +13,10 @@ import { CreateWebhookData, UpdateWebhookData } from '../../../types/webhooks'
 import {
   isValidEnvironmentIdentifier,
   isValidEnvironmentName,
-  isValidHttpsUrl,
-  isValidProjectIdentifier,
   isValidWebhookDescription,
   isValidWebhookId,
+  isValidWebhookUrl,
+  isValidProjectIdentifier,
 } from '../../../utils/inputValidation'
 import { createWebhook } from './handlers/create'
 import { deleteWebhook } from './handlers/delete'
@@ -150,15 +149,10 @@ export class WebhooksAPI {
     const validationError = this.validateIdentifiers()
     if (validationError) return responseFailure(validationError)
 
-    const isValidUrl = isValidHttpsUrl(data.url)
+    const isValidUrl = isValidWebhookUrl(data.url)
 
     if (!isValidUrl) {
       const error = invalidWebhookUrlError
-      return responseFailure(error)
-    }
-
-    if (data.url.length > 512) {
-      const error = webhookUrlTooLongError
       return responseFailure(error)
     }
 
@@ -226,15 +220,10 @@ export class WebhooksAPI {
     }
 
     if (data.url !== undefined) {
-      const isValidUrl = isValidHttpsUrl(data.url)
+      const isValidUrl = isValidWebhookUrl(data.url)
 
       if (!isValidUrl) {
         const error = invalidWebhookUrlError
-        return responseFailure(error)
-      }
-
-      if (data.url.length > 512) {
-        const error = webhookUrlTooLongError
         return responseFailure(error)
       }
     }
