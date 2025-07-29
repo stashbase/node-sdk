@@ -26,6 +26,14 @@ export const invalidWebhookUrlError: InvalidWebhookUrlValidationError = createAp
   },
 })
 
+export const webhookUrlHttpsRequiredError = createApiError({
+  code: 'validation.webhook_url_https_required',
+  message: `The webhook URL must use HTTPS for secure communication. Please provide a URL that starts with 'https://'.`,
+  details: {
+    validUrlExample: 'https://my-endpoint.com',
+  },
+})
+
 export const webhookUrlTooLongError: WebhookUrlTooLongValidationError = createApiError({
   code: 'validation.webhook_url_too_long',
   message: 'The webhook URL cannot be longer than 512 characters.',
