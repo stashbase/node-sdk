@@ -20,6 +20,7 @@ import { CreateProjectData, createProject } from './handlers/create'
 import { deleteProject } from './handlers/delete'
 import { getProject } from './handlers/get'
 import { ListProjectsOpts, listProjects } from './handlers/list'
+import { updateProject, UpdateProjectData } from './handlers/update'
 
 export class ProjectsAPI {
   private httpClient: HttpClient
@@ -125,6 +126,40 @@ export class ProjectsAPI {
     }
 
     return await createProject(this.httpClient, data)
+  }
+
+  /**
+   * Updates a project by its name or id.
+   * @param args - The arguments for updating a project, including the project name or id.
+   * @returns A promise that resolves to null on successful update or an error response.
+   */
+  async update(projectNameOrId: string, data: UpdateProjectData) {
+    const { name, description } = data
+    const invaliIdentifier = !isValidProjectIdentifier(projectNameOrId)
+
+    if (invaliIdentifier) {
+      const error = invalidProjectIdentifierError
+      return responseFailure(error)
+    }
+
+    if (name) {
+      if (!isValidProjectName(name)) {
+        const error = invalidNewProjectNameError
+        return responseFailure(error)
+      }
+
+      if (isResourceIdFormat('project', name)) {
+        const error = projectNameUsesIdFormat
+        return responseFailure(error)
+      }
+    }
+
+    if (description && description.length > 255) {
+      const error = projectDescriptionTooLongError
+      return responseFailure(error)
+    }
+
+    return await updateProject(this.httpClient, projectNameOrId, data)
   }
 
   /**
