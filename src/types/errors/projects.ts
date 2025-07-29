@@ -35,6 +35,8 @@ export type InvalidProjectNameError = ValidationApiError<
   }
 >
 
+export type NewProjectNameEqualsOriginal = ValidationApiError<'new_project_name_equals_original'>
+
 export type ProjectDescriptionTooLongError = ValidationApiError<
   'project_description_too_long',
   {

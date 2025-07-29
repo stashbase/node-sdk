@@ -9,7 +9,6 @@ import {
   InvalidEnvironmentSortByError,
   InvalidNewEnvironmentNameError,
   NewEnvironmentNameEqualsOriginal,
-  NewProjectNameEqualsOriginal,
 } from '../types/errors/environments'
 import {
   InvalidIdentifierProjectError,
@@ -21,6 +20,7 @@ import {
   InvalidProjectOrderError,
   InvalidProjectSearchError,
   InvalidProjectNameError,
+  NewProjectNameEqualsOriginal,
 } from '../types/errors/projects'
 
 export function createApiErrorFromResponse<T>(responseData: unknown) {
