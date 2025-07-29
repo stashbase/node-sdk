@@ -420,4 +420,19 @@ export const formatSecretsInputArray = <T extends { comment?: string | null }>(
   })) as T[]
 }
 
-export { isValidProjectName, isValidProjectIdentifier, isValidEnvironmentName, isValidSecretName }
+const isValidWebhookUrl = (url: string): boolean => {
+  const isValidFormat =
+    /^https:\/\/(?:[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?\.)+[a-z]{2,}(?::\d{1,5})?(?:\/\S*)?$/i.test(
+      url
+    )
+
+  return isValidFormat && url.length <= 512
+}
+
+export {
+  isValidProjectName,
+  isValidProjectIdentifier,
+  isValidEnvironmentName,
+  isValidSecretName,
+  isValidWebhookUrl,
+}
