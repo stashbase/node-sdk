@@ -9,6 +9,7 @@ import {
   InvalidEnvironmentSortByError,
   InvalidNewEnvironmentNameError,
   NewEnvironmentNameEqualsOriginal,
+  NewProjectNameEqualsOriginal,
 } from '../types/errors/environments'
 import {
   InvalidIdentifierProjectError,
@@ -83,6 +84,12 @@ export const invalidProjectIdentifierError: InvalidIdentifierProjectError = crea
   },
   message:
     "Invalid project identifier. Either a name or Id can be used. The name must be alphanumeric, may include underscores (_) and hyphens (-), and must be between 2 and 40 characters long. The Id must start with the prefix 'proj_' followed by 22 alphanumeric characters.",
+})
+
+export const newProjectNameEqualsOriginal: NewProjectNameEqualsOriginal = createApiError({
+  code: 'validation.new_project_name_equals_original',
+  message: 'The new project name cannot be the same as the original project name.',
+  details: undefined,
 })
 
 export const projectNameUsesIdFormat: ProjectNameUsesIdFormatError = createApiError({
