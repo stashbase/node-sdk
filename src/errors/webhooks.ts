@@ -1,10 +1,10 @@
 import { createApiError } from '.'
 import {
-  InvalidWebhookDescriptionValidationError,
   InvalidWebhookIdError,
   InvalidWebhookLogsLimitError,
   InvalidWebhookLogsPageError,
   InvalidWebhookUrlValidationError,
+  WebhookDescriptionTooLongError,
   WebhookMissingPropertiesToUpdateValidationError,
 } from '../types/errors/webhooks'
 
@@ -26,14 +26,13 @@ export const invalidWebhookUrlError: InvalidWebhookUrlValidationError = createAp
   },
 })
 
-export const invalidWebhookDescriptionError: InvalidWebhookDescriptionValidationError =
-  createApiError({
-    code: 'validation.invalid_webhook_description',
-    message: 'The description must be a string no longer than 255 characters.',
-    details: {
-      maxLength: 255,
-    },
-  })
+export const webhookDescriptionTooLongError: WebhookDescriptionTooLongError = createApiError({
+  code: 'validation.webhook_description_too_long',
+  message: 'The webhook description cannot be longer than 255 characters.',
+  details: {
+    maxLength: 255,
+  },
+})
 
 export const webhookMissingPropertiesToUpdateError: WebhookMissingPropertiesToUpdateValidationError =
   createApiError({

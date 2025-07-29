@@ -38,12 +38,11 @@ import { updateWebhookStatus } from './handlers/webhooks/updateStatus'
 import { updateWebhook } from './handlers/webhooks/update'
 import { testWebhook } from './handlers/webhooks/test'
 import {
-  invalidWebhookDescriptionError,
   invalidWebhookLogsLimitError,
   invalidWebhookLogsPageError,
   invalidWebhookUrlError,
   webhookMissingPropertiesToUpdateError,
-  webhookUrlTooLongError,
+  webhookDescriptionTooLongError,
 } from '../../errors/webhooks'
 import { CreateWebhookData, UpdateWebhookData } from '../../types/webhooks'
 import { ListWebhookLogsOptions } from '../workspace/webhooks/handlers/listLogs'
@@ -331,7 +330,7 @@ class WebhooksAPI {
       const isValidDescription = isValidWebhookDescription(data.description)
 
       if (!isValidDescription) {
-        const error = invalidWebhookDescriptionError
+        const error = webhookDescriptionTooLongError
         return responseFailure(error)
       }
     }
@@ -403,7 +402,7 @@ class WebhooksAPI {
       const isValidDescription = isValidWebhookDescription(data.description)
 
       if (!isValidDescription) {
-        const error = invalidWebhookDescriptionError
+        const error = webhookDescriptionTooLongError
         return responseFailure(error)
       }
     }

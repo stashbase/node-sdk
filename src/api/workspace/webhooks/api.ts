@@ -1,10 +1,10 @@
 import { invalidEnvironmentIdentifierError, invalidProjectIdentifierError } from '../../../errors'
 import {
-  invalidWebhookDescriptionError,
   invalidWebhookIdError,
   invalidWebhookLogsLimitError,
   invalidWebhookLogsPageError,
   invalidWebhookUrlError,
+  webhookDescriptionTooLongError,
   webhookMissingPropertiesToUpdateError,
 } from '../../../errors/webhooks'
 import { HttpClient } from '../../../http/client'
@@ -160,7 +160,7 @@ export class WebhooksAPI {
       const isValidDescription = isValidWebhookDescription(data.description)
 
       if (!isValidDescription) {
-        const error = invalidWebhookDescriptionError
+        const error = webhookDescriptionTooLongError
         return responseFailure(error)
       }
     }
@@ -232,7 +232,7 @@ export class WebhooksAPI {
       const isValidDescription = isValidWebhookDescription(data.description)
 
       if (!isValidDescription) {
-        const error = invalidWebhookDescriptionError
+        const error = webhookDescriptionTooLongError
         return responseFailure(error)
       }
     }
