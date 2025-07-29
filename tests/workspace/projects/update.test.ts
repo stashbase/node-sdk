@@ -1,5 +1,5 @@
 // tests/projects.test.ts
-import { assert, describe, test } from 'vitest'
+import { describe, test } from 'vitest'
 import { createWorkspaceClient } from '../../../src'
 
 describe('Update project', () => {
