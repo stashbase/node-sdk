@@ -236,52 +236,52 @@ export class EnvironmentsAPI {
     return await updateEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId, data })
   }
 
-  /**
-   * Renames an environment within a project.
-   * @param envNameOrId - The current name or id of the environment.
-   * @param newName - The new name for the environment.
-   * @returns A promise that resolves to the rename result or an error response.
-   */
-  async rename(envNameOrId: string, newName: string) {
-    const identifiersError = this.validateIdentifiers(envNameOrId)
-    if (identifiersError) return responseFailure(identifiersError)
+  // /**
+  //  * Renames an environment within a project.
+  //  * @param envNameOrId - The current name or id of the environment.
+  //  * @param newName - The new name for the environment.
+  //  * @returns A promise that resolves to the rename result or an error response.
+  //  */
+  // async rename(envNameOrId: string, newName: string) {
+  //   const identifiersError = this.validateIdentifiers(envNameOrId)
+  //   if (identifiersError) return responseFailure(identifiersError)
 
-    if (!isValidEnvironmentName(newName)) {
-      const error = invalidEnvironmentName
-      return responseFailure(error)
-    }
+  //   if (!isValidEnvironmentName(newName)) {
+  //     const error = invalidEnvironmentName
+  //     return responseFailure(error)
+  //   }
 
-    const newNameHasIdFormat = isResourceIdFormat('environment', newName)
+  //   const newNameHasIdFormat = isResourceIdFormat('environment', newName)
 
-    if (newNameHasIdFormat) {
-      const error = environmentNameUsesIdFormatError
-      return responseFailure(error)
-    }
+  //   if (newNameHasIdFormat) {
+  //     const error = environmentNameUsesIdFormatError
+  //     return responseFailure(error)
+  //   }
 
-    const environmentHasIdFormat = isResourceIdFormat('environment', envNameOrId)
+  //   const environmentHasIdFormat = isResourceIdFormat('environment', envNameOrId)
 
-    if (!environmentHasIdFormat && newName === envNameOrId) {
-      const error = newEnvironmentNameEqualsOriginal
-      return responseFailure(error)
-    }
+  //   if (!environmentHasIdFormat && newName === envNameOrId) {
+  //     const error = newEnvironmentNameEqualsOriginal
+  //     return responseFailure(error)
+  //   }
 
-    return await renameEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId, newName })
-  }
+  //   return await renameEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId, newName })
+  // }
 
-  /**
-   * Mark the environment as a production or non-production environment.
-   * @param envNameOrId - The name or id of the environment to update.
-   * @param isProduction - Whether the environment is a production environment or not.
-   * @returns A promise that resolves to the update result or an error response.
-   */
-  async setIsProduction(envNameOrId: string, isProduction: boolean) {
-    const identifiersError = this.validateIdentifiers(envNameOrId)
-    if (identifiersError) return responseFailure(identifiersError)
+  // /**
+  //  * Mark the environment as a production or non-production environment.
+  //  * @param envNameOrId - The name or id of the environment to update.
+  //  * @param isProduction - Whether the environment is a production environment or not.
+  //  * @returns A promise that resolves to the update result or an error response.
+  //  */
+  // async setIsProduction(envNameOrId: string, isProduction: boolean) {
+  //   const identifiersError = this.validateIdentifiers(envNameOrId)
+  //   if (identifiersError) return responseFailure(identifiersError)
 
-    return await setIsProduction({
-      ...this.getHandlerArgs(),
-      environment: envNameOrId,
-      isProduction,
-    })
-  }
+  //   return await setIsProduction({
+  //     ...this.getHandlerArgs(),
+  //     environment: envNameOrId,
+  //     isProduction,
+  //   })
+  // }
 }
