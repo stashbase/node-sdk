@@ -8,6 +8,7 @@ import {
   invalidEnvironmentName,
   invalidProjectIdentifierError,
   newEnvironmentNameEqualsOriginal,
+  missingPropertiesToUpdateError,
 } from '../../../errors'
 import {
   isResourceIdFormat,
@@ -28,6 +29,7 @@ import {
   ListEnvironmentOptions,
   LoadEnvironmentOptions,
 } from '../../../types/environments'
+import { updateEnvironment, UpdateEnvironmentData } from './handlers/update'
 
 export const checkValidProjectEnv = (projectName: string, environmentName: string) => {
   if (!isValidProjectIdentifier(projectName)) {
@@ -195,6 +197,43 @@ export class EnvironmentsAPI {
     if (identifiersError) return responseFailure(identifiersError)
 
     return await deleteEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId })
+  }
+
+  /**
+   * Updates an environment within a project.
+   * @param envNameOrId - The name or id of the environment to update.
+   * @param data - The data for updating the environment.
+   * @returns A promise that resolves to the update result or an error response.
+   */
+  async update(envNameOrId: string, data: UpdateEnvironmentData) {
+    const identifiersError = this.validateIdentifiers(envNameOrId)
+    if (identifiersError) return responseFailure(identifiersError)
+
+    if (data.name === undefined && data.isProduction === undefined) {
+      const error = missingPropertiesToUpdateError
+      return responseFailure(error)
+    }
+
+    if (data.name !== undefined) {
+      if (!isValidEnvironmentName(data.name)) {
+        const error = invalidEnvironmentName
+        return responseFailure(error)
+      }
+
+      const newNameHasIdFormat = isResourceIdFormat('environment', data.name)
+
+      if (newNameHasIdFormat) {
+        const error = environmentNameUsesIdFormatError
+        return responseFailure(error)
+      }
+
+      if (!newNameHasIdFormat && data.name === envNameOrId) {
+        const error = newEnvironmentNameEqualsOriginal
+        return responseFailure(error)
+      }
+    }
+
+    return await updateEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId, data })
   }
 
   /**
