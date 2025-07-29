@@ -1,5 +1,5 @@
 import {
-  invalidNewProjectNameError,
+  invalidProjectName,
   invalidProjectIdentifierError,
   invalidProjectLimitError,
   invalidProjectOrderError,
@@ -109,7 +109,7 @@ export class ProjectsAPI {
     const valid = isValidProjectName(name)
 
     if (!valid) {
-      const error = invalidNewProjectNameError
+      const error = invalidProjectName
       return responseFailure(error)
     }
 
@@ -144,7 +144,7 @@ export class ProjectsAPI {
 
     if (name) {
       if (!isValidProjectName(name)) {
-        const error = invalidNewProjectNameError
+        const error = invalidProjectName
         return responseFailure(error)
       }
 
