@@ -50,8 +50,8 @@ export type InvalidWebhookUrlValidationError = ValidationApiError<
   }
 >
 
-export type InvalidWebhookDescriptionValidationError = ValidationApiError<
-  'invalid_webhook_description',
+export type WebhookDescriptionTooLongError = ValidationApiError<
+  'webhook_description_too_long',
   {
     maxLength: number
   }
