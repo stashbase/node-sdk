@@ -57,13 +57,6 @@ export type InvalidWebhookDescriptionValidationError = ValidationApiError<
   }
 >
 
-export type WebhookUrlTooLongValidationError = ValidationApiError<
-  'webhook_url_too_long',
-  {
-    maxLength: number
-  }
->
-
 export type WebhookMissingPropertiesToUpdateValidationError = ValidationApiError<
   'missing_properties_to_update',
   {
