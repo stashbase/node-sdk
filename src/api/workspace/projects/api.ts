@@ -8,6 +8,7 @@ import {
   invalidProjectSortByError,
   projectNameUsesIdFormat,
   newProjectNameEqualsOriginal,
+  missingPropertiesToUpdateError,
 } from '../../../errors'
 import { projectDescriptionTooLongError } from '../../../errors/projects'
 import { HttpClient } from '../../../http/client'
@@ -136,6 +137,12 @@ export class ProjectsAPI {
    */
   async update(projectNameOrId: string, data: UpdateProjectData) {
     const { name, description } = data
+
+    if (data.name === undefined && data.description === undefined) {
+      const error = missingPropertiesToUpdateError
+      return responseFailure(error)
+    }
+
     const invaliIdentifier = !isValidProjectIdentifier(projectNameOrId)
 
     if (invaliIdentifier) {
