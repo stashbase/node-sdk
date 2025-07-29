@@ -5,7 +5,7 @@ import {
   invalidEnvironmentOrderError,
   invalidEnvironmentSearchError,
   invalidEnvironmentSortByError,
-  invalidNewEnvironmentNameError,
+  invalidEnvironmentName,
   invalidProjectIdentifierError,
   newEnvironmentNameEqualsOriginal,
 } from '../../../errors'
@@ -171,7 +171,7 @@ export class EnvironmentsAPI {
     if (validationError) return responseFailure(validationError)
 
     if (!isValidEnvironmentName(data.name)) {
-      const error = invalidNewEnvironmentNameError
+      const error = invalidEnvironmentName
       return responseFailure(error)
     }
 
@@ -208,7 +208,7 @@ export class EnvironmentsAPI {
     if (identifiersError) return responseFailure(identifiersError)
 
     if (!isValidEnvironmentName(newName)) {
-      const error = invalidNewEnvironmentNameError
+      const error = invalidEnvironmentName
       return responseFailure(error)
     }
 

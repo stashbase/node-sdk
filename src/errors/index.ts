@@ -7,12 +7,10 @@ import {
   InvalidEnvironmentOrderError,
   InvalidEnvironmentSearchError,
   InvalidEnvironmentSortByError,
-  InvalidNewEnvironmentNameError,
   NewEnvironmentNameEqualsOriginal,
 } from '../types/errors/environments'
 import {
   InvalidIdentifierProjectError,
-  InvalidNewProjectNameError,
   InvalidProjectLimitError,
   InvalidProjectPageNumberError,
   InvalidProjectByProjectError,
@@ -112,16 +110,6 @@ export const environmentNameUsesIdFormatError: EnvironmentNameUsesIdFormatError 
   },
 })
 
-export const invalidNewEnvironmentNameError: InvalidNewEnvironmentNameError = createApiError({
-  code: 'validation.invalid_new_environment_name',
-  message:
-    'Environment name must be alphanumeric and may include underscores (_) and a single hyphen (-) as a separator, with a minimum of 2 and a maximum of 40 characters.',
-  details: {
-    validNameExamples: ['staging', 'dev_copy', 'api-prod'],
-    invalidNameExamples: ['#dev', 'api-dev-1', 'service--dev'],
-  },
-})
-
 export const invalidEnvironmentName: InvalidEnvironmentNameError = createApiError({
   code: 'validation.invalid_environment_name',
   message:
@@ -136,16 +124,6 @@ export const newEnvironmentNameEqualsOriginal: NewEnvironmentNameEqualsOriginal 
   code: 'validation.new_environment_name_equals_original',
   message: 'The new environment name cannot be the same as the original environment name.',
   details: undefined,
-})
-
-export const invalidNewProjectNameError: InvalidNewProjectNameError = createApiError({
-  code: 'validation.invalid_new_project_name',
-  message:
-    'Project name must be alphanumeric and may include underscores (_) and hyphens (-), with a minimum of 2 and a maximum of 40 characters.',
-  details: {
-    validNameExamples: ['my-project', 'booking-app-1', 'super_app'],
-    invalidNameExamples: ['super project', '#app-1', `joe's app`],
-  },
 })
 
 export const invalidProjectName: InvalidProjectNameError = createApiError({
