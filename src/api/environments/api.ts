@@ -8,9 +8,9 @@ import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
 import { getSecret } from './handlers/secrets/get'
 import {
   formatSecretsInputArray,
-  isValidHttpsUrl,
   isValidSecretName,
   isValidWebhookDescription,
+  isValidWebhookUrl,
   validateCreateSecretsInput,
   validateSecretNames,
   validateSetSecretsInput,
@@ -320,15 +320,10 @@ class WebhooksAPI {
    * @returns A promise that resolves to the created webhook or an error response.
    */
   async create(data: CreateWebhookData) {
-    const isValidUrl = isValidHttpsUrl(data.url)
+    const isValidUrl = isValidWebhookUrl(data.url)
 
     if (!isValidUrl) {
       const error = invalidWebhookUrlError
-      return responseFailure(error)
-    }
-
-    if (data.url.length > 512) {
-      const error = webhookUrlTooLongError
       return responseFailure(error)
     }
 
@@ -396,15 +391,10 @@ class WebhooksAPI {
     }
 
     if (data.url !== undefined) {
-      const isValidUrl = isValidHttpsUrl(data.url)
+      const isValidUrl = isValidWebhookUrl(data.url)
 
       if (!isValidUrl) {
         const error = invalidWebhookUrlError
-        return responseFailure(error)
-      }
-
-      if (data.url.length > 512) {
-        const error = webhookUrlTooLongError
         return responseFailure(error)
       }
     }
