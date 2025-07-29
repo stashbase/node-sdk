@@ -27,6 +27,13 @@ export type InvalidNewProjectNameError = ValidationApiError<
   }
 >
 
+export type ProjectDescriptionTooLongError = ValidationApiError<
+  'project_description_too_long',
+  {
+    maxLength: number
+  }
+>
+
 export type InvalidProjectPageNumberError = ValidationApiError<
   'invalid_page',
   {
