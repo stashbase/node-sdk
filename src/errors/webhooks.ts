@@ -20,7 +20,8 @@ export const invalidWebhookIdError: InvalidWebhookIdError = createApiError({
 
 export const invalidWebhookUrlError: InvalidWebhookUrlValidationError = createApiError({
   code: 'validation.invalid_webhook_url',
-  message: `The webhook URL must be valid and use HTTPS for secure communication. Please provide a URL that starts with 'https://'.`,
+  message:
+    'The webhook URL is invalid. Webhook URLs cannot be longer than 512 characters, must use HTTPS, and cannot use localhost, loopback addresses, or private IP ranges.',
   details: {
     validUrlExample: 'https://my-endpoint.com',
   },
