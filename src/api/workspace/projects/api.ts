@@ -7,6 +7,7 @@ import {
   invalidProjectSearchError,
   invalidProjectSortByError,
   projectNameUsesIdFormat,
+  newProjectNameEqualsOriginal,
 } from '../../../errors'
 import { projectDescriptionTooLongError } from '../../../errors/projects'
 import { HttpClient } from '../../../http/client'
@@ -148,8 +149,15 @@ export class ProjectsAPI {
         return responseFailure(error)
       }
 
-      if (isResourceIdFormat('project', name)) {
+      const newNameHasIdFormat = isResourceIdFormat('project', name)
+
+      if (newNameHasIdFormat) {
         const error = projectNameUsesIdFormat
+        return responseFailure(error)
+      }
+
+      if (!newNameHasIdFormat && name === projectNameOrId) {
+        const error = newProjectNameEqualsOriginal
         return responseFailure(error)
       }
     }
