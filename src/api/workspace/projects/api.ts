@@ -8,6 +8,7 @@ import {
   invalidProjectSortByError,
   projectNameUsesIdFormat,
 } from '../../../errors'
+import { projectDescriptionTooLongError } from '../../../errors/projects'
 import { HttpClient } from '../../../http/client'
 import { responseFailure } from '../../../http/response'
 import {
@@ -115,6 +116,11 @@ export class ProjectsAPI {
 
     if (nameHasIdFormat) {
       const error = projectNameUsesIdFormat
+      return responseFailure(error)
+    }
+
+    if (data.description && data.description.length > 255) {
+      const error = projectDescriptionTooLongError
       return responseFailure(error)
     }
 
