@@ -66,6 +66,7 @@ export type GenericApiError =
   | UnsupportedApiKeyTypeError
   | ExpiredApiKeyError
   | MissingPermissionError
+  | BadRequestError
   | InternalServerError
   | ConnectionFailedError
 
@@ -95,6 +96,8 @@ export type TooManyRequestsApiError = RateLimitApiError<
   { retryAfter: { seconds: number; unixTimestamp: number } }
 >
 type UnauthorizedApiError = AuthApiError<'unauthorized', undefined>
+
+type BadRequestError = ValidationApiError<'bad_request', Record<string, unknown>>
 
 type InternalServerError = SeverApiError<'internal_error', { requestId: string }>
 
