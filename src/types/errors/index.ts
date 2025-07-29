@@ -104,3 +104,10 @@ type InternalServerError = SeverApiError<'internal_error', { requestId: string }
 export type ConnectionFailedError = SeverApiError<'connection_failed', undefined>
 export type ProjectNotFoundError = ResourceApiError<'project_not_found', undefined>
 export type EnvironmentNotFoundError = ResourceApiError<'environment_not_found', undefined>
+
+export type MissingPropertiesToUpdateValidationError = ValidationApiError<
+  'missing_properties_to_update',
+  {
+    possibleProperties: string[]
+  }
+>
