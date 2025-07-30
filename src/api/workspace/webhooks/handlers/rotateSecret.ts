@@ -2,14 +2,10 @@ import { ApiResponse } from '../../../../http/response'
 import { WebhookSigningSecret } from '../../../../types/webhooks'
 import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
 import { GetWebhookError as SharedGetWebhookError } from '../../../../types/errors/webhooks'
-import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
+import { EnvironmentContextError } from '../../../../types/errors'
 
 export type RotateWebhookSigningSecretArgs = SingleWebhookProjectEnvHandlerArgs<undefined>
-
-export type RotateWebhookSigningSecretError =
-  | SharedGetWebhookError
-  | ProjectNotFoundError
-  | EnvironmentNotFoundError
+export type RotateWebhookSigningSecretError = SharedGetWebhookError | EnvironmentContextError
 
 async function rotateWebhookSigningSecret(
   args: RotateWebhookSigningSecretArgs
