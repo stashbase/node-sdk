@@ -1,19 +1,13 @@
 import { ApiResponse } from '../../../../http/response'
-import {
-  EnvironmentNotFoundError,
-  ProjectNotFoundError,
-  GenericApiError,
-} from '../../../../types/errors'
+import { EnvironmentNotFoundError, ProjectContextError } from '../../../../types/errors'
 import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
-import { InvalidIdentifierProjectError } from '../../../../types/errors/projects'
 import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
 
 export type DeleteEnvironmentArgs = SingleEnvironmentHandlerArgs<undefined>
+
 type DeleteEnvironmentError =
-  | GenericApiError
-  | ProjectNotFoundError
+  | ProjectContextError
   | EnvironmentNotFoundError
-  | InvalidIdentifierProjectError
   | InvalidEnvironmentIdentifierError
 
 async function deleteEnvironment(

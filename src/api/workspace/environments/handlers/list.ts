@@ -1,7 +1,13 @@
 import { ApiResponse } from '../../../../http/response'
-import { ProjectNotFoundError, GenericApiError } from '../../../../types/errors'
+import { ProjectContextError } from '../../../../types/errors'
 import { Environment, ListEnvironmentOptions } from '../../../../types/environments'
 import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
+import {
+  InvalidEnvironmentOrderError,
+  InvalidEnvironmentSearchError,
+  InvalidEnvironmentSortByError,
+} from '../../../../types/errors/environments'
+import { invalidEnvironmentOrderError } from '../../../../errors'
 
 // ???
 // export interface GetEnvironmentOpts {
@@ -9,7 +15,11 @@ import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
 //   perPage: number
 // }
 //
-type ListEnvironmentsError = GenericApiError | ProjectNotFoundError
+type ListEnvironmentsError =
+  | ProjectContextError
+  | InvalidEnvironmentSortByError
+  | InvalidEnvironmentOrderError
+  | InvalidEnvironmentSearchError
 
 async function listEnvironments(
   args: EnvironmentHandlerArgs<{ options?: ListEnvironmentOptions }>

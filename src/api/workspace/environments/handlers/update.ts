@@ -7,13 +7,11 @@ import {
 } from '../../../../types/errors/environments'
 import {
   EnvironmentNotFoundError,
-  ProjectNotFoundError,
-  GenericApiError,
   MissingPropertiesToUpdateValidationError,
+  ProjectContextError,
 } from '../../../../types/errors'
 import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
 import { AtLeastOne } from '../../../../types/util'
-import { InvalidIdentifierProjectError } from '../../../../types/errors/projects'
 import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
 
 export type UpdateEnvironmentArgs = SingleEnvironmentHandlerArgs<{
@@ -28,11 +26,9 @@ export type UpdateEnvironmentData = AtLeastOne<{
 }>
 
 type UpdateEnvironmentError =
-  | GenericApiError
-  | ProjectNotFoundError
+  | ProjectContextError
   | EnvironmentNotFoundError
   | EnvironmentAlreadyExistsError
-  | InvalidIdentifierProjectError
   | InvalidEnvironmentIdentifierError
   | InvalidEnvironmentNameError
   | EnvironmentNameUsesIdFormatError

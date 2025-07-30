@@ -1,11 +1,7 @@
 import dotenvExpand from 'dotenv-expand'
 import { printSecretsTable } from '../../../../utils/table'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-import {
-  EnvironmentNotFoundError,
-  ProjectNotFoundError,
-  GenericApiError,
-} from '../../../../types/errors'
+import { EnvironmentNotFoundError } from '../../../../types/errors'
 import {
   LoadEnvironmentOptions,
   LoadEnvironmentQueryParams,
@@ -13,13 +9,11 @@ import {
 } from '../../../../types/environments'
 import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
 import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
-import { InvalidIdentifierProjectError } from '../../../../types/errors/projects'
+import { ProjectContextError } from '../../../../types/errors'
 
 type LoadEnvironmentError =
-  | GenericApiError
-  | ProjectNotFoundError
+  | ProjectContextError
   | EnvironmentNotFoundError
-  | InvalidIdentifierProjectError
   | InvalidEnvironmentIdentifierError
 
 export type LoadEnvironmentArgs = SingleEnvironmentHandlerArgs<{
