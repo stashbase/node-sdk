@@ -1,4 +1,5 @@
 import { ApiError, ApiErrorDetails } from '../../http/response'
+import { InvalidIdentifierProjectError } from './projects'
 
 export type AuthErrorCodePrefix = 'auth'
 export type AccessErrorCodePrefix = 'access'
@@ -111,3 +112,8 @@ export type MissingPropertiesToUpdateValidationError = ValidationApiError<
     possibleProperties: string[]
   }
 >
+
+export type ProjectContextError =
+  | GenericApiError
+  | ProjectNotFoundError
+  | InvalidIdentifierProjectError
