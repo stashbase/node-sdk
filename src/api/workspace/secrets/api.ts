@@ -5,7 +5,9 @@ import {
   noDataProvidedError,
 } from '../../../errors/secrets'
 import { HttpClient } from '../../../http/client'
-import { responseFailure } from '../../../http/response'
+import { ApiResponse, responseFailure } from '../../../http/response'
+import { EnvironmentContextError } from '../../../types/errors'
+import { ListExcludeSecretsError, ListOnlySecretsError } from '../../../types/errors/secrets'
 import {
   SecretName,
   CreateSecretsItem,
@@ -13,6 +15,7 @@ import {
   ListSecretsOptions,
   SetSecretsItem,
   UpdateSecretsItem,
+  ListSecretsResData,
 } from '../../../types/secrets'
 import {
   formatSecretsInputArray,
@@ -100,7 +103,10 @@ export class SecretsAPI {
    * @param options - Optional parameters for listing secrets.
    * @returns A promise that resolves to an array of specified secret objects or an error response.
    */
-  async listOnly(only: SecretName[], options?: ListSecretsOptions) {
+  async listOnly(
+    only: SecretName[],
+    options?: ListSecretsOptions
+  ): Promise<ApiResponse<ListSecretsResData, ListOnlySecretsError | EnvironmentContextError>> {
     const identifierValidationError = this.validateIdentifiers()
     if (identifierValidationError) return responseFailure(identifierValidationError)
 
@@ -126,7 +132,10 @@ export class SecretsAPI {
    * @param options - Optional parameters for listing secrets.
    * @returns A promise that resolves to an array of secret objects (excluding specified names) or an error response.
    */
-  async listExclude(exclude: SecretName[], options?: ListSecretsOptions) {
+  async listExclude(
+    exclude: SecretName[],
+    options?: ListSecretsOptions
+  ): Promise<ApiResponse<ListSecretsResData, ListExcludeSecretsError | EnvironmentContextError>> {
     const validationError = this.validateIdentifiers()
     if (validationError) return responseFailure(validationError)
 
