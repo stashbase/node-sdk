@@ -1,10 +1,10 @@
 import { ApiResponse } from '../../../../http/response'
 import { UpdateSecretsItem, UpdateSecretsResData } from '../../../../types/secrets'
-import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
+import { EnvironmentContextError } from '../../../../types/errors'
 import { UpdateSecretsError as SharedUpdateSecretsError } from '../../../../types/errors/secrets'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 
-type UpdateSecretsError = SharedUpdateSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
+type UpdateSecretsError = SharedUpdateSecretsError | EnvironmentContextError
 
 export type UpdateSecretsArgs = ProjectEnvHandlerArgs<{
   data: Array<UpdateSecretsItem>
