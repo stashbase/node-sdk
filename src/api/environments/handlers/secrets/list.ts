@@ -1,12 +1,14 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiResponse } from '../../../../http/response'
-import { ListSecretsError } from '../../../../types/errors/secrets'
+import { ListSecretsError as SharedListSecretsError } from '../../../../types/errors/secrets'
 import {
   SecretName,
   ListSecretsOptions,
   ListSecretsResData,
   ListSecretsQueryParams,
 } from '../../../../types/secrets'
+
+export type ListSecretsError = SharedListSecretsError
 
 async function listSecrets(
   envClient: HttpClient,
