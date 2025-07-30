@@ -29,7 +29,7 @@ import { deleteAllEnvironmentSecrets } from './handlers/secrets/deleteAll'
 import {
   GetSecretOptions,
   ListSecretsOptions,
-  ListSecretsResData,
+  ListSecretsResponse,
   SecretName,
 } from '../../types/secrets'
 import { listWebhooks } from './handlers/webhooks/list'
@@ -134,7 +134,7 @@ class SecretsAPI {
   async listOnly(
     only: SecretName[],
     options?: ListSecretsOptions
-  ): Promise<ApiResponse<ListSecretsResData, ListOnlySecretsError>> {
+  ): Promise<ApiResponse<ListSecretsResponse, ListOnlySecretsError>> {
     if (!Array.isArray(only) || only.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
@@ -160,7 +160,7 @@ class SecretsAPI {
   async listExclude(
     exclude: SecretName[],
     options?: ListSecretsOptions
-  ): Promise<ApiResponse<ListSecretsResData, ListExcludeSecretsError>> {
+  ): Promise<ApiResponse<ListSecretsResponse, ListExcludeSecretsError>> {
     if (!Array.isArray(exclude) || exclude.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
