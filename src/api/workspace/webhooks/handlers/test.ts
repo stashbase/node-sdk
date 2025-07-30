@@ -1,15 +1,12 @@
 import { ApiResponse } from '../../../../http/response'
 import { TestWebhookResponse } from '../../../../types/webhooks'
+import { EnvironmentContextError } from '../../../../types/errors'
 import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
 import { GetWebhookError as SharedGetWebhookError } from '../../../../types/errors/webhooks'
-import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
 
 export type TestWebhookArgs = SingleWebhookProjectEnvHandlerArgs<undefined>
 
-export type TestWebhookError =
-  | SharedGetWebhookError
-  | ProjectNotFoundError
-  | EnvironmentNotFoundError
+export type TestWebhookError = SharedGetWebhookError | EnvironmentContextError
 
 async function testWebhook(
   args: TestWebhookArgs
