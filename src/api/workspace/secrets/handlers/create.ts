@@ -4,11 +4,11 @@ import {
   CreateSecretsResData,
 } from '../../../../types/secrets'
 import { ApiResponse } from '../../../../http/response'
-import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
+import { EnvironmentContextError } from '../../../../types/errors'
 import { CreateSecretsError as SharedCreateSecretsError } from '../../../../types/errors/secrets'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 
-type CreateSecretsError = SharedCreateSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
+type CreateSecretsError = SharedCreateSecretsError | EnvironmentContextError
 
 export type CreateSecretsArgs = ProjectEnvHandlerArgs<{
   data: CreateSecretsItem[]
