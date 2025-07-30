@@ -22,7 +22,11 @@ export type DeleteSecretsError =
   | InvalidSecretNamesValidationError
   | NoDataProvidedValidationError
 
-export type GetSecretError = GenericApiError | ResourceApiError<'secret_not_found', undefined>
+export type GetSecretError =
+  | GenericApiError
+  | ResourceApiError<'secret_not_found', undefined>
+  | InvalidSecretNameValidationError
+
 export type ListSecretsError = GenericApiError
 
 export type SetSecretsError =
