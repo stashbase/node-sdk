@@ -1,6 +1,13 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiResponse } from '../../../../http/response'
 import { GenericApiError } from '../../../../types/errors'
+import {
+  InvalidProjectLimitError,
+  InvalidProjectOrderError,
+  InvalidProjectPageNumberError,
+  InvalidProjectSearchError,
+  InvalidProjectSortByError,
+} from '../../../../types/errors/projects'
 import { PaginationMetadata } from '../../../../types/pagination'
 import { Project } from '../../../../types/projects'
 
@@ -22,7 +29,13 @@ type ListProjectsResponse = {
   pagination: PaginationMetadata
 }
 
-type ListProjectsError = GenericApiError
+type ListProjectsError =
+  | GenericApiError
+  | InvalidProjectPageNumberError
+  | InvalidProjectLimitError
+  | InvalidProjectSortByError
+  | InvalidProjectOrderError
+  | InvalidProjectSearchError
 
 export async function listProjects(
   client: HttpClient,

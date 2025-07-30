@@ -1,8 +1,11 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiResponse } from '../../../../http/response'
 import {
+  InvalidProjectNameError,
   ProjectAlreadyExistsError,
+  ProjectDescriptionTooLongError,
   ProjectLimitReachedError,
+  ProjectNameUsesIdFormatError,
 } from '../../../../types/errors/projects'
 import { GenericApiError } from '../../../../types/errors'
 
@@ -11,7 +14,13 @@ interface CreateProjectResponseData {
   name: string
 }
 
-type CreateSecretsError = GenericApiError | ProjectAlreadyExistsError | ProjectLimitReachedError
+type CreateProjectError =
+  | GenericApiError
+  | InvalidProjectNameError
+  | ProjectDescriptionTooLongError
+  | ProjectNameUsesIdFormatError
+  | ProjectAlreadyExistsError
+  | ProjectLimitReachedError
 
 export type CreateProjectData = {
   name: string
@@ -21,8 +30,8 @@ export type CreateProjectData = {
 export async function createProject(
   envClient: HttpClient,
   data: CreateProjectData
-): Promise<ApiResponse<CreateProjectResponseData, CreateSecretsError>> {
-  return await envClient.sendApiRequest<CreateProjectResponseData, CreateSecretsError>({
+): Promise<ApiResponse<CreateProjectResponseData, CreateProjectError>> {
+  return await envClient.sendApiRequest<CreateProjectResponseData, CreateProjectError>({
     method: 'POST',
     path: '/v1/projects',
     data,

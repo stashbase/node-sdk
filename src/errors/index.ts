@@ -17,12 +17,12 @@ import {
   InvalidIdentifierProjectError,
   InvalidProjectLimitError,
   InvalidProjectPageNumberError,
-  InvalidProjectByProjectError,
   ProjectNameUsesIdFormatError,
   InvalidProjectOrderError,
   InvalidProjectSearchError,
   InvalidProjectNameError,
   NewProjectNameEqualsOriginal,
+  InvalidProjectSortByError,
 } from '../types/errors/projects'
 
 export function createApiErrorFromResponse<T>(responseData: unknown) {
@@ -160,7 +160,7 @@ export const invalidProjectLimitError: InvalidProjectLimitError = createApiError
   },
 })
 
-export const invalidProjectSortByError: InvalidProjectByProjectError = createApiError({
+export const invalidProjectSortByError: InvalidProjectSortByError = createApiError({
   code: 'validation.invalid_sort_by',
   message: 'Sort by field must be one of: name, createdAt, or environmentCount.',
   details: {
