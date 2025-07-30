@@ -24,7 +24,7 @@ export type DeleteSecretsError =
 
 export type GetSecretError =
   | GenericApiError
-  | ResourceApiError<'secret_not_found', undefined>
+  | SecretNotFoundError
   | InvalidSecretNameValidationError
 
 export type ListSecretsError = GenericApiError
@@ -49,6 +49,7 @@ export type UpdateSecretsError =
   | SecretValuesTooLongValidationError
   | SecretsAlreadyExistConflictError
 
+export type SecretNotFoundError = ResourceApiError<'secret_not_found', undefined>
 export type NoDataProvidedValidationError = ValidationApiError<'no_data_provided', undefined>
 export type InvalidSecretNameValidationError = ValidationApiError<'invalid_secret_name', undefined>
 export type InvalidSecretNamesValidationError =
