@@ -2,10 +2,14 @@ import { ApiResponse } from '../../../../http/response'
 import {
   EnvironmentAlreadyExistsError,
   EnvironmentLimitReachedError,
+  EnvironmentNameUsesIdFormatError,
+  InvalidEnvironmentNameError,
 } from '../../../../types/errors/environments'
 import { ProjectNotFoundError, GenericApiError } from '../../../../types/errors'
 import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
 import { CreateEnvironmentData } from '../../../../types/environments'
+import { InvalidIdentifierProjectError } from '../../../../types/errors/projects'
+import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
 
 export type CreateEnvironmentArgs = EnvironmentHandlerArgs<{
   data: CreateEnvironmentData
@@ -21,6 +25,10 @@ type CreateEnvironmentError =
   | ProjectNotFoundError
   | EnvironmentAlreadyExistsError
   | EnvironmentLimitReachedError
+  | InvalidEnvironmentIdentifierError
+  | InvalidIdentifierProjectError
+  | InvalidEnvironmentNameError
+  | EnvironmentNameUsesIdFormatError
 
 async function createEnvironment(
   args: CreateEnvironmentArgs

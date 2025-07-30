@@ -5,9 +5,16 @@ import {
   GenericApiError,
 } from '../../../../types/errors'
 import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
+import { InvalidIdentifierProjectError } from '../../../../types/errors/projects'
+import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
 
 export type DeleteEnvironmentArgs = SingleEnvironmentHandlerArgs<undefined>
-type DeleteEnvironmentError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
+type DeleteEnvironmentError =
+  | GenericApiError
+  | ProjectNotFoundError
+  | EnvironmentNotFoundError
+  | InvalidIdentifierProjectError
+  | InvalidEnvironmentIdentifierError
 
 async function deleteEnvironment(
   args: DeleteEnvironmentArgs
