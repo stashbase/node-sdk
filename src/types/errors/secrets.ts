@@ -11,6 +11,7 @@ type SecretsValidationErrorWithDetails<T extends string> = ValidationApiError<
 
 export type CreateSecretsError =
   | GenericApiError
+  | NoDataProvidedValidationError
   | InvalidSecretNamesValidationError
   | DuplicateSecretsNamesValidationError
   | SecretCommentsTooLongValidationError
