@@ -44,7 +44,7 @@ export class WebhooksAPI {
     return { client: this.httpClient, project: this.project, environment: this.environment }
   }
 
-  private validateIdentifiers(webhookId?: string) {
+  private validateIdentifiers() {
     const { project, environment } = this
 
     if (!isValidProjectIdentifier(project)) {
@@ -56,11 +56,11 @@ export class WebhooksAPI {
       const error = invalidEnvironmentIdentifierError
       return error
     }
+  }
 
-    if (webhookId !== undefined && !isValidWebhookId(webhookId)) {
-      const error = invalidWebhookIdError
-      return error
-    }
+  private validateIdentifiersWithWebhookId(webhookId: string) {
+    const validationError = this.validateIdentifiers()
+    if (validationError) return responseFailure(validationError)
   }
 
   private getSingleWebhookHandlerArgs(webhookId: string) {
@@ -94,7 +94,7 @@ export class WebhooksAPI {
    * @returns A promise that resolves to an array of webhook log objects with pagination metadata or an error response.
    */
   async listLogs(webhookId: string, options?: ListWebhookLogsOptions) {
-    const validationError = this.validateIdentifiers(webhookId)
+    const validationError = this.validateIdentifiersWithWebhookId(webhookId)
     if (validationError) return responseFailure(validationError)
 
     if (options?.page !== undefined) {
@@ -130,8 +130,13 @@ export class WebhooksAPI {
    * @returns A promise that resolves to the webhook object identifiers (id, name) or an error response.
    */
   async get(webhookId: string, withSecret?: boolean) {
-    const validationError = this.validateIdentifiers(webhookId)
+    const validationError = this.validateIdentifiersWithWebhookId(webhookId)
     if (validationError) return responseFailure(validationError)
+
+    if (!isValidWebhookId(webhookId)) {
+      const error = invalidWebhookIdError
+      return responseFailure(error)
+    }
 
     return await getWebhook({
       ...this.getSingleWebhookHandlerArgs(webhookId),
@@ -178,7 +183,7 @@ export class WebhooksAPI {
    * @returns A promise that resolves to the updated webhook object or an error response.
    */
   async enable(webhookId: string) {
-    const validationError = this.validateIdentifiers(webhookId)
+    const validationError = this.validateIdentifiersWithWebhookId(webhookId)
     if (validationError) return responseFailure(validationError)
 
     return await updateWebhookStatus({
@@ -194,7 +199,7 @@ export class WebhooksAPI {
    * @returns A promise that resolves to the updated webhook object or an error response.
    */
   async disable(webhookId: string) {
-    const validationError = this.validateIdentifiers(webhookId)
+    const validationError = this.validateIdentifiersWithWebhookId(webhookId)
     if (validationError) return responseFailure(validationError)
 
     return await updateWebhookStatus({
@@ -211,7 +216,7 @@ export class WebhooksAPI {
    * @returns A promise that resolves to the updated webhook object or an error response.
    */
   async update(webhookId: string, data: UpdateWebhookData) {
-    const validationError = this.validateIdentifiers(webhookId)
+    const validationError = this.validateIdentifiersWithWebhookId(webhookId)
     if (validationError) return responseFailure(validationError)
 
     if (data.url === undefined && data.description === undefined) {
@@ -250,7 +255,7 @@ export class WebhooksAPI {
    * @returns A promise that resolves to the test result or an error response.
    */
   async test(webhookId: string) {
-    const validationError = this.validateIdentifiers(webhookId)
+    const validationError = this.validateIdentifiersWithWebhookId(webhookId)
     if (validationError) return responseFailure(validationError)
 
     return await testWebhook(this.getSingleWebhookHandlerArgs(webhookId))
@@ -263,7 +268,7 @@ export class WebhooksAPI {
    * @returns A promise that resolves to null on success or an error response.
    */
   async delete(webhookId: string) {
-    const validationError = this.validateIdentifiers(webhookId)
+    const validationError = this.validateIdentifiersWithWebhookId(webhookId)
     if (validationError) return responseFailure(validationError)
 
     return await deleteWebhook(this.getSingleWebhookHandlerArgs(webhookId))
@@ -276,7 +281,7 @@ export class WebhooksAPI {
    * @returns A promise that resolves to the signing secret or an error response.
    */
   async getSigningSecret(webhookId: string) {
-    const validationError = this.validateIdentifiers(webhookId)
+    const validationError = this.validateIdentifiersWithWebhookId(webhookId)
     if (validationError) return responseFailure(validationError)
 
     return await getWebhookSigningSecret(this.getSingleWebhookHandlerArgs(webhookId))
@@ -289,7 +294,7 @@ export class WebhooksAPI {
    * @returns A promise that resolves to the new signing secret or an error response.
    */
   async rotateSigningSecret(webhookId: string) {
-    const validationError = this.validateIdentifiers(webhookId)
+    const validationError = this.validateIdentifiersWithWebhookId(webhookId)
     if (validationError) return responseFailure(validationError)
 
     return await rotateWebhookSigningSecret(this.getSingleWebhookHandlerArgs(webhookId))
