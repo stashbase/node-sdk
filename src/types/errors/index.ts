@@ -1,4 +1,5 @@
 import { ApiError, ApiErrorDetails } from '../../http/response'
+import { InvalidEnvironmentIdentifierError } from './environments'
 import { InvalidIdentifierProjectError } from './projects'
 
 export type AuthErrorCodePrefix = 'auth'
@@ -117,3 +118,8 @@ export type ProjectContextError =
   | GenericApiError
   | ProjectNotFoundError
   | InvalidIdentifierProjectError
+
+export type EnvironmentContextError =
+  | ProjectContextError
+  | EnvironmentNotFoundError
+  | InvalidEnvironmentIdentifierError
