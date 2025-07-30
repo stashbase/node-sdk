@@ -1,12 +1,15 @@
 import { ApiResponse } from '../../../../http/response'
-import { CreateWebhookError } from '../../../../types/errors/webhooks'
+import { CreateWebhookError as SharedCreateWebhookError } from '../../../../types/errors/webhooks'
 import { CreateWebhookData } from '../../../../types/webhooks'
 import { CreateWebhookResponse } from '../../../../types/webhooks'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
+import { ProjectContextError } from '../../../../types/errors'
 
 export type CreateWebhookArgs = ProjectEnvHandlerArgs<{
   data: CreateWebhookData
 }>
+
+type CreateWebhookError = SharedCreateWebhookError | ProjectContextError
 
 async function createWebhook(
   args: CreateWebhookArgs
