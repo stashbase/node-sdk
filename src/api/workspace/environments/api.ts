@@ -93,11 +93,11 @@ export class EnvironmentsAPI {
     }
 
     const identifiersError = this.validateProjectIdentifier()
-    if (identifiersError) return responseFailure(identifiersError)
+    if (identifiersError) throw new Error(identifiersError.code)
 
     if (!isValidEnvironmentIdentifier(envNameOrId)) {
       const error = invalidEnvironmentIdentifierError
-      return responseFailure(error)
+      throw new Error(error.code)
     }
 
     const { error } = await loadEnvironment({
