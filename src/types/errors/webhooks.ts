@@ -15,6 +15,8 @@ export type CreateWebhookError =
 
 export type UpdateWebhookError =
   | SingleWebhookError
+  | InvalidWebhookUrlValidationError
+  | WebhookDescriptionTooLongError
   | WebhookMissingPropertiesToUpdateValidationError
 
 export type UpdateWebhookStatusError =
