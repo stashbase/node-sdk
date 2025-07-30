@@ -5,11 +5,11 @@ import {
   GetSecretResData,
   SecretName,
 } from '../../../../types/secrets'
-import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
+import { EnvironmentContextError } from '../../../../types/errors'
 import { GetSecretError as SharedGetSecretsError } from '../../../../types/errors/secrets'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 
-type GetSecretError = SharedGetSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
+type GetSecretError = SharedGetSecretsError | EnvironmentContextError
 type GetSecretResponse = Promise<ApiResponse<GetSecretResData, GetSecretError>>
 
 export type GetSecretArgs = ProjectEnvHandlerArgs<{
