@@ -47,7 +47,7 @@ export class SecretsAPI {
     return { client: this.httpClient, project: this.project, environment: this.environment }
   }
 
-  private validateIdentifiers(secretName?: string) {
+  private validateIdentifiers() {
     const { project, environment } = this
 
     if (!isValidProjectIdentifier(project)) {
@@ -57,11 +57,6 @@ export class SecretsAPI {
 
     if (!isValidEnvironmentIdentifier(environment)) {
       const error = invalidEnvironmentIdentifierError
-      return error
-    }
-
-    if (secretName !== undefined && !isValidSecretName(secretName)) {
-      const error = invalidSecretNameError()
       return error
     }
   }
@@ -74,8 +69,13 @@ export class SecretsAPI {
    * @returns A promise that resolves to the secret object or an error response.
    */
   async get(name: SecretName, options?: GetSecretOptions) {
-    const validationError = this.validateIdentifiers(name)
+    const validationError = this.validateIdentifiers()
     if (validationError) return responseFailure(validationError)
+
+    if (!isValidSecretName(name)) {
+      const error = invalidSecretNameError()
+      return responseFailure(error)
+    }
 
     return await getSecret({ name, options, ...this.getHandlerArgs() })
   }
