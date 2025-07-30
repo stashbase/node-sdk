@@ -1,17 +1,14 @@
 import { ApiResponse } from '../../../../http/response'
 import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
-import { GetWebhookError as SharedGetWebhookError } from '../../../../types/errors/webhooks'
-import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
+import { UpdateWebhookError as SharedUpdateWebhookError } from '../../../../types/errors/webhooks'
+import { EnvironmentContextError } from '../../../../types/errors'
 import { UpdateWebhookData } from '../../../../types/webhooks'
 
 export type UpdateWebhookArgs = SingleWebhookProjectEnvHandlerArgs<{
   data: UpdateWebhookData
 }>
 
-export type UpdateWebhookError =
-  | SharedGetWebhookError
-  | ProjectNotFoundError
-  | EnvironmentNotFoundError
+export type UpdateWebhookError = SharedUpdateWebhookError | EnvironmentContextError
 
 async function updateWebhook(
   args: UpdateWebhookArgs
