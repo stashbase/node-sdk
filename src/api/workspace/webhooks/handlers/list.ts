@@ -1,13 +1,9 @@
 import { ApiResponse } from '../../../../http/response'
 import { ListWebhooksResponse } from '../../../../types/webhooks'
-import { ListWebhooksError as SharedListWebhooksError } from '../../../../types/errors/webhooks'
-import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
+import { EnvironmentContextError, ProjectContextError } from '../../../../types/errors'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 
-export type ListWebhooksError =
-  | SharedListWebhooksError
-  | ProjectNotFoundError
-  | EnvironmentNotFoundError
+export type ListWebhooksError = ProjectContextError | EnvironmentContextError
 
 async function listWebhooks(
   args: ProjectEnvHandlerArgs<undefined>
