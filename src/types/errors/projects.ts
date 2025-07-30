@@ -52,7 +52,7 @@ export type InvalidProjectLimitError = ValidationApiError<
   }
 >
 
-export type InvalidProjectByProjectError = ValidationApiError<
+export type InvalidProjectSortByError = ValidationApiError<
   'invalid_sort_by',
   {
     allowedValues: Array<string>

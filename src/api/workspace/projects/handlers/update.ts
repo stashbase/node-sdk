@@ -1,13 +1,27 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiResponse } from '../../../../http/response'
 import {
+  InvalidIdentifierProjectError,
+  InvalidProjectNameError,
+  NewProjectNameEqualsOriginal,
   ProjectAlreadyExistsError,
+  ProjectDescriptionTooLongError,
   ProjectLimitReachedError,
+  ProjectNameUsesIdFormatError,
 } from '../../../../types/errors/projects'
-import { GenericApiError } from '../../../../types/errors'
 import { AtLeastOne } from '../../../../types/util'
+import { GenericApiError, MissingPropertiesToUpdateValidationError } from '../../../../types/errors'
 
-type UpdateProjectError = GenericApiError | ProjectAlreadyExistsError | ProjectLimitReachedError
+type UpdateProjectError =
+  | GenericApiError
+  | MissingPropertiesToUpdateValidationError
+  | NewProjectNameEqualsOriginal
+  | InvalidIdentifierProjectError
+  | InvalidProjectNameError
+  | ProjectAlreadyExistsError
+  | ProjectLimitReachedError
+  | ProjectNameUsesIdFormatError
+  | ProjectDescriptionTooLongError
 
 export type UpdateProjectData = AtLeastOne<{
   /** The new name of the project */
