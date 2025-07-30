@@ -1,12 +1,20 @@
 import { ApiResponse } from '../../../../http/response'
-import { EnvironmentAlreadyExistsError } from '../../../../types/errors/environments'
+import {
+  EnvironmentAlreadyExistsError,
+  NewEnvironmentNameEqualsOriginal,
+  EnvironmentNameUsesIdFormatError,
+  InvalidEnvironmentNameError,
+} from '../../../../types/errors/environments'
 import {
   EnvironmentNotFoundError,
   ProjectNotFoundError,
   GenericApiError,
+  MissingPropertiesToUpdateValidationError,
 } from '../../../../types/errors'
 import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
 import { AtLeastOne } from '../../../../types/util'
+import { InvalidIdentifierProjectError } from '../../../../types/errors/projects'
+import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
 
 export type UpdateEnvironmentArgs = SingleEnvironmentHandlerArgs<{
   data: UpdateEnvironmentData
@@ -24,6 +32,12 @@ type UpdateEnvironmentError =
   | ProjectNotFoundError
   | EnvironmentNotFoundError
   | EnvironmentAlreadyExistsError
+  | InvalidIdentifierProjectError
+  | InvalidEnvironmentIdentifierError
+  | InvalidEnvironmentNameError
+  | EnvironmentNameUsesIdFormatError
+  | NewEnvironmentNameEqualsOriginal
+  | MissingPropertiesToUpdateValidationError
 
 export async function updateEnvironment(
   args: UpdateEnvironmentArgs

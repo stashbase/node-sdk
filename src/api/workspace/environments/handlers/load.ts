@@ -12,8 +12,15 @@ import {
   LoadEnvironmentResponse,
 } from '../../../../types/environments'
 import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
+import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
+import { InvalidIdentifierProjectError } from '../../../../types/errors/projects'
 
-type LoadEnvironmentError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
+type LoadEnvironmentError =
+  | GenericApiError
+  | ProjectNotFoundError
+  | EnvironmentNotFoundError
+  | InvalidIdentifierProjectError
+  | InvalidEnvironmentIdentifierError
 
 export type LoadEnvironmentArgs = SingleEnvironmentHandlerArgs<{
   options?: LoadEnvironmentOptions

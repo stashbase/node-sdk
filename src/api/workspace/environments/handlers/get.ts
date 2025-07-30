@@ -6,10 +6,17 @@ import {
 } from '../../../../types/errors'
 import { Environment } from '../../../../types/environments'
 import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
+import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
+import { InvalidIdentifierProjectError } from '../../../../types/errors/projects'
 
 export type GetEnvironmentArgs = SingleEnvironmentHandlerArgs<undefined>
 
-type GetEnvironmentError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
+type GetEnvironmentError =
+  | GenericApiError
+  | ProjectNotFoundError
+  | EnvironmentNotFoundError
+  | InvalidIdentifierProjectError
+  | InvalidEnvironmentIdentifierError
 
 async function getEnvironment(
   args: GetEnvironmentArgs
