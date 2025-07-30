@@ -48,6 +48,7 @@ export type UpdateSecretsError =
   | SecretCommentsTooLongValidationError
   | SecretValuesTooLongValidationError
   | SecretsAlreadyExistConflictError
+  | NewSecretNamesSameAsNamesValidationError
 
 export type SecretNotFoundError = ResourceApiError<'secret_not_found', undefined>
 export type NoDataProvidedValidationError = ValidationApiError<'no_data_provided', undefined>
