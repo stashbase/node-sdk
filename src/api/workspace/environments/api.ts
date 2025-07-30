@@ -54,16 +54,11 @@ export class EnvironmentsAPI {
     return { client: this.httpClient, project: this.project }
   }
 
-  private validateIdentifiers(envNameOrId?: string) {
+  private validateProjectIdentifier() {
     const { project } = this
 
     if (!isValidProjectIdentifier(project)) {
       const error = invalidProjectIdentifierError
-      return error
-    }
-
-    if (envNameOrId !== undefined && !isValidEnvironmentIdentifier(envNameOrId)) {
-      const error = invalidEnvironmentIdentifierError
       return error
     }
   }
@@ -74,8 +69,13 @@ export class EnvironmentsAPI {
    * @returns A promise that resolves to the environment data or an error response.
    */
   async get(envNameOrId: string) {
-    const identifiersError = this.validateIdentifiers(envNameOrId)
+    const identifiersError = this.validateProjectIdentifier()
     if (identifiersError) return responseFailure(identifiersError)
+
+    if (!isValidEnvironmentIdentifier(envNameOrId)) {
+      const error = invalidEnvironmentIdentifierError
+      return responseFailure(error)
+    }
 
     return await getEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId })
   }
@@ -92,8 +92,13 @@ export class EnvironmentsAPI {
       return { data: null, error: null, ok: null }
     }
 
-    const identifiersError = this.validateIdentifiers(envNameOrId)
+    const identifiersError = this.validateProjectIdentifier()
     if (identifiersError) return responseFailure(identifiersError)
+
+    if (!isValidEnvironmentIdentifier(envNameOrId)) {
+      const error = invalidEnvironmentIdentifierError
+      return responseFailure(error)
+    }
 
     const { error } = await loadEnvironment({
       ...this.getHandlerArgs(),
@@ -118,8 +123,13 @@ export class EnvironmentsAPI {
       return { data: null, error: null, ok: null }
     }
 
-    const identifiersError = this.validateIdentifiers(envNameOrId)
+    const identifiersError = this.validateProjectIdentifier()
     if (identifiersError) return responseFailure(identifiersError)
+
+    if (!isValidEnvironmentIdentifier(envNameOrId)) {
+      const error = invalidEnvironmentIdentifierError
+      return responseFailure(error)
+    }
 
     return await loadEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId, options })
   }
@@ -130,7 +140,7 @@ export class EnvironmentsAPI {
    * @returns A promise that resolves to an array of environments or an error response.
    */
   async list(options?: ListEnvironmentOptions) {
-    const identifiersError = this.validateIdentifiers()
+    const identifiersError = this.validateProjectIdentifier()
     if (identifiersError) return responseFailure(identifiersError)
 
     if (options?.sortBy) {
@@ -167,7 +177,7 @@ export class EnvironmentsAPI {
    * @returns A promise that resolves to the creation result or an error response.
    */
   async create(data: CreateEnvironmentData) {
-    const validationError = this.validateIdentifiers()
+    const validationError = this.validateProjectIdentifier()
     if (validationError) return responseFailure(validationError)
 
     if (!isValidEnvironmentName(data.name)) {
@@ -191,8 +201,13 @@ export class EnvironmentsAPI {
    * @returns A promise that resolves to the removal result or an error response.
    */
   async delete(envNameOrId: string) {
-    const identifiersError = this.validateIdentifiers(envNameOrId)
+    const identifiersError = this.validateProjectIdentifier()
     if (identifiersError) return responseFailure(identifiersError)
+
+    if (!isValidEnvironmentIdentifier(envNameOrId)) {
+      const error = invalidEnvironmentIdentifierError
+      return responseFailure(error)
+    }
 
     return await deleteEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId })
   }
@@ -204,8 +219,13 @@ export class EnvironmentsAPI {
    * @returns A promise that resolves to the update result or an error response.
    */
   async update(envNameOrId: string, data: UpdateEnvironmentData) {
-    const identifiersError = this.validateIdentifiers(envNameOrId)
+    const identifiersError = this.validateProjectIdentifier()
     if (identifiersError) return responseFailure(identifiersError)
+
+    if (!isValidEnvironmentIdentifier(envNameOrId)) {
+      const error = invalidEnvironmentIdentifierError
+      return responseFailure(error)
+    }
 
     if (data.name === undefined && data.isProduction === undefined) {
       const error = missingPropertiesToUpdateError
