@@ -17,7 +17,11 @@ export type CreateSecretsError =
   | SecretCommentsTooLongValidationError
   | SecretValuesTooLongValidationError
 
-export type DeleteSecretsError = GenericApiError | InvalidSecretNamesValidationError
+export type DeleteSecretsError =
+  | GenericApiError
+  | InvalidSecretNamesValidationError
+  | NoDataProvidedValidationError
+
 export type GetSecretError = GenericApiError | ResourceApiError<'secret_not_found', undefined>
 export type ListSecretsError = GenericApiError
 
