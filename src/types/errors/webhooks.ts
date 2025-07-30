@@ -30,7 +30,11 @@ export type GetWebhookError = SingleWebhookError
 export type RotateWebhookSigningSecretError = SingleWebhookError
 export type GetWebhookSigningSecretError = SingleWebhookError
 export type TestWebhookError = SingleWebhookError
-export type ListWebhookLogsError = SingleWebhookError
+
+export type ListWebhookLogsError =
+  | SingleWebhookError
+  | InvalidWebhookLogsLimitError
+  | InvalidWebhookLogsPageError
 
 //
 export type SingleWebhookError = GenericApiError | InvalidWebhookIdError | WebhookNotFoundError
