@@ -26,7 +26,12 @@ import {
 import { ApiResponse, responseFailure } from '../../http/response'
 import { LoadEnvironmentOptions } from '../../types/environments'
 import { deleteAllEnvironmentSecrets } from './handlers/secrets/deleteAll'
-import { GetSecretOptions, ListSecretsOptions, SecretName } from '../../types/secrets'
+import {
+  GetSecretOptions,
+  ListSecretsOptions,
+  ListSecretsResData,
+  SecretName,
+} from '../../types/secrets'
 import { listWebhooks } from './handlers/webhooks/list'
 import { getWebhook } from './handlers/webhooks/get'
 import { listWebhookLogs } from './handlers/webhooks/listLogs'
@@ -46,6 +51,7 @@ import {
 } from '../../errors/webhooks'
 import { CreateWebhookData, UpdateWebhookData } from '../../types/webhooks'
 import { ListWebhookLogsOptions } from '../workspace/webhooks/handlers/listLogs'
+import { ListExcludeSecretsError, ListOnlySecretsError } from '../../types/errors/secrets'
 
 class EnvironmentsAPI {
   constructor(private httpClient: HttpClient) {}
@@ -125,7 +131,10 @@ class SecretsAPI {
     return await listSecrets(this.httpClient, options)
   }
 
-  async listOnly(only: SecretName[], options?: ListSecretsOptions) {
+  async listOnly(
+    only: SecretName[],
+    options?: ListSecretsOptions
+  ): Promise<ApiResponse<ListSecretsResData, ListOnlySecretsError>> {
     if (!Array.isArray(only) || only.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
@@ -148,7 +157,10 @@ class SecretsAPI {
    * @param options - Additional options for listing secrets.
    * @returns A promise that resolves to an array of secrets excluding the specified secrets by their names or an error response.
    */
-  async listExclude(exclude: SecretName[], options?: ListSecretsOptions) {
+  async listExclude(
+    exclude: SecretName[],
+    options?: ListSecretsOptions
+  ): Promise<ApiResponse<ListSecretsResData, ListExcludeSecretsError>> {
     if (!Array.isArray(exclude) || exclude.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
