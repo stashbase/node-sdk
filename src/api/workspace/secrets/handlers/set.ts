@@ -1,10 +1,10 @@
 import { ApiResponse } from '../../../../http/response'
 import { SetSecretsItem, SetSecretsResData } from '../../../../types/secrets'
-import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
+import { ProjectContextError } from '../../../../types/errors'
 import { SetSecretsError as SharedSetSecretsError } from '../../../../types/errors/secrets'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 
-type SetSecretsError = SharedSetSecretsError | ProjectNotFoundError | EnvironmentNotFoundError
+type SetSecretsError = SharedSetSecretsError | ProjectContextError
 
 export type SetSecretsArgs = ProjectEnvHandlerArgs<{
   data: Array<SetSecretsItem>
