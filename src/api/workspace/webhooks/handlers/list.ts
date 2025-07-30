@@ -2,8 +2,12 @@ import { ApiResponse } from '../../../../http/response'
 import { ListWebhooksResponse } from '../../../../types/webhooks'
 import { EnvironmentContextError, ProjectContextError } from '../../../../types/errors'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
+import { InvalidWebhookIdError } from '../../../../types/errors/webhooks'
 
-export type ListWebhooksError = ProjectContextError | EnvironmentContextError
+export type ListWebhooksError =
+  | ProjectContextError
+  | EnvironmentContextError
+  | InvalidWebhookIdError
 
 async function listWebhooks(
   args: ProjectEnvHandlerArgs<undefined>
