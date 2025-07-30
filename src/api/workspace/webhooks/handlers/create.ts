@@ -3,13 +3,13 @@ import { CreateWebhookError as SharedCreateWebhookError } from '../../../../type
 import { CreateWebhookData } from '../../../../types/webhooks'
 import { CreateWebhookResponse } from '../../../../types/webhooks'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
-import { ProjectContextError } from '../../../../types/errors'
+import { EnvironmentContextError } from '../../../../types/errors'
 
 export type CreateWebhookArgs = ProjectEnvHandlerArgs<{
   data: CreateWebhookData
 }>
 
-type CreateWebhookError = SharedCreateWebhookError | ProjectContextError
+type CreateWebhookError = SharedCreateWebhookError | EnvironmentContextError
 
 async function createWebhook(
   args: CreateWebhookArgs
