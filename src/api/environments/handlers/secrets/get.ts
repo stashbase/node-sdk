@@ -1,13 +1,17 @@
 import { HttpClient } from '../../../../http/client'
 import { GetSecretError } from '../../../../types/errors/secrets'
 import { ApiResponse } from '../../../../http/response'
-import { GetSecretOptions, GetSecretQueryParams, GetSecretResData } from '../../../../types/secrets'
+import {
+  GetSecretOptions,
+  GetSecretQueryParams,
+  GetSecretResponse,
+} from '../../../../types/secrets'
 
 async function getSecret(
   envClient: HttpClient,
   name: string,
   options?: GetSecretOptions
-): Promise<ApiResponse<GetSecretResData, GetSecretError>> {
+): Promise<ApiResponse<GetSecretResponse, GetSecretError>> {
   const omit = options?.omit
   const expandRefs = options?.expandRefs
 
@@ -29,7 +33,7 @@ async function getSecret(
 
   const path = `/v1/secrets/${name}`
 
-  return envClient.sendApiRequest<GetSecretResData, GetSecretError>({
+  return envClient.sendApiRequest<GetSecretResponse, GetSecretError>({
     method: 'GET',
     path,
     query: Object.keys(query).length > 0 ? query : undefined,

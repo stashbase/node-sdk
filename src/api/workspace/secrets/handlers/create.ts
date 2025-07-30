@@ -1,7 +1,7 @@
 import {
   CreateSecretsData,
   CreateSecretsItem,
-  CreateSecretsResData,
+  CreateSecretsResponse,
 } from '../../../../types/secrets'
 import { ApiResponse } from '../../../../http/response'
 import { EnvironmentContextError } from '../../../../types/errors'
@@ -16,11 +16,11 @@ export type CreateSecretsArgs = ProjectEnvHandlerArgs<{
 
 async function createSecrets(
   args: CreateSecretsArgs
-): Promise<ApiResponse<CreateSecretsResData, CreateSecretsError>> {
+): Promise<ApiResponse<CreateSecretsResponse, CreateSecretsError>> {
   const { client, project, environment, data } = args
   const path = `/v1/projects/${project}/environments/${environment}/secrets`
 
-  return await client.sendApiRequest<CreateSecretsResData, CreateSecretsError>({
+  return await client.sendApiRequest<CreateSecretsResponse, CreateSecretsError>({
     method: 'POST',
     path,
     data,

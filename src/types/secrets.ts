@@ -11,37 +11,37 @@ export interface Secret {
   comment: string | null
 }
 
-export type GetSecretResData = Secret
-export type ListSecretsResData = Array<Secret>
+export type GetSecretResponse = Secret
+export type ListSecretsResponse = Array<Secret>
 export type ListSecretsOptions = GetSecretOptions
 
-export interface CreateSecretsResData {
+export interface CreateSecretsResponse {
   /** The number of secrets successfully created */
   createdCount: number
   /** An array of secret names that were duplicates and not created */
   duplicateSecrets: Array<SecretName>
 }
 
-export interface DeleteSecretsResData {
+export interface DeleteSecretsResponse {
   /** The number of secrets successfully deleted */
   deletedCount: number
   /** An array of secret names that were not found and thus not deleted */
   notFoundSecrets: Array<SecretName>
 }
 
-export interface DeleteAllSecretsResData {
+export interface DeleteAllSecretsResponse {
   /** The total number of secrets deleted */
   deletedCount: number
 }
 
-export interface SetSecretsResData {
+export interface SetSecretsResponse {
   /** The number of new secrets created */
   createdCount: number
   /** The number of existing secrets updated */
   updatedCount: number
 }
 
-export interface UpdateSecretsResData {
+export interface UpdateSecretsResponse {
   /** The number of secrets successfully updated */
   updatedCount: number
   /** An array of secret names that were not found and thus not updated */

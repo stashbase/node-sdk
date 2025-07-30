@@ -15,7 +15,7 @@ import {
   ListSecretsOptions,
   SetSecretsItem,
   UpdateSecretsItem,
-  ListSecretsResData,
+  ListSecretsResponse,
 } from '../../../types/secrets'
 import {
   formatSecretsInputArray,
@@ -106,7 +106,7 @@ export class SecretsAPI {
   async listOnly(
     only: SecretName[],
     options?: ListSecretsOptions
-  ): Promise<ApiResponse<ListSecretsResData, ListOnlySecretsError | EnvironmentContextError>> {
+  ): Promise<ApiResponse<ListSecretsResponse, ListOnlySecretsError | EnvironmentContextError>> {
     const identifierValidationError = this.validateIdentifiers()
     if (identifierValidationError) return responseFailure(identifierValidationError)
 
@@ -135,7 +135,7 @@ export class SecretsAPI {
   async listExclude(
     exclude: SecretName[],
     options?: ListSecretsOptions
-  ): Promise<ApiResponse<ListSecretsResData, ListExcludeSecretsError | EnvironmentContextError>> {
+  ): Promise<ApiResponse<ListSecretsResponse, ListExcludeSecretsError | EnvironmentContextError>> {
     const validationError = this.validateIdentifiers()
     if (validationError) return responseFailure(validationError)
 

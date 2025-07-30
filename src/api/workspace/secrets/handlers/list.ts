@@ -1,7 +1,7 @@
 import {
   SecretName,
   ListSecretsOptions,
-  ListSecretsResData,
+  ListSecretsResponse,
   ListSecretsQueryParams,
 } from '../../../../types/secrets'
 import { ApiResponse } from '../../../../http/response'
@@ -25,7 +25,7 @@ export type ListExcludeSecretsArgs = ListSecretsBaseArgs & {
 
 async function listSecrets(
   args: ListSecretsBaseArgs & { only?: SecretName[]; exclude?: SecretName[] }
-): Promise<ApiResponse<ListSecretsResData, ListSecretsError>> {
+): Promise<ApiResponse<ListSecretsResponse, ListSecretsError>> {
   const { client, project, environment } = args
   const { only, exclude } = args
 
@@ -54,7 +54,7 @@ async function listSecrets(
 
   const path = `/v1/projects/${project}/environments/${environment}/secrets`
 
-  return await client.sendApiRequest<ListSecretsResData, ListSecretsError>({
+  return await client.sendApiRequest<ListSecretsResponse, ListSecretsError>({
     method: 'GET',
     path,
     query,

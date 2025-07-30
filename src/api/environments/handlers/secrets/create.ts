@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../../http/client'
 import { CreateSecretsError } from '../../../../types/errors/secrets'
-import { CreateSecretsResData } from '../../../../types/secrets'
+import { CreateSecretsResponse } from '../../../../types/secrets'
 import { ApiResponse } from '../../../../http/response'
 
 export type CreateSecretsData = Array<{
@@ -12,10 +12,10 @@ export type CreateSecretsData = Array<{
 async function createSecrets(
   envClient: HttpClient,
   data: CreateSecretsData
-): Promise<ApiResponse<CreateSecretsResData, CreateSecretsError>> {
+): Promise<ApiResponse<CreateSecretsResponse, CreateSecretsError>> {
   const path = '/v1/secrets'
 
-  return envClient.sendApiRequest<CreateSecretsResData, CreateSecretsError>({
+  return envClient.sendApiRequest<CreateSecretsResponse, CreateSecretsError>({
     method: 'POST',
     path,
     data,
