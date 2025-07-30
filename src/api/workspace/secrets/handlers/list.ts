@@ -7,17 +7,8 @@ import {
 import { ApiResponse } from '../../../../http/response'
 import { EnvironmentContextError, GenericApiError } from '../../../../types/errors'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
-import {
-  InvalidSecretNamesValidationError,
-  NoDataProvidedValidationError,
-} from '../../../../types/errors/secrets'
 
-type ListSecretsError =
-  | GenericApiError
-  | EnvironmentContextError
-  | InvalidSecretNamesValidationError
-  | NoDataProvidedValidationError
-
+type ListSecretsError = GenericApiError | EnvironmentContextError
 type ListSecretsBaseArgs = ProjectEnvHandlerArgs<{ options?: ListSecretsOptions }>
 
 export type ListSecretsArgs = ListSecretsBaseArgs
