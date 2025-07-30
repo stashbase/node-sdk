@@ -5,14 +5,18 @@ import {
   ListSecretsQueryParams,
 } from '../../../../types/secrets'
 import { ApiResponse } from '../../../../http/response'
-import {
-  EnvironmentNotFoundError,
-  ProjectNotFoundError,
-  GenericApiError,
-} from '../../../../types/errors'
+import { EnvironmentContextError, GenericApiError } from '../../../../types/errors'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
+import {
+  InvalidSecretNamesValidationError,
+  NoDataProvidedValidationError,
+} from '../../../../types/errors/secrets'
 
-type ListSecretsError = GenericApiError | ProjectNotFoundError | EnvironmentNotFoundError
+type ListSecretsError =
+  | GenericApiError
+  | EnvironmentContextError
+  | InvalidSecretNamesValidationError
+  | NoDataProvidedValidationError
 
 type ListSecretsBaseArgs = ProjectEnvHandlerArgs<{ options?: ListSecretsOptions }>
 
