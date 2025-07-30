@@ -60,7 +60,12 @@ export class WebhooksAPI {
 
   private validateIdentifiersWithWebhookId(webhookId: string) {
     const validationError = this.validateIdentifiers()
-    if (validationError) return responseFailure(validationError)
+    if (validationError) return validationError
+
+    if (!isValidWebhookId(webhookId)) {
+      const error = invalidWebhookIdError
+      return error
+    }
   }
 
   private getSingleWebhookHandlerArgs(webhookId: string) {
