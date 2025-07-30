@@ -5,10 +5,9 @@ import {
   EnvironmentNameUsesIdFormatError,
   InvalidEnvironmentNameError,
 } from '../../../../types/errors/environments'
-import { ProjectNotFoundError, GenericApiError } from '../../../../types/errors'
+import { ProjectContextError } from '../../../../types/errors'
 import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
 import { CreateEnvironmentData } from '../../../../types/environments'
-import { InvalidIdentifierProjectError } from '../../../../types/errors/projects'
 import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
 
 export type CreateEnvironmentArgs = EnvironmentHandlerArgs<{
@@ -21,12 +20,10 @@ interface CreateEnvironmentResponseData {
 }
 
 type CreateEnvironmentError =
-  | GenericApiError
-  | ProjectNotFoundError
+  | ProjectContextError
   | EnvironmentAlreadyExistsError
   | EnvironmentLimitReachedError
   | InvalidEnvironmentIdentifierError
-  | InvalidIdentifierProjectError
   | InvalidEnvironmentNameError
   | EnvironmentNameUsesIdFormatError
 
