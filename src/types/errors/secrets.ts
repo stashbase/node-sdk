@@ -27,10 +27,17 @@ export type GetSecretError =
   | SecretNotFoundError
   | InvalidSecretNameValidationError
 
-export type ListSecretsError =
-  | GenericApiError
-  | NoDataProvidedValidationError // for listOnly and listExclude
-  | InvalidSecretNamesValidationError // for listOnly and listExclude
+export type ListSecretsError = GenericApiError
+
+export type ListOnlySecretsError =
+  | ListSecretsError
+  | NoDataProvidedValidationError
+  | InvalidSecretNamesValidationError
+
+export type ListExcludeSecretsError =
+  | ListSecretsError
+  | NoDataProvidedValidationError
+  | InvalidSecretNamesValidationError
 
 export type SetSecretsError =
   | GenericApiError
