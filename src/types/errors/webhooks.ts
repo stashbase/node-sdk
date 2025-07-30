@@ -7,7 +7,11 @@ import {
 } from '.'
 
 export type ListWebhooksError = GenericApiError
-export type CreateWebhookError = GenericApiError | WebhookLimitReachedError
+export type CreateWebhookError =
+  | GenericApiError
+  | WebhookLimitReachedError
+  | InvalidWebhookUrlValidationError
+  | WebhookDescriptionTooLongError
 
 export type UpdateWebhookError =
   | SingleWebhookError
