@@ -1,13 +1,9 @@
 import { DeleteAllSecretsResData } from '../../../../types/secrets'
 import { ApiResponse } from '../../../../http/response'
-import {
-  EnvironmentNotFoundError,
-  GenericApiError,
-  ProjectNotFoundError,
-} from '../../../../types/errors'
+import { EnvironmentContextError, GenericApiError } from '../../../../types/errors'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 
-type DeleteAllSecretsError = ProjectNotFoundError | EnvironmentNotFoundError | GenericApiError
+type DeleteAllSecretsError = GenericApiError | EnvironmentContextError
 
 export type DeleteAllSecretsArgs = ProjectEnvHandlerArgs<undefined>
 
