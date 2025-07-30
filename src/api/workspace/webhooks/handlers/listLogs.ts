@@ -1,11 +1,6 @@
 import { ApiResponse } from '../../../../http/response'
 import { ListWebhookLogsResponse } from '../../../../types/webhooks'
-import {
-  InvalidWebhookIdError,
-  InvalidWebhookLogsLimitError,
-  InvalidWebhookLogsPageError,
-  ListWebhooksError as SharedListWebhooksError,
-} from '../../../../types/errors/webhooks'
+import { ListWebhookLogsError as SharedListWebhookLogsError } from '../../../../types/errors/webhooks'
 import { EnvironmentContextError } from '../../../../types/errors'
 import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
 
@@ -16,11 +11,7 @@ export type ListWebhookLogsOptions = {
   limit?: number
 }
 
-export type ListWebhookLogsError =
-  | InvalidWebhookIdError
-  | EnvironmentContextError
-  | InvalidWebhookLogsLimitError
-  | InvalidWebhookLogsPageError
+export type ListWebhookLogsError = SharedListWebhookLogsError | EnvironmentContextError
 
 async function listWebhookLogs(
   args: SingleWebhookProjectEnvHandlerArgs<{ options?: ListWebhookLogsOptions }>
