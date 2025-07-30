@@ -21,8 +21,6 @@ import { deleteEnvironment } from './handlers/delete'
 import { getEnvironment } from './handlers/get'
 import { listEnvironments } from './handlers/list'
 import { loadEnvironment } from './handlers/load'
-import { renameEnvironment } from './handlers/rename'
-import { setIsProduction } from './handlers/setIsProduction'
 import { responseFailure } from '../../../http/response'
 import {
   CreateEnvironmentData,
