@@ -1,10 +1,10 @@
 import { ApiResponse } from '../../../../http/response'
 import { DeleteSecretsResData, SecretName } from '../../../../types/secrets'
-import { EnvironmentNotFoundError, ProjectNotFoundError } from '../../../../types/errors'
+import { EnvironmentContextError } from '../../../../types/errors'
 import { DeleteSecretsError as SharedDeleteSecretsError } from '../../../../types/errors/secrets'
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 
-type DeleteSecretsError = ProjectNotFoundError | EnvironmentNotFoundError | SharedDeleteSecretsError
+type DeleteSecretsError = SharedDeleteSecretsError | EnvironmentContextError
 
 export type DeleteSecretsArgs = ProjectEnvHandlerArgs<{
   names: Array<SecretName>
