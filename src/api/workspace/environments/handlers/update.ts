@@ -7,7 +7,7 @@ import {
 } from '../../../../types/errors/environments'
 import {
   EnvironmentNotFoundError,
-  MissingPropertiesToUpdateValidationError,
+  MissingPropertiesToUpdateError,
   ProjectContextError,
 } from '../../../../types/errors'
 import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
@@ -33,7 +33,7 @@ type UpdateEnvironmentError =
   | InvalidEnvironmentNameError
   | EnvironmentNameUsesIdFormatError
   | NewEnvironmentNameEqualsOriginal
-  | MissingPropertiesToUpdateValidationError
+  | MissingPropertiesToUpdateError
 
 export async function updateEnvironment(
   args: UpdateEnvironmentArgs
