@@ -39,7 +39,9 @@ export interface WebhookLog {
 }
 
 export interface ListWebhookLogsResponse {
+  /** The list of webhook logs */
   data: Array<WebhookLog>
+  /** The pagination metadata */
   pagination: PaginationMetadata
 }
 
