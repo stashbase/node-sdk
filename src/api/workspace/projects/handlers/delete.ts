@@ -1,9 +1,9 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiResponse } from '../../../../http/response'
 import { ProjectNotFoundError, GenericApiError } from '../../../../types/errors'
-import { InvalidIdentifierProjectError } from '../../../../types/errors/projects'
+import { InvalidProjectIdentifierError } from '../../../../types/errors/projects'
 
-type DeleteProjectsError = GenericApiError | ProjectNotFoundError | InvalidIdentifierProjectError
+type DeleteProjectsError = GenericApiError | ProjectNotFoundError | InvalidProjectIdentifierError
 
 type DeleteProjectsResponseData = null
 

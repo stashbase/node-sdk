@@ -1,6 +1,6 @@
 import { ApiError, ApiErrorDetails } from '../../http/response'
 import { InvalidEnvironmentIdentifierError } from './environments'
-import { InvalidIdentifierProjectError } from './projects'
+import { InvalidProjectIdentifierError } from './projects'
 
 export type AuthErrorCodePrefix = 'auth'
 export type AccessErrorCodePrefix = 'access'
@@ -117,7 +117,7 @@ export type MissingPropertiesToUpdateValidationError = ValidationApiError<
 export type ProjectContextError =
   | GenericApiError
   | ProjectNotFoundError
-  | InvalidIdentifierProjectError
+  | InvalidProjectIdentifierError
 
 export type EnvironmentContextError =
   | ProjectContextError

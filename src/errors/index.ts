@@ -14,7 +14,7 @@ import {
   NewEnvironmentNameEqualsOriginal,
 } from '../types/errors/environments'
 import {
-  InvalidIdentifierProjectError,
+  InvalidProjectIdentifierError,
   InvalidProjectLimitError,
   InvalidProjectPageNumberError,
   ProjectNameUsesIdFormatError,
@@ -78,7 +78,7 @@ export const invalidEnvironmentIdentifierError: InvalidEnvironmentIdentifierErro
     "Invalid environment identifier. Either a name or Id can be used. The name must be alphanumeric, may include underscores (_) and one hyphen (-) as a separator, and must be between 2 and 40 characters long. The Id must start with the prefix 'env_' followd by 22 alphanumeric characters.",
 })
 
-export const invalidProjectIdentifierError: InvalidIdentifierProjectError = createApiError({
+export const invalidProjectIdentifierError: InvalidProjectIdentifierError = createApiError({
   code: 'validation.invalid_project_identifier',
   details: {
     nameExamples: ['my-project', 'booking-app-1', 'super_app'],
