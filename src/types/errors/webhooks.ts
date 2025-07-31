@@ -46,13 +46,6 @@ export type InvalidWebhookIdError = ValidationApiError<
   }
 >
 
-export type WebhookUrlHttpsRequiredValidationError = ValidationApiError<
-  'webhook_url_https_required',
-  {
-    validUrlExample: string
-  }
->
-
 export type InvalidWebhookUrlError = ValidationApiError<
   'invalid_webhook_url',
   {
