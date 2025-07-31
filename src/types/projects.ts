@@ -10,3 +10,8 @@ export interface Project {
   /** The number of environments associated with the project. */
   environmentCount: number
 }
+
+export interface CreateProjectResponse {
+  id: string
+  name: string
+}

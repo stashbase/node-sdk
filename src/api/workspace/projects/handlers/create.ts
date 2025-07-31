@@ -8,11 +8,7 @@ import {
   ProjectNameUsesIdFormatError,
 } from '../../../../types/errors/projects'
 import { GenericApiError } from '../../../../types/errors'
-
-interface CreateProjectResponseData {
-  id: string
-  name: string
-}
+import { CreateProjectResponse } from '../../../../types/projects'
 
 type CreateProjectError =
   | GenericApiError
@@ -30,8 +26,8 @@ export type CreateProjectData = {
 export async function createProject(
   envClient: HttpClient,
   data: CreateProjectData
-): Promise<ApiResponse<CreateProjectResponseData, CreateProjectError>> {
-  return await envClient.sendApiRequest<CreateProjectResponseData, CreateProjectError>({
+): Promise<ApiResponse<CreateProjectResponse, CreateProjectError>> {
+  return await envClient.sendApiRequest<CreateProjectResponse, CreateProjectError>({
     method: 'POST',
     path: '/v1/projects',
     data,
