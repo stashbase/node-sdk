@@ -1,9 +1,5 @@
 import { ApiError, ApiErrorDetails } from '../http/response'
-import {
-  ApiErrorType,
-  ConnectionFailedError,
-  MissingPropertiesToUpdateError,
-} from '../types/errors'
+import { ConnectionFailedError, MissingPropertiesToUpdateError } from '../types/errors'
 import {
   EnvironmentNameUsesIdFormatError,
   InvalidEnvironmentIdentifierError,
