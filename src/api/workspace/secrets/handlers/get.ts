@@ -2,7 +2,7 @@ import { ApiResponse } from '../../../../http/response'
 import {
   GetSecretOptions,
   GetSecretQueryParams,
-  GetSecretResponse,
+  Secret,
   SecretName,
 } from '../../../../types/secrets'
 import { EnvironmentContextError } from '../../../../types/errors'
@@ -10,7 +10,7 @@ import { GetSecretError as SharedGetSecretsError } from '../../../../types/error
 import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
 
 type GetSecretError = SharedGetSecretsError | EnvironmentContextError
-type GetSecretResponse = Promise<ApiResponse<GetSecretResponse, GetSecretError>>
+type GetSecretResponse = Promise<ApiResponse<Secret, GetSecretError>>
 
 export type GetSecretArgs = ProjectEnvHandlerArgs<{
   name: SecretName
@@ -38,7 +38,7 @@ async function getSecret(args: GetSecretArgs): GetSecretResponse {
     }
   }
 
-  return await client.sendApiRequest<GetSecretResponse, GetSecretError>({
+  return await client.sendApiRequest<Secret, GetSecretError>({
     method: 'GET',
     path: `/v1/projects/${project}/environments/${environment}/secrets/${name}`,
     query: Object.keys(query).length > 0 ? query : undefined,
