@@ -30,7 +30,7 @@ class WorkspaceClient {
   }
 
   /** API for interacting with projects. */
-  public projects: ProjectsAPI
+  public readonly projects: ProjectsAPI
 
   /** API for interacting with environments. */
   public environments(projectNameOrId: string) {
