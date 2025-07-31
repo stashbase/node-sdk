@@ -12,7 +12,6 @@ import { responseFailure } from '../../../http/response'
 import { CreateWebhookData, UpdateWebhookData } from '../../../types/webhooks'
 import {
   isValidEnvironmentIdentifier,
-  isValidEnvironmentName,
   isValidWebhookDescription,
   isValidWebhookId,
   isValidWebhookUrl,
