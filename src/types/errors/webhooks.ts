@@ -10,12 +10,12 @@ export type ListWebhooksError = GenericApiError
 export type CreateWebhookError =
   | GenericApiError
   | WebhookLimitReachedError
-  | InvalidWebhookUrlValidationError
+  | InvalidWebhookUrlError
   | WebhookDescriptionTooLongError
 
 export type UpdateWebhookError =
   | SingleWebhookError
-  | InvalidWebhookUrlValidationError
+  | InvalidWebhookUrlError
   | WebhookDescriptionTooLongError
   | WebhookMissingPropertiesToUpdateValidationError
 
@@ -53,7 +53,7 @@ export type WebhookUrlHttpsRequiredValidationError = ValidationApiError<
   }
 >
 
-export type InvalidWebhookUrlValidationError = ValidationApiError<
+export type InvalidWebhookUrlError = ValidationApiError<
   'invalid_webhook_url',
   {
     validUrlExample: string

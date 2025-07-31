@@ -3,7 +3,7 @@ import {
   InvalidWebhookIdError,
   InvalidWebhookLogsLimitError,
   InvalidWebhookLogsPageError,
-  InvalidWebhookUrlValidationError,
+  InvalidWebhookUrlError,
   WebhookDescriptionTooLongError,
   WebhookMissingPropertiesToUpdateValidationError,
 } from '../types/errors/webhooks'
@@ -17,7 +17,7 @@ export const invalidWebhookIdError: InvalidWebhookIdError = createApiError({
   },
 })
 
-export const invalidWebhookUrlError: InvalidWebhookUrlValidationError = createApiError({
+export const invalidWebhookUrlError: InvalidWebhookUrlError = createApiError({
   code: 'validation.invalid_webhook_url',
   message:
     'The webhook URL is invalid. Webhook URLs cannot be longer than 512 characters, must use HTTPS, and cannot use localhost, loopback addresses, or private IP ranges.',
