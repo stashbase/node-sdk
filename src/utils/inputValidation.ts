@@ -13,15 +13,15 @@ import {
 import { invalidWebhookIdError } from '../errors/webhooks'
 import { responseFailure } from '../http/response'
 import {
-  DuplicateNewSecretNamesValidationError,
-  DuplicateSecretsNamesValidationError,
-  InvalidNewSecretNamesValidationError,
-  InvalidSecretNamesValidationError,
-  MissingPropertiesToUpdateValidationError,
-  NewSecretNamesSameAsNamesValidationError,
-  NoDataProvidedValidationError,
-  SecretCommentsTooLongValidationError,
-  SecretValuesTooLongValidationError,
+  DuplicateNewSecretNamesError,
+  DuplicateSecretsNamesError,
+  InvalidNewSecretNamesError,
+  InvalidSecretNamesError,
+  MissingPropertiesToUpdateError,
+  NewSecretNamesSameAsNamesError,
+  NoDataProvidedError,
+  SecretCommentsTooLongError,
+  SecretValuesTooLongError,
 } from '../types/errors/secrets'
 
 export const SECRET_COMMENT_MAX_LENGTH = 512
@@ -169,11 +169,11 @@ interface SetSecretsItem {
 }
 
 type ValidateSetSecretsInputRes =
-  | NoDataProvidedValidationError
-  | InvalidSecretNamesValidationError
-  | DuplicateSecretsNamesValidationError
-  | SecretCommentsTooLongValidationError
-  | SecretValuesTooLongValidationError
+  | NoDataProvidedError
+  | InvalidSecretNamesError
+  | DuplicateSecretsNamesError
+  | SecretCommentsTooLongError
+  | SecretValuesTooLongError
   | null
 
 // return api error
@@ -241,15 +241,15 @@ export const validateSetSecretsInput = (
 export const validateCreateSecretsInput = validateSetSecretsInput
 
 type ValidateUpdateSecretsInputRes =
-  | NoDataProvidedValidationError
-  | MissingPropertiesToUpdateValidationError
-  | InvalidSecretNamesValidationError
-  | InvalidNewSecretNamesValidationError
-  | DuplicateSecretsNamesValidationError
-  | DuplicateNewSecretNamesValidationError
-  | NewSecretNamesSameAsNamesValidationError
-  | SecretCommentsTooLongValidationError
-  | SecretValuesTooLongValidationError
+  | NoDataProvidedError
+  | MissingPropertiesToUpdateError
+  | InvalidSecretNamesError
+  | InvalidNewSecretNamesError
+  | DuplicateSecretsNamesError
+  | DuplicateNewSecretNamesError
+  | NewSecretNamesSameAsNamesError
+  | SecretCommentsTooLongError
+  | SecretValuesTooLongError
   | null
 
 export const validateUpdateSecretsInput = (

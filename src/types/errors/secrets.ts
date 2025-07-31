@@ -1,4 +1,4 @@
-import { ConflictApiError, GenericApiError, ResourceApiError, ValidationApiError } from './'
+import { GenericApiError, ResourceApiError, ValidationApiError } from './'
 
 export type SecretsErrorDetails = {
   secretNames: Array<string>
@@ -11,87 +11,76 @@ type SecretsValidationErrorWithDetails<T extends string> = ValidationApiError<
 
 export type CreateSecretsError =
   | GenericApiError
-  | NoDataProvidedValidationError
-  | InvalidSecretNamesValidationError
-  | DuplicateSecretsNamesValidationError
-  | SecretCommentsTooLongValidationError
-  | SecretValuesTooLongValidationError
+  | NoDataProvidedError
+  | InvalidSecretNamesError
+  | DuplicateSecretsNamesError
+  | SecretCommentsTooLongError
+  | SecretValuesTooLongError
 
-export type DeleteSecretsError =
-  | GenericApiError
-  | InvalidSecretNamesValidationError
-  | NoDataProvidedValidationError
+export type DeleteSecretsError = GenericApiError | InvalidSecretNamesError | NoDataProvidedError
 
-export type GetSecretError =
-  | GenericApiError
-  | SecretNotFoundError
-  | InvalidSecretNameValidationError
+export type GetSecretError = GenericApiError | SecretNotFoundError | InvalidSecretNameError
 
 export type ListSecretsError = GenericApiError
 
-export type ListOnlySecretsError =
-  | ListSecretsError
-  | NoDataProvidedValidationError
-  | InvalidSecretNamesValidationError
+export type ListOnlySecretsError = ListSecretsError | NoDataProvidedError | InvalidSecretNamesError
 
 export type ListExcludeSecretsError =
   | ListSecretsError
-  | NoDataProvidedValidationError
-  | InvalidSecretNamesValidationError
+  | NoDataProvidedError
+  | InvalidSecretNamesError
 
 export type SetSecretsError =
   | GenericApiError
-  | NoDataProvidedValidationError
-  | InvalidSecretNamesValidationError
-  | DuplicateSecretsNamesValidationError
-  | SecretCommentsTooLongValidationError
-  | SecretValuesTooLongValidationError
+  | NoDataProvidedError
+  | InvalidSecretNamesError
+  | DuplicateSecretsNamesError
+  | SecretCommentsTooLongError
+  | SecretValuesTooLongError
 
 export type UpdateSecretsError =
   | GenericApiError
-  | NoDataProvidedValidationError
-  | InvalidSecretNamesValidationError
-  | DuplicateSecretsNamesValidationError
-  | DuplicateNewSecretNamesValidationError
-  | InvalidNewSecretNamesValidationError
-  | MissingPropertiesToUpdateValidationError
-  | SecretCommentsTooLongValidationError
-  | SecretValuesTooLongValidationError
-  | SecretsAlreadyExistConflictError
-  | NewSecretNamesSameAsNamesValidationError
+  | NoDataProvidedError
+  | InvalidSecretNamesError
+  | DuplicateSecretsNamesError
+  | DuplicateNewSecretNamesError
+  | InvalidNewSecretNamesError
+  | MissingPropertiesToUpdateError
+  | SecretCommentsTooLongError
+  | SecretValuesTooLongError
+  | SecretsAlreadyExistError
+  | NewSecretNamesSameAsNamesError
 
 export type SecretNotFoundError = ResourceApiError<'secret_not_found', undefined>
-export type NoDataProvidedValidationError = ValidationApiError<'no_data_provided', undefined>
-export type InvalidSecretNameValidationError = ValidationApiError<'invalid_secret_name', undefined>
-export type InvalidSecretNamesValidationError =
-  SecretsValidationErrorWithDetails<'invalid_secret_names'>
+export type NoDataProvidedError = ValidationApiError<'no_data_provided', undefined>
+export type InvalidSecretNameError = ValidationApiError<'invalid_secret_name', undefined>
+export type InvalidSecretNamesError = SecretsValidationErrorWithDetails<'invalid_secret_names'>
 
-export type DuplicateSecretsNamesValidationError = ValidationApiError<
+export type DuplicateSecretsNamesError = ValidationApiError<
   'duplicate_secret_names',
   SecretsErrorDetails
 >
 
-export type SecretCommentsTooLongValidationError = ValidationApiError<
+export type SecretCommentsTooLongError = ValidationApiError<
   'secret_comments_too_long',
   SecretsErrorDetails
 >
 
-export type SecretValuesTooLongValidationError = ValidationApiError<
+export type SecretValuesTooLongError = ValidationApiError<
   'secret_values_too_long',
   SecretsErrorDetails
 >
 
-export type DuplicateNewSecretNamesValidationError =
+export type DuplicateNewSecretNamesError =
   SecretsValidationErrorWithDetails<'duplicate_new_secret_names'>
 
-export type InvalidNewSecretNamesValidationError =
+export type InvalidNewSecretNamesError =
   SecretsValidationErrorWithDetails<'invalid_new_secret_names'>
 
-export type NewSecretNamesSameAsNamesValidationError =
+export type NewSecretNamesSameAsNamesError =
   SecretsValidationErrorWithDetails<'new_secret_names_same_as_names'>
 
-export type MissingPropertiesToUpdateValidationError =
+export type MissingPropertiesToUpdateError =
   SecretsValidationErrorWithDetails<'missing_properties_to_update'>
 
-export type SecretsAlreadyExistConflictError =
-  SecretsValidationErrorWithDetails<'secrets_already_exist'>
+export type SecretsAlreadyExistError = SecretsValidationErrorWithDetails<'secrets_already_exist'>
