@@ -54,7 +54,13 @@ import { ListWebhookLogsOptions } from '../workspace/webhooks/handlers/listLogs'
 import { ListExcludeSecretsError, ListOnlySecretsError } from '../../types/errors/secrets'
 
 class EnvironmentsAPI {
-  constructor(private httpClient: HttpClient) {}
+  public secrets: SecretsAPI
+  public webhooks: WebhooksAPI
+
+  constructor(private httpClient: HttpClient) {
+    this.secrets = new SecretsAPI(this.httpClient)
+    this.webhooks = new WebhooksAPI(this.httpClient)
+  }
 
   /**
    * Loads the environment and injects the secrets into the process.
@@ -97,9 +103,6 @@ class EnvironmentsAPI {
   async get() {
     return await getEnvironment(this.httpClient)
   }
-
-  secrets = new SecretsAPI(this.httpClient)
-  webhooks = new WebhooksAPI(this.httpClient)
 }
 
 class SecretsAPI {
