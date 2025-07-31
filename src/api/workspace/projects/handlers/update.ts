@@ -10,11 +10,11 @@ import {
   ProjectNameUsesIdFormatError,
 } from '../../../../types/errors/projects'
 import { AtLeastOne } from '../../../../types/util'
-import { GenericApiError, MissingPropertiesToUpdateValidationError } from '../../../../types/errors'
+import { GenericApiError, MissingPropertiesToUpdateError } from '../../../../types/errors'
 
 type UpdateProjectError =
   | GenericApiError
-  | MissingPropertiesToUpdateValidationError
+  | MissingPropertiesToUpdateError
   | NewProjectNameEqualsOriginal
   | InvalidProjectIdentifierError
   | InvalidProjectNameError

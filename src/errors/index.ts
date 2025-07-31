@@ -2,7 +2,7 @@ import { ApiError, ApiErrorDetails } from '../http/response'
 import {
   ApiErrorType,
   ConnectionFailedError,
-  MissingPropertiesToUpdateValidationError,
+  MissingPropertiesToUpdateError,
 } from '../types/errors'
 import {
   EnvironmentNameUsesIdFormatError,
@@ -217,11 +217,10 @@ export const invalidEnvironmentSearchError: InvalidEnvironmentSearchError = crea
     invalidSearchExamples: ['#dev', 'api-dev-1', 'service--dev'],
   },
 })
-export const missingPropertiesToUpdateError: MissingPropertiesToUpdateValidationError =
-  createApiError({
-    code: 'validation.missing_properties_to_update',
-    message: 'At least one property to update must be provided.',
-    details: {
-      possibleProperties: ['name', 'description'],
-    },
-  })
+export const missingPropertiesToUpdateError: MissingPropertiesToUpdateError = createApiError({
+  code: 'validation.missing_properties_to_update',
+  message: 'At least one property to update must be provided.',
+  details: {
+    possibleProperties: ['name', 'description'],
+  },
+})
