@@ -7,17 +7,12 @@ import {
 } from '../../../../types/errors/environments'
 import { ProjectContextError } from '../../../../types/errors'
 import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
-import { CreateEnvironmentData } from '../../../../types/environments'
+import { CreateEnvironmentData, CreateEnvironmentResponse } from '../../../../types/environments'
 import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
 
 export type CreateEnvironmentArgs = EnvironmentHandlerArgs<{
   data: CreateEnvironmentData
 }>
-
-interface CreateEnvironmentResponseData {
-  id: string
-  name: string
-}
 
 type CreateEnvironmentError =
   | ProjectContextError
@@ -29,11 +24,11 @@ type CreateEnvironmentError =
 
 async function createEnvironment(
   args: CreateEnvironmentArgs
-): Promise<ApiResponse<CreateEnvironmentResponseData, CreateEnvironmentError>> {
+): Promise<ApiResponse<CreateEnvironmentResponse, CreateEnvironmentError>> {
   const { client, project } = args
   const path = `/v1/projects/${project}/environments`
 
-  return await client.sendApiRequest<CreateEnvironmentResponseData, CreateEnvironmentError>({
+  return await client.sendApiRequest<CreateEnvironmentResponse, CreateEnvironmentError>({
     method: 'POST',
     path,
     data: args.data,
