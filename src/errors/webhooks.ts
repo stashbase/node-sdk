@@ -5,7 +5,7 @@ import {
   InvalidWebhookLogsPageError,
   InvalidWebhookUrlError,
   WebhookDescriptionTooLongError,
-  WebhookMissingPropertiesToUpdateValidationError,
+  WebhookMissingPropertiesToUpdateError,
 } from '../types/errors/webhooks'
 
 export const invalidWebhookIdError: InvalidWebhookIdError = createApiError({
@@ -34,7 +34,7 @@ export const webhookDescriptionTooLongError: WebhookDescriptionTooLongError = cr
   },
 })
 
-export const webhookMissingPropertiesToUpdateError: WebhookMissingPropertiesToUpdateValidationError =
+export const webhookMissingPropertiesToUpdateError: WebhookMissingPropertiesToUpdateError =
   createApiError({
     code: 'validation.missing_properties_to_update',
     message: 'At least one property to update must be provided.',

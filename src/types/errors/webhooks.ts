@@ -17,7 +17,7 @@ export type UpdateWebhookError =
   | SingleWebhookError
   | InvalidWebhookUrlError
   | WebhookDescriptionTooLongError
-  | WebhookMissingPropertiesToUpdateValidationError
+  | WebhookMissingPropertiesToUpdateError
 
 export type UpdateWebhookStatusError =
   | SingleWebhookError
@@ -60,7 +60,7 @@ export type WebhookDescriptionTooLongError = ValidationApiError<
   }
 >
 
-export type WebhookMissingPropertiesToUpdateValidationError = ValidationApiError<
+export type WebhookMissingPropertiesToUpdateError = ValidationApiError<
   'missing_properties_to_update',
   {
     possibleProperties: Array<'url' | 'description'>
