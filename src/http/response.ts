@@ -111,12 +111,13 @@ export class ApiError<T extends string, D = undefined | ApiErrorDetails> impleme
   }
 }
 
-interface ResponseSuccess<T> {
+export interface ResponseSuccess<T> {
   ok: true
   error: null
   data: T
 }
-interface ResponseFailure<K> {
+
+export interface ResponseFailure<K> {
   ok: false
   error: K
   data: null
