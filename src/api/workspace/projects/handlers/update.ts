@@ -1,7 +1,7 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiResponse } from '../../../../http/response'
 import {
-  InvalidIdentifierProjectError,
+  InvalidProjectIdentifierError,
   InvalidProjectNameError,
   NewProjectNameEqualsOriginal,
   ProjectAlreadyExistsError,
@@ -16,7 +16,7 @@ type UpdateProjectError =
   | GenericApiError
   | MissingPropertiesToUpdateValidationError
   | NewProjectNameEqualsOriginal
-  | InvalidIdentifierProjectError
+  | InvalidProjectIdentifierError
   | InvalidProjectNameError
   | ProjectAlreadyExistsError
   | ProjectLimitReachedError

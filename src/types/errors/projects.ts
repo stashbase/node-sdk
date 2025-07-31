@@ -11,7 +11,7 @@ export type ProjectNameUsesIdFormatError = ValidationApiError<
   }
 >
 
-export type InvalidIdentifierProjectError = ValidationApiError<
+export type InvalidProjectIdentifierError = ValidationApiError<
   'invalid_project_identifier',
   {
     nameExamples: string[]
