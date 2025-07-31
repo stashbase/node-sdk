@@ -57,12 +57,17 @@ export type EnvironmentWithProject = Environment & {
 }
 
 export interface CreateEnvironmentData {
+  /** The unique name of the environment. */
   name: string
+  /** The description of the environment, can be null. */
   description?: string | null
+  /** Whether the environment is a production environment or not. */
   isProduction?: boolean
 }
 
 export interface CreateEnvironmentResponse {
+  /** The unique identifier of the environment. */
   id: string
+  /** The unique name of the environment. */
   name: string
 }

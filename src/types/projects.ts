@@ -12,6 +12,8 @@ export interface Project {
 }
 
 export interface CreateProjectResponse {
+  /** The unique identifier of the project. */
   id: string
+  /** The unique name of the project. */
   name: string
 }
