@@ -61,3 +61,8 @@ export interface CreateEnvironmentData {
   description?: string | null
   isProduction?: boolean
 }
+
+export interface CreateEnvironmentResponse {
+  id: string
+  name: string
+}
