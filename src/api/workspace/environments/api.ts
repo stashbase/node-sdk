@@ -28,6 +28,7 @@ import {
   LoadEnvironmentOptions,
 } from '../../../types/environments'
 import { updateEnvironment, UpdateEnvironmentData } from './handlers/update'
+import { environmentDescriptionTooLongError } from '../../../errors/environments'
 
 export const checkValidProjectEnv = (projectName: string, environmentName: string) => {
   if (!isValidProjectIdentifier(projectName)) {
@@ -249,6 +250,11 @@ export class EnvironmentsAPI {
         const error = newEnvironmentNameEqualsOriginal
         return responseFailure(error)
       }
+    }
+
+    if (data.description && data?.description?.length > 255) {
+      const error = environmentDescriptionTooLongError
+      return responseFailure(error)
     }
 
     return await updateEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId, data })

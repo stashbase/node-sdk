@@ -23,6 +23,8 @@ export type UpdateEnvironmentData = AtLeastOne<{
   name: string
   /** Whether the environment is production */
   isProduction: boolean
+  /** The new description of the environment */
+  description: string
 }>
 
 type UpdateEnvironmentError =
