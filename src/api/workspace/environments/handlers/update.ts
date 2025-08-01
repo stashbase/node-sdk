@@ -4,6 +4,7 @@ import {
   NewEnvironmentNameEqualsOriginal,
   EnvironmentNameUsesIdFormatError,
   InvalidEnvironmentNameError,
+  EnvironmentDescriptionTooLongError,
 } from '../../../../types/errors/environments'
 import {
   EnvironmentNotFoundError,
@@ -36,6 +37,7 @@ type UpdateEnvironmentError =
   | EnvironmentNameUsesIdFormatError
   | NewEnvironmentNameEqualsOriginal
   | MissingPropertiesToUpdateError
+  | EnvironmentDescriptionTooLongError
 
 export async function updateEnvironment(
   args: UpdateEnvironmentArgs
