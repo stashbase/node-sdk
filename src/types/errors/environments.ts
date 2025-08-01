@@ -68,3 +68,10 @@ export type InvalidEnvironmentSearchError = ValidationApiError<
     invalidSearchExamples: string[]
   }
 >
+
+export type EnvironmentDescriptionTooLongError = ValidationApiError<
+  'environment_description_too_long',
+  {
+    maxLength: number
+  }
+>
