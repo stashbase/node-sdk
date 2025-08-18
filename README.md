@@ -30,21 +30,23 @@ For full documentation, please visit [Stashbase Node SDK](https://docs.stashbase
 
 Here are some common usage examples for the Stashbase Node SDK:
 
-### Initialize the client
+### Workspace client
 
-```ts
+Use workspace client to manage resources in a workspace, you can use Service Account or Personal API key.
+
+```js
 import { createWorkspaceClient } from '@stashbase/node-sdk'
 
 const client = createWorkspaceClient(process.env.STASHBASE_API_KEY)
 ```
 
-### List projects
+#### List project
 
 ```js
 const { data, error } = await client.projects.list()
 ```
 
-### Create environment
+#### Create environment
 
 ```js
 const { data, error } = await client.environments('project-name').create({
@@ -53,12 +55,43 @@ const { data, error } = await client.environments('project-name').create({
 })
 ```
 
-### Load environment
+#### Load environment
 
 This method will load the environment and inject the secrets into the process.
 
 ```js
+// using workspace client
 const { error } = await client.environments('project-name').load('api-dev')
+```
+
+### Environment client
+
+Use environment client to manage resources in a specific environment, using Environment Account API key.
+
+```js
+import { createEnvClient } from '@stashbase/node-sdk'
+
+const client = createEnvClient(process.env.STASHBASE_ENV_API_KEY)
+```
+
+#### Get environment details
+
+```js
+const { data, error } = await client.environment.get()
+```
+
+#### Load environment
+
+This method will load the environment and inject the secrets into the process.
+
+```js
+const { error } = await client.environment.load()
+```
+
+#### List secrets
+
+```js
+const { data, error } = await client.secrets.list()
 ```
 
 ## License
