@@ -1,7 +1,13 @@
 # Stashbase Node SDK
 
-The Stashbase Node SDK is the official SDK for Stashbase, secrets management platform for developers.
-You can use this SDK to manage your projects, environments, secrets, etc. in your Node.js application.
+The official SDK for [Stashbase](https://stashbase.com), a secrets management platform for developers.
+
+**Features:**
+
+- Manage projects, environments, and secrets from Node.js
+- Inject secrets into your process environment
+- Simple, promise-based API
+- And more...
 
 ## Table of Contents
 
