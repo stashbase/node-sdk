@@ -56,11 +56,17 @@ import { ListExcludeSecretsError, ListOnlySecretsError } from '../../types/error
 class EnvironmentsAPI {
   public readonly secrets: SecretsAPI
   public readonly webhooks: WebhooksAPI
+  public readonly environment: EnvironmentAPI
 
   constructor(private httpClient: HttpClient) {
     this.secrets = new SecretsAPI(this.httpClient)
     this.webhooks = new WebhooksAPI(this.httpClient)
+    this.environment = new EnvironmentAPI(this.httpClient)
   }
+}
+
+class EnvironmentAPI {
+  constructor(private httpClient: HttpClient) {}
 
   /**
    * Loads the environment and injects the secrets into the process.
