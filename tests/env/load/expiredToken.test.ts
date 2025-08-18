@@ -4,7 +4,7 @@ import { createEnvClient } from '../../../src'
 test('Returns exipred token error', async () => {
   const client = createEnvClient('5D0sqWbu8BzauYK76bFQ4hrIstkQKeqr')
 
-  const { error } = await client.load({
+  const { error } = await client.environment.load({
     print: 'name',
   })
 
