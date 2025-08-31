@@ -96,5 +96,5 @@ const { data, error } = await client.secrets.list()
 
 ## License
 
-Stashbase CLI is licensed under the [MIT License](https://opensource.org/licenses/MIT).
+Stashbase Node SDK is licensed under the [MIT License](https://opensource.org/licenses/MIT).
 You can find the license in the [LICENSE.txt](LICENSE.txt) file.
