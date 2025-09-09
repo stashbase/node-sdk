@@ -52,6 +52,7 @@ import {
 import { CreateWebhookData, UpdateWebhookData } from '../../types/webhooks'
 import { ListWebhookLogsOptions } from '../workspace/webhooks/handlers/listLogs'
 import { ListExcludeSecretsError, ListOnlySecretsError } from '../../types/errors/secrets'
+import { getCurrentAuthDetails } from './handlers/whoami'
 
 class EnvironmentsAPI {
   public readonly secrets: SecretsAPI
@@ -62,6 +63,15 @@ class EnvironmentsAPI {
     this.secrets = new SecretsAPI(this.httpClient)
     this.webhooks = new WebhooksAPI(this.httpClient)
     this.environment = new EnvironmentAPI(this.httpClient)
+  }
+
+  /**
+   * Retrieves information about the current environment associated with the API key.
+   *
+   * @returns A promise that resolves to the current authed entity data or an error response.
+   */
+  whoami = async () => {
+    return await getCurrentAuthDetails(this.httpClient)
   }
 }
 
