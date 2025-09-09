@@ -26,10 +26,10 @@ export type AuthedEnvironmentAccountData = {
   project: {
     id: string
     name: string
-  }
-  environment: {
-    id: string
-    name: string
+    environment: {
+      id: string
+      name: string
+    }
   }
   permissions: Record<string, string[]>
 }
