@@ -1,25 +1,25 @@
 // Base workspace type shared across all auth types
-type WorkspaceData<R extends boolean> = {
+export type WorkspaceData<R extends boolean> = {
   id: string
   slug: string
   name: string
 } & (R extends true ? { userRole: 'MEMBER' | 'ADMIN' | 'OWNER' } : Record<string, never>)
 
 // User authentication type
-type AuthedUserData = {
+export type AuthedUserData = {
   id: string
   email: string
   name: string
   workspace: WorkspaceData<true>
 }
 
-type AuthedUserResponse = {
+export type AuthedUserResponse = {
   type: 'user'
   data: AuthedUserData
 }
 
 // Environment account authentication type
-type AuthedEnvironmentAccountData = {
+export type AuthedEnvironmentAccountData = {
   id: string
   name: string
   workspace: WorkspaceData<false>
@@ -34,13 +34,13 @@ type AuthedEnvironmentAccountData = {
   permissions: Record<string, string[]>
 }
 
-type AuthedEnvironmentAccountResponse = {
+export type AuthedEnvironmentAccountResponse = {
   type: 'environment_account'
   data: AuthedEnvironmentAccountData
 }
 
 // Service account authentication type
-type AuthedServiceAccountData = {
+export type AuthedServiceAccountData = {
   id: string
   name: string
   workspace: WorkspaceData<false>
@@ -54,13 +54,13 @@ type AuthedServiceAccountData = {
   } | null
 }
 
-type AuthedServiceAccountResponse = {
+export type AuthedServiceAccountResponse = {
   type: 'service_account'
   data: AuthedServiceAccountData
 }
 
 // The main union type that represents all possible auth responses
-type CurrentAuthResponse =
+export type CurrentAuthResponse =
   | AuthedUserResponse
   | AuthedEnvironmentAccountResponse
   | AuthedServiceAccountResponse
