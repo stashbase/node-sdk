@@ -49,9 +49,9 @@ class WorkspaceClient {
   }
 
   /**
-   * Retrieves information about the current authed entity associated with the API key.
+   * Retrieves information about the currently authenticated entity associated with the API key.
    *
-   * @returns A promise that resolves to the current authed entity data or an error response.
+   * @returns A promise that resolves to the currently authenticated entity data or an error response.
    */
   whoami = async () => {
     return await getCurrentAuthDetails(this.client)
