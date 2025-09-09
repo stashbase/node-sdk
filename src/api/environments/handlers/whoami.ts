@@ -10,7 +10,7 @@ async function getCurrentAuthDetails(
 ): Promise<ApiResponse<CurrentAuthResponse, GetCurrentAuthDetailsError>> {
   return await client.sendApiRequest<CurrentAuthResponse, GetCurrentAuthDetailsError>({
     method: 'GET',
-    path: '/v1/auth/whoami',
+    path: '/v1/whoami',
   })
 }
 
