@@ -5,6 +5,7 @@ import { createHttpClient, HttpClient } from './http/client'
 import verifyWebhook from './webhooks/verify'
 import { WebhooksAPI as WsWebhooksAPI } from './api/workspace/webhooks/api'
 import { EnvironmentsAPI as WsEnvironmentsAPI } from './api/workspace/environments/api'
+import { getCurrentAuthDetails } from './api/shared/handlers/whoami'
 
 /**
  * Creates an SDK object that encapsulates functionality for managing projects, environments, and secrets.
@@ -45,6 +46,15 @@ class WorkspaceClient {
   /** API for interacting with webhooks. */
   public webhooks(projectNameOrId: string, envNameOrId: string) {
     return new WsWebhooksAPI(this.client, projectNameOrId, envNameOrId)
+  }
+
+  /**
+   * Retrieves information about the current authed entity associated with the API key.
+   *
+   * @returns A promise that resolves to the current authed entity data or an error response.
+   */
+  whoami = async () => {
+    return await getCurrentAuthDetails(this.client)
   }
 }
 
