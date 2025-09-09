@@ -52,7 +52,7 @@ import {
 import { CreateWebhookData, UpdateWebhookData } from '../../types/webhooks'
 import { ListWebhookLogsOptions } from '../workspace/webhooks/handlers/listLogs'
 import { ListExcludeSecretsError, ListOnlySecretsError } from '../../types/errors/secrets'
-import { getCurrentAuthDetails } from './handlers/whoami'
+import { getCurrentAuthDetails } from '../shared/handlers/whoami'
 
 class EnvironmentsAPI {
   public readonly secrets: SecretsAPI
