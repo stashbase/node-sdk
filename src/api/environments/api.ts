@@ -66,7 +66,7 @@ class EnvironmentsAPI {
   }
 
   /**
-   * Retrieves information about the current environment associated with the API key.
+   * Retrieves information about the current authed entity associated with the API key.
    *
    * @returns A promise that resolves to the current authed entity data or an error response.
    */
