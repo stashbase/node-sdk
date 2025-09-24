@@ -74,9 +74,9 @@ async function loadEnvironment(
 
   console.log(`\nLoaded environment: ${environment} (${envType})`)
 
-  const printType = args?.options?.print
+  const printType = args?.options?.printSecrets
 
-  if (printType === 'name') {
+  if (printType === 'names') {
     printSecretsTable.names(secrets)
   } else if (printType === 'masked') {
     printSecretsTable.masked(secrets)
