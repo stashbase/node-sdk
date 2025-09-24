@@ -16,7 +16,7 @@ async function loadEnvironment(
   client: HttpClient,
   options?: LoadEnvironmentOptions
 ): Promise<ApiResponse<null, LoadEnvironmentError>> {
-  const printType = options?.print
+  const printType = options?.printSecrets
 
   const query: LoadEnvironmentQueryParams = {
     omit: 'description',
@@ -66,7 +66,7 @@ async function loadEnvironment(
 
   console.log(`\nLoaded environment: ${environment.name} (${envType})`)
 
-  if (printType === 'name') {
+  if (printType === 'names') {
     printSecretsTable.names(secrets)
   } else if (printType === 'masked') {
     printSecretsTable.masked(secrets)
