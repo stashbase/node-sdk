@@ -1,6 +1,6 @@
 import Table from 'cli-table3'
 
-function printNameValueTable(secrets: Array<{ name: string; value: string }>) {
+function printMaskedTable(secrets: Array<{ name: string; value: string }>) {
   const table = new Table({
     head: ['Name', 'Value'],
     // colWidths: [40, 40],
@@ -12,7 +12,10 @@ function printNameValueTable(secrets: Array<{ name: string; value: string }>) {
   })
 
   for (const { name, value } of secrets) {
-    table.push([name, value])
+    const firstPart = value.slice(0, 3)
+    const secondPart = '*'.repeat(6)
+
+    table.push([name, `${firstPart}${secondPart}`])
   }
 
   console.log(table.toString())
@@ -37,5 +40,5 @@ function printNameTable(secrets: Array<{ name: string }>) {
 
 export const printSecretsTable = {
   names: printNameTable,
-  nameValues: printNameValueTable,
+  masked: printMaskedTable,
 }

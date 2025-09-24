@@ -76,12 +76,10 @@ async function loadEnvironment(
 
   const printType = args?.options?.print
 
-  if (printType === 'name' || printType === 'name-value') {
-    if (printType === 'name') {
-      printSecretsTable.names(secrets)
-    } else {
-      printSecretsTable.nameValues(secrets)
-    }
+  if (printType === 'name') {
+    printSecretsTable.names(secrets)
+  } else if (printType === 'masked') {
+    printSecretsTable.masked(secrets)
   }
 
   return responseSuccess(null)

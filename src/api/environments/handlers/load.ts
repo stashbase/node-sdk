@@ -66,12 +66,10 @@ async function loadEnvironment(
 
   console.log(`\nLoaded environment: ${environment.name} (${envType})`)
 
-  if (printType === 'name' || printType === 'name-value') {
-    if (printType === 'name') {
-      printSecretsTable.names(secrets)
-    } else {
-      printSecretsTable.nameValues(secrets)
-    }
+  if (printType === 'name') {
+    printSecretsTable.names(secrets)
+  } else if (printType === 'masked') {
+    printSecretsTable.masked(secrets)
   }
 
   return responseSuccess(null)
