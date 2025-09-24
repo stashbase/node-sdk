@@ -4,7 +4,7 @@ export type LoadEnvironmentOptions = {
   /** Whether this methid is enabled or not. */
   enabled?: boolean
   /** Specifies how to print the environment variables. */
-  printSecrets?: 'names' | 'masked' | 'none'
+  printSecrets?: 'name' | 'masked' | 'none'
   /** Expand all referred secrets to their values. */
   expandRefs?: boolean
 }
