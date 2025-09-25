@@ -51,11 +51,11 @@ export class HttpClient {
       })
 
       if (!response.ok) {
-        const errorData = await response.json()
+        const errorData: unknown = await response.json()
         throw errorData
       }
 
-      const data = await response.json()
+      const data: unknown = await response.json()
       return data as T
     } catch (error) {
       if (error instanceof Error) {
@@ -85,7 +85,7 @@ export class HttpClient {
       })
 
       if (!response.ok) {
-        const errorData = await response.json()
+        const errorData: unknown = await response.json()
         throw errorData
       }
 
@@ -94,7 +94,7 @@ export class HttpClient {
         return null as T
       }
 
-      const data = await response.json()
+      const data: unknown = await response.json()
       return data as T
     } catch (error) {
       if (error instanceof Error) {
@@ -175,7 +175,7 @@ export class HttpClient {
       })
 
       if (!response.ok) {
-        const errorData = await response.json()
+        const errorData: unknown = await response.json()
         console.error(errorData)
         throw errorData
       }
@@ -185,7 +185,7 @@ export class HttpClient {
         return null as T
       }
 
-      const responseData = await response.json()
+      const responseData: unknown = await response.json()
       return responseData as T
     } catch (error) {
       if (error instanceof Error) {
