@@ -12,10 +12,16 @@ function printMaskedTable(secrets: Array<{ name: string; value: string }>) {
   })
 
   for (const { name, value } of secrets) {
-    const firstPart = value.slice(0, 3)
-    const secondPart = '*'.repeat(6)
+    const valueLength = value.length
 
-    table.push([name, `${firstPart}${secondPart}`])
+    if (valueLength <= 3) {
+      const maskedValue = '*'.repeat(6)
+      table.push([name, maskedValue])
+    } else {
+      const firstPart = value.slice(0, 3)
+      const secondPart = '*'.repeat(6)
+      table.push([name, `${firstPart}${secondPart}`])
+    }
   }
 
   console.log(table.toString())
