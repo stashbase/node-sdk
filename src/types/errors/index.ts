@@ -71,7 +71,7 @@ export type GenericApiError =
   | BadRequestError
   | InternalServerError
   | ConnectionFailedError
-  | ServiceUnavailableError
+  | ServerTemporaryUnavailableError
 
 type MissingPermissionError = AccessApiError<
   'missing_permission',
@@ -103,7 +103,7 @@ type UnauthorizedApiError = AuthApiError<'unauthorized', undefined>
 type BadRequestError = ValidationApiError<'bad_request', Record<string, unknown>>
 
 type InternalServerError = SeverApiError<'internal_error', { requestId: string }>
-type ServiceUnavailableError = SeverApiError<'temporary_unavailable', undefined>
+type ServerTemporaryUnavailableError = SeverApiError<'temporary_unavailable', undefined>
 
 export type ConnectionFailedError = SeverApiError<'connection_failed', undefined>
 export type ProjectNotFoundError = ResourceApiError<'project_not_found', undefined>
