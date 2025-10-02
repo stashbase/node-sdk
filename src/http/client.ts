@@ -51,6 +51,12 @@ export class HttpClient {
       })
 
       if (!response.ok) {
+        if (response.status === 503) {
+          const error = new Error()
+          error.name = 'ServerTemporaryUnavailableError'
+          throw error
+        }
+
         const errorData: unknown = await response.json()
         throw errorData
       }
@@ -85,6 +91,12 @@ export class HttpClient {
       })
 
       if (!response.ok) {
+        if (response.status === 503) {
+          const error = new Error()
+          error.name = 'ServerTemporaryUnavailableError'
+          throw error
+        }
+
         const errorData: unknown = await response.json()
         throw errorData
       }
@@ -175,6 +187,12 @@ export class HttpClient {
       })
 
       if (!response.ok) {
+        if (response.status === 503) {
+          const error = new Error()
+          error.name = 'ServerTemporaryUnavailableError'
+          throw error
+        }
+
         const errorData: unknown = await response.json()
         console.error(errorData)
         throw errorData
