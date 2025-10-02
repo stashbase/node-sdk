@@ -1,5 +1,9 @@
 import { ApiError, ApiErrorDetails } from '../http/response'
-import { ConnectionFailedError, MissingPropertiesToUpdateError } from '../types/errors'
+import {
+  ConnectionFailedError,
+  MissingPropertiesToUpdateError,
+  ServerTemporaryUnavailableError,
+} from '../types/errors'
 import {
   EnvironmentNameUsesIdFormatError,
   InvalidEnvironmentIdentifierError,
@@ -22,6 +26,10 @@ import {
 } from '../types/errors/projects'
 
 export function createApiErrorFromResponse<T>(responseData: unknown) {
+  if (responseData instanceof Error && responseData.name === 'ServerTemporaryUnavailableError') {
+    return serverTemporaryUnavailableError
+  }
+
   if (typeof responseData === 'object') {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const resData = responseData as { error?: ApiError<string, any> }
@@ -61,6 +69,12 @@ export const createApiError = <T extends string, D = undefined | ApiErrorDetails
 const connectionFailedError: ConnectionFailedError = createApiError({
   code: 'server.connection_failed',
   message: 'Could not connect to the API server. Please try again later.',
+  details: undefined,
+})
+
+export const serverTemporaryUnavailableError: ServerTemporaryUnavailableError = createApiError({
+  code: 'server.temporary_unavailable',
+  message: 'API service is temporarily unavailable. Please try again later.',
   details: undefined,
 })
 
