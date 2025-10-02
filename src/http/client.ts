@@ -65,7 +65,6 @@ export class HttpClient {
       return data as T
     } catch (error) {
       if (error instanceof Error) {
-        console.error('A network-related error occurred:', error.message)
         throw error
       } else {
         throw error
@@ -102,7 +101,6 @@ export class HttpClient {
       }
 
       if (response.status === 204) {
-        console.log('No content')
         return null as T
       }
 
@@ -110,7 +108,6 @@ export class HttpClient {
       return data as T
     } catch (error) {
       if (error instanceof Error) {
-        console.error('A network-related error occurred:', error.message)
         throw error
       } else {
         throw error
@@ -177,7 +174,6 @@ export class HttpClient {
   }): Promise<T> {
     const { method, headers, path, data } = args
     const url = `${baseURL}${path ?? ''}`
-    console.log(url)
 
     try {
       const response = await fetchWithRetry(url, {
@@ -194,12 +190,10 @@ export class HttpClient {
         }
 
         const errorData: unknown = await response.json()
-        console.error(errorData)
         throw errorData
       }
 
       if (response.status === 204) {
-        console.log('No content')
         return null as T
       }
 
@@ -207,7 +201,6 @@ export class HttpClient {
       return responseData as T
     } catch (error) {
       if (error instanceof Error) {
-        console.error('A network-related error occurred:', error.message)
         throw error
       } else {
         throw error
