@@ -35,10 +35,9 @@ const verifyPayloadAndTimestamp = (args: {
     return { error: 'invalid_signature' }
   }
 
-  // Compare signatures using timing-safe equality check
   const signatureValidation = crypto.timingSafeEqual(
-    Buffer.from(expectedSignature),
-    Buffer.from(receivedSignature)
+    toSharedBuffer(expectedSignature),
+    toSharedBuffer(receivedSignature)
   )
 
   if (!signatureValidation) {
@@ -85,3 +84,16 @@ const verifyWebhook = (
 }
 
 export default verifyWebhook
+
+// Compare signatures using timing-safe equality check
+// Use SharedArrayBuffer to ensure ArrayBuffer compatibility
+const toSharedBuffer = (str: string): Uint8Array => {
+  const encoder = new TextEncoder()
+  const arr = encoder.encode(str)
+
+  const sharedBuffer = new SharedArrayBuffer(arr.length)
+  const sharedArr = new Uint8Array(sharedBuffer)
+
+  sharedArr.set(arr)
+  return sharedArr
+}
