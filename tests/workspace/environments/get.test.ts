@@ -5,7 +5,7 @@ describe('Get environment', () => {
   test('OK', async () => {
     const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await client.environments('hero-hub').get('vercel')
+    const { data, error } = await client.environments({ project: 'hero-hub' }).get('vercel')
 
     const type = error?.getType()
 

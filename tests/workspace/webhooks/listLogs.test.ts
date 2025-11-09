@@ -5,7 +5,7 @@ test('List webhook logs', async () => {
   const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
   const { data, error } = await client
-    .webhooks('name', '123')
+    .webhooks({ project: 'name', environment: '123' })
     .listLogs('whk_4i1gbnewYBnCTZg3Sbye2c', {
       page: 1,
       limit: 20,

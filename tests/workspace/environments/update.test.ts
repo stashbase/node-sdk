@@ -5,7 +5,7 @@ describe('Update environment', () => {
   test('', async () => {
     const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await client.environments('hero-hub').update('api-dev', {
+    const { data, error } = await client.environments({ project: 'hero-hub' }).update('api-dev', {
       name: 'api-development',
       isProduction: false,
     })
