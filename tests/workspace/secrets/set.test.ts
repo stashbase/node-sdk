@@ -3,10 +3,15 @@ import { createWorkspaceClient } from '../../../src'
 
 describe('Set secrets', () => {
   test('', async () => {
-    const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
+    const client = createWorkspaceClient(
+      'sbs_ElRbXgfhk0Y55sSrQkjHwsBOpRaK7DdsfFBVpqxW8a8KxAbMbEvmLHFY'
+    )
 
     const { data, error } = await client
-      .secrets('proj_iBgCx5tegfVaKzjywTg2ck', 'env_3NCdY7kmbLJpZcpMg4W6wk')
+      .secrets({
+        project: 'proj_iBgCx5tegfVaKzjywTg2ck',
+        environment: 'env_3NCdY7kmbLJpZcpMg4W6wk',
+      })
       .set([
         {
           name: 'KEYS',

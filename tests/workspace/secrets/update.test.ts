@@ -4,12 +4,17 @@ import { createWorkspaceClient } from '../../../src'
 test('Update secrets', async () => {
   const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-  const { data, error } = await client.secrets('name', '123').update([
-    {
-      name: 'KEYS',
-      comment: null,
-    },
-  ])
+  const { data, error } = await client
+    .secrets({
+      project: 'name',
+      environment: '123',
+    })
+    .update([
+      {
+        name: 'KEYS',
+        comment: null,
+      },
+    ])
 
   if (error) {
     const { code } = error

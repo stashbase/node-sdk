@@ -33,19 +33,38 @@ class WorkspaceClient {
   /** API for interacting with projects. */
   public readonly projects: ProjectsAPI
 
-  /** API for interacting with environments. */
-  public environments(projectNameOrId: string) {
-    return new WsEnvironmentsAPI(this.client, projectNameOrId)
+  /**
+   * Provides access to the Environments API for a specific project.
+   *
+   * @param args - An object with a `project` property.
+   * @param args.project - The project's name or ID.
+   */
+  public environments(args: { project: string }) {
+    return new WsEnvironmentsAPI(this.client, args.project)
   }
 
   /** API for interacting with secrets. */
-  public secrets(projectNameOrId: string, envNameOrId: string) {
-    return new SecretsAPI(this.client, projectNameOrId, envNameOrId)
+  /**
+   * Provides access to the Secrets API for a specific project and environment.
+   *
+   * @param args - An object with a `project` and `environment` property.
+   * @param args.project - The project's name or ID.
+   * @param args.environment - The environment's name or ID.
+   */
+  public secrets(args: { project: string; environment: string }) {
+    return new SecretsAPI(this.client, args.project, args.environment)
   }
 
   /** API for interacting with webhooks. */
-  public webhooks(projectNameOrId: string, envNameOrId: string) {
-    return new WsWebhooksAPI(this.client, projectNameOrId, envNameOrId)
+  /**
+   * Provides access to the Webhooks API for a specific project and environment.
+   *
+   * @param args - An object with a `project` and `environment` property.
+   * @param args.project - The project's name or ID.
+   * @param args.environment - The environment's name or ID.
+   */
+  public webhooks(args: { project: string; environment: string }) {
+    return new WsWebhooksAPI(this.client, args.project, args.environment)
   }
 
   /**

@@ -5,10 +5,12 @@ describe('Create environment', () => {
   test('', async () => {
     const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await client.environments('proj_nVpZPsL5nQTUP9yXU2GKYJ').create({
-      name: 'app-dev',
-      isProduction: false,
-    })
+    const { data, error } = await client
+      .environments({ project: 'proj_nVpZPsL5nQTUP9yXU2GKYJ' })
+      .create({
+        name: 'app-dev',
+        isProduction: false,
+      })
 
     console.log(data)
 

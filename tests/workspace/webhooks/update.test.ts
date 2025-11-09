@@ -5,7 +5,7 @@ test('Update webhook', async () => {
   const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
   const { data, error } = await client
-    .webhooks('name', '123')
+    .webhooks({ project: 'name', environment: '123' })
     .update('whk_4i1gbnewYBnCTZg3Sbye2c', {
       description: 'This is a new description for the webhook',
     })

@@ -5,7 +5,7 @@ test('Get webhook signing secret', async () => {
   const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
   const { data, error } = await client
-    .webhooks('name', '123')
+    .webhooks({ project: 'name', environment: '123' })
     .getSigningSecret('whk_4i1gbnewYBnCTZg3Sbye2c')
 
   if (error) {

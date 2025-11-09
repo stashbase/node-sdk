@@ -6,7 +6,7 @@ describe('Delete environment', () => {
     const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
     const { data, error } = await client
-      .environments('proj_nVpZPsL5nQTUP9yXU2GKYJ')
+      .environments({ project: 'proj_nVpZPsL5nQTUP9yXU2GKYJ' })
       .delete('app-dev')
 
     console.log(data)
@@ -15,7 +15,9 @@ describe('Delete environment', () => {
 
   test('Project not found', async () => {
     const client = createWorkspaceClient('xPKDa2Xq0zWmfES1nLDoG45qZtR1z2qL')
-    const { data, error } = await client.environments('hero-hub1231231231').delete('dev-sdk')
+    const { data, error } = await client
+      .environments({ project: 'hero-hub1231231231' })
+      .delete('dev-sdk')
 
     assert.equal(error?.code, 'project_not_found')
 

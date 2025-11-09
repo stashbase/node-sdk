@@ -5,12 +5,14 @@ describe('Create secrets', () => {
   test('OK', async () => {
     const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await client.secrets('hero-hub', 'vercel').create([
-      {
-        name: 'SOME_KEY',
-        value: 'SOME_VALUE',
-      },
-    ])
+    const { data, error } = await client
+      .secrets({ project: 'hero-hub', environment: 'vercel' })
+      .create([
+        {
+          name: 'SOME_KEY',
+          value: 'SOME_VALUE',
+        },
+      ])
 
     console.log(data)
     console.log(error)
