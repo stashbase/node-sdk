@@ -14,20 +14,20 @@ import { getCurrentAuthDetails } from './api/shared/handlers/whoami'
  * @returns An object containing methods for interacting with projects, environments, and secrets.
  */
 export function createWorkspaceClient(apiKey: string) {
-  const client = createHttpClient({
-    authorization: { apiKey },
-  })
-
-  return new WorkspaceClient(client)
+  return new WorkspaceClient(apiKey)
 }
 
 /** Client for interacting with Stashbase resources using a workspace API key with a given permissions. */
 class WorkspaceClient {
   private client: HttpClient
 
-  constructor(client: HttpClient) {
+  constructor(apiKey: string) {
+    const client = createHttpClient({
+      authorization: { apiKey },
+    })
+
     this.client = client
-    this.projects = new ProjectsAPI(client)
+    this.projects = new ProjectsAPI(this.client)
   }
 
   /** API for interacting with projects. */
@@ -84,11 +84,7 @@ class WorkspaceClient {
  * @returns An object containing methods for interacting with the environment.
  */
 export function createEnvClient(apiKey: string) {
-  const client = createHttpClient({
-    authorization: { apiKey },
-  })
-
-  return new EnvironmentClient(client)
+  return new EnvironmentClient(apiKey)
 }
 
 export { verifyWebhook }
