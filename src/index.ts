@@ -87,4 +87,4 @@ export function createEnvClient(apiKey: string) {
   return new EnvironmentClient(apiKey)
 }
 
-export { verifyWebhook }
+export { WorkspaceClient, EnvironmentClient, verifyWebhook }
