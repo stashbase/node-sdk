@@ -1,4 +1,4 @@
-import EnvironmentsAPI from './api/environments/api'
+import EnvironmentClient from './api/environments/api'
 import { ProjectsAPI } from './api/workspace/projects/api'
 import { SecretsAPI } from './api/workspace/secrets/api'
 import { createHttpClient, HttpClient } from './http/client'
@@ -88,7 +88,7 @@ export function createEnvClient(apiKey: string) {
     authorization: { apiKey },
   })
 
-  return new EnvironmentsAPI(client)
+  return new EnvironmentClient(client)
 }
 
 export { verifyWebhook }

@@ -54,15 +54,15 @@ import { ListWebhookLogsOptions } from '../workspace/webhooks/handlers/listLogs'
 import { ListExcludeSecretsError, ListOnlySecretsError } from '../../types/errors/secrets'
 import { getCurrentAuthDetails } from '../shared/handlers/whoami'
 
-class EnvironmentsAPI {
+class EnvironmentClient {
   public readonly secrets: SecretsAPI
   public readonly webhooks: WebhooksAPI
-  public readonly environment: EnvironmentAPI
+  public readonly environment: EnvironmentsClient
 
   constructor(private httpClient: HttpClient) {
     this.secrets = new SecretsAPI(this.httpClient)
     this.webhooks = new WebhooksAPI(this.httpClient)
-    this.environment = new EnvironmentAPI(this.httpClient)
+    this.environment = new EnvironmentsClient(this.httpClient)
   }
 
   /**
@@ -75,7 +75,7 @@ class EnvironmentsAPI {
   }
 }
 
-class EnvironmentAPI {
+class EnvironmentsClient {
   constructor(private httpClient: HttpClient) {}
 
   /**
@@ -506,4 +506,4 @@ class WebhooksAPI {
   }
 }
 
-export default EnvironmentsAPI
+export default EnvironmentClient
