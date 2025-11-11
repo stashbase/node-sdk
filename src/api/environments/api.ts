@@ -1,7 +1,7 @@
 import { loadEnvironment } from './handlers/load'
 import { getEnvironment } from './handlers/get'
 import { deleteEnvironmentSecrets } from './handlers/secrets/delete'
-import { HttpClient } from '../../http/client'
+import { createHttpClient, HttpClient } from '../../http/client'
 import { listSecrets } from './handlers/secrets/list'
 import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
 import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
@@ -55,11 +55,19 @@ import { ListExcludeSecretsError, ListOnlySecretsError } from '../../types/error
 import { getCurrentAuthDetails } from '../shared/handlers/whoami'
 
 class EnvironmentClient {
+  private httpClient: HttpClient
+
   public readonly secrets: SecretsAPI
   public readonly webhooks: WebhooksAPI
   public readonly environment: EnvironmentsClient
 
-  constructor(private httpClient: HttpClient) {
+  constructor(apiKey: string) {
+    const httpClient = createHttpClient({
+      authorization: { apiKey },
+    })
+
+    this.httpClient = httpClient
+
     this.secrets = new SecretsAPI(this.httpClient)
     this.webhooks = new WebhooksAPI(this.httpClient)
     this.environment = new EnvironmentsClient(this.httpClient)
