@@ -1,8 +1,8 @@
 import { test } from 'vitest'
-import { createEnvClient } from '../../../src'
+import { createEnvironmentClient } from '../../../src'
 
 test('List environment secrets', async () => {
-  const client = createEnvClient(process.env.VITE_TEST_ENV_API_KEY as string)
+  const client = createEnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
   const { data, error } = await client.secrets.list()
   if (error) {

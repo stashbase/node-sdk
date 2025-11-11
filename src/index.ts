@@ -83,7 +83,7 @@ class WorkspaceClient {
  * @param apiKey - Environment Account API key.
  * @returns An object containing methods for interacting with the environment.
  */
-export function createEnvClient(apiKey: string) {
+export function createEnvironmentClient(apiKey: string) {
   return new EnvironmentClient(apiKey)
 }
 

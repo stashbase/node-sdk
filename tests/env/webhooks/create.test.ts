@@ -1,8 +1,8 @@
 import { test } from 'vitest'
-import { createEnvClient } from '../../../src'
+import { createEnvironmentClient } from '../../../src'
 
 test('Create webhook', async () => {
-  const client = createEnvClient(process.env.VITE_TEST_ENV_API_KEY as string)
+  const client = createEnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
   const { data, error } = await client.webhooks.create({
     url: 'https://webhook.site/acdaf43b-caf1-4f9c-a667-061fc75197ea',

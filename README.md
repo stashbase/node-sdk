@@ -69,9 +69,9 @@ const { error } = await client.environments('project-name').load('api-dev')
 Use environment client to manage resources in a specific environment, using Environment Account API key.
 
 ```js
-import { createEnvClient } from '@stashbase/node-sdk'
+import { createEnvironmentClient } from '@stashbase/node-sdk'
 
-const client = createEnvClient(process.env.STASHBASE_ENV_API_KEY)
+const client = createEnvironmentClient(process.env.STASHBASE_ENV_API_KEY)
 ```
 
 #### Get environment details

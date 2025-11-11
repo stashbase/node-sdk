@@ -1,9 +1,9 @@
 // tests/projects.test.ts
 import { assert, test } from 'vitest'
-import { createEnvClient } from '../../src'
+import { createEnvironmentClient } from '../../src'
 
 test('Get current authed entity details', async () => {
-  const client = createEnvClient(process.env.VITE_TEST_ENV_API_KEY as string)
+  const client = createEnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
   const { data, error } = await client.whoami()
 
