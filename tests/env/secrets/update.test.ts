@@ -1,8 +1,8 @@
 import { test } from 'vitest'
-import { createEnvClient } from '../../../src'
+import { createEnvironmentClient } from '../../../src'
 
 test('Update env secrets', async () => {
-  const client = createEnvClient('duIwyuCWOhJYpWQM3zmcGm0uGAJanqBS')
+  const client = createEnvironmentClient('duIwyuCWOhJYpWQM3zmcGm0uGAJanqBS')
 
   const { data, error } = await client.secrets.update([
     {

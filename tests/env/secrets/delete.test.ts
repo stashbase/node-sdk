@@ -1,8 +1,8 @@
 import { test } from 'vitest'
-import { createEnvClient } from '../../../src'
+import { createEnvironmentClient } from '../../../src'
 
 test('Delete specific secret from env - grant must be write or read/write', async () => {
-  const client = createEnvClient(process.env.VITE_TEST_ENV_API_KEY as string)
+  const client = createEnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
   const { data, error } = await client.secrets.delete(['NEXT_PUBLIC_PRODUCTION_GITHUB_URL'])
   if (error) {
