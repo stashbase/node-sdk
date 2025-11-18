@@ -49,7 +49,7 @@ const { data, error } = await client.projects.list()
 #### Create environment
 
 ```js
-const { data, error } = await client.environments('project-name').create({
+const { data, error } = await client.environments({ project: 'project-name' }).create({
   name: 'api-dev',
   isProduction: false,
 })
@@ -61,7 +61,7 @@ This method will load the environment and inject the secrets into the process.
 
 ```js
 // using workspace client
-const { error } = await client.environments('project-name').load('api-dev')
+const { error } = await client.environments({ project: 'project-name' }).load('api-dev')
 ```
 
 ### Environment client
