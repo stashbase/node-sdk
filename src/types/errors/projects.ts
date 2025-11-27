@@ -44,8 +44,8 @@ export type InvalidProjectPageNumberError = ValidationApiError<
   }
 >
 
-export type InvalidProjectLimitError = ValidationApiError<
-  'invalid_limit',
+export type InvalidProjectPageSizeError = ValidationApiError<
+  'invalid_page_size',
   {
     min: number
     max: number

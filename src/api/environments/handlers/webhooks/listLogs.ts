@@ -8,14 +8,14 @@ export type ListWebhookLogsArgs = SingleWebhookArgs<{
   /** The page number to retrieve */
   page?: number
   /** The number of logs to retrieve per page */
-  limit?: number
+  pageSize?: number
 }>
 
 async function listWebhookLogs(
   envClient: HttpClient,
   args: ListWebhookLogsArgs
 ): Promise<ApiResponse<ListWebhookLogsResponse, ListWebhookLogsError>> {
-  const { page, limit } = args
+  const { page, pageSize } = args
 
   const query: Record<string, string | number> = {}
 
@@ -23,8 +23,8 @@ async function listWebhookLogs(
     query.page = page
   }
 
-  if (limit) {
-    query.limit = limit
+  if (pageSize) {
+    query['page-size'] = pageSize
   }
 
   return await envClient.sendApiRequest<ListWebhookLogsResponse, ListWebhookLogsError>({

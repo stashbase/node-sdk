@@ -43,11 +43,11 @@ import { updateWebhookStatus } from './handlers/webhooks/updateStatus'
 import { updateWebhook } from './handlers/webhooks/update'
 import { testWebhook } from './handlers/webhooks/test'
 import {
-  invalidWebhookLogsLimitError,
   invalidWebhookLogsPageError,
   invalidWebhookUrlError,
   webhookMissingPropertiesToUpdateError,
   webhookDescriptionTooLongError,
+  invalidWebhookLogsPageSizeError,
 } from '../../errors/webhooks'
 import { CreateWebhookData, UpdateWebhookData } from '../../types/webhooks'
 import { ListWebhookLogsOptions } from '../workspace/webhooks/handlers/listLogs'
@@ -338,11 +338,11 @@ class WebhooksAPI {
       }
     }
 
-    if (options?.limit !== undefined) {
-      const limit = options.limit
+    if (options?.pageSize !== undefined) {
+      const pageSize = options.pageSize
 
-      if (limit < 2 || limit > 30 || typeof limit !== 'number') {
-        const error = invalidWebhookLogsLimitError
+      if (pageSize < 2 || pageSize > 30 || typeof pageSize !== 'number') {
+        const error = invalidWebhookLogsPageSizeError
         return responseFailure(error)
       }
     }

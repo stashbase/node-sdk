@@ -1,7 +1,7 @@
 import {
   invalidProjectName,
   invalidProjectIdentifierError,
-  invalidProjectLimitError,
+  invalidProjectPageSizeError,
   invalidProjectOrderError,
   invalidProjectPageError,
   invalidProjectSearchError,
@@ -61,11 +61,11 @@ export class ProjectsAPI {
         }
       }
 
-      if (options.limit) {
-        const limit = options.limit
+      if (options.pageSize) {
+        const pageSize = options.pageSize
 
-        if (limit < 2 || limit > 1000 || typeof limit !== 'number') {
-          const error = invalidProjectLimitError
+        if (pageSize < 2 || pageSize > 1000 || typeof pageSize !== 'number') {
+          const error = invalidProjectPageSizeError
           return responseFailure(error)
         }
       }

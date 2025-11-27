@@ -1,8 +1,8 @@
 import { createApiError } from '.'
 import {
   InvalidWebhookIdError,
-  InvalidWebhookLogsLimitError,
   InvalidWebhookLogsPageError,
+  InvalidWebhookLogsPageSizeError,
   InvalidWebhookUrlError,
   WebhookDescriptionTooLongError,
   WebhookMissingPropertiesToUpdateError,
@@ -53,9 +53,9 @@ export const invalidWebhookLogsPageError: InvalidWebhookLogsPageError = createAp
   },
 })
 
-export const invalidWebhookLogsLimitError: InvalidWebhookLogsLimitError = createApiError({
-  code: 'validation.invalid_limit',
-  message: 'Limit must be a number between 2 and 30, defaulting to 10.',
+export const invalidWebhookLogsPageSizeError: InvalidWebhookLogsPageSizeError = createApiError({
+  code: 'validation.invalid_page_size',
+  message: 'Page size must be a number between 2 and 30, defaulting to 10.',
   details: {
     min: 2,
     max: 30,

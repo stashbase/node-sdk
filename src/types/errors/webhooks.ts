@@ -33,7 +33,7 @@ export type TestWebhookError = SingleWebhookError
 
 export type ListWebhookLogsError =
   | SingleWebhookError
-  | InvalidWebhookLogsLimitError
+  | InvalidWebhookLogsPageSizeError
   | InvalidWebhookLogsPageError
 
 //
@@ -77,14 +77,14 @@ export type WebhookAlreadyDisabledConflictError = ConflictApiError<
   undefined
 >
 
-export type InvalidWebhookLogsLimitError = ValidationApiError<
-  'invalid_limit',
+export type InvalidWebhookLogsPageSizeError = ValidationApiError<
+  'invalid_page_size',
   {
-    /** Min possbile value for the limit */
+    /** Min possbile value for the page size */
     min: number
-    /** Max possible value for the limit */
+    /** Max possible value for the page size */
     max: number
-    /** Default value for the limit */
+    /** Default value for the page size */
     default: number
   }
 >
@@ -92,11 +92,11 @@ export type InvalidWebhookLogsLimitError = ValidationApiError<
 export type InvalidWebhookLogsPageError = ValidationApiError<
   'invalid_page',
   {
-    /** Min possbile value for the limit */
+    /** Min possbile value for the page */
     min: number
-    /** Max possible value for the limit */
+    /** Max possible value for the page */
     max: number
-    /** Default value for the limit */
+    /** Default value for the page */
     default: number
   }
 >

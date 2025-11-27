@@ -4,8 +4,8 @@
 export interface PaginationMetadata {
   /** The current page number. */
   page: number
-  /** The maximum number of items per page. */
-  limit: number
+  /** The number of items per page. */
+  pageSize: number
   /** The total number of items across all pages. */
   totalItems: number
   /** The total number of pages. */
