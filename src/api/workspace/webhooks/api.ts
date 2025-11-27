@@ -1,11 +1,11 @@
 import { invalidEnvironmentIdentifierError, invalidProjectIdentifierError } from '../../../errors'
 import {
   invalidWebhookIdError,
-  invalidWebhookLogsLimitError,
   invalidWebhookLogsPageError,
   invalidWebhookUrlError,
   webhookDescriptionTooLongError,
   webhookMissingPropertiesToUpdateError,
+  invalidWebhookLogsPageSizeError,
 } from '../../../errors/webhooks'
 import { HttpClient } from '../../../http/client'
 import { responseFailure } from '../../../http/response'
@@ -110,11 +110,11 @@ export class WebhooksAPI {
       }
     }
 
-    if (options?.limit !== undefined) {
-      const limit = options.limit
+    if (options?.pageSize !== undefined) {
+      const pageSize = options.pageSize
 
-      if (limit < 2 || limit > 1000 || typeof limit !== 'number') {
-        const error = invalidWebhookLogsLimitError
+      if (pageSize < 2 || pageSize > 1000 || typeof pageSize !== 'number') {
+        const error = invalidWebhookLogsPageSizeError
         return responseFailure(error)
       }
     }

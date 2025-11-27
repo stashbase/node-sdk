@@ -7,8 +7,8 @@ import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments
 export type ListWebhookLogsOptions = {
   /** The page number */
   page?: number
-  /** The limit of items per page */
-  limit?: number
+  /** The number of items per page */
+  pageSize?: number
 }
 
 export type ListWebhookLogsError = SharedListWebhookLogsError | EnvironmentContextError
@@ -24,8 +24,8 @@ async function listWebhookLogs(
     query.page = options.page
   }
 
-  if (options?.limit) {
-    query.limit = options.limit
+  if (options?.pageSize) {
+    query.page_size = options.pageSize
   }
 
   const path = `/v1/projects/${project}/environments/${environment}/webhooks/${webhookId}/logs`
