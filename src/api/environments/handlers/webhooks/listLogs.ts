@@ -24,7 +24,7 @@ async function listWebhookLogs(
   }
 
   if (pageSize) {
-    query['page-size'] = pageSize
+    query.page_size = pageSize
   }
 
   return await envClient.sendApiRequest<ListWebhookLogsResponse, ListWebhookLogsError>({

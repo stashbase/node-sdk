@@ -48,7 +48,7 @@ export async function listProjects(
   }
 
   if (options?.pageSize) {
-    query['page-size'] = options.pageSize
+    query.page_size = options.pageSize
   }
 
   if (options?.search) {
@@ -56,7 +56,7 @@ export async function listProjects(
   }
 
   if (options?.sortBy) {
-    query['sort-by'] = options.sortBy
+    query.sort_by = options.sortBy
   }
 
   if (options?.order) {

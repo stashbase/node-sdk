@@ -29,7 +29,7 @@ async function getWebhook<T extends boolean>(
   return envClient.sendApiRequest<WebhookWithConditionalSecret<T>, GetWebhookError>({
     method: 'GET',
     path: `/v1/webhooks/${webhookId}`,
-    query: withSecret ? { 'with-secret': true } : undefined,
+    query: withSecret ? { with_secret: true } : undefined,
   })
 }
 

@@ -24,7 +24,7 @@ async function getWebhook<T extends boolean>(args: {
   >({
     method: 'GET',
     path,
-    query: withSecret ? { 'with-secret': true } : undefined,
+    query: withSecret ? { with_secret: true } : undefined,
   })
 }
 

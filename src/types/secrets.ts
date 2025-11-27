@@ -50,9 +50,9 @@ export interface UpdateSecretsResponse {
 
 export interface ListSecretsQueryParams {
   /** If true, expands all referenced secrets to their values */
-  'expand-refs'?: true
+  expand_refs?: true
   /** A comma-separated list of environment properties to return (id, name, is_production) */
-  'with-environment'?: string
+  with_environment?: string
   /** A string specifying which properties to omit from the response */
   omit?: string
   /** A string specifying which secrets to include in the response */
@@ -64,7 +64,7 @@ export interface ListSecretsQueryParams {
   // exclude?: Array<SecretName>
 }
 
-export type GetSecretQueryParams = Pick<ListSecretsQueryParams, 'omit' | 'expand-refs'>
+export type GetSecretQueryParams = Pick<ListSecretsQueryParams, 'omit' | 'expand_refs'>
 
 export interface GetSecretOptions {
   /**
