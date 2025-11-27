@@ -27,11 +27,11 @@ async function loadEnvironment(
 
   const query: LoadEnvironmentQueryParams = {
     omit: 'comment',
-    'with-environment': ['name,is-production'].join(','),
+    with_environment: ['name,is-production'].join(','),
   }
 
   if (args?.options?.expandRefs) {
-    query['expand-refs'] = true
+    query.expand_refs = true
   }
 
   const { data, error } = await client.sendApiRequest<

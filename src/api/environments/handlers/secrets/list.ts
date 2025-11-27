@@ -19,25 +19,25 @@ async function listSecrets(
   const queryObj: ListSecretsQueryParams = {}
 
   if (expandRefs) {
-    queryObj['expand-refs'] = true
+    queryObj.expand_refs = true
   }
 
   if (omit && omit.length > 0) {
     const omitStr = omit.filter((o) => o === 'value' || o === 'comment').join(',')
 
     if (omitStr.length > 0) {
-      queryObj['omit'] = omitStr
+      queryObj.omit = omitStr
     }
   }
 
   if (only && only.length > 0) {
     const onlyStr = only.join(',')
-    queryObj['only'] = onlyStr
+    queryObj.only = onlyStr
   }
 
   if (exclude && exclude.length > 0) {
     const excludeStr = exclude.join(',')
-    queryObj['exclude'] = excludeStr
+    queryObj.exclude = excludeStr
   }
 
   const query =

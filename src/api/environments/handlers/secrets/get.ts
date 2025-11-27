@@ -19,7 +19,7 @@ async function getSecret(
 
   if (expandRefs) {
     if (!omit?.includes('value')) {
-      query['expand-refs'] = true
+      query.expand_refs = true
     }
   }
 
@@ -27,7 +27,7 @@ async function getSecret(
     const omitStr = omit.filter((o) => o === 'value' || o === 'comment').join(',')
 
     if (omitStr.length > 0) {
-      query['omit'] = omitStr
+      query.omit = omitStr
     }
   }
 

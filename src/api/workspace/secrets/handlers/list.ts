@@ -37,16 +37,16 @@ async function listSecrets(
     const omitStr = omit.filter((o) => o === 'value' || o === 'comment').join(',')
 
     if (omitStr.length > 0) {
-      queryObj['omit'] = omitStr
+      queryObj.omit = omitStr
     }
   }
 
   if (only && only.length > 0) {
-    queryObj['only'] = only.join(',')
+    queryObj.only = only.join(',')
   }
 
   if (exclude && exclude.length > 0) {
-    queryObj['exclude'] = exclude.join(',')
+    queryObj.exclude = exclude.join(',')
   }
 
   const query =

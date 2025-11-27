@@ -30,7 +30,7 @@ async function listEnvironments(
   const query: Record<string, string | number | boolean> = {}
 
   if (opts?.sortBy) {
-    query['sort-by'] = opts.sortBy
+    query.sort_by = opts.sortBy
   }
 
   if (opts?.order) {
