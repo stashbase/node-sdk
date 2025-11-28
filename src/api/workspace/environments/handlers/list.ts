@@ -8,6 +8,7 @@ import {
   InvalidEnvironmentSortByError,
 } from '../../../../types/errors/environments'
 import { invalidEnvironmentOrderError } from '../../../../errors'
+import { stringToSnakeCase } from '../../../../utils/serializer'
 
 // ???
 // export interface GetEnvironmentOpts {
@@ -30,7 +31,7 @@ async function listEnvironments(
   const query: Record<string, string | number | boolean> = {}
 
   if (opts?.sortBy) {
-    query.sort_by = opts.sortBy
+    query.sort_by = stringToSnakeCase(opts.sortBy)
   }
 
   if (opts?.order) {
