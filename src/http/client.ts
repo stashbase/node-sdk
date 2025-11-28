@@ -1,6 +1,7 @@
 import fetchWithRetry from './retry'
 import { createApiErrorFromResponse } from '../errors'
 import { responseFailure, responseSuccess } from './response'
+import { toCamelCase, toSnakeCase } from '../utils/serializer'
 
 const baseURL: string = 'http://0.0.0.0:5000'
 const version: string = '0.0.1'
@@ -159,9 +160,11 @@ export class HttpClient {
         response = await this.requestWithData<T>({ method, path, data, headers: this.headers })
       }
 
-      return responseSuccess(response)
+      const formattedResponse = toCamelCase(response)
+      return responseSuccess(formattedResponse)
     } catch (error) {
-      const apiError = createApiErrorFromResponse<E>(error)
+      const formattedError = toCamelCase(error)
+      const apiError = createApiErrorFromResponse<E>(formattedError)
       return responseFailure(apiError)
     }
   }
@@ -175,11 +178,13 @@ export class HttpClient {
     const { method, headers, path, data } = args
     const url = `${baseURL}${path ?? ''}`
 
+    const formattedData = data ? toSnakeCase(data) : undefined
+
     try {
       const response = await fetchWithRetry(url, {
         method,
         headers,
-        body: data ? JSON.stringify(data) : undefined,
+        body: formattedData ? JSON.stringify(formattedData) : undefined,
       })
 
       if (!response.ok) {
