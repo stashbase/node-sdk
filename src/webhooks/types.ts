@@ -25,7 +25,7 @@ export type Event = {
    * @summary Live mode
    * @description Whether the event was triggered in live mode
    */
-  liveMode: boolean
+  live_mode: boolean
 
   /**
    * @summary Event Data
@@ -83,7 +83,7 @@ export type Event = {
       /**
        * @summary Whether the environment is production
        */
-      isProduction: boolean
+      is_production: boolean
     }
   }
 }
