@@ -10,6 +10,7 @@ import {
 } from '../../../../types/errors/projects'
 import { PaginationMetadata } from '../../../../types/pagination'
 import { Project } from '../../../../types/projects'
+import { stringToSnakeCase } from '../../../../utils/serializer'
 
 export type ListProjectsOpts = {
   /** The current page number (min 1, max 1000, default 1). */
@@ -56,7 +57,7 @@ export async function listProjects(
   }
 
   if (options?.sortBy) {
-    query.sort_by = options.sortBy
+    query.sort_by = stringToSnakeCase(options.sortBy)
   }
 
   if (options?.order) {
