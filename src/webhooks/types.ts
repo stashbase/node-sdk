@@ -19,7 +19,7 @@ export type Event = {
    * @summary Unix timestamp of the event
    * @description Timestamp of when the event was processed (not the individual attempt)
    */
-  created: number
+  created_at: number
 
   /**
    * @summary Live mode
