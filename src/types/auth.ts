@@ -3,7 +3,7 @@ export type WorkspaceData<R extends boolean> = {
   id: string
   slug: string
   name: string
-} & (R extends true ? { userRole: 'MEMBER' | 'ADMIN' | 'OWNER' } : Record<string, never>)
+} & (R extends true ? { userRole: 'member' | 'admin' | 'owner' } : Record<string, never>)
 
 // User authentication type
 export type AuthedUserData = {
