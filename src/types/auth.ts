@@ -9,7 +9,7 @@ export type WorkspaceData<R extends boolean> = {
 export type AuthedUserData = {
   id: string
   email: string
-  name: string
+  fullName: string
   workspace: WorkspaceData<true>
 }
 
