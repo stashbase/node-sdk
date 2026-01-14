@@ -10,6 +10,7 @@ export type AuthedUserData = {
   id: string
   email: string
   fullName: string
+  displayName: string | null
   workspace: WorkspaceData<true>
 }
 
