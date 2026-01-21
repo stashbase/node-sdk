@@ -8,7 +8,7 @@ type DeleteAllSecretsError = GenericApiError
 async function deleteAllEnvironmentSecrets(
   client: HttpClient
 ): Promise<ApiResponse<DeleteAllSecretsResponse, DeleteAllSecretsError>> {
-  const path = '/v1/secrets/delete/all'
+  const path = '/v1/environment/secrets/delete/all'
 
   return client.sendApiRequest<DeleteAllSecretsResponse, DeleteAllSecretsError>({
     method: 'POST',

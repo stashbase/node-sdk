@@ -12,7 +12,7 @@ async function rotateWebhookSigningSecret(
 ): Promise<ApiResponse<WebhookSigningSecret, RotateWebhookSigningSecretError>> {
   return await envClient.sendApiRequest<WebhookSigningSecret, RotateWebhookSigningSecretError>({
     method: 'POST',
-    path: `/v1/webhooks/${webhookId}/signing-secret`,
+    path: `/v1/environment/webhooks/${webhookId}/signing-secret`,
   })
 }
 

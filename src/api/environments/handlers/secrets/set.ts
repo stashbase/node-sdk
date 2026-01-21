@@ -16,7 +16,7 @@ async function setSecrets(
 ): Promise<ApiResponse<SetSecretsResponse, SetSecretsError>> {
   return await envClient.sendApiRequest<SetSecretsResponse, SetSecretsError>({
     method: 'PUT',
-    path: '/v1/secrets',
+    path: '/v1/environment/secrets',
     data,
   })
 }

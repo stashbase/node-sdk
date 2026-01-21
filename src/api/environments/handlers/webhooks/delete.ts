@@ -8,7 +8,7 @@ async function deleteWebhook(
 ): Promise<ApiResponse<null, GetWebhookError>> {
   return await envClient.sendApiRequest<null, GetWebhookError>({
     method: 'DELETE',
-    path: `/v1/webhooks/${webhookId}`,
+    path: `/v1/environment/webhooks/${webhookId}`,
   })
 }
 

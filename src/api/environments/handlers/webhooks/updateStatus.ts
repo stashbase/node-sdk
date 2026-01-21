@@ -12,7 +12,7 @@ async function updateWebhookStatus(
 ): Promise<ApiResponse<null, UpdateWebhookStatusError>> {
   return await envClient.sendApiRequest<null, UpdateWebhookStatusError>({
     method: 'PATCH',
-    path: `/v1/webhooks/${webhookId}/status`,
+    path: `/v1/environment/webhooks/${webhookId}/status`,
     data: { enabled },
   })
 }

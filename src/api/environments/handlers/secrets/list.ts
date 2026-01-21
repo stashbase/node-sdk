@@ -43,7 +43,7 @@ async function listSecrets(
   const query =
     Object.keys(queryObj).length > 0 ? (queryObj as Record<string, string | boolean>) : undefined
 
-  const path = '/v1/secrets'
+  const path = '/v1/environment/secrets'
 
   return envClient.sendApiRequest<ListSecretsResponse, ListSecretsError>({
     method: 'GET',

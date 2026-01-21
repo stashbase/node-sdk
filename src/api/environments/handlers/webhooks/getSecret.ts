@@ -12,7 +12,7 @@ async function getWebhookSigningSecret(
 ): Promise<ApiResponse<WebhookSigningSecret, GetWebhookSigningSecretError>> {
   return await envClient.sendApiRequest<WebhookSigningSecret, GetWebhookSigningSecretError>({
     method: 'GET',
-    path: `/v1/webhooks/${webhookId}/signing-secret`,
+    path: `/v1/environment/webhooks/${webhookId}/signing-secret`,
   })
 }
 
