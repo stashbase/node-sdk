@@ -29,7 +29,7 @@ async function listWebhookLogs(
 
   return await envClient.sendApiRequest<ListWebhookLogsResponse, ListWebhookLogsError>({
     method: 'GET',
-    path: `/v1/webhooks/${args.webhookId}/logs`,
+    path: `/v1/environment/webhooks/${args.webhookId}/logs`,
     query: Object.keys(query).length > 0 ? query : undefined,
   })
 }

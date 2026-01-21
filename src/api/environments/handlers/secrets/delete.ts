@@ -7,7 +7,7 @@ async function deleteEnvironmentSecrets(
   client: HttpClient,
   names: SecretName[]
 ): Promise<ApiResponse<DeleteSecretsResponse, DeleteSecretsError>> {
-  const path = '/v1/secrets/delete'
+  const path = '/v1/environment/secrets/delete'
 
   return client.sendApiRequest<DeleteSecretsResponse, DeleteSecretsError>({
     method: 'POST',

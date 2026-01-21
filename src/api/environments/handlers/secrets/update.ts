@@ -20,7 +20,7 @@ async function updateSecrets(
 ): Promise<ApiResponse<UpdateSecretsResponse, UpdateSecretsError>> {
   return await envClient.sendApiRequest<UpdateSecretsResponse, UpdateSecretsError>({
     method: 'PATCH',
-    path: '/v1/secrets',
+    path: '/v1/environment/secrets',
     data,
   })
 }

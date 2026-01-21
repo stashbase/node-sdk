@@ -8,7 +8,7 @@ async function listWebhooks(
 ): Promise<ApiResponse<ListWebhooksResponse, ListWebhooksError>> {
   return await envClient.sendApiRequest<ListWebhooksResponse, ListWebhooksError>({
     method: 'GET',
-    path: '/v1/webhooks',
+    path: '/v1/environment/webhooks',
   })
 }
 

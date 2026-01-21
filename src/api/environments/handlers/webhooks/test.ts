@@ -9,7 +9,7 @@ async function testWebhook(
 ): Promise<ApiResponse<TestWebhookResponse, TestWebhookError>> {
   return await envClient.sendApiRequest<TestWebhookResponse, TestWebhookError>({
     method: 'POST',
-    path: `/v1/webhooks/${webhookId}/test`,
+    path: `/v1/environment/webhooks/${webhookId}/test`,
   })
 }
 

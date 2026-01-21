@@ -17,7 +17,7 @@ async function updateWebhook(
 
   return await envClient.sendApiRequest<null, UpdateWebhookError>({
     method: 'PATCH',
-    path: `/v1/webhooks/${webhookId}`,
+    path: `/v1/environment/webhooks/${webhookId}`,
     data,
   })
 }

@@ -32,7 +32,7 @@ async function loadEnvironment(
     LoadEnvironmentError
   >({
     method: 'GET',
-    path: '/v1/secrets',
+    path: '/v1/environment/secrets',
     query: query as Record<string, string | boolean>,
   })
 

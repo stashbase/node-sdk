@@ -31,7 +31,7 @@ async function getSecret(
     }
   }
 
-  const path = `/v1/secrets/${name}`
+  const path = `/v1/environment/secrets/${name}`
 
   return envClient.sendApiRequest<GetSecretResponse, GetSecretError>({
     method: 'GET',
