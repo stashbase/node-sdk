@@ -28,7 +28,7 @@ export class HttpClient {
     } as Record<string, string>
 
     if (apiKey) {
-      headers['x-api-key'] = apiKey
+      headers['Authorization'] = `Bearer ${apiKey}`
     }
 
     this.headers = headers
