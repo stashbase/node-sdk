@@ -9,6 +9,7 @@ import {
   LoadEnvironmentQueryParams,
   LoadEnvironmentResponse,
 } from '../../../types/environments'
+import { SecretName } from '../../../types/secrets'
 
 type LoadEnvironmentError = GenericApiError
 
@@ -56,10 +57,13 @@ async function loadEnvironment(
     return responseSuccess(null)
   }
 
-  const secretsObj = (secrets ?? []).reduce((obj: { [name: string]: string }, item) => {
-    obj[item.name] = item.value
-    return obj
-  }, {})
+  const secretsObj = (secrets ?? []).reduce(
+    (obj: { [name: string]: string }, item: { name: SecretName; value: string }) => {
+      obj[item.name] = item.value
+      return obj
+    },
+    {}
+  )
 
   const dotenv = {
     parsed: secretsObj,
