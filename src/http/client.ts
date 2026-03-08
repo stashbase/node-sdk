@@ -6,6 +6,7 @@ import { toCamelCase, toSnakeCase } from '../utils/serializer'
 declare const __SDK_VERSION__: string
 
 export const DEFAULT_API_BASE_URL = 'https://api.stashbase.dev'
+export const DEFAULT_API_TIMEOUT_MS = 15000
 const VERSION = __SDK_VERSION__
 const DEV_API_URL_ENV = 'STASHBASE_SDK_DEV_API_URL'
 const DEV_MODE_ENV = 'STASHBASE_SDK_DEV_MODE'
@@ -13,18 +14,26 @@ const DEV_MODE_ENV = 'STASHBASE_SDK_DEV_MODE'
 export type HttpClientConfig = {
   baseUrl?: string
   version?: string
+  timeoutMs?: number
 }
 
-type RequestWithData = { path: string; data?: { [key: string]: any } | any[] }
+type RequestWithData = {
+  path: string
+  data?: { [key: string]: any } | any[]
+  timeoutMs?: number
+  signal?: AbortSignal
+}
 type Query = Record<string, string | number | boolean>
 
 export class HttpClient {
   private headers: Record<string, string>
   private baseUrl: string
+  private timeoutMs?: number
 
   constructor(args: {
     baseUrl?: string
     version?: string
+    timeoutMs?: number
     authorization: {
       apiKey: string
     }
@@ -33,6 +42,7 @@ export class HttpClient {
       authorization: { apiKey },
       version,
       baseUrl,
+      timeoutMs,
     } = args
 
     const headers = {
@@ -46,9 +56,10 @@ export class HttpClient {
 
     this.headers = headers
     this.baseUrl = resolveBaseUrl(baseUrl)
+    this.timeoutMs = timeoutMs ?? DEFAULT_API_TIMEOUT_MS
   }
 
-  private async get<T>(args: { path: string; query?: Query }): Promise<T> {
+  private async get<T>(args: { path: string; query?: Query; timeoutMs?: number; signal?: AbortSignal }): Promise<T> {
     let url = `${this.baseUrl}${args.path ?? ''}`
 
     if (args.query) {
@@ -63,6 +74,9 @@ export class HttpClient {
       const response = await fetchWithRetry(url, {
         method: 'GET',
         headers: this.headers,
+      }, {
+        timeoutMs: args.timeoutMs ?? this.timeoutMs,
+        signal: args.signal,
       })
 
       if (!response.ok) {
@@ -87,7 +101,12 @@ export class HttpClient {
     }
   }
 
-  private async delete<T>(args: { path: string; query?: Query }): Promise<T> {
+  private async delete<T>(args: {
+    path: string
+    query?: Query
+    timeoutMs?: number
+    signal?: AbortSignal
+  }): Promise<T> {
     let url = `${this.baseUrl}${args.path ?? ''}`
 
     if (args.query) {
@@ -102,6 +121,9 @@ export class HttpClient {
       const response = await fetchWithRetry(url, {
         method: 'DELETE',
         headers: this.headers,
+      }, {
+        timeoutMs: args.timeoutMs ?? this.timeoutMs,
+        signal: args.signal,
       })
 
       if (!response.ok) {
@@ -136,6 +158,8 @@ export class HttpClient {
       headers: this.headers,
       path: args.path,
       data: args.data,
+      timeoutMs: args.timeoutMs,
+      signal: args.signal,
     })
   }
 
@@ -145,6 +169,8 @@ export class HttpClient {
       headers: this.headers,
       path: args.path,
       data: args.data,
+      timeoutMs: args.timeoutMs,
+      signal: args.signal,
     })
   }
 
@@ -154,6 +180,8 @@ export class HttpClient {
       headers: this.headers,
       path: args.path,
       data: args.data,
+      timeoutMs: args.timeoutMs,
+      signal: args.signal,
     })
   }
 
@@ -162,16 +190,25 @@ export class HttpClient {
     path: string
     data?: { [key: string]: any } | any[]
     query?: Record<string, string | number | boolean>
+    timeoutMs?: number
+    signal?: AbortSignal
   }) {
-    const { method, path, data, query } = args
+    const { method, path, data, query, timeoutMs, signal } = args
     try {
       let response: T
 
       if (method === 'GET' || method === 'DELETE') {
         const m = method === 'GET' ? 'get' : 'delete'
-        response = await this[m]<T>({ path, query })
+        response = await this[m]<T>({ path, query, timeoutMs, signal })
       } else {
-        response = await this.requestWithData<T>({ method, path, data, headers: this.headers })
+        response = await this.requestWithData<T>({
+          method,
+          path,
+          data,
+          headers: this.headers,
+          timeoutMs,
+          signal,
+        })
       }
 
       const formattedResponse = toCamelCase(response)
@@ -188,8 +225,10 @@ export class HttpClient {
     headers: Record<string, string>
     path: string
     data?: { [key: string]: any } | any[]
+    timeoutMs?: number
+    signal?: AbortSignal
   }): Promise<T> {
-    const { method, headers, path, data } = args
+    const { method, headers, path, data, timeoutMs, signal } = args
     const url = `${this.baseUrl}${path ?? ''}`
 
     const formattedData = data ? toSnakeCase(data) : undefined
@@ -199,6 +238,9 @@ export class HttpClient {
         method,
         headers,
         body: formattedData ? JSON.stringify(formattedData) : undefined,
+      }, {
+        timeoutMs: timeoutMs ?? this.timeoutMs,
+        signal,
       })
 
       if (!response.ok) {
@@ -231,6 +273,7 @@ export class HttpClient {
 export function createHttpClient(args: {
   baseUrl?: string
   version?: string
+  timeoutMs?: number
   authorization: {
     apiKey: string
   }
