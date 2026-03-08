@@ -89,6 +89,7 @@ export type Event = {
 }
 
 export type WebhookVerificationError = 'invalid_payload' | 'timestamp_too_old' | 'invalid_signature'
+export type VerifyWebhookPayload = Event | Record<string, unknown> | string | Buffer | Uint8Array
 export type WebhookVerificationResult =
   | {
       error: WebhookVerificationError
