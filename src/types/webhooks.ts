@@ -57,9 +57,6 @@ export interface CreateWebhookData {
 export interface CreateWebhookResponse {
   /** The unique identifier of the webhook */
   id: string
-
-  /** The singing secret of the webhook */
-  signingSecret: string
 }
 
 export interface WebhookSigningSecret {
