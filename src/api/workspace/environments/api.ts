@@ -85,7 +85,7 @@ export class EnvironmentsAPI {
    * Loads an environment and injects its secrets into the process, throwing an error if it fails.
    * @param envNameOrId - The name or id of the environment to load.
    * @param options - Additional options for loading the environment.
-   * @throws Error with the error code if loading fails.
+   * @throws ApiError when loading fails.
    * @returns A promise that resolves to null if successful.
    */
   async loadOrThrow(envNameOrId: string, options?: LoadEnvironmentOptions) {
@@ -94,11 +94,11 @@ export class EnvironmentsAPI {
     }
 
     const identifiersError = this.validateProjectIdentifier()
-    if (identifiersError) throw new Error(identifiersError.code)
+    if (identifiersError) throw identifiersError
 
     if (!isValidEnvironmentIdentifier(envNameOrId)) {
       const error = invalidEnvironmentIdentifierError
-      throw new Error(error.code)
+      throw error
     }
 
     const { error } = await loadEnvironment({
@@ -107,9 +107,8 @@ export class EnvironmentsAPI {
       options,
     })
 
-    // throws only error code
     if (error) {
-      throw new Error(error?.code)
+      throw error
     }
   }
 
