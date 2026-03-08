@@ -1,7 +1,7 @@
 import { ApiResponse } from '../../../../http/response'
 import { ProjectContextError } from '../../../../types/errors'
 import { Environment, ListEnvironmentOptions } from '../../../../types/environments'
-import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
+import { EnvironmentHandlerArgs } from '../../../../types/arguments'
 import {
   InvalidEnvironmentOrderError,
   InvalidEnvironmentSearchError,

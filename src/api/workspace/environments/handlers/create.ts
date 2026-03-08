@@ -6,7 +6,7 @@ import {
   InvalidEnvironmentNameError,
 } from '../../../../types/errors/environments'
 import { ProjectContextError } from '../../../../types/errors'
-import { EnvironmentHandlerArgs } from '../../../../types/aruguments'
+import { EnvironmentHandlerArgs } from '../../../../types/arguments'
 import { CreateEnvironmentData, CreateEnvironmentResponse } from '../../../../types/environments'
 import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
 

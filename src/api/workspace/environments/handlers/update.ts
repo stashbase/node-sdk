@@ -11,7 +11,7 @@ import {
   MissingPropertiesToUpdateError,
   ProjectContextError,
 } from '../../../../types/errors'
-import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
+import { SingleEnvironmentHandlerArgs } from '../../../../types/arguments'
 import { AtLeastOne } from '../../../../types/util'
 import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
 

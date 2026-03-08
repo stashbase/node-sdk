@@ -1,5 +1,5 @@
 import { ApiResponse } from '../../../../http/response'
-import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
+import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/arguments'
 import { UpdateWebhookError as SharedUpdateWebhookError } from '../../../../types/errors/webhooks'
 import { EnvironmentContextError } from '../../../../types/errors'
 import { UpdateWebhookData } from '../../../../types/webhooks'

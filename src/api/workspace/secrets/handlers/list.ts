@@ -6,7 +6,7 @@ import {
 } from '../../../../types/secrets'
 import { ApiResponse } from '../../../../http/response'
 import { EnvironmentContextError, GenericApiError } from '../../../../types/errors'
-import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
+import { ProjectEnvHandlerArgs } from '../../../../types/arguments'
 
 type ListSecretsError = GenericApiError | EnvironmentContextError
 type ListSecretsBaseArgs = ProjectEnvHandlerArgs<{ options?: ListSecretsOptions }>

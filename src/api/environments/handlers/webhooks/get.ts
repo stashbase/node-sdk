@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../../http/client'
 import { Webhook } from '../../../../types/webhooks'
-import { SingleWebhookArgs } from '../../../../types/aruguments'
+import { SingleWebhookArgs } from '../../../../types/arguments'
 import { GetWebhookError } from '../../../../types/errors/webhooks'
 import { ApiResponse } from '../../../../http/response'
 

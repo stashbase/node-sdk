@@ -1,6 +1,6 @@
 import { ApiResponse } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectContextError } from '../../../../types/errors'
-import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
+import { SingleEnvironmentHandlerArgs } from '../../../../types/arguments'
 import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
 
 export type DeleteEnvironmentArgs = SingleEnvironmentHandlerArgs<undefined>

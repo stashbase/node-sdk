@@ -2,7 +2,7 @@ import { HttpClient } from '../../../../http/client'
 import { WebhookSigningSecret } from '../../../../types/webhooks'
 import { ApiResponse } from '../../../../http/response'
 import { GetWebhookSigningSecretError } from '../../../../types/errors/webhooks'
-import { SingleWebhookArgs } from '../../../../types/aruguments'
+import { SingleWebhookArgs } from '../../../../types/arguments'
 
 export type GetWebhookSigningSecretArgs = SingleWebhookArgs<undefined>
 

@@ -7,7 +7,7 @@ import {
 } from '../../../../types/secrets'
 import { EnvironmentContextError } from '../../../../types/errors'
 import { GetSecretError as SharedGetSecretsError } from '../../../../types/errors/secrets'
-import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
+import { ProjectEnvHandlerArgs } from '../../../../types/arguments'
 
 type GetSecretError = SharedGetSecretsError | EnvironmentContextError
 type GetSecretResponse = Promise<ApiResponse<Secret, GetSecretError>>

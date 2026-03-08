@@ -1,5 +1,5 @@
 import { GetWebhookError } from '../../../../types/errors/webhooks'
-import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
+import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/arguments'
 import { ApiResponse } from '../../../../http/response'
 import { EnvironmentContextError } from '../../../../types/errors'
 
