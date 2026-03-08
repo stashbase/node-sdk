@@ -3,16 +3,25 @@ import { createApiErrorFromResponse } from '../errors'
 import { responseFailure, responseSuccess } from './response'
 import { toCamelCase, toSnakeCase } from '../utils/serializer'
 
-const baseURL: string = 'http://0.0.0.0:5000'
-const version: string = '0.0.1'
+export const DEFAULT_API_BASE_URL = 'https://api.stashbase.dev'
+const VERSION = '0.0.1'
+const DEV_API_URL_ENV = 'STASHBASE_SDK_DEV_API_URL'
+const DEV_MODE_ENV = 'STASHBASE_SDK_DEV_MODE'
+
+export type HttpClientConfig = {
+  baseUrl?: string
+  version?: string
+}
 
 type RequestWithData = { path: string; data?: { [key: string]: any } | any[] }
 type Query = Record<string, string | number | boolean>
 
 export class HttpClient {
   private headers: Record<string, string>
+  private baseUrl: string
 
   constructor(args: {
+    baseUrl?: string
     version?: string
     authorization: {
       apiKey: string
@@ -20,11 +29,13 @@ export class HttpClient {
   }) {
     const {
       authorization: { apiKey },
+      version,
+      baseUrl,
     } = args
 
     const headers = {
       'Content-Type': 'application/json',
-      'User-Agent': `stashbase/node-sdk/${version}`,
+      'User-Agent': `stashbase/node-sdk/${version ?? VERSION}`,
     } as Record<string, string>
 
     if (apiKey) {
@@ -32,10 +43,11 @@ export class HttpClient {
     }
 
     this.headers = headers
+    this.baseUrl = resolveBaseUrl(baseUrl)
   }
 
   private async get<T>(args: { path: string; query?: Query }): Promise<T> {
-    let url = `${baseURL}${args.path ?? ''}`
+    let url = `${this.baseUrl}${args.path ?? ''}`
 
     if (args.query) {
       const query = args.query
@@ -74,7 +86,7 @@ export class HttpClient {
   }
 
   private async delete<T>(args: { path: string; query?: Query }): Promise<T> {
-    let url = `${baseURL}${args.path ?? ''}`
+    let url = `${this.baseUrl}${args.path ?? ''}`
 
     if (args.query) {
       const query = args.query
@@ -176,7 +188,7 @@ export class HttpClient {
     data?: { [key: string]: any } | any[]
   }): Promise<T> {
     const { method, headers, path, data } = args
-    const url = `${baseURL}${path ?? ''}`
+    const url = `${this.baseUrl}${path ?? ''}`
 
     const formattedData = data ? toSnakeCase(data) : undefined
 
@@ -215,10 +227,32 @@ export class HttpClient {
 }
 
 export function createHttpClient(args: {
+  baseUrl?: string
   version?: string
   authorization: {
     apiKey: string
   }
 }): HttpClient {
   return new HttpClient(args)
+}
+
+const normalizeBaseUrl = (url: string): string => {
+  return url.replace(/\/+$/, '')
+}
+
+const resolveBaseUrl = (baseUrl?: string): string => {
+  if (baseUrl && baseUrl.trim().length > 0) {
+    return normalizeBaseUrl(baseUrl.trim())
+  }
+
+  if (typeof process !== 'undefined') {
+    const isDevMode = process.env.NODE_ENV !== 'production' || process.env[DEV_MODE_ENV] === '1'
+    const devUrl = process.env[DEV_API_URL_ENV]
+
+    if (isDevMode && devUrl && devUrl.trim().length > 0) {
+      return normalizeBaseUrl(devUrl)
+    }
+  }
+
+  return DEFAULT_API_BASE_URL
 }
