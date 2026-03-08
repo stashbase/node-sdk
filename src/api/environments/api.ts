@@ -105,7 +105,7 @@ class EnvironmentsClient {
    *
    * @param options - Options for loading the environment.
    * @returns A promise that resolves to an object containing the loaded data, error (if any), and success status.
-   * @throws Error if the loading process fails.
+   * @throws ApiError if the loading process fails.
    */
   async loadOrThrow(options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
@@ -115,7 +115,7 @@ class EnvironmentsClient {
     const { error } = await loadEnvironment(this.httpClient, options)
 
     if (error) {
-      throw new Error(error?.code)
+      throw error
     }
   }
 
