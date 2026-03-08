@@ -3,8 +3,10 @@ import { createApiErrorFromResponse } from '../errors'
 import { responseFailure, responseSuccess } from './response'
 import { toCamelCase, toSnakeCase } from '../utils/serializer'
 
+declare const __SDK_VERSION__: string
+
 export const DEFAULT_API_BASE_URL = 'https://api.stashbase.dev'
-const VERSION = '0.0.1'
+const VERSION = __SDK_VERSION__
 const DEV_API_URL_ENV = 'STASHBASE_SDK_DEV_API_URL'
 const DEV_MODE_ENV = 'STASHBASE_SDK_DEV_MODE'
 
