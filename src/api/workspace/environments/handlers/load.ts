@@ -10,6 +10,7 @@ import {
 import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
 import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
 import { ProjectContextError } from '../../../../types/errors'
+import { SecretName } from '../../../../types/secrets'
 
 type LoadEnvironmentError =
   | ProjectContextError
@@ -64,10 +65,13 @@ async function loadEnvironment(
     return responseSuccess(null)
   }
 
-  const secretsObj = (secrets ?? []).reduce((obj: { [name: string]: string }, item) => {
-    obj[item.name] = item.value
-    return obj
-  }, {})
+  const secretsObj = (secrets ?? []).reduce(
+    (obj: { [name: string]: string }, item: { name: SecretName; value: string }) => {
+      obj[item.name] = item.value
+      return obj
+    },
+    {}
+  )
 
   const dotenv = {
     parsed: secretsObj,
