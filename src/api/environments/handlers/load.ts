@@ -1,7 +1,6 @@
 import dotenvExpand from 'dotenv-expand'
 import { printSecretsTable } from '../../../utils/table'
 import { HttpClient } from '../../../http/client'
-import { createApiErrorFromResponse } from '../../../errors'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../http/response'
 import { GenericApiError } from '../../../types/errors'
 import {
