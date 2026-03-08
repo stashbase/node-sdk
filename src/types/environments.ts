@@ -3,6 +3,8 @@ import { ListSecretsQueryParams, SecretName } from './secrets'
 export type LoadEnvironmentOptions = {
   /** Whether this methid is enabled or not. */
   enabled?: boolean
+  /** Print informational logs about environment loading. Disabled by default. */
+  verbose?: boolean
   /** Specifies how to print the environment variables. */
   printSecrets?: 'name' | 'masked' | 'none'
   /** Expand all referred secrets to their values. */

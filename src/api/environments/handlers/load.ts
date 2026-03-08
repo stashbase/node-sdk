@@ -17,6 +17,7 @@ async function loadEnvironment(
   options?: LoadEnvironmentOptions
 ): Promise<ApiResponse<null, LoadEnvironmentError>> {
   const printType = options?.printSecrets
+  const verbose = options?.verbose === true
 
   const query: LoadEnvironmentQueryParams = {
     omit: 'description',
@@ -47,8 +48,10 @@ async function loadEnvironment(
   const envType = environment.isProduction ? 'production' : 'non-production'
 
   if (secrets.length === 0) {
-    console.log(`\nLoaded environment: ${environment.name} (${envType})`)
-    console.log(`No secrets found`)
+    if (verbose) {
+      console.log(`\nLoaded environment: ${environment.name} (${envType})`)
+      console.log(`No secrets found`)
+    }
 
     return responseSuccess(null)
   }
@@ -64,7 +67,9 @@ async function loadEnvironment(
 
   dotenvExpand.expand(dotenv)
 
-  console.log(`\nLoaded environment: ${environment.name} (${envType})`)
+  if (verbose) {
+    console.log(`\nLoaded environment: ${environment.name} (${envType})`)
+  }
 
   if (printType === 'name') {
     printSecretsTable.names(secrets)
