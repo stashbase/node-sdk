@@ -31,7 +31,7 @@
   "scripts": {
     "test": "vitest --run",
     "coverage": "vitest run --coverage",
-    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "build": "tsup --config tsup.config.ts",
     "prepack": "npm run build"
   },
   "keywords": [],
