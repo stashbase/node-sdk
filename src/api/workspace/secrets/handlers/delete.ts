@@ -2,7 +2,7 @@ import { ApiResponse } from '../../../../http/response'
 import { DeleteSecretsResponse, SecretName } from '../../../../types/secrets'
 import { EnvironmentContextError } from '../../../../types/errors'
 import { DeleteSecretsError as SharedDeleteSecretsError } from '../../../../types/errors/secrets'
-import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
+import { ProjectEnvHandlerArgs } from '../../../../types/arguments'
 
 type DeleteSecretsError = SharedDeleteSecretsError | EnvironmentContextError
 

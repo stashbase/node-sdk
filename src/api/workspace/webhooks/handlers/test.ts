@@ -1,7 +1,7 @@
 import { ApiResponse } from '../../../../http/response'
 import { TestWebhookResponse } from '../../../../types/webhooks'
 import { EnvironmentContextError } from '../../../../types/errors'
-import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
+import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/arguments'
 import { GetWebhookError as SharedGetWebhookError } from '../../../../types/errors/webhooks'
 
 export type TestWebhookArgs = SingleWebhookProjectEnvHandlerArgs<undefined>

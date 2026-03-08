@@ -7,7 +7,7 @@ import {
   LoadEnvironmentQueryParams,
   LoadEnvironmentResponse,
 } from '../../../../types/environments'
-import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
+import { SingleEnvironmentHandlerArgs } from '../../../../types/arguments'
 import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
 import { ProjectContextError } from '../../../../types/errors'
 import { SecretName } from '../../../../types/secrets'

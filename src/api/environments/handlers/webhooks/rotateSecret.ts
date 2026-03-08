@@ -1,7 +1,7 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiResponse } from '../../../../http/response'
 import { WebhookSigningSecret } from '../../../../types/webhooks'
-import { SingleWebhookArgs } from '../../../../types/aruguments'
+import { SingleWebhookArgs } from '../../../../types/arguments'
 import { RotateWebhookSigningSecretError } from '../../../../types/errors/webhooks'
 
 export type RotateWebhookSigningSecretArgs = SingleWebhookArgs<undefined>

@@ -2,7 +2,7 @@ import { ApiResponse } from '../../../../http/response'
 import { CreateWebhookError as SharedCreateWebhookError } from '../../../../types/errors/webhooks'
 import { CreateWebhookData } from '../../../../types/webhooks'
 import { CreateWebhookResponse } from '../../../../types/webhooks'
-import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
+import { ProjectEnvHandlerArgs } from '../../../../types/arguments'
 import { EnvironmentContextError } from '../../../../types/errors'
 
 export type CreateWebhookArgs = ProjectEnvHandlerArgs<{

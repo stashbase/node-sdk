@@ -2,7 +2,7 @@ import { ApiResponse } from '../../../../http/response'
 import { SetSecretsItem, SetSecretsResponse } from '../../../../types/secrets'
 import { EnvironmentContextError } from '../../../../types/errors'
 import { SetSecretsError as SharedSetSecretsError } from '../../../../types/errors/secrets'
-import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
+import { ProjectEnvHandlerArgs } from '../../../../types/arguments'
 
 type SetSecretsError = SharedSetSecretsError | EnvironmentContextError
 

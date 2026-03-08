@@ -4,7 +4,7 @@ import {
   ProjectNotFoundError,
   GenericApiError,
 } from '../../../../types/errors'
-import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
+import { SingleEnvironmentHandlerArgs } from '../../../../types/arguments'
 
 type SetIsProductionArgs = SingleEnvironmentHandlerArgs<{
   isProduction: boolean

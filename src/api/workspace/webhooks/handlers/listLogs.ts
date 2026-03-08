@@ -2,7 +2,7 @@ import { ApiResponse } from '../../../../http/response'
 import { ListWebhookLogsResponse } from '../../../../types/webhooks'
 import { ListWebhookLogsError as SharedListWebhookLogsError } from '../../../../types/errors/webhooks'
 import { EnvironmentContextError } from '../../../../types/errors'
-import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/aruguments'
+import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/arguments'
 
 export type ListWebhookLogsOptions = {
   /** The page number */

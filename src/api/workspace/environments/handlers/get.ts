@@ -1,7 +1,7 @@
 import { ApiResponse } from '../../../../http/response'
 import { EnvironmentNotFoundError, ProjectContextError } from '../../../../types/errors'
 import { Environment } from '../../../../types/environments'
-import { SingleEnvironmentHandlerArgs } from '../../../../types/aruguments'
+import { SingleEnvironmentHandlerArgs } from '../../../../types/arguments'
 import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
 
 export type GetEnvironmentArgs = SingleEnvironmentHandlerArgs<undefined>

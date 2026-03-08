@@ -6,7 +6,7 @@ import {
 import { ApiResponse } from '../../../../http/response'
 import { EnvironmentContextError } from '../../../../types/errors'
 import { CreateSecretsError as SharedCreateSecretsError } from '../../../../types/errors/secrets'
-import { ProjectEnvHandlerArgs } from '../../../../types/aruguments'
+import { ProjectEnvHandlerArgs } from '../../../../types/arguments'
 
 type CreateSecretsError = SharedCreateSecretsError | EnvironmentContextError
 

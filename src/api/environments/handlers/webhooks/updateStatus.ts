@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiResponse } from '../../../../http/response'
-import { SingleWebhookArgs } from '../../../../types/aruguments'
+import { SingleWebhookArgs } from '../../../../types/arguments'
 import { UpdateWebhookStatusError } from '../../../../types/errors/webhooks'
 
 export type UpdateWebhookStatusArgs = SingleWebhookArgs<undefined>
