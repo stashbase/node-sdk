@@ -24,6 +24,7 @@ async function loadEnvironment(
   args: LoadEnvironmentArgs
 ): Promise<ApiResponse<null, LoadEnvironmentError>> {
   const { client, project, environment } = args
+  const verbose = args?.options?.verbose === true
 
   const query: LoadEnvironmentQueryParams = {
     omit: 'comment',
@@ -55,8 +56,10 @@ async function loadEnvironment(
   const envType = isProduction ? 'production' : 'non-production'
 
   if (secrets.length === 0) {
-    console.log(`\nLoaded environment: ${environment} (${envType})`)
-    console.log(`No secrets found`)
+    if (verbose) {
+      console.log(`\nLoaded environment: ${environment} (${envType})`)
+      console.log(`No secrets found`)
+    }
 
     return responseSuccess(null)
   }
@@ -72,7 +75,9 @@ async function loadEnvironment(
 
   dotenvExpand.expand(dotenv)
 
-  console.log(`\nLoaded environment: ${environment} (${envType})`)
+  if (verbose) {
+    console.log(`\nLoaded environment: ${environment} (${envType})`)
+  }
 
   const printType = args?.options?.printSecrets
 
