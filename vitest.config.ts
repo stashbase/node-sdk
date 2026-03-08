@@ -9,6 +9,7 @@ export default defineConfig({
     dir: 'tests',
     testTimeout: 10000,
     env: {
+      ...config({ path: './.env' }).parsed,
       ...config({ path: './env' }).parsed,
     },
   },
