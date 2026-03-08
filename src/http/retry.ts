@@ -1,9 +1,13 @@
-const RETRY_DELAY_MS = 3000
+const DEFAULT_BASE_BACKOFF_MS = 300
+const DEFAULT_MAX_BACKOFF_MS = 3000
+const RETRYABLE_STATUS_CODES = new Set([500, 502, 503, 504])
 
 type RetryOptions = {
   retries?: number
   timeoutMs?: number
   signal?: AbortSignal
+  baseBackoffMs?: number
+  maxBackoffMs?: number
 }
 
 const createAbortError = (): Error => {
@@ -74,14 +78,30 @@ const createAttemptSignal = (signal?: AbortSignal, timeoutMs?: number) => {
   return { signal: controller.signal, cleanup }
 }
 
+const shouldRetryStatusCode = (statusCode: number) => RETRYABLE_STATUS_CODES.has(statusCode)
+
+const getBackoffDelayMs = (args: {
+  attempt: number
+  baseBackoffMs: number
+  maxBackoffMs: number
+}) => {
+  const { attempt, baseBackoffMs, maxBackoffMs } = args
+  const exponentialDelay = Math.min(maxBackoffMs, baseBackoffMs * 2 ** Math.max(0, attempt - 1))
+  const jitter = Math.floor(Math.random() * Math.max(1, exponentialDelay))
+
+  return exponentialDelay + jitter
+}
+
 const fetchWithRetry = async (
   url: string,
   options: RequestInit,
   retryOptions?: RetryOptions
 ): Promise<Response> => {
   const retries = retryOptions?.retries ?? 3
+  const baseBackoffMs = retryOptions?.baseBackoffMs ?? DEFAULT_BASE_BACKOFF_MS
+  const maxBackoffMs = retryOptions?.maxBackoffMs ?? DEFAULT_MAX_BACKOFF_MS
 
-  const fetchRetry = async (attemptsRemaining: number): Promise<Response> => {
+  const fetchRetry = async (attemptsRemaining: number, attempt: number): Promise<Response> => {
     const { signal, cleanup } = createAttemptSignal(retryOptions?.signal, retryOptions?.timeoutMs)
 
     try {
@@ -92,13 +112,19 @@ const fetchWithRetry = async (
 
       cleanup()
 
-      if (response.status === 500) {
+      if (shouldRetryStatusCode(response.status)) {
         if (attemptsRemaining === 1) {
           return response
         }
 
-        await sleep(RETRY_DELAY_MS, retryOptions?.signal)
-        return fetchRetry(attemptsRemaining - 1)
+        const delayMs = getBackoffDelayMs({
+          attempt,
+          baseBackoffMs,
+          maxBackoffMs,
+        })
+
+        await sleep(delayMs, retryOptions?.signal)
+        return fetchRetry(attemptsRemaining - 1, attempt + 1)
       }
 
       return response
@@ -113,8 +139,14 @@ const fetchWithRetry = async (
         throw error
       }
 
-      await sleep(RETRY_DELAY_MS, retryOptions?.signal)
-      return fetchRetry(attemptsRemaining - 1)
+      const delayMs = getBackoffDelayMs({
+        attempt,
+        baseBackoffMs,
+        maxBackoffMs,
+      })
+
+      await sleep(delayMs, retryOptions?.signal)
+      return fetchRetry(attemptsRemaining - 1, attempt + 1)
     }
   }
 
@@ -122,7 +154,7 @@ const fetchWithRetry = async (
     throw createAbortError()
   }
 
-  return fetchRetry(retries)
+  return fetchRetry(retries, 1)
 }
 
 export default fetchWithRetry
