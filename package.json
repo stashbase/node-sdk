@@ -29,7 +29,7 @@
     "LICENSE.txt"
   ],
   "scripts": {
-    "test": "vitest",
+    "test": "vitest --run",
     "coverage": "vitest run --coverage",
     "build": "tsup src/index.ts --format cjs,esm --dts",
     "prepack": "npm run build"
