@@ -2,11 +2,37 @@
   "name": "@stashbase/node-sdk",
   "version": "0.1.0",
   "description": "Stashbase Node SDK",
-  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/stashbase/node-sdk.git"
+  },
+  "homepage": "https://github.com/stashbase/node-sdk#readme",
+  "bugs": {
+    "url": "https://github.com/stashbase/node-sdk/issues"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "main": "./dist/index.js",
+  "module": "./dist/index.mjs",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE.txt"
+  ],
   "scripts": {
     "test": "vitest",
     "coverage": "vitest run --coverage",
-    "build": "tsup src/index.ts --format cjs,esm --dts"
+    "build": "tsup src/index.ts --format cjs,esm --dts",
+    "prepack": "npm run build"
   },
   "keywords": [],
   "author": "Radim Höfer",
