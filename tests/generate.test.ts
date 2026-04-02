@@ -113,3 +113,35 @@ describe('hash generator', () => {
     assert.equal(value, '2CF24DBA5FB0A30E26E83B2AC5B9E29E1B161E5C1FA7425E73043362938B9824')
   })
 })
+
+describe('passphrase generator', () => {
+  test('uses defaults', () => {
+    const value = generate.passphrase()
+    const parts = value.split('-')
+
+    assert.equal(parts.length, 6)
+    assert.match(value, /^[a-z-]+$/)
+  })
+
+  test('supports words and separator options', () => {
+    const value = generate.passphrase({ words: 8, separator: '.' })
+    const parts = value.split('.')
+
+    assert.equal(parts.length, 8)
+    assert.match(value, /^[a-z.]+$/)
+  })
+
+  test('supports uppercase option', () => {
+    const value = generate.passphrase({ words: 4, uppercase: true })
+    assert.equal(value, value.toUpperCase())
+    assert.match(value, /^[A-Z-]+$/)
+  })
+
+  test('throws on invalid words range', () => {
+    assert.throws(() => generate.passphrase({ words: 2 }), /words must be an integer between 3 and 24/)
+    assert.throws(
+      () => generate.passphrase({ words: 25 }),
+      /words must be an integer between 3 and 24/
+    )
+  })
+})

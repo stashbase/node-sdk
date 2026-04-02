@@ -1,4 +1,4 @@
-import { createHash, randomBytes, randomUUID } from 'node:crypto'
+import { createHash, randomBytes, randomInt, randomUUID } from 'node:crypto'
 
 export const RANDOM_STRING_MIN_LENGTH = 3
 export const RANDOM_STRING_MAX_LENGTH = 256
@@ -38,8 +38,45 @@ export type GenerateHashOptions = {
   uppercase?: boolean
 }
 
+export const PASSPHRASE_MIN_WORDS = 3
+export const PASSPHRASE_MAX_WORDS = 24
+
+export type GeneratePassphraseOptions = {
+  /**
+   * Number of words in passphrase.
+   * @default 6
+   */
+  words?: number
+
+  /**
+   * Separator between words.
+   * @default '-'
+   */
+  separator?: string
+
+  /**
+   * Convert final output to uppercase.
+   */
+  uppercase?: boolean
+}
+
 const BASE32_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'
 const ALPHANUMERIC_ALPHABET = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+const PASSPHRASE_WORDS = [
+  'anchor', 'apple', 'arch', 'arrow', 'atom', 'badge', 'bamboo', 'beacon', 'berry', 'bicycle',
+  'bird', 'bloom', 'boat', 'breeze', 'brook', 'cable', 'cactus', 'candle', 'canyon', 'captain',
+  'castle', 'cedar', 'chalk', 'cherry', 'circle', 'cloud', 'clover', 'coast', 'comet', 'coral',
+  'cotton', 'crystal', 'delta', 'dolphin', 'drift', 'dune', 'eagle', 'ember', 'falcon', 'field',
+  'finch', 'flame', 'flower', 'forest', 'fossil', 'frost', 'galaxy', 'garden', 'glacier', 'globe',
+  'granite', 'harbor', 'harvest', 'hazel', 'horizon', 'island', 'jasmine', 'jewel', 'jungle',
+  'kernel', 'lagoon', 'lantern', 'leaf', 'legend', 'lemon', 'lilac', 'lotus', 'lunar', 'maple',
+  'marble', 'meadow', 'meteor', 'mint', 'mirror', 'mist', 'mountain', 'nebula', 'nectar', 'night',
+  'north', 'oasis', 'ocean', 'olive', 'onyx', 'orbit', 'orchid', 'palm', 'pearl', 'pebble',
+  'pepper', 'phoenix', 'pine', 'planet', 'plume', 'prairie', 'prism', 'quartz', 'raven', 'reef',
+  'river', 'rocket', 'saddle', 'saffron', 'sapphire', 'scarlet', 'shadow', 'silver', 'sky', 'solar',
+  'sparrow', 'spring', 'stone', 'sunset', 'swift', 'thunder', 'timber', 'topaz', 'trail', 'valley',
+  'velvet', 'violet', 'wave', 'willow', 'winter', 'zephyr', 'zinc',
+] as const
 
 function isValidLength(length: number) {
   return (
@@ -59,6 +96,19 @@ function validateRandomOptions(options: GenerateRandomStringOptions): void {
   if (options.bytes !== undefined && !isValidLength(options.bytes)) {
     throw new RangeError(
       `bytes must be an integer between ${RANDOM_STRING_MIN_LENGTH} and ${RANDOM_STRING_MAX_LENGTH}`
+    )
+  }
+}
+
+function validatePassphraseOptions(options: GeneratePassphraseOptions): void {
+  if (
+    options.words !== undefined &&
+    (!Number.isInteger(options.words) ||
+      options.words < PASSPHRASE_MIN_WORDS ||
+      options.words > PASSPHRASE_MAX_WORDS)
+  ) {
+    throw new RangeError(
+      `words must be an integer between ${PASSPHRASE_MIN_WORDS} and ${PASSPHRASE_MAX_WORDS}`
     )
   }
 }
@@ -245,6 +295,21 @@ export function generateHash(value: string, options: GenerateHashOptions = {}): 
   return applyUppercase(digest, options.uppercase)
 }
 
+/** Generate random passphrase from built-in word list. */
+export function generatePassphrase(options: GeneratePassphraseOptions = {}): string {
+  validatePassphraseOptions(options)
+
+  const words = options.words ?? 6
+  const separator = options.separator ?? '-'
+  const selectedWords: string[] = []
+
+  for (let i = 0; i < words; i++) {
+    selectedWords.push(PASSPHRASE_WORDS[randomInt(PASSPHRASE_WORDS.length)])
+  }
+
+  return applyUppercase(selectedWords.join(separator), options.uppercase)
+}
+
 export const generate = {
   uuid: {
     v4: generateUuidV4,
@@ -259,4 +324,5 @@ export const generate = {
     base64Url: generateRandomBase64Url,
   },
   hash: generateHash,
+  passphrase: generatePassphrase,
 } as const
