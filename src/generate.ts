@@ -1,4 +1,4 @@
-import { randomBytes, randomUUID } from 'node:crypto'
+import { createHash, randomBytes, randomUUID } from 'node:crypto'
 
 export const RANDOM_STRING_MIN_LENGTH = 3
 export const RANDOM_STRING_MAX_LENGTH = 256
@@ -19,6 +19,21 @@ export type GenerateRandomStringOptions = {
 
   /**
    * Convert final output to uppercase.
+   */
+  uppercase?: boolean
+}
+
+export type GenerateHashAlgorithm = 'sha224' | 'sha256' | 'sha384' | 'sha512'
+
+export type GenerateHashOptions = {
+  /**
+   * Hash algorithm.
+   * @default 'sha256'
+   */
+  algorithm?: GenerateHashAlgorithm
+
+  /**
+   * Convert final hash output to uppercase.
    */
   uppercase?: boolean
 }
@@ -223,6 +238,13 @@ export function generateRandomBase64Url(options: GenerateRandomStringOptions = {
   return generateRandom('base64url', options)
 }
 
+/** Generate hash for value using selected algorithm. */
+export function generateHash(value: string, options: GenerateHashOptions = {}): string {
+  const algorithm = options.algorithm ?? 'sha256'
+  const digest = createHash(algorithm).update(value).digest('hex')
+  return applyUppercase(digest, options.uppercase)
+}
+
 export const generate = {
   uuid: {
     v4: generateUuidV4,
@@ -236,4 +258,5 @@ export const generate = {
     base64url: generateRandomBase64Url,
     base64Url: generateRandomBase64Url,
   },
+  hash: generateHash,
 } as const
