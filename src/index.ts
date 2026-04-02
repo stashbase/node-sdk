@@ -6,6 +6,7 @@ import verifyWebhook from './webhooks/verify'
 import { WebhooksAPI as WsWebhooksAPI } from './api/workspace/webhooks/api'
 import { EnvironmentsAPI as WsEnvironmentsAPI } from './api/workspace/environments/api'
 import { getCurrentAuthDetails } from './api/shared/handlers/whoami'
+export * from './generate'
 
 /**
  * Creates an SDK object that encapsulates functionality for managing projects, environments, and secrets.
