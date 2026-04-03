@@ -1,4 +1,4 @@
-import { createHash, randomBytes, randomInt, randomUUID } from 'node:crypto'
+import { createHash, generateKeyPairSync, randomBytes, randomInt, randomUUID } from 'node:crypto'
 
 export const RANDOM_STRING_MIN_LENGTH = 3
 export const RANDOM_STRING_MAX_LENGTH = 256
@@ -58,6 +58,34 @@ export type GeneratePassphraseOptions = {
    * Convert final output to uppercase.
    */
   uppercase?: boolean
+}
+
+export type GenerateSshKeyType = 'ed25519' | 'rsa'
+
+export type GenerateSshKeypairOptions = {
+  /**
+   * SSH key algorithm.
+   * @default 'ed25519'
+   */
+  keyType?: GenerateSshKeyType
+
+  /**
+   * Key comment appended to public key.
+   * @default 'stashbase@local'
+   */
+  comment?: string
+
+  /**
+   * Passphrase for private key.
+   */
+  passphrase?: string
+}
+
+export type GenerateSshKeypairResult = {
+  keyType: GenerateSshKeyType
+  privateKey: string
+  publicKey: string
+  fingerprint: string
 }
 
 const BASE32_ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ234567'
@@ -310,6 +338,113 @@ export function generatePassphrase(options: GeneratePassphraseOptions = {}): str
   return applyUppercase(selectedWords.join(separator), options.uppercase)
 }
 
+function base64UrlToBuffer(value: string): Buffer {
+  return Buffer.from(value, 'base64url')
+}
+
+function writeSshString(value: Buffer | string): Buffer {
+  const data = typeof value === 'string' ? Buffer.from(value, 'utf8') : value
+  const prefix = Buffer.alloc(4)
+  prefix.writeUInt32BE(data.length, 0)
+  return Buffer.concat([prefix, data])
+}
+
+function writeSshMpint(value: Buffer): Buffer {
+  let data = value
+
+  while (data.length > 0 && data[0] === 0) {
+    data = data.subarray(1)
+  }
+
+  if (data.length === 0) {
+    return writeSshString(Buffer.alloc(0))
+  }
+
+  if ((data[0] & 0x80) !== 0) {
+    data = Buffer.concat([Buffer.from([0x00]), data])
+  }
+
+  return writeSshString(data)
+}
+
+function toOpenSshPublicKey(keyType: GenerateSshKeyType, comment: string, jwk: JsonWebKey): string {
+  if (keyType === 'ed25519') {
+    if (jwk.kty !== 'OKP' || jwk.crv !== 'Ed25519' || !jwk.x) {
+      throw new Error('failed to export ed25519 public key')
+    }
+
+    const payload = Buffer.concat([
+      writeSshString('ssh-ed25519'),
+      writeSshString(base64UrlToBuffer(jwk.x)),
+    ])
+
+    return `ssh-ed25519 ${payload.toString('base64')}${comment ? ` ${comment}` : ''}`
+  }
+
+  if (jwk.kty !== 'RSA' || !jwk.e || !jwk.n) {
+    throw new Error('failed to export rsa public key')
+  }
+
+  const payload = Buffer.concat([
+    writeSshString('ssh-rsa'),
+    writeSshMpint(base64UrlToBuffer(jwk.e)),
+    writeSshMpint(base64UrlToBuffer(jwk.n)),
+  ])
+
+  return `ssh-rsa ${payload.toString('base64')}${comment ? ` ${comment}` : ''}`
+}
+
+function fingerprintFromOpenSshPublicKey(publicKey: string): string {
+  const parts = publicKey.trim().split(/\s+/)
+
+  if (parts.length < 2) {
+    throw new Error('invalid OpenSSH public key format')
+  }
+
+  const keyBlob = Buffer.from(parts[1], 'base64')
+  const digest = createHash('sha256').update(keyBlob).digest('base64').replace(/=+$/g, '')
+
+  return `SHA256:${digest}`
+}
+
+/** Generate SSH keypair and return key material with SHA256 fingerprint. */
+export function generateSshKeypair(
+  options: GenerateSshKeypairOptions = {}
+): GenerateSshKeypairResult {
+  const keyType = options.keyType ?? 'ed25519'
+  const comment = options.comment ?? 'stashbase@local'
+
+  const pair =
+    keyType === 'rsa'
+      ? generateKeyPairSync('rsa', { modulusLength: 4096 })
+      : generateKeyPairSync('ed25519')
+
+  const privateKey = pair.privateKey.export(
+    options.passphrase
+      ? {
+          type: 'pkcs8',
+          format: 'pem',
+          cipher: 'aes-256-cbc',
+          passphrase: options.passphrase,
+        }
+      : {
+          type: 'pkcs8',
+          format: 'pem',
+        }
+  )
+
+  const jwk = pair.publicKey.export({ format: 'jwk' })
+  const publicKey = toOpenSshPublicKey(keyType, comment, jwk)
+  const fingerprint = fingerprintFromOpenSshPublicKey(publicKey)
+
+  return {
+    keyType,
+    privateKey: privateKey.toString(),
+    publicKey,
+    fingerprint,
+  }
+}
+
 export const generate = {
   uuid: {
     v4: generateUuidV4,
@@ -325,4 +460,5 @@ export const generate = {
   },
   hash: generateHash,
   passphrase: generatePassphrase,
+  sshKeypair: generateSshKeypair,
 } as const

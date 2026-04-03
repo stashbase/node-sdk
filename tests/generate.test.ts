@@ -1,8 +1,5 @@
 import { assert, describe, test } from 'vitest'
-import {
-  generate,
-  getRandomTargetLength,
-} from '../src'
+import { generate, getRandomTargetLength } from '../src'
 
 const UUID_V4_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
 const UUID_V7_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-7[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/
@@ -138,10 +135,42 @@ describe('passphrase generator', () => {
   })
 
   test('throws on invalid words range', () => {
-    assert.throws(() => generate.passphrase({ words: 2 }), /words must be an integer between 3 and 24/)
+    assert.throws(
+      () => generate.passphrase({ words: 2 }),
+      /words must be an integer between 3 and 24/
+    )
     assert.throws(
       () => generate.passphrase({ words: 25 }),
       /words must be an integer between 3 and 24/
     )
+  })
+})
+
+describe('ssh keypair generator', () => {
+  test('returns ed25519 private/public key and fingerprint', () => {
+    const result = generate.sshKeypair()
+
+    assert.equal(result.keyType, 'ed25519')
+    assert.match(result.privateKey, /BEGIN PRIVATE KEY/)
+    assert.match(result.publicKey, /^ssh-ed25519\s+[A-Za-z0-9+/=]+(\s+stashbase@local)?$/)
+    assert.match(result.fingerprint, /^SHA256:[A-Za-z0-9+/]+$/)
+  })
+
+  test('supports rsa with fixed 4096 bits', () => {
+    const result = generate.sshKeypair({ keyType: 'rsa', comment: 'me@example.com' })
+
+    assert.equal(result.keyType, 'rsa')
+    assert.match(result.privateKey, /BEGIN PRIVATE KEY/)
+    assert.match(result.publicKey, /^ssh-rsa\s+[A-Za-z0-9+/=]+\s+me@example\.com$/)
+    assert.match(result.fingerprint, /^SHA256:[A-Za-z0-9+/]+$/)
+  })
+
+  test('supports encrypted private key with passphrase', () => {
+    const result = generate.sshKeypair({
+      passphrase: 'secret123',
+    })
+
+    assert.match(result.privateKey, /ENCRYPTED/)
+    assert.match(result.fingerprint, /^SHA256:[A-Za-z0-9+/]+$/)
   })
 })
