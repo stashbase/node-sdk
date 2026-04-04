@@ -3,16 +3,24 @@ import {
   invalidSecretNameError,
   invalidSecretNamesError,
   noDataProvidedError,
+  searchRequiresNameOrValueError,
+  searchSecretNameAndValueMutuallyExclusiveError,
 } from '../../../errors/secrets'
 import { HttpClient } from '../../../http/client'
 import { ApiResponse, responseFailure } from '../../../http/response'
 import { EnvironmentContextError } from '../../../types/errors'
-import { ListExcludeSecretsError, ListOnlySecretsError } from '../../../types/errors/secrets'
+import {
+  ListExcludeSecretsError,
+  ListOnlySecretsError,
+  SearchSecretsError,
+} from '../../../types/errors/secrets'
 import {
   SecretName,
   CreateSecretsItem,
   GetSecretOptions,
   ListSecretsOptions,
+  SearchSecretsOptions,
+  SearchSecretsResponse,
   SetSecretsItem,
   UpdateSecretsItem,
   ListSecretsResponse,
@@ -32,6 +40,7 @@ import { deleteSecrets } from './handlers/delete'
 import { deleteAllSecrets } from './handlers/deleteAll'
 import { getSecret } from './handlers/get'
 import { listSecrets } from './handlers/list'
+import { searchSecrets } from './handlers/search'
 import { setSecrets } from './handlers/set'
 import { updateSecrets } from './handlers/update'
 
@@ -40,14 +49,23 @@ export class SecretsAPI {
   public project: string
   public environment: string
 
-  public constructor(httpClient: HttpClient, project: string, environment: string) {
+  public constructor(httpClient: HttpClient, project: string, environment?: string) {
     this.httpClient = httpClient
     this.project = project
-    this.environment = environment
+    this.environment = environment ?? ''
   }
 
   private getHandlerArgs() {
     return { client: this.httpClient, project: this.project, environment: this.environment }
+  }
+
+  private validateProjectIdentifier() {
+    const { project } = this
+
+    if (!isValidProjectIdentifier(project)) {
+      const error = invalidProjectIdentifierError
+      return error
+    }
   }
 
   private validateIdentifiers() {
@@ -94,6 +112,39 @@ export class SecretsAPI {
     if (validationError) return responseFailure(validationError)
 
     return await listSecrets({ ...this.getHandlerArgs(), options })
+  }
+
+  /**
+   * Searches secrets in a specific project by exact name or value.
+   *
+   * @param options - Search options equivalent to CLI `secrets search`.
+   * @returns A promise that resolves to searched secrets or an error response.
+   */
+  async searchSecrets(
+    options: SearchSecretsOptions
+  ): Promise<ApiResponse<SearchSecretsResponse, SearchSecretsError | EnvironmentContextError>> {
+    const validationError = this.validateProjectIdentifier()
+    if (validationError) return responseFailure(validationError)
+
+    const name = options?.name
+    const value = options?.value
+
+    if (!name && !value) {
+      const error = searchRequiresNameOrValueError(['name', 'value'])
+      return responseFailure(error)
+    }
+
+    if (name && value) {
+      const error = searchSecretNameAndValueMutuallyExclusiveError()
+      return responseFailure(error)
+    }
+
+    if (name && !isValidSecretName(name)) {
+      const error = invalidSecretNameError()
+      return responseFailure(error)
+    }
+
+    return await searchSecrets({ client: this.httpClient, project: this.project, options })
   }
 
   /**

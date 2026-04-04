@@ -22,6 +22,11 @@ export type DeleteSecretsError = GenericApiError | InvalidSecretNamesError | NoD
 export type GetSecretError = GenericApiError | SecretNotFoundError | InvalidSecretNameError
 
 export type ListSecretsError = GenericApiError
+export type SearchSecretsError =
+  | GenericApiError
+  | InvalidSecretNameError
+  | SearchRequiresNameOrValueError
+  | SearchSecretNameAndValueMutuallyExclusiveError
 
 export type ListOnlySecretsError = ListSecretsError | NoDataProvidedError | InvalidSecretNamesError
 
@@ -54,6 +59,16 @@ export type UpdateSecretsError =
 export type SecretNotFoundError = ResourceApiError<'secret_not_found', undefined>
 export type NoDataProvidedError = ValidationApiError<'no_data_provided', undefined>
 export type InvalidSecretNameError = ValidationApiError<'invalid_secret_name', undefined>
+export type SearchRequiresNameOrValueError = ValidationApiError<
+  'search_requires_name_or_value',
+  {
+    requiredQueryParamsAnyOf: string[]
+  }
+>
+export type SearchSecretNameAndValueMutuallyExclusiveError = ValidationApiError<
+  'search_secret_name_and_value_mutually_exclusive',
+  undefined
+>
 export type InvalidSecretNamesError = SecretsValidationErrorWithDetails<'invalid_secret_names'>
 
 export type DuplicateSecretsNamesError = ValidationApiError<

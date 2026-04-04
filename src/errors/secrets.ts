@@ -8,6 +8,8 @@ import {
   MissingPropertiesToUpdateError,
   NewSecretNamesSameAsNamesError,
   NoDataProvidedError,
+  SearchRequiresNameOrValueError,
+  SearchSecretNameAndValueMutuallyExclusiveError,
   SecretCommentsTooLongError,
   SecretValuesTooLongError,
   SecretsErrorDetails,
@@ -121,3 +123,22 @@ export const noDataProvidedError = (): NoDataProvidedError =>
     code: 'validation.no_data_provided',
     message: 'At least one data item must be provided.',
   })
+
+export const searchRequiresNameOrValueError = (
+  requiredQueryParamsAnyOf: string[]
+): SearchRequiresNameOrValueError =>
+  createSecretsError({
+    code: 'validation.search_requires_name_or_value',
+    message: "Search requires at least one query parameter: provide 'name' or 'value'.",
+    details: {
+      requiredQueryParamsAnyOf,
+    },
+  })
+
+export const searchSecretNameAndValueMutuallyExclusiveError =
+  (): SearchSecretNameAndValueMutuallyExclusiveError =>
+    createSecretsError({
+      details: undefined,
+      code: 'validation.search_secret_name_and_value_mutually_exclusive',
+      message: "Only one of 'name' or 'value' query parameter can be provided.",
+    })

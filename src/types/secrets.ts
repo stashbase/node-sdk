@@ -64,6 +64,38 @@ export interface ListSecretsQueryParams {
   // exclude?: Array<SecretName>
 }
 
+export interface SearchSecretsQueryParams {
+  name?: string
+  value?: string
+  return_values?: true
+  with_ids?: true
+}
+
+export interface SearchSecretsEnvironment {
+  id?: string
+  name: string
+}
+
+export interface SearchSecretsByNameItem {
+  secretValue: string | null
+  environments: Array<SearchSecretsEnvironment>
+}
+
+export interface SearchSecretsByValueItem {
+  secretName: SecretName
+  environments: Array<SearchSecretsEnvironment>
+}
+
+export type SearchSecretsResponse = Array<SearchSecretsByNameItem> | Array<SearchSecretsByValueItem>
+
+export type SearchSecretsOptions = AtLeastOne<{
+  name: SecretName
+  value: string
+}> & {
+  /** Return actual secret values, for search by name */
+  returnValues?: boolean
+}
+
 export type GetSecretQueryParams = Pick<ListSecretsQueryParams, 'omit' | 'expand_refs'>
 
 export interface GetSecretOptions {

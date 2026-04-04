@@ -6,6 +6,7 @@ import verifyWebhook from './webhooks/verify'
 import { WebhooksAPI as WsWebhooksAPI } from './api/workspace/webhooks/api'
 import { EnvironmentsAPI as WsEnvironmentsAPI } from './api/workspace/environments/api'
 import { getCurrentAuthDetails } from './api/shared/handlers/whoami'
+import { SearchSecretsOptions } from './types/secrets'
 export * from './generate'
 
 /**
@@ -46,7 +47,7 @@ class WorkspaceClient {
 
   /** API for interacting with secrets. */
   /**
-   * Provides access to the Secrets API for a specific project and environment.
+   * Provides access to the Secrets API.
    *
    * @param args - An object with a `project` and `environment` property.
    * @param args.project - The project's name or ID.
@@ -54,6 +55,18 @@ class WorkspaceClient {
    */
   public secrets(args: { project: string; environment: string }) {
     return new SecretsAPI(this.client, args.project, args.environment)
+  }
+
+  /**
+   * Searches secrets in a specific project by exact name or value.
+   *
+   * @param args - Search arguments.
+   * @param args.project - The project's name or ID.
+   * @returns A promise that resolves to searched secrets or an error response.
+   */
+  public searchSecrets(args: { project: string } & SearchSecretsOptions) {
+    const { project, ...options } = args
+    return new SecretsAPI(this.client, project).searchSecrets(options)
   }
 
   /** API for interacting with webhooks. */
