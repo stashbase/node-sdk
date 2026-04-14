@@ -22,6 +22,7 @@ export function createWorkspaceClient(apiKey: string) {
 /** Client for interacting with Stashbase resources using a workspace API key with a given permissions. */
 class WorkspaceClient {
   private client: HttpClient
+  public readonly scope = 'workspace' as const
 
   constructor(apiKey: string) {
     const client = createHttpClient({

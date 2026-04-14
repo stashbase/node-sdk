@@ -38,6 +38,7 @@ Use workspace client to manage resources in a workspace, you can use Service Acc
 import { createWorkspaceClient } from '@stashbase/node-sdk'
 
 const client = createWorkspaceClient(process.env.STASHBASE_API_KEY)
+console.log(client.scope) // "workspace"
 ```
 
 #### List project
@@ -72,6 +73,7 @@ Use environment client to manage resources in a specific environment, using Envi
 import { createEnvironmentClient } from '@stashbase/node-sdk'
 
 const client = createEnvironmentClient(process.env.STASHBASE_ENV_API_KEY)
+console.log(client.scope) // "environment"
 ```
 
 #### Get environment details

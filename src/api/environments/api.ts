@@ -56,6 +56,7 @@ import { getCurrentAuthDetails } from '../shared/handlers/whoami'
 
 class EnvironmentClient {
   private httpClient: HttpClient
+  public readonly scope = 'environment' as const
 
   public readonly secrets: SecretsAPI
   public readonly webhooks: WebhooksAPI
