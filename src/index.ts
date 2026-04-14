@@ -22,9 +22,15 @@ export type * as WebhookErrors from './types/errors/webhooks'
 export { ApiError, ApiResponse } from './http/response'
 
 export type ClientScope = 'workspace' | 'environment'
+export type ClientTransportOptions = {
+  /** Request timeout in milliseconds. Hard capped by SDK. */
+  timeoutMs?: number
+  /** Number of request attempts before failing. Hard capped by SDK. */
+  retries?: number
+}
 export type CreateClientOptions =
-  | { apiKey: string; scope: 'workspace' }
-  | { apiKey: string; scope: 'environment' }
+  | ({ apiKey: string; scope: 'workspace' } & ClientTransportOptions)
+  | ({ apiKey: string; scope: 'environment' } & ClientTransportOptions)
 
 export type WorkspaceProjectContext = {
   scope: 'workspace'
@@ -44,10 +50,11 @@ export type WorkspaceProjectEnvironmentContext = WorkspaceProjectContext & {
  * Creates an SDK object that encapsulates functionality for managing projects, environments, and secrets.
  *
  * @param apiKey - Service or Personal API key.
+ * @param options - Optional transport options.
  * @returns An object containing methods for interacting with projects, environments, and secrets.
  */
-export function createWorkspaceClient(apiKey: string) {
-  return new WorkspaceClient(apiKey)
+export function createWorkspaceClient(apiKey: string, options?: ClientTransportOptions) {
+  return new WorkspaceClient(apiKey, options)
 }
 
 /** Client for interacting with Stashbase resources using a workspace API key with a given permissions. */
@@ -55,9 +62,10 @@ class WorkspaceClient {
   private client: HttpClient
   public readonly scope: ClientScope = 'workspace'
 
-  constructor(apiKey: string) {
+  constructor(apiKey: string, options?: ClientTransportOptions) {
     const client = createHttpClient({
       authorization: { apiKey },
+      ...options,
     })
 
     this.client = client
@@ -165,10 +173,11 @@ class WorkspaceClient {
  * Creates an API client for environment-specific operations using an environment API key.
  *
  * @param apiKey - Environment Account API key.
+ * @param options - Optional transport options.
  * @returns An object containing methods for interacting with the environment.
  */
-export function createEnvironmentClient(apiKey: string) {
-  return new EnvironmentClient(apiKey)
+export function createEnvironmentClient(apiKey: string, options?: ClientTransportOptions) {
+  return new EnvironmentClient(apiKey, options)
 }
 
 /**
@@ -177,15 +186,24 @@ export function createEnvironmentClient(apiKey: string) {
  * This factory does not perform network discovery. API key validity and permissions
  * are validated by backend endpoints when requests are made.
  *
- * @param options - Client creation options.
+ * @param options - Client creation options including scope and optional transport options.
  * @returns A workspace or environment client based on requested scope.
  */
-export function createClient(options: { apiKey: string; scope: 'workspace' }): WorkspaceClient
-export function createClient(options: { apiKey: string; scope: 'environment' }): EnvironmentClient
+export function createClient(
+  options: { apiKey: string; scope: 'workspace' } & ClientTransportOptions
+): WorkspaceClient
+export function createClient(
+  options: { apiKey: string; scope: 'environment' } & ClientTransportOptions
+): EnvironmentClient
 export function createClient(options: CreateClientOptions): WorkspaceClient | EnvironmentClient {
+  const transportOptions: ClientTransportOptions = {
+    timeoutMs: options.timeoutMs,
+    retries: options.retries,
+  }
+
   return options.scope === 'environment'
-    ? new EnvironmentClient(options.apiKey)
-    : new WorkspaceClient(options.apiKey)
+    ? new EnvironmentClient(options.apiKey, transportOptions)
+    : new WorkspaceClient(options.apiKey, transportOptions)
 }
 
 export { WorkspaceClient, EnvironmentClient, verifyWebhook }

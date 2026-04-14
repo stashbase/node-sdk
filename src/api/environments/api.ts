@@ -1,7 +1,7 @@
 import { loadEnvironment } from './handlers/load'
 import { getEnvironment } from './handlers/get'
 import { deleteEnvironmentSecrets } from './handlers/secrets/delete'
-import { createHttpClient, HttpClient } from '../../http/client'
+import { createHttpClient, HttpClient, type HttpClientConfig } from '../../http/client'
 import { listSecrets } from './handlers/secrets/list'
 import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
 import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
@@ -62,9 +62,10 @@ class EnvironmentClient {
   public readonly webhooks: WebhooksAPI
   public readonly environment: EnvironmentsClient
 
-  constructor(apiKey: string) {
+  constructor(apiKey: string, options?: Pick<HttpClientConfig, 'timeoutMs' | 'retries'>) {
     const httpClient = createHttpClient({
       authorization: { apiKey },
+      ...options,
     })
 
     this.httpClient = httpClient

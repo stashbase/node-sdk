@@ -7,6 +7,9 @@ declare const __SDK_VERSION__: string
 
 export const DEFAULT_API_BASE_URL = 'https://api.stashbase.dev'
 export const DEFAULT_API_TIMEOUT_MS = 15000
+export const MAX_API_TIMEOUT_MS = 120000
+export const DEFAULT_API_RETRIES = 3
+export const MAX_API_RETRIES = 10
 const VERSION = __SDK_VERSION__
 const DEV_API_URL_ENV = 'STASHBASE_SDK_DEV_API_URL'
 const DEV_MODE_ENV = 'STASHBASE_SDK_DEV_MODE'
@@ -15,6 +18,7 @@ export type HttpClientConfig = {
   baseUrl?: string
   version?: string
   timeoutMs?: number
+  retries?: number
 }
 
 type RequestWithData = {
@@ -29,11 +33,13 @@ export class HttpClient {
   private headers: Record<string, string>
   private baseUrl: string
   private timeoutMs?: number
+  private retries: number
 
   constructor(args: {
     baseUrl?: string
     version?: string
     timeoutMs?: number
+    retries?: number
     authorization: {
       apiKey: string
     }
@@ -43,6 +49,7 @@ export class HttpClient {
       version,
       baseUrl,
       timeoutMs,
+      retries,
     } = args
 
     const headers = {
@@ -56,7 +63,8 @@ export class HttpClient {
 
     this.headers = headers
     this.baseUrl = resolveBaseUrl(baseUrl)
-    this.timeoutMs = timeoutMs ?? DEFAULT_API_TIMEOUT_MS
+    this.timeoutMs = normalizeTimeoutMs(timeoutMs)
+    this.retries = normalizeRetries(retries)
   }
 
   private async get<T>(args: { path: string; query?: Query; timeoutMs?: number; signal?: AbortSignal }): Promise<T> {
@@ -75,6 +83,7 @@ export class HttpClient {
         method: 'GET',
         headers: this.headers,
       }, {
+        retries: this.retries,
         timeoutMs: args.timeoutMs ?? this.timeoutMs,
         signal: args.signal,
       })
@@ -122,6 +131,7 @@ export class HttpClient {
         method: 'DELETE',
         headers: this.headers,
       }, {
+        retries: this.retries,
         timeoutMs: args.timeoutMs ?? this.timeoutMs,
         signal: args.signal,
       })
@@ -239,6 +249,7 @@ export class HttpClient {
         headers,
         body: formattedData ? JSON.stringify(formattedData) : undefined,
       }, {
+        retries: this.retries,
         timeoutMs: timeoutMs ?? this.timeoutMs,
         signal,
       })
@@ -274,11 +285,30 @@ export function createHttpClient(args: {
   baseUrl?: string
   version?: string
   timeoutMs?: number
+  retries?: number
   authorization: {
     apiKey: string
   }
 }): HttpClient {
   return new HttpClient(args)
+}
+
+const normalizeTimeoutMs = (timeoutMs?: number): number => {
+  if (typeof timeoutMs !== 'number' || !Number.isFinite(timeoutMs)) {
+    return DEFAULT_API_TIMEOUT_MS
+  }
+
+  const integerTimeout = Math.trunc(timeoutMs)
+  return Math.min(MAX_API_TIMEOUT_MS, Math.max(1, integerTimeout))
+}
+
+const normalizeRetries = (retries?: number): number => {
+  if (typeof retries !== 'number' || !Number.isFinite(retries)) {
+    return DEFAULT_API_RETRIES
+  }
+
+  const integerRetries = Math.trunc(retries)
+  return Math.min(MAX_API_RETRIES, Math.max(1, integerRetries))
 }
 
 const normalizeBaseUrl = (url: string): string => {
