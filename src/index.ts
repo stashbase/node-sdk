@@ -26,6 +26,20 @@ export type CreateClientOptions =
   | { apiKey: string; scope: 'workspace' }
   | { apiKey: string; scope: 'environment' }
 
+export type WorkspaceProjectContext = {
+  scope: 'workspace'
+  project: string
+  environments: WsEnvironmentsAPI
+  searchSecrets: (options: SearchSecretsOptions) => ReturnType<SecretsAPI['searchSecrets']>
+  inEnvironment: (environment: string) => WorkspaceProjectEnvironmentContext
+}
+
+export type WorkspaceProjectEnvironmentContext = WorkspaceProjectContext & {
+  environment: string
+  secrets: SecretsAPI
+  webhooks: WsWebhooksAPI
+}
+
 /**
  * Creates an SDK object that encapsulates functionality for managing projects, environments, and secrets.
  *
@@ -97,6 +111,44 @@ class WorkspaceClient {
    */
   public webhooks(args: { project: string; environment: string }) {
     return new WsWebhooksAPI(this.client, args.project, args.environment)
+  }
+
+  /**
+   * Binds project/environment context once and returns scoped API helpers.
+   *
+   * @param args - Context arguments.
+   * @param args.project - The project's name or ID.
+   * @param args.environment - Optional environment name or ID.
+   */
+  public withContext(args: { project: string }): WorkspaceProjectContext
+  public withContext(args: {
+    project: string
+    environment: string
+  }): WorkspaceProjectEnvironmentContext
+  public withContext(args: {
+    project: string
+    environment?: string
+  }): WorkspaceProjectContext | WorkspaceProjectEnvironmentContext {
+    const baseContext: WorkspaceProjectContext = {
+      scope: 'workspace',
+      project: args.project,
+      environments: new WsEnvironmentsAPI(this.client, args.project),
+      searchSecrets: (options: SearchSecretsOptions) =>
+        new SecretsAPI(this.client, args.project).searchSecrets(options),
+      inEnvironment: (environment: string) =>
+        this.withContext({ project: args.project, environment }),
+    }
+
+    if (args.environment) {
+      return {
+        ...baseContext,
+        environment: args.environment,
+        secrets: new SecretsAPI(this.client, args.project, args.environment),
+        webhooks: new WsWebhooksAPI(this.client, args.project, args.environment),
+      }
+    }
+
+    return baseContext
   }
 
   /**

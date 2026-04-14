@@ -70,6 +70,17 @@ const { data, error } = await client.environments({ project: 'project-name' }).c
 })
 ```
 
+#### Bind workspace context
+
+```js
+const ctx = client.withContext({
+  project: 'project-name',
+  environment: 'dev',
+})
+
+const { data, error } = await ctx.secrets.list()
+```
+
 #### Load environment
 
 This method will load the environment and inject the secrets into the process.
