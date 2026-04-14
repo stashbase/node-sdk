@@ -30,6 +30,20 @@ For full documentation, please visit [Stashbase Node SDK](https://docs.stashbase
 
 Here are some common usage examples for the Stashbase Node SDK:
 
+### Auto client
+
+Use `createClient` to create a client with explicit scope selection.
+
+```js
+import { createClient } from '@stashbase/node-sdk'
+
+const client = createClient({
+  apiKey: process.env.STASHBASE_API_KEY,
+  scope: 'workspace', // or "environment"
+})
+console.log(client.scope) // "workspace" or "environment"
+```
+
 ### Workspace client
 
 Use workspace client to manage resources in a workspace, you can use Service Account or Personal API key.

@@ -9,6 +9,11 @@ import { getCurrentAuthDetails } from './api/shared/handlers/whoami'
 import { SearchSecretsOptions } from './types/secrets'
 export * from './generate'
 
+export type ClientScope = 'workspace' | 'environment'
+export type CreateClientOptions =
+  | { apiKey: string; scope: 'workspace' }
+  | { apiKey: string; scope: 'environment' }
+
 /**
  * Creates an SDK object that encapsulates functionality for managing projects, environments, and secrets.
  *
@@ -22,7 +27,7 @@ export function createWorkspaceClient(apiKey: string) {
 /** Client for interacting with Stashbase resources using a workspace API key with a given permissions. */
 class WorkspaceClient {
   private client: HttpClient
-  public readonly scope = 'workspace' as const
+  public readonly scope: ClientScope = 'workspace'
 
   constructor(apiKey: string) {
     const client = createHttpClient({
@@ -100,6 +105,23 @@ class WorkspaceClient {
  */
 export function createEnvironmentClient(apiKey: string) {
   return new EnvironmentClient(apiKey)
+}
+
+/**
+ * Creates an SDK client with explicit scope selection.
+ *
+ * This factory does not perform network discovery. API key validity and permissions
+ * are validated by backend endpoints when requests are made.
+ *
+ * @param options - Client creation options.
+ * @returns A workspace or environment client based on requested scope.
+ */
+export function createClient(options: { apiKey: string; scope: 'workspace' }): WorkspaceClient
+export function createClient(options: { apiKey: string; scope: 'environment' }): EnvironmentClient
+export function createClient(options: CreateClientOptions): WorkspaceClient | EnvironmentClient {
+  return options.scope === 'environment'
+    ? new EnvironmentClient(options.apiKey)
+    : new WorkspaceClient(options.apiKey)
 }
 
 export { WorkspaceClient, EnvironmentClient, verifyWebhook }
