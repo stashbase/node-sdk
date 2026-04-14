@@ -1,5 +1,5 @@
-import dotenvExpand from 'dotenv-expand'
 import { printSecretsTable } from '../../../../utils/table'
+import { expandAndInjectEnv } from '../../../../utils/envExpansion'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
 import { EnvironmentNotFoundError } from '../../../../types/errors'
 import {
@@ -73,11 +73,7 @@ async function loadEnvironment(
     {}
   )
 
-  const dotenv = {
-    parsed: secretsObj,
-  }
-
-  dotenvExpand.expand(dotenv)
+  expandAndInjectEnv(secretsObj)
 
   if (verbose) {
     console.log(`\nLoaded environment: ${environment} (${envType})`)
