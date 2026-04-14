@@ -6,8 +6,8 @@ import { toCamelCase, toSnakeCase } from '../utils/serializer'
 declare const __SDK_VERSION__: string
 
 export const DEFAULT_API_BASE_URL = 'https://api.stashbase.dev'
-export const DEFAULT_API_TIMEOUT_MS = 15000
-export const MAX_API_TIMEOUT_MS = 120000
+export const DEFAULT_API_TIMEOUT_MS = 10000
+export const MAX_API_TIMEOUT_MS = 10000
 export const DEFAULT_API_RETRIES = 3
 export const MAX_API_RETRIES = 10
 const VERSION = __SDK_VERSION__
