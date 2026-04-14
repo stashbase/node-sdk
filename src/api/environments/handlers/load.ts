@@ -21,7 +21,7 @@ async function loadEnvironment(
 
   const query: LoadEnvironmentQueryParams = {
     omit: 'description',
-    with_environment: ['name', 'type'].join(','),
+    with_environment: ['name', 'is_production'].join(','),
   }
 
   if (options?.expandRefs) {
