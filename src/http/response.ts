@@ -23,8 +23,14 @@ export class ApiError<T extends string, D = undefined | ApiErrorDetails> impleme
    * @param {T} code - The error code.
    * @param {D} details - Additional details about the error.
    * @param {string} message - A descriptive error message.
+   * @param {string | undefined} requestId - Backend request identifier if provided.
    */
-  constructor(public code: T, public details: D, public message: string) {}
+  constructor(
+    public code: T,
+    public details: D,
+    public message: string,
+    public requestId?: string
+  ) {}
 
   /**
    * Gets the type of the error from the code.

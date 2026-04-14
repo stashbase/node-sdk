@@ -13,6 +13,7 @@ describe('Create environment', () => {
       })
 
     console.log(data)
+    console.log(error)
 
     if (error?.isConflictError()) {
       const code = error.code === 'conflict.environment_already_exists'

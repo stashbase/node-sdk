@@ -30,14 +30,42 @@ export function createApiErrorFromResponse<T>(responseData: unknown) {
     return serverTemporaryUnavailableError
   }
 
+  const getRequestIdFromDetails = (details: unknown): string | undefined => {
+    if (!details || typeof details !== 'object') {
+      return undefined
+    }
+
+    const maybeDetails = details as { requestId?: unknown; request?: { id?: unknown } }
+
+    if (typeof maybeDetails.requestId === 'string') {
+      return maybeDetails.requestId
+    }
+
+    if (maybeDetails.request && typeof maybeDetails.request.id === 'string') {
+      return maybeDetails.request.id
+    }
+
+    return undefined
+  }
+
   if (typeof responseData === 'object') {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const resData = responseData as { error?: ApiError<string, any> }
+    const resData = responseData as {
+      error?: ApiError<string, any> & { requestId?: string }
+      requestId?: string
+    }
+
     if (resData && resData.error) {
+      const requestId =
+        resData.error.requestId ??
+        getRequestIdFromDetails(resData.error.details) ??
+        resData.requestId
+
       const error = new ApiError(
         resData.error.code,
         resData.error.details,
-        resData.error.message
+        resData.error.message,
+        requestId
       ) as T
 
       return error
@@ -51,6 +79,7 @@ export const createApiError = <T extends string, D = undefined | ApiErrorDetails
   code: T
   message: string
   details: D
+  requestId?: string
 }) => {
   // const error: ApiError<T, D> = {
   //   code: args.code,
@@ -62,7 +91,7 @@ export const createApiError = <T extends string, D = undefined | ApiErrorDetails
   //     return type
   //   },
 
-  const error = new ApiError(args.code, args.details, args.message)
+  const error = new ApiError(args.code, args.details, args.message, args.requestId)
   return error
 }
 
