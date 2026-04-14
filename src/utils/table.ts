@@ -1,47 +1,75 @@
-import Table from 'cli-table3'
+const padRight = (value: string, width: number): string => {
+  return value.padEnd(width, ' ')
+}
 
-function printMaskedTable(secrets: Array<{ name: string; value: string }>) {
-  const table = new Table({
-    head: ['Name', 'Value'],
-    // colWidths: [40, 40],
-    wordWrap: true,
-    style: {
-      compact: true,
-      head: ['cyan'],
-    },
+const ANSI_CYAN = '\x1b[36m'
+const ANSI_RESET = '\x1b[39m'
+
+const shouldUseColor = () => {
+  return process.env.NO_COLOR === undefined
+}
+
+const colorHeader = (value: string): string => {
+  return shouldUseColor() ? `${ANSI_CYAN}${value}${ANSI_RESET}` : value
+}
+
+const createTopBorder = (columnWidths: number[]): string => {
+  return `┌${columnWidths.map((width) => '─'.repeat(width + 2)).join('┬')}┐`
+}
+
+const createMiddleBorder = (columnWidths: number[]): string => {
+  return `├${columnWidths.map((width) => '─'.repeat(width + 2)).join('┼')}┤`
+}
+
+const createBottomBorder = (columnWidths: number[]): string => {
+  return `└${columnWidths.map((width) => '─'.repeat(width + 2)).join('┴')}┘`
+}
+
+const createRow = (columns: string[], columnWidths: number[]): string => {
+  const cells = columns.map((column, index) => ` ${padRight(column, columnWidths[index])} `).join('│')
+  return `│${cells}│`
+}
+
+const createHeaderRow = (headers: string[], columnWidths: number[]): string => {
+  const cells = headers
+    .map((header, index) => ` ${colorHeader(padRight(header, columnWidths[index]))} `)
+    .join('│')
+  return `│${cells}│`
+}
+
+const renderTable = (headers: string[], rows: string[][]): string => {
+  const columnWidths = headers.map((header, index) => {
+    const maxRowLength = rows.reduce((max, row) => Math.max(max, (row[index] ?? '').length), 0)
+    return Math.max(header.length, maxRowLength)
   })
 
-  for (const { name, value } of secrets) {
-    const valueLength = value.length
+  const outputRows = [
+    createTopBorder(columnWidths),
+    createHeaderRow(headers, columnWidths),
+    createMiddleBorder(columnWidths),
+  ]
 
-    if (valueLength <= 3) {
-      const maskedValue = '*'.repeat(6)
-      table.push([name, maskedValue])
-    } else {
-      const firstPart = value.slice(0, 3)
-      const secondPart = '*'.repeat(6)
-      table.push([name, `${firstPart}${secondPart}`])
-    }
+  for (const row of rows) {
+    outputRows.push(createRow(row, columnWidths))
   }
 
-  console.log(table.toString())
+  outputRows.push(createBottomBorder(columnWidths))
+
+  return outputRows.join('\n')
+}
+
+function printMaskedTable(secrets: Array<{ name: string; value: string }>) {
+  const rows = secrets.map(({ name, value }) => {
+    const maskedValue = value.length <= 3 ? '*'.repeat(6) : `${value.slice(0, 3)}${'*'.repeat(6)}`
+    return [name, maskedValue]
+  })
+
+  console.log(renderTable(['Name', 'Value'], rows))
 }
 
 function printNameTable(secrets: Array<{ name: string }>) {
-  const table = new Table({
-    head: ['Name'],
-    wordWrap: true,
-    style: {
-      compact: true,
-      head: ['cyan'],
-    },
-  })
-
-  for (const { name } of secrets) {
-    table.push([name])
-  }
-
-  console.log(table.toString())
+  const rows = secrets.map(({ name }) => [name])
+  console.log(renderTable(['Name'], rows))
 }
 
 export const printSecretsTable = {
