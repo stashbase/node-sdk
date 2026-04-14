@@ -47,7 +47,5 @@
     "typescript": "5.9.3",
     "vitest": "4.0.7"
   },
-  "dependencies": {
-    "cli-table3": "0.6.5"
-  }
+  "dependencies": {}
 }
