@@ -48,7 +48,6 @@
     "vitest": "4.0.7"
   },
   "dependencies": {
-    "cli-table3": "0.6.5",
-    "dotenv-expand": "12.0.3"
+    "cli-table3": "0.6.5"
   }
 }
