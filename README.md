@@ -110,6 +110,14 @@ const { error } = await client.environment.load()
 const { data, error } = await client.secrets.list()
 ```
 
+### Type imports
+
+All public SDK types are exported from the package root.
+
+```ts
+import type { Secret, ListSecretsResponse, GenericApiError, SecretErrors } from '@stashbase/node-sdk'
+```
+
 ## License
 
 Stashbase Node SDK is licensed under the [MIT License](https://opensource.org/licenses/MIT).

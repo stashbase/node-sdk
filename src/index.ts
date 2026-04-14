@@ -8,6 +8,18 @@ import { EnvironmentsAPI as WsEnvironmentsAPI } from './api/workspace/environmen
 import { getCurrentAuthDetails } from './api/shared/handlers/whoami'
 import { SearchSecretsOptions } from './types/secrets'
 export * from './generate'
+export * from './types/auth'
+export * from './types/environments'
+export * from './types/pagination'
+export * from './types/projects'
+export * from './types/secrets'
+export * from './types/webhooks'
+export * from './types/errors/index'
+export type * as EnvironmentErrors from './types/errors/environments'
+export type * as ProjectErrors from './types/errors/projects'
+export type * as SecretErrors from './types/errors/secrets'
+export type * as WebhookErrors from './types/errors/webhooks'
+export { ApiError, ApiResponse } from './http/response'
 
 export type ClientScope = 'workspace' | 'environment'
 export type CreateClientOptions =
