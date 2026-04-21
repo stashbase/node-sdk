@@ -92,7 +92,11 @@ const verifyWebhook = (
       return { error: isVerified.error, success: false, event: null }
     }
 
-    if (typeof payload === 'object' && !(payload instanceof Uint8Array) && !Buffer.isBuffer(payload)) {
+    if (
+      typeof payload === 'object' &&
+      !(payload instanceof Uint8Array) &&
+      !Buffer.isBuffer(payload)
+    ) {
       return { error: null, success: true, event: payload as Event }
     }
 
