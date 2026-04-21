@@ -42,6 +42,11 @@ const client = createClient({
   scope: 'workspace', // or "environment"
   timeoutMs: 15000, // optional, hard capped at 120000
   retries: 3, // optional, hard capped at 10
+  hooks: {
+    beforeRequest: ({ method, url }) => console.log('[request]', method, url),
+    afterResponse: ({ response }) => console.log('[response]', response.status),
+    onError: ({ error }) => console.error('[error]', error),
+  }, // optional
 })
 console.log(client.scope) // "workspace" or "environment"
 ```
@@ -61,6 +66,9 @@ console.log(client.scope) // "workspace"
 const client = createWorkspaceClient(process.env.STASHBASE_API_KEY, {
   timeoutMs: 15000, // optional, hard capped at 120000
   retries: 3, // optional, hard capped at 10
+  hooks: {
+    beforeRequest: ({ method, url }) => console.log('[request]', method, url),
+  }, // optional
 })
 ```
 
@@ -114,8 +122,32 @@ console.log(client.scope) // "environment"
 const client = createEnvironmentClient(process.env.STASHBASE_ENV_API_KEY, {
   timeoutMs: 15000, // optional, hard capped at 120000
   retries: 3, // optional, hard capped at 10
+  hooks: {
+    beforeRequest: ({ method, url }) => console.log('[request]', method, url),
+  }, // optional
 })
 ```
+
+### Transport hooks
+
+Hooks can be configured at creation time and updated later at runtime through `client.options.hooks`.
+
+```ts
+const client = createWorkspaceClient(process.env.STASHBASE_API_KEY)
+
+client.options.hooks = {
+  beforeRequest: ({ method, url }) => console.log('[request]', method, url),
+  afterResponse: ({ response }) => console.log('[response]', response.status),
+  onError: ({ error }) => console.error('[error]', error),
+}
+```
+
+Hook behavior contract:
+- `beforeRequest`: runs before each request attempt.
+- `afterResponse`: runs after receiving a response (including non-2xx).
+- `onError`: runs when request processing throws.
+- If `beforeRequest` or `afterResponse` throws, request fails with `HookExecutionError` in `response.error`.
+- If `onError` throws, that error is ignored and the original request error is preserved.
 
 #### Get environment details
 

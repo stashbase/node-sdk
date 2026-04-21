@@ -2,6 +2,7 @@ import EnvironmentClient from './api/environments/api'
 import { ProjectsAPI } from './api/workspace/projects/api'
 import { SecretsAPI } from './api/workspace/secrets/api'
 import { createHttpClient, HttpClient } from './http/client'
+import type { HttpClientHooks } from './http/client'
 import verifyWebhook from './webhooks/verify'
 import { WebhooksAPI as WsWebhooksAPI } from './api/workspace/webhooks/api'
 import { EnvironmentsAPI as WsEnvironmentsAPI } from './api/workspace/environments/api'
@@ -20,6 +21,14 @@ export type * as ProjectErrors from './types/errors/projects'
 export type * as SecretErrors from './types/errors/secrets'
 export type * as WebhookErrors from './types/errors/webhooks'
 export { ApiError, ApiResponse } from './http/response'
+export { HookExecutionError } from './http/client'
+export type {
+  HttpHookName,
+  HttpClientHooks,
+  HttpBeforeRequestHookContext,
+  HttpAfterResponseHookContext,
+  HttpErrorHookContext,
+} from './http/client'
 
 export type ClientScope = 'workspace' | 'environment'
 export type ClientTransportOptions = {
@@ -27,6 +36,12 @@ export type ClientTransportOptions = {
   timeoutMs?: number
   /** Number of request attempts before failing. Hard capped by SDK. */
   retries?: number
+  /** Transport hooks for request/response/error lifecycle. */
+  hooks?: HttpClientHooks
+}
+
+export type ClientRuntimeOptions = {
+  hooks?: HttpClientHooks
 }
 export type CreateClientOptions =
   | ({ apiKey: string; scope: 'workspace' } & ClientTransportOptions)
@@ -61,6 +76,7 @@ export function createWorkspaceClient(apiKey: string, options?: ClientTransportO
 class WorkspaceClient {
   private client: HttpClient
   public readonly scope: ClientScope = 'workspace'
+  public readonly options: ClientRuntimeOptions
 
   constructor(apiKey: string, options?: ClientTransportOptions) {
     const client = createHttpClient({
@@ -70,6 +86,14 @@ class WorkspaceClient {
 
     this.client = client
     this.projects = new ProjectsAPI(this.client)
+    this.options = {}
+
+    Object.defineProperty(this.options, 'hooks', {
+      enumerable: true,
+      configurable: false,
+      get: () => this.client.getHooks(),
+      set: (hooks?: HttpClientHooks) => this.client.setHooks(hooks),
+    })
   }
 
   /** API for interacting with projects. */
@@ -199,6 +223,7 @@ export function createClient(options: CreateClientOptions): WorkspaceClient | En
   const transportOptions: ClientTransportOptions = {
     timeoutMs: options.timeoutMs,
     retries: options.retries,
+    hooks: options.hooks,
   }
 
   return options.scope === 'environment'

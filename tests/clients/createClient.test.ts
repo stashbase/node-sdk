@@ -21,4 +21,22 @@ describe('createClient', () => {
 
     assert.equal(fetchMock.mock.calls.length, 0)
   })
+
+  test('forwards hooks in options for selected scope', () => {
+    const beforeRequest = vi.fn()
+
+    const workspaceClient = createClient({
+      apiKey: 'test-key',
+      scope: 'workspace',
+      hooks: { beforeRequest },
+    })
+    const environmentClient = createClient({
+      apiKey: 'test-key',
+      scope: 'environment',
+      hooks: { beforeRequest },
+    })
+
+    assert.equal(workspaceClient.options.hooks?.beforeRequest, beforeRequest)
+    assert.equal(environmentClient.options.hooks?.beforeRequest, beforeRequest)
+  })
 })

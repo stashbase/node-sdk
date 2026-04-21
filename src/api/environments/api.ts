@@ -1,7 +1,12 @@
 import { loadEnvironment } from './handlers/load'
 import { getEnvironment } from './handlers/get'
 import { deleteEnvironmentSecrets } from './handlers/secrets/delete'
-import { createHttpClient, HttpClient, type HttpClientConfig } from '../../http/client'
+import {
+  createHttpClient,
+  HttpClient,
+  type HttpClientConfig,
+  type HttpClientHooks,
+} from '../../http/client'
 import { listSecrets } from './handlers/secrets/list'
 import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
 import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
@@ -57,18 +62,27 @@ import { getCurrentAuthDetails } from '../shared/handlers/whoami'
 class EnvironmentClient {
   private httpClient: HttpClient
   public readonly scope = 'environment' as const
+  public readonly options: { hooks?: HttpClientHooks }
 
   public readonly secrets: SecretsAPI
   public readonly webhooks: WebhooksAPI
   public readonly environment: EnvironmentsClient
 
-  constructor(apiKey: string, options?: Pick<HttpClientConfig, 'timeoutMs' | 'retries'>) {
+  constructor(apiKey: string, options?: Pick<HttpClientConfig, 'timeoutMs' | 'retries' | 'hooks'>) {
     const httpClient = createHttpClient({
       authorization: { apiKey },
       ...options,
     })
 
     this.httpClient = httpClient
+    this.options = {}
+
+    Object.defineProperty(this.options, 'hooks', {
+      enumerable: true,
+      configurable: false,
+      get: () => this.httpClient.getHooks(),
+      set: (hooks?: HttpClientHooks) => this.httpClient.setHooks(hooks),
+    })
 
     this.secrets = new SecretsAPI(this.httpClient)
     this.webhooks = new WebhooksAPI(this.httpClient)
