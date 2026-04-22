@@ -50,33 +50,12 @@ function isAlphanumericWithHyphensAndUnderscores(inputString: string): boolean {
 
 export const removeOuterNewlines = (str: string) => str.replace(/^\n+|\n+$/g, '')
 
-// TODO: validate max length
 const isValidProjectName = (projectName: string) =>
   projectName.length >= 2 &&
   projectName.length <= 40 &&
   isAlphanumericWithHyphensAndUnderscores(projectName)
 
 const isValidProjectIdentifier = isValidProjectName
-
-//
-
-// function isAlphanumericWithHyphensAndUnderscores(inputString: string): boolean {
-//   const pattern = /[^a-zA-Z0-9-_]/
-//
-//   return !pattern.test(inputString)
-// }
-//
-// function isAlphanumericWithHyphens(inputString: string): boolean {
-//   const pattern = /[^a-zA-Z0-9-]/
-//
-//   return !pattern.test(inputString)
-// }
-//
-// function isAlphanumericWithUnderscores(inputString: string): boolean {
-//   const pattern = /[^a-zA-Z0-9_]/
-//
-//   return !pattern.test(inputString)
-// }
 
 const isValidEnvironmentName = (environmentName: string) =>
   environmentName.length >= 2 &&
@@ -132,19 +111,6 @@ export const validateWebhookIdForMethod = (webhookId: string) => {
     return responseFailure(error)
   }
 }
-
-// export const secretHasSelfReference = (secretName: string, value: string): boolean => {
-//   const regex = /\${(.*?)}/g
-//   const matches = value.matchAll(regex)
-
-//   for (const match of matches) {
-//     if (match[1] === secretName) {
-//       return true
-//     }
-//   }
-
-//   return false
-// }
 
 export const extractAllSecretsReferences = (secretName: string): string[] => {
   const regex = /\${(.*?)}/g
