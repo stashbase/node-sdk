@@ -81,16 +81,6 @@ export const createApiError = <T extends string, D = undefined | ApiErrorDetails
   details: D
   requestId?: string
 }) => {
-  // const error: ApiError<T, D> = {
-  //   code: args.code,
-  //   message: args.message,
-  //   details: args.details,
-  //   getType: () => {
-  //     const splittedCode = args.code.split('.')
-  //     const type = splittedCode[0] as ApiErrorType
-  //     return type
-  //   },
-
   const error = new ApiError(args.code, args.details, args.message, args.requestId)
   return error
 }
