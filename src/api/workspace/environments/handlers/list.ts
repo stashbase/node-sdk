@@ -35,7 +35,7 @@ async function listEnvironments(
   }
 
   if (opts?.order) {
-    query.order = true
+    query.order = opts.order
   }
 
   if (opts?.search) {
