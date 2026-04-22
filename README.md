@@ -7,6 +7,7 @@ The official SDK for [Stashbase](https://stashbase.dev), a secrets management pl
 - Manage projects, environments, and secrets from Node.js
 - Inject secrets into your process environment
 - Simple, promise-based API
+- Zero non-development dependencies (security-focused runtime footprint)
 - And more...
 
 ## Table of Contents
