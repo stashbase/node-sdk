@@ -11,6 +11,7 @@ const packageJson = JSON.parse(
 ) as PackageJson
 
 const sdkVersion = packageJson.version ?? '0.0.0'
+const sdkDevApiUrl = process.env.STASHBASE_SDK_DEV_API_URL ?? ''
 
 export default defineConfig({
   entry: ['src/index.ts'],
@@ -18,5 +19,6 @@ export default defineConfig({
   dts: true,
   define: {
     __SDK_VERSION__: JSON.stringify(sdkVersion),
+    __SDK_DEV_API_URL__: JSON.stringify(sdkDevApiUrl),
   },
 })

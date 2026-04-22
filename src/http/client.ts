@@ -4,6 +4,7 @@ import { responseFailure, responseSuccess } from './response'
 import { toCamelCase, toSnakeCase } from '../utils/serializer'
 
 declare const __SDK_VERSION__: string
+declare const __SDK_DEV_API_URL__: string
 
 export const DEFAULT_API_BASE_URL = 'https://api.stashbase.dev'
 export const DEFAULT_API_TIMEOUT_MS = 10000
@@ -11,8 +12,6 @@ export const MAX_API_TIMEOUT_MS = 10000
 export const DEFAULT_API_RETRIES = 3
 export const MAX_API_RETRIES = 10
 const VERSION = __SDK_VERSION__
-const DEV_API_URL_ENV = 'STASHBASE_SDK_DEV_API_URL'
-const DEV_MODE_ENV = 'STASHBASE_SDK_DEV_MODE'
 
 export type HttpRequestMethod = 'GET' | 'DELETE' | 'POST' | 'PATCH' | 'PUT'
 type Query = Record<string, string | number | boolean>
@@ -455,13 +454,9 @@ const resolveBaseUrl = (baseUrl?: string): string => {
     return normalizeBaseUrl(baseUrl.trim())
   }
 
-  if (typeof process !== 'undefined') {
-    const isDevMode = process.env.NODE_ENV !== 'production' || process.env[DEV_MODE_ENV] === '1'
-    const devUrl = process.env[DEV_API_URL_ENV]
-
-    if (isDevMode && devUrl && devUrl.trim().length > 0) {
-      return normalizeBaseUrl(devUrl)
-    }
+  const devUrl = __SDK_DEV_API_URL__
+  if (typeof devUrl === 'string' && devUrl.trim().length > 0) {
+    return normalizeBaseUrl(devUrl)
   }
 
   return DEFAULT_API_BASE_URL
