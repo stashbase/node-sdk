@@ -48,6 +48,22 @@ export function isAuthError(code?: string): boolean {
   return code.startsWith(ErrorPrefixes.Auth)
 }
 
+export function isRateLimitError(code?: string): boolean {
+  if (!code) {
+    return false
+  }
+
+  return code.startsWith(ErrorPrefixes.RateLimit)
+}
+
+export function isServerError(code?: string): boolean {
+  if (!code) {
+    return false
+  }
+
+  return code.startsWith(ErrorPrefixes.Server)
+}
+
 export function isValidationErrorCode(code: string): code is `validation.${string}` {
   return code.startsWith(ErrorPrefixes.Validation)
 }
