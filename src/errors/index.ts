@@ -51,7 +51,7 @@ export const invalidEnvironmentIdentifierError: ApiError<InvalidEnvironmentIdent
       idExample: 'env_2vKmcBluEENNfFKtXzrHBS',
     },
     message:
-      "Invalid environment identifier. Either a name or Id can be used. The name must be alphanumeric, may include underscores (_) and one hyphen (-) as a separator, and must be between 2 and 40 characters long. The Id must start with the prefix 'env_' followd by 22 alphanumeric characters.",
+      "Invalid environment identifier. Either a name or Id can be used. The name must be alphanumeric, may include underscores (_) and one hyphen (-) as a separator, and must be between 2 and 40 characters long. The Id must start with the prefix 'env_' followed by 22 alphanumeric characters.",
   })
 
 export const invalidProjectIdentifierError: ApiError<InvalidProjectIdentifierErrorCode> =
