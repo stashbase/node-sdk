@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiResponse } from '../../../../http/response'
-import { ListSecretsError as SharedListSecretsError } from '../../../../types/errors/secrets'
+import { ListSecretsErrorCode as SharedListSecretsErrorCode } from '../../../../types/errors/secrets'
 import {
   SecretName,
   ListSecretsOptions,
@@ -8,12 +8,12 @@ import {
   ListSecretsQueryParams,
 } from '../../../../types/secrets'
 
-export type ListSecretsError = SharedListSecretsError
+export type ListSecretsErrorCode = SharedListSecretsErrorCode
 
 async function listSecrets(
   envClient: HttpClient,
   options?: ListSecretsOptions & { only?: SecretName[]; exclude?: SecretName[] }
-): Promise<ApiResponse<ListSecretsResponse, ListSecretsError>> {
+): Promise<ApiResponse<ListSecretsResponse, ListSecretsErrorCode>> {
   const { omit, expandRefs, only, exclude } = options || {}
 
   const queryObj: ListSecretsQueryParams = {}
@@ -45,7 +45,7 @@ async function listSecrets(
 
   const path = '/v1/environment/secrets'
 
-  return envClient.sendApiRequest<ListSecretsResponse, ListSecretsError>({
+  return envClient.sendApiRequest<ListSecretsResponse, ListSecretsErrorCode>({
     method: 'GET',
     path,
     query,

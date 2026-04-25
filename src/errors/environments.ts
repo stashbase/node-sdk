@@ -1,7 +1,8 @@
 import { createApiError } from '.'
-import { EnvironmentDescriptionTooLongError } from '../types/errors/environments'
+import { ApiError } from '../http/response'
+import { EnvironmentDescriptionTooLongErrorCode } from '../types/errors/environments'
 
-export const environmentDescriptionTooLongError: EnvironmentDescriptionTooLongError =
+export const environmentDescriptionTooLongError: ApiError<EnvironmentDescriptionTooLongErrorCode> =
   createApiError({
     code: 'validation.environment_description_too_long',
     message: 'The environment description cannot be longer than 255 characters.',

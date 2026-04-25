@@ -1,6 +1,5 @@
 import fetchWithRetry from './retry'
-import { createApiErrorFromResponse } from '../errors'
-import { responseFailure, responseSuccess } from './response'
+import { responseFailure, responseSuccess, type ApiError } from './response'
 import { toCamelCase, toSnakeCase } from '../utils/serializer'
 
 declare const __SDK_VERSION__: string
@@ -66,6 +65,35 @@ type RequestWithData = {
   data?: RequestData
   timeoutMs?: number
   signal?: AbortSignal
+}
+
+const parseError = (res: unknown): ApiError => {
+  if (res instanceof Error && res.name === 'ServerTemporaryUnavailableError') {
+    return {
+      code: 'server.temporary_unavailable',
+      message: 'API service is temporarily unavailable. Please try again later.',
+    }
+  }
+
+  if (typeof res === 'object' && res !== null && 'error' in res) {
+    const response = res as { error?: { code?: unknown; message?: unknown; hint?: unknown; details?: unknown } }
+    const code = typeof response.error?.code === 'string' ? response.error.code : 'server.connection_failed'
+    const message =
+      typeof response.error?.message === 'string' ? response.error.message : 'Unknown error'
+    const hint = typeof response.error?.hint === 'string' ? response.error.hint : undefined
+
+    return {
+      code,
+      message,
+      hint,
+      details: response.error?.details,
+    }
+  }
+
+  return {
+    code: 'server.connection_failed',
+    message: 'Could not connect to the API server. Please try again later.',
+  }
 }
 
 export class HttpClient {
@@ -314,14 +342,14 @@ export class HttpClient {
     })
   }
 
-  public async sendApiRequest<T = object, E = object>(args: {
+  public async sendApiRequest<T = object, E extends string = string>(args: {
     method: 'GET' | 'DELETE' | 'POST' | 'PATCH' | 'PUT'
     path: string
     data?: { [key: string]: any } | any[]
     query?: Record<string, string | number | boolean>
     timeoutMs?: number
     signal?: AbortSignal
-  }) {
+  }): Promise<import('./response').ApiResponse<T, E>> {
     const { method, path, data, query, timeoutMs, signal } = args
     try {
       let response: T
@@ -340,15 +368,19 @@ export class HttpClient {
       }
 
       const formattedResponse = toCamelCase(response)
-      return responseSuccess(formattedResponse)
+      return responseSuccess<T, E>(formattedResponse as T)
     } catch (error) {
       if (error instanceof HookExecutionError) {
-        return responseFailure(error as E)
+        return responseFailure<T, E>({
+          code: 'server.connection_failed' as E,
+          message: error.message,
+          details: error,
+        })
       }
 
       const formattedError = toCamelCase(error)
-      const apiError = createApiErrorFromResponse<E>(formattedError)
-      return responseFailure(apiError)
+      const apiError = parseError(formattedError) as ApiError<E>
+      return responseFailure<T, E>(apiError)
     }
   }
 

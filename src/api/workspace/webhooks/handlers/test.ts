@@ -1,20 +1,20 @@
 import { ApiResponse } from '../../../../http/response'
 import { TestWebhookResponse } from '../../../../types/webhooks'
-import { EnvironmentContextError } from '../../../../types/errors'
+import { EnvironmentContextErrorCode } from '../../../../types/errors'
 import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/arguments'
-import { GetWebhookError as SharedGetWebhookError } from '../../../../types/errors/webhooks'
+import { GetWebhookErrorCode as SharedGetWebhookErrorCode } from '../../../../types/errors/webhooks'
 
 export type TestWebhookArgs = SingleWebhookProjectEnvHandlerArgs<undefined>
 
-export type TestWebhookError = SharedGetWebhookError | EnvironmentContextError
+export type TestWebhookErrorCode = SharedGetWebhookErrorCode | EnvironmentContextErrorCode
 
 async function testWebhook(
   args: TestWebhookArgs
-): Promise<ApiResponse<TestWebhookResponse, TestWebhookError>> {
+): Promise<ApiResponse<TestWebhookResponse, TestWebhookErrorCode>> {
   const { client, project, environment, webhookId } = args
   const path = `/v1/projects/${project}/environments/${environment}/webhooks/${webhookId}/test`
 
-  return await client.sendApiRequest<TestWebhookResponse, TestWebhookError>({
+  return await client.sendApiRequest<TestWebhookResponse, TestWebhookErrorCode>({
     method: 'POST',
     path,
   })

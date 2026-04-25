@@ -1,21 +1,14 @@
-import { assert, describe, test } from 'vitest'
+import { test } from 'vitest'
 import { createWorkspaceClient } from '../../../src'
 
-describe('Get environment', () => {
-  test('OK', async () => {
-    const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
+test('Get environment', async () => {
+  const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
+  const { data, error } = await client.environments({ project: 'hero-hub' }).get('vercel')
 
-    const { data, error } = await client.environments({ project: 'hero-hub' }).get('vercel')
+  if (error?.code === 'rate_limit.too_many_requests') {
+    console.log(true)
+  }
 
-    const type = error?.getType()
-
-    if (error) {
-      if (error.isRateLimitError() === true) {
-        console.log(error.code === 'rate_limit.too_many_requests')
-      }
-    }
-
-    console.log(data)
-    console.log(error)
-  })
+  console.log(data)
+  console.log(error)
 })

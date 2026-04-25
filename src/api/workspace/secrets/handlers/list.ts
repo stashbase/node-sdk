@@ -5,10 +5,10 @@ import {
   ListSecretsQueryParams,
 } from '../../../../types/secrets'
 import { ApiResponse } from '../../../../http/response'
-import { EnvironmentContextError, GenericApiError } from '../../../../types/errors'
+import { EnvironmentContextErrorCode, GenericApiErrorCode } from '../../../../types/errors'
 import { ProjectEnvHandlerArgs } from '../../../../types/arguments'
 
-type ListSecretsError = GenericApiError | EnvironmentContextError
+type ListSecretsErrorCode = GenericApiErrorCode | EnvironmentContextErrorCode
 type ListSecretsBaseArgs = ProjectEnvHandlerArgs<{ options?: ListSecretsOptions }>
 
 export type ListSecretsArgs = ListSecretsBaseArgs
@@ -25,7 +25,7 @@ export type ListExcludeSecretsArgs = ListSecretsBaseArgs & {
 
 async function listSecrets(
   args: ListSecretsBaseArgs & { only?: SecretName[]; exclude?: SecretName[] }
-): Promise<ApiResponse<ListSecretsResponse, ListSecretsError>> {
+): Promise<ApiResponse<ListSecretsResponse, ListSecretsErrorCode>> {
   const { client, project, environment } = args
   const { only, exclude } = args
 
@@ -54,7 +54,7 @@ async function listSecrets(
 
   const path = `/v1/projects/${project}/environments/${environment}/secrets`
 
-  return await client.sendApiRequest<ListSecretsResponse, ListSecretsError>({
+  return await client.sendApiRequest<ListSecretsResponse, ListSecretsErrorCode>({
     method: 'GET',
     path,
     query,

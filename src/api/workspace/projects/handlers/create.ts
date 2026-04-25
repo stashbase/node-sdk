@@ -1,22 +1,22 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiResponse } from '../../../../http/response'
 import {
-  InvalidProjectNameError,
-  ProjectAlreadyExistsError,
-  ProjectDescriptionTooLongError,
-  ProjectLimitReachedError,
-  ProjectNameUsesIdFormatError,
+  InvalidProjectNameErrorCode,
+  ProjectAlreadyExistsErrorCode,
+  ProjectDescriptionTooLongErrorCode,
+  ProjectLimitReachedErrorCode,
+  ProjectNameUsesIdFormatErrorCode,
 } from '../../../../types/errors/projects'
-import { GenericApiError } from '../../../../types/errors'
+import { GenericApiErrorCode } from '../../../../types/errors'
 import { CreateProjectResponse } from '../../../../types/projects'
 
-type CreateProjectError =
-  | GenericApiError
-  | InvalidProjectNameError
-  | ProjectDescriptionTooLongError
-  | ProjectNameUsesIdFormatError
-  | ProjectAlreadyExistsError
-  | ProjectLimitReachedError
+type CreateProjectErrorCode =
+  | GenericApiErrorCode
+  | InvalidProjectNameErrorCode
+  | ProjectDescriptionTooLongErrorCode
+  | ProjectNameUsesIdFormatErrorCode
+  | ProjectAlreadyExistsErrorCode
+  | ProjectLimitReachedErrorCode
 
 export type CreateProjectData = {
   name: string
@@ -26,8 +26,8 @@ export type CreateProjectData = {
 export async function createProject(
   envClient: HttpClient,
   data: CreateProjectData
-): Promise<ApiResponse<CreateProjectResponse, CreateProjectError>> {
-  return await envClient.sendApiRequest<CreateProjectResponse, CreateProjectError>({
+): Promise<ApiResponse<CreateProjectResponse, CreateProjectErrorCode>> {
+  return await envClient.sendApiRequest<CreateProjectResponse, CreateProjectErrorCode>({
     method: 'POST',
     path: '/v1/projects',
     data,

@@ -1,7 +1,7 @@
 import { HttpClient } from '../../../../http/client'
 import { AtLeastOne } from '../../../../types/util'
 import { SecretName, UpdateSecretsResponse } from '../../../../types/secrets'
-import { UpdateSecretsError } from '../../../../types/errors/secrets'
+import { UpdateSecretsErrorCode } from '../../../../types/errors/secrets'
 import { ApiResponse } from '../../../../http/response'
 
 export type UpdateSecretsData = Array<
@@ -17,8 +17,8 @@ export type UpdateSecretsData = Array<
 async function updateSecrets(
   envClient: HttpClient,
   data: UpdateSecretsData
-): Promise<ApiResponse<UpdateSecretsResponse, UpdateSecretsError>> {
-  return await envClient.sendApiRequest<UpdateSecretsResponse, UpdateSecretsError>({
+): Promise<ApiResponse<UpdateSecretsResponse, UpdateSecretsErrorCode>> {
+  return await envClient.sendApiRequest<UpdateSecretsResponse, UpdateSecretsErrorCode>({
     method: 'PATCH',
     path: '/v1/environment/secrets',
     data,

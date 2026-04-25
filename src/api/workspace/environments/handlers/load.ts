@@ -1,21 +1,21 @@
 import { printSecretsTable } from '../../../../utils/table'
 import { expandAndInjectEnv } from '../../../../utils/envExpansion'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../../http/response'
-import { EnvironmentNotFoundError } from '../../../../types/errors'
+import { EnvironmentNotFoundErrorCode } from '../../../../types/errors'
 import {
   LoadEnvironmentOptions,
   LoadEnvironmentQueryParams,
   LoadEnvironmentResponse,
 } from '../../../../types/environments'
 import { SingleEnvironmentHandlerArgs } from '../../../../types/arguments'
-import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
-import { ProjectContextError } from '../../../../types/errors'
+import { InvalidEnvironmentIdentifierErrorCode } from '../../../../types/errors/environments'
+import { ProjectContextErrorCode } from '../../../../types/errors'
 import { SecretName } from '../../../../types/secrets'
 
-type LoadEnvironmentError =
-  | ProjectContextError
-  | EnvironmentNotFoundError
-  | InvalidEnvironmentIdentifierError
+type LoadEnvironmentErrorCode =
+  | ProjectContextErrorCode
+  | EnvironmentNotFoundErrorCode
+  | InvalidEnvironmentIdentifierErrorCode
 
 export type LoadEnvironmentArgs = SingleEnvironmentHandlerArgs<{
   options?: LoadEnvironmentOptions
@@ -23,7 +23,7 @@ export type LoadEnvironmentArgs = SingleEnvironmentHandlerArgs<{
 
 async function loadEnvironment(
   args: LoadEnvironmentArgs
-): Promise<ApiResponse<null, LoadEnvironmentError>> {
+): Promise<ApiResponse<null, LoadEnvironmentErrorCode>> {
   const { client, project, environment } = args
   const verbose = args?.options?.verbose === true
 
@@ -38,7 +38,7 @@ async function loadEnvironment(
 
   const { data, error } = await client.sendApiRequest<
     LoadEnvironmentResponse,
-    LoadEnvironmentError
+    LoadEnvironmentErrorCode
   >({
     method: 'GET',
     path: `/v1/projects/${project}/environments/${environment}/secrets`,
@@ -47,6 +47,13 @@ async function loadEnvironment(
 
   if (error) {
     return responseFailure(error)
+  }
+
+  if (!data) {
+    return responseFailure({
+      code: 'server.connection_failed',
+      message: 'Could not load environment data.',
+    })
   }
 
   const {

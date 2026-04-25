@@ -13,13 +13,6 @@ test('Create new secrets (add them to environment)', async () => {
   ])
   if (error) {
     const { code } = error
-    if (error.code === 'access.unsupported_api_key_type') {
-      console.log('Supported api keys', error.details?.supportedApiKeyTypes)
-    } else if (error.code === 'access.missing_permission') {
-      console.log('Required permmissions', error.details?.requiredPermissions)
-    } else if (error.code === 'auth.expired_api_key') {
-      console.log('Expired api key', error.details?.expiredAt)
-    }
     console.log('Error: ', error)
     console.log(code)
   } else {

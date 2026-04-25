@@ -1,14 +1,14 @@
 import { HttpClient } from '../../../http/client'
 import { ApiResponse } from '../../../http/response'
-import { GenericApiError } from '../../../types/errors'
+import { GenericApiErrorCode } from '../../../types/errors'
 import { EnvironmentWithProject } from '../../../types/environments'
 
-type GetEnvironmentError = GenericApiError
+type GetEnvironmentErrorCode = GenericApiErrorCode
 
 async function getEnvironment(
   client: HttpClient
-): Promise<ApiResponse<EnvironmentWithProject, GetEnvironmentError>> {
-  return await client.sendApiRequest<EnvironmentWithProject, GetEnvironmentError>({
+): Promise<ApiResponse<EnvironmentWithProject, GetEnvironmentErrorCode>> {
+  return await client.sendApiRequest<EnvironmentWithProject, GetEnvironmentErrorCode>({
     method: 'GET',
     path: '/v1/environment',
   })

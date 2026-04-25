@@ -1,19 +1,19 @@
 import { ApiResponse } from '../../../../http/response'
-import { EnvironmentNotFoundError, ProjectContextError } from '../../../../types/errors'
+import { EnvironmentNotFoundErrorCode, ProjectContextErrorCode } from '../../../../types/errors'
 import { Environment } from '../../../../types/environments'
 import { SingleEnvironmentHandlerArgs } from '../../../../types/arguments'
-import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
+import { InvalidEnvironmentIdentifierErrorCode } from '../../../../types/errors/environments'
 
 export type GetEnvironmentArgs = SingleEnvironmentHandlerArgs<undefined>
 
-type GetEnvironmentError =
-  | ProjectContextError
-  | EnvironmentNotFoundError
-  | InvalidEnvironmentIdentifierError
+type GetEnvironmentErrorCode =
+  | ProjectContextErrorCode
+  | EnvironmentNotFoundErrorCode
+  | InvalidEnvironmentIdentifierErrorCode
 
 async function getEnvironment(
   args: GetEnvironmentArgs
-): Promise<ApiResponse<Environment, GetEnvironmentError>> {
+): Promise<ApiResponse<Environment, GetEnvironmentErrorCode>> {
   const { client, project, environment } = args
   const path = `/v1/projects/${project}/environments/${environment}`
 

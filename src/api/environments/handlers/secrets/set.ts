@@ -1,6 +1,6 @@
 import { HttpClient } from '../../../../http/client'
 import { SetSecretsResponse } from '../../../../types/secrets'
-import { SetSecretsError } from '../../../../types/errors/secrets'
+import { SetSecretsErrorCode } from '../../../../types/errors/secrets'
 import { ApiResponse } from '../../../../http/response'
 import { SecretName } from '../../../../types/secrets'
 
@@ -13,8 +13,8 @@ export type SetSecretsData = Array<{
 async function setSecrets(
   envClient: HttpClient,
   data: SetSecretsData
-): Promise<ApiResponse<SetSecretsResponse, SetSecretsError>> {
-  return await envClient.sendApiRequest<SetSecretsResponse, SetSecretsError>({
+): Promise<ApiResponse<SetSecretsResponse, SetSecretsErrorCode>> {
+  return await envClient.sendApiRequest<SetSecretsResponse, SetSecretsErrorCode>({
     method: 'PUT',
     path: '/v1/environment/secrets',
     data,

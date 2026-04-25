@@ -1,127 +1,24 @@
-import { ApiError, ApiErrorDetails } from '../../http/response'
-import { InvalidEnvironmentIdentifierError } from './environments'
-import { InvalidProjectIdentifierError } from './projects'
+export type GlobalErrorCode =
+  | 'auth.unauthorized'
+  | 'auth.expired_api_key'
+  | 'rate_limit.too_many_requests'
+  | 'server.internal_error'
+  | 'server.temporary_unavailable'
 
-export type AuthErrorCodePrefix = 'auth'
-export type AccessErrorCodePrefix = 'access'
-export type ResourceErrorCodePrefix = 'resource'
-export type ValidationErrorCodePrefix = 'validation'
-export type ConflictErrorCodePrefix = 'conflict'
-export type QuotaLimitErrorCodePrefix = 'quota'
-export type RateLimitErrorCodePrefix = 'rate_limit'
-export type ServerErrorCodePrefix = 'server'
+export type SdkErrorCode = 'server.connection_failed'
 
-type ApiErrorDetailsGenericType = undefined | ApiErrorDetails
+export type GenericApiErrorCode = GlobalErrorCode | SdkErrorCode
 
-export type ApiErrorType =
-  | AuthErrorCodePrefix
-  | AccessErrorCodePrefix
-  | ResourceErrorCodePrefix
-  | ValidationErrorCodePrefix
-  | ConflictErrorCodePrefix
-  | QuotaLimitErrorCodePrefix
-  | RateLimitErrorCodePrefix
-  | ServerErrorCodePrefix
+export type MissingPropertiesToUpdateErrorCode = 'validation.missing_properties_to_update'
+export type ProjectNotFoundErrorCode = 'resource.project_not_found'
+export type EnvironmentNotFoundErrorCode = 'resource.environment_not_found'
 
-export type SeverApiError<T extends string, D = ApiErrorDetailsGenericType> = ApiError<
-  `${ServerErrorCodePrefix}.${T}`,
-  D
->
+export type ProjectContextErrorCode =
+  | GenericApiErrorCode
+  | ProjectNotFoundErrorCode
+  | 'validation.invalid_project_identifier'
 
-export type AuthApiError<T extends string, D = ApiErrorDetailsGenericType> = ApiError<
-  `${AuthErrorCodePrefix}.${T}`,
-  D
->
-
-export type AccessApiError<T extends string, D = ApiErrorDetailsGenericType> = ApiError<
-  `${AccessErrorCodePrefix}.${T}`,
-  D
->
-
-export type ResourceApiError<T extends string, D = ApiErrorDetailsGenericType> = ApiError<
-  `${ResourceErrorCodePrefix}.${T}`,
-  D
->
-
-export type ValidationApiError<T extends string, D = ApiErrorDetailsGenericType> = ApiError<
-  `${ValidationErrorCodePrefix}.${T}`,
-  D
->
-
-export type ConflictApiError<T extends string, D = ApiErrorDetailsGenericType> = ApiError<
-  `${ConflictErrorCodePrefix}.${T}`,
-  D
->
-
-export type QuotaLimitApiError<T extends string, D = ApiErrorDetailsGenericType> = ApiError<
-  `${QuotaLimitErrorCodePrefix}.${T}`,
-  D
->
-export type RateLimitApiError<T extends string, D = ApiErrorDetailsGenericType> = ApiError<
-  `${RateLimitErrorCodePrefix}.${T}`,
-  D
->
-
-export type GenericApiError =
-  | UnauthorizedApiError
-  | TooManyRequestsApiError
-  | UnsupportedApiKeyTypeError
-  | ExpiredApiKeyError
-  | MissingPermissionError
-  | BadRequestError
-  | InternalServerError
-  | ConnectionFailedError
-  | ServerTemporaryUnavailableError
-
-type MissingPermissionError = AccessApiError<
-  'missing_permission',
-  {
-    requiredPermissions?: string[]
-    userWorkspaceRole?: {
-      current: string
-      allowed: string[]
-    }
-    projectRole?: {
-      current: string
-      allowed: string[]
-    }
-  }
->
-
-type UnsupportedApiKeyTypeError = AccessApiError<
-  'unsupported_api_key_type',
-  { supportedApiKeyTypes: string[] }
->
-type ExpiredApiKeyError = AuthApiError<'expired_api_key', { expiredAt: string }>
-
-export type TooManyRequestsApiError = RateLimitApiError<
-  'too_many_requests',
-  { retryAfter: { seconds: number; unixTimestamp: number } }
->
-type UnauthorizedApiError = AuthApiError<'unauthorized', undefined>
-
-type BadRequestError = ValidationApiError<'bad_request', Record<string, unknown>>
-
-type InternalServerError = SeverApiError<'internal_error', { requestId: string }>
-export type ServerTemporaryUnavailableError = SeverApiError<'temporary_unavailable', undefined>
-
-export type ConnectionFailedError = SeverApiError<'connection_failed', undefined>
-export type ProjectNotFoundError = ResourceApiError<'project_not_found', undefined>
-export type EnvironmentNotFoundError = ResourceApiError<'environment_not_found', undefined>
-
-export type MissingPropertiesToUpdateError = ValidationApiError<
-  'missing_properties_to_update',
-  {
-    possibleProperties: string[]
-  }
->
-
-export type ProjectContextError =
-  | GenericApiError
-  | ProjectNotFoundError
-  | InvalidProjectIdentifierError
-
-export type EnvironmentContextError =
-  | ProjectContextError
-  | EnvironmentNotFoundError
-  | InvalidEnvironmentIdentifierError
+export type EnvironmentContextErrorCode =
+  | ProjectContextErrorCode
+  | EnvironmentNotFoundErrorCode
+  | 'validation.invalid_environment_identifier'

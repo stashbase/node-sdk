@@ -1,33 +1,36 @@
 import { ApiError } from '../http/response'
 import {
-  DuplicateNewSecretNamesError,
-  DuplicateSecretsNamesError,
-  InvalidNewSecretNamesError,
-  InvalidSecretNameError,
-  InvalidSecretNamesError,
-  MissingPropertiesToUpdateError,
-  NewSecretNamesSameAsNamesError,
-  NoDataProvidedError,
-  SearchRequiresNameOrValueError,
-  SearchSecretNameAndValueMutuallyExclusiveError,
-  SecretCommentsTooLongError,
-  SecretValuesTooLongError,
-  SecretsErrorDetails,
+  DuplicateNewSecretNamesErrorCode,
+  DuplicateSecretsNamesErrorCode,
+  InvalidNewSecretNamesErrorCode,
+  InvalidSecretNameErrorCode,
+  MissingPropertiesToUpdateErrorCode,
+  NewSecretNamesSameAsNamesErrorCode,
+  NoDataProvidedErrorCode,
+  SearchRequiresNameOrValueErrorCode,
+  SearchSecretNameAndValueMutuallyExclusiveErrorCode,
+  SecretCommentsTooLongErrorCode,
+  SecretValuesTooLongErrorCode,
+  InvalidSecretNamesErrorCode,
 } from '../types/errors/secrets'
 import { SECRET_COMMENT_MAX_LENGTH, SECRET_VALUE_MAX_LENGTH } from '../utils/inputValidation'
 
-export const createSecretsError = <T extends string, D = undefined | SecretsErrorDetails>(args: {
-  code: T
+const createSecretsError = <TCode extends string>(args: {
+  code: TCode
   message: string
-  details: D
-}) => {
-  return new ApiError(args.code, args.details, args.message)
+  details?: unknown
+}): ApiError<TCode> => {
+  return {
+    code: args.code,
+    details: args.details,
+    message: args.message,
+  }
 }
 
 export const secretNameFormatErrorMessage =
   'Secret names cannot start with a digit, only uppercase alphanumeric characters and underscores allowed, min 2 and max 255 characters.'
 
-export const invalidSecretNamesError = (secretNames: Array<string>): InvalidSecretNamesError =>
+export const invalidSecretNamesError = (secretNames: Array<string>): ApiError<InvalidSecretNamesErrorCode> =>
   createSecretsError({
     code: 'validation.invalid_secret_names',
     message: secretNameFormatErrorMessage,
@@ -36,17 +39,18 @@ export const invalidSecretNamesError = (secretNames: Array<string>): InvalidSecr
     },
   })
 
-export const invalidSecretNameError = (): InvalidSecretNameError =>
+export const invalidSecretNameError = (): ApiError<InvalidSecretNameErrorCode> =>
   createSecretsError({
     code: 'validation.invalid_secret_name',
     message: secretNameFormatErrorMessage,
-    details: undefined,
   })
 
-export const duplicateSecretNamesError = (secretNames: Array<string>): DuplicateSecretsNamesError =>
+export const duplicateSecretNamesError = (
+  secretNames: Array<string>
+): ApiError<DuplicateSecretsNamesErrorCode> =>
   createSecretsError({
     code: 'validation.duplicate_secret_names',
-    message: `One or more secrets with the same value of property 'name' provided in the request.`,
+    message: "One or more secrets with the same value of property 'name' provided in the request.",
     details: {
       secretNames,
     },
@@ -54,10 +58,10 @@ export const duplicateSecretNamesError = (secretNames: Array<string>): Duplicate
 
 export const duplicateNewSecretNamesError = (
   secretNames: Array<string>
-): DuplicateNewSecretNamesError =>
+): ApiError<DuplicateNewSecretNamesErrorCode> =>
   createSecretsError({
     code: 'validation.duplicate_new_secret_names',
-    message: `One or more secrets with the same value of property 'newName' provided in the request.`,
+    message: "One or more secrets with the same value of property 'newName' provided in the request.",
     details: {
       secretNames,
     },
@@ -65,7 +69,7 @@ export const duplicateNewSecretNamesError = (
 
 export const missingPropertiesToUpdateError = (
   secretNames: Array<string>
-): MissingPropertiesToUpdateError =>
+): ApiError<MissingPropertiesToUpdateErrorCode> =>
   createSecretsError({
     code: 'validation.missing_properties_to_update',
     message: 'At least one property to update must be provided.',
@@ -76,7 +80,7 @@ export const missingPropertiesToUpdateError = (
 
 export const invalidNewSecretNamesError = (
   secretNames: Array<string>
-): InvalidNewSecretNamesError =>
+): ApiError<InvalidNewSecretNamesErrorCode> =>
   createSecretsError({
     code: 'validation.invalid_new_secret_names',
     message: secretNameFormatErrorMessage,
@@ -87,7 +91,7 @@ export const invalidNewSecretNamesError = (
 
 export const newSecretNamesSameAsNamesError = (
   secretNames: Array<string>
-): NewSecretNamesSameAsNamesError =>
+): ApiError<NewSecretNamesSameAsNamesErrorCode> =>
   createSecretsError({
     code: 'validation.new_secret_names_same_as_names',
     message:
@@ -99,7 +103,7 @@ export const newSecretNamesSameAsNamesError = (
 
 export const secretCommentsTooLongError = (
   secretNames: Array<string>
-): SecretCommentsTooLongError =>
+): ApiError<SecretCommentsTooLongErrorCode> =>
   createSecretsError({
     code: 'validation.secret_comments_too_long',
     message: `One or more secret comments are too long. Comment cannot be longer than ${SECRET_COMMENT_MAX_LENGTH} characters after formatting.`,
@@ -108,7 +112,9 @@ export const secretCommentsTooLongError = (
     },
   })
 
-export const secretValuesTooLongError = (secretNames: Array<string>): SecretValuesTooLongError =>
+export const secretValuesTooLongError = (
+  secretNames: Array<string>
+): ApiError<SecretValuesTooLongErrorCode> =>
   createSecretsError({
     code: 'validation.secret_values_too_long',
     message: `One or more secret values are too long. Secret value cannot be longer than ${SECRET_VALUE_MAX_LENGTH} characters.`,
@@ -117,16 +123,15 @@ export const secretValuesTooLongError = (secretNames: Array<string>): SecretValu
     },
   })
 
-export const noDataProvidedError = (): NoDataProvidedError =>
+export const noDataProvidedError = (): ApiError<NoDataProvidedErrorCode> =>
   createSecretsError({
-    details: undefined,
     code: 'validation.no_data_provided',
     message: 'At least one data item must be provided.',
   })
 
 export const searchRequiresNameOrValueError = (
   requiredQueryParamsAnyOf: string[]
-): SearchRequiresNameOrValueError =>
+): ApiError<SearchRequiresNameOrValueErrorCode> =>
   createSecretsError({
     code: 'validation.search_requires_name_or_value',
     message: "Search requires at least one query parameter: provide 'name' or 'value'.",
@@ -136,9 +141,8 @@ export const searchRequiresNameOrValueError = (
   })
 
 export const searchSecretNameAndValueMutuallyExclusiveError =
-  (): SearchSecretNameAndValueMutuallyExclusiveError =>
+  (): ApiError<SearchSecretNameAndValueMutuallyExclusiveErrorCode> =>
     createSecretsError({
-      details: undefined,
       code: 'validation.search_secret_name_and_value_mutually_exclusive',
       message: "Only one of 'name' or 'value' query parameter can be provided.",
     })

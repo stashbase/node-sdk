@@ -1,10 +1,10 @@
 import { ApiResponse } from '../../../../http/response'
 import { DeleteSecretsResponse, SecretName } from '../../../../types/secrets'
-import { EnvironmentContextError } from '../../../../types/errors'
-import { DeleteSecretsError as SharedDeleteSecretsError } from '../../../../types/errors/secrets'
+import { EnvironmentContextErrorCode } from '../../../../types/errors'
+import { DeleteSecretsErrorCode as SharedDeleteSecretsErrorCode } from '../../../../types/errors/secrets'
 import { ProjectEnvHandlerArgs } from '../../../../types/arguments'
 
-type DeleteSecretsError = SharedDeleteSecretsError | EnvironmentContextError
+type DeleteSecretsErrorCode = SharedDeleteSecretsErrorCode | EnvironmentContextErrorCode
 
 export type DeleteSecretsArgs = ProjectEnvHandlerArgs<{
   names: Array<SecretName>
@@ -12,11 +12,11 @@ export type DeleteSecretsArgs = ProjectEnvHandlerArgs<{
 
 async function deleteSecrets(
   args: DeleteSecretsArgs
-): Promise<ApiResponse<DeleteSecretsResponse, DeleteSecretsError>> {
+): Promise<ApiResponse<DeleteSecretsResponse, DeleteSecretsErrorCode>> {
   const { client, project, environment, names } = args
   const path = `/v1/projects/${project}/environments/${environment}/secrets/delete`
 
-  return await client.sendApiRequest<DeleteSecretsResponse, DeleteSecretsError>({
+  return await client.sendApiRequest<DeleteSecretsResponse, DeleteSecretsErrorCode>({
     method: 'POST',
     path,
     data: names,

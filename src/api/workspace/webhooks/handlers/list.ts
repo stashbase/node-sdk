@@ -1,21 +1,21 @@
 import { ApiResponse } from '../../../../http/response'
 import { ListWebhooksResponse } from '../../../../types/webhooks'
-import { EnvironmentContextError, ProjectContextError } from '../../../../types/errors'
+import { EnvironmentContextErrorCode, ProjectContextErrorCode } from '../../../../types/errors'
 import { ProjectEnvHandlerArgs } from '../../../../types/arguments'
-import { InvalidWebhookIdError } from '../../../../types/errors/webhooks'
+import { InvalidWebhookIdErrorCode } from '../../../../types/errors/webhooks'
 
-export type ListWebhooksError =
-  | ProjectContextError
-  | EnvironmentContextError
-  | InvalidWebhookIdError
+export type ListWebhooksErrorCode =
+  | ProjectContextErrorCode
+  | EnvironmentContextErrorCode
+  | InvalidWebhookIdErrorCode
 
 async function listWebhooks(
   args: ProjectEnvHandlerArgs<undefined>
-): Promise<ApiResponse<ListWebhooksResponse, ListWebhooksError>> {
+): Promise<ApiResponse<ListWebhooksResponse, ListWebhooksErrorCode>> {
   const { client, project, environment } = args
   const path = `/v1/projects/${project}/environments/${environment}/webhooks`
 
-  return await client.sendApiRequest<ListWebhooksResponse, ListWebhooksError>({
+  return await client.sendApiRequest<ListWebhooksResponse, ListWebhooksErrorCode>({
     method: 'GET',
     path,
   })

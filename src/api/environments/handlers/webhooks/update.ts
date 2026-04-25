@@ -1,7 +1,7 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiResponse } from '../../../../http/response'
 import { SingleWebhookArgs } from '../../../../types/arguments'
-import { UpdateWebhookError } from '../../../../types/errors/webhooks'
+import { UpdateWebhookErrorCode } from '../../../../types/errors/webhooks'
 import { UpdateWebhookData } from '../../../../types/webhooks'
 
 export type UpdateWebhookArgs = SingleWebhookArgs<{
@@ -12,10 +12,10 @@ export type UpdateWebhookArgs = SingleWebhookArgs<{
 async function updateWebhook(
   envClient: HttpClient,
   args: UpdateWebhookArgs
-): Promise<ApiResponse<null, UpdateWebhookError>> {
+): Promise<ApiResponse<null, UpdateWebhookErrorCode>> {
   const { webhookId, data } = args
 
-  return await envClient.sendApiRequest<null, UpdateWebhookError>({
+  return await envClient.sendApiRequest<null, UpdateWebhookErrorCode>({
     method: 'PATCH',
     path: `/v1/environment/webhooks/${webhookId}`,
     data,

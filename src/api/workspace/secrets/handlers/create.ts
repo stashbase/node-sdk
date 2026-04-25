@@ -4,11 +4,11 @@ import {
   CreateSecretsResponse,
 } from '../../../../types/secrets'
 import { ApiResponse } from '../../../../http/response'
-import { EnvironmentContextError } from '../../../../types/errors'
-import { CreateSecretsError as SharedCreateSecretsError } from '../../../../types/errors/secrets'
+import { EnvironmentContextErrorCode } from '../../../../types/errors'
+import { CreateSecretsErrorCode as SharedCreateSecretsErrorCode } from '../../../../types/errors/secrets'
 import { ProjectEnvHandlerArgs } from '../../../../types/arguments'
 
-type CreateSecretsError = SharedCreateSecretsError | EnvironmentContextError
+type CreateSecretsErrorCode = SharedCreateSecretsErrorCode | EnvironmentContextErrorCode
 
 export type CreateSecretsArgs = ProjectEnvHandlerArgs<{
   data: CreateSecretsItem[]
@@ -16,11 +16,11 @@ export type CreateSecretsArgs = ProjectEnvHandlerArgs<{
 
 async function createSecrets(
   args: CreateSecretsArgs
-): Promise<ApiResponse<CreateSecretsResponse, CreateSecretsError>> {
+): Promise<ApiResponse<CreateSecretsResponse, CreateSecretsErrorCode>> {
   const { client, project, environment, data } = args
   const path = `/v1/projects/${project}/environments/${environment}/secrets`
 
-  return await client.sendApiRequest<CreateSecretsResponse, CreateSecretsError>({
+  return await client.sendApiRequest<CreateSecretsResponse, CreateSecretsErrorCode>({
     method: 'POST',
     path,
     data,

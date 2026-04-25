@@ -1,13 +1,13 @@
 import { HttpClient } from '../../../../http/client'
 import { CreateWebhookData, CreateWebhookResponse } from '../../../../types/webhooks'
-import { CreateWebhookError } from '../../../../types/errors/webhooks'
+import { CreateWebhookErrorCode } from '../../../../types/errors/webhooks'
 import { ApiResponse } from '../../../../http/response'
 
 async function createWebhook(
   envClient: HttpClient,
   data: CreateWebhookData
-): Promise<ApiResponse<CreateWebhookResponse, CreateWebhookError>> {
-  return await envClient.sendApiRequest<CreateWebhookResponse, CreateWebhookError>({
+): Promise<ApiResponse<CreateWebhookResponse, CreateWebhookErrorCode>> {
+  return await envClient.sendApiRequest<CreateWebhookResponse, CreateWebhookErrorCode>({
     method: 'POST',
     path: '/v1/environment/webhooks',
     data,

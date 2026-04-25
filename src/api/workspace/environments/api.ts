@@ -85,12 +85,12 @@ export class EnvironmentsAPI {
    * Loads an environment and injects its secrets into the process, throwing an error if it fails.
    * @param envNameOrId - The name or id of the environment to load.
    * @param options - Additional options for loading the environment.
-   * @throws ApiError when loading fails.
+   * @throws ApiErrorCode when loading fails.
    * @returns A promise that resolves to null if successful.
    */
   async loadOrThrow(envNameOrId: string, options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
-      return { data: null, error: null, ok: null }
+      return { data: null, error: null }
     }
 
     const identifiersError = this.validateProjectIdentifier()
@@ -120,7 +120,7 @@ export class EnvironmentsAPI {
    */
   async load(envNameOrId: string, options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
-      return { data: null, error: null, ok: null }
+      return { data: null, error: null }
     }
 
     const identifiersError = this.validateProjectIdentifier()

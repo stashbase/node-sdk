@@ -2,7 +2,7 @@ import { HttpClient } from '../../../../http/client'
 import { ApiResponse } from '../../../../http/response'
 import { SingleWebhookArgs } from '../../../../types/arguments'
 import { ListWebhookLogsResponse } from '../../../../types/webhooks'
-import { ListWebhookLogsError } from '../../../../types/errors/webhooks'
+import { ListWebhookLogsErrorCode } from '../../../../types/errors/webhooks'
 
 export type ListWebhookLogsArgs = SingleWebhookArgs<{
   /** The page number to retrieve */
@@ -14,7 +14,7 @@ export type ListWebhookLogsArgs = SingleWebhookArgs<{
 async function listWebhookLogs(
   envClient: HttpClient,
   args: ListWebhookLogsArgs
-): Promise<ApiResponse<ListWebhookLogsResponse, ListWebhookLogsError>> {
+): Promise<ApiResponse<ListWebhookLogsResponse, ListWebhookLogsErrorCode>> {
   const { page, pageSize } = args
 
   const query: Record<string, string | number> = {}
@@ -27,7 +27,7 @@ async function listWebhookLogs(
     query.page_size = pageSize
   }
 
-  return await envClient.sendApiRequest<ListWebhookLogsResponse, ListWebhookLogsError>({
+  return await envClient.sendApiRequest<ListWebhookLogsResponse, ListWebhookLogsErrorCode>({
     method: 'GET',
     path: `/v1/environment/webhooks/${args.webhookId}/logs`,
     query: Object.keys(query).length > 0 ? query : undefined,

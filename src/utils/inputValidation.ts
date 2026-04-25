@@ -1,4 +1,5 @@
 import { UpdateSecretsData } from '../api/environments/handlers/secrets/update'
+import { ApiError } from '../http/response'
 import {
   duplicateNewSecretNamesError,
   duplicateSecretNamesError,
@@ -13,15 +14,15 @@ import {
 import { invalidWebhookIdError } from '../errors/webhooks'
 import { responseFailure } from '../http/response'
 import {
-  DuplicateNewSecretNamesError,
-  DuplicateSecretsNamesError,
-  InvalidNewSecretNamesError,
-  InvalidSecretNamesError,
-  MissingPropertiesToUpdateError,
-  NewSecretNamesSameAsNamesError,
-  NoDataProvidedError,
-  SecretCommentsTooLongError,
-  SecretValuesTooLongError,
+  DuplicateNewSecretNamesErrorCode,
+  DuplicateSecretsNamesErrorCode,
+  InvalidNewSecretNamesErrorCode,
+  InvalidSecretNamesErrorCode,
+  MissingPropertiesToUpdateErrorCode,
+  NewSecretNamesSameAsNamesErrorCode,
+  NoDataProvidedErrorCode,
+  SecretCommentsTooLongErrorCode,
+  SecretValuesTooLongErrorCode,
 } from '../types/errors/secrets'
 
 export const SECRET_COMMENT_MAX_LENGTH = 512
@@ -135,11 +136,11 @@ interface SetSecretsItem {
 }
 
 type ValidateSetSecretsInputRes =
-  | NoDataProvidedError
-  | InvalidSecretNamesError
-  | DuplicateSecretsNamesError
-  | SecretCommentsTooLongError
-  | SecretValuesTooLongError
+  | ApiError<NoDataProvidedErrorCode>
+  | ApiError<InvalidSecretNamesErrorCode>
+  | ApiError<DuplicateSecretsNamesErrorCode>
+  | ApiError<SecretCommentsTooLongErrorCode>
+  | ApiError<SecretValuesTooLongErrorCode>
   | null
 
 // return api error
@@ -207,15 +208,15 @@ export const validateSetSecretsInput = (
 export const validateCreateSecretsInput = validateSetSecretsInput
 
 type ValidateUpdateSecretsInputRes =
-  | NoDataProvidedError
-  | MissingPropertiesToUpdateError
-  | InvalidSecretNamesError
-  | InvalidNewSecretNamesError
-  | DuplicateSecretsNamesError
-  | DuplicateNewSecretNamesError
-  | NewSecretNamesSameAsNamesError
-  | SecretCommentsTooLongError
-  | SecretValuesTooLongError
+  | ApiError<NoDataProvidedErrorCode>
+  | ApiError<MissingPropertiesToUpdateErrorCode>
+  | ApiError<InvalidSecretNamesErrorCode>
+  | ApiError<InvalidNewSecretNamesErrorCode>
+  | ApiError<DuplicateSecretsNamesErrorCode>
+  | ApiError<DuplicateNewSecretNamesErrorCode>
+  | ApiError<NewSecretNamesSameAsNamesErrorCode>
+  | ApiError<SecretCommentsTooLongErrorCode>
+  | ApiError<SecretValuesTooLongErrorCode>
   | null
 
 export const validateUpdateSecretsInput = (

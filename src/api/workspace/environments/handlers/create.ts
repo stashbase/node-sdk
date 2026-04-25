@@ -1,34 +1,34 @@
 import { ApiResponse } from '../../../../http/response'
 import {
-  EnvironmentAlreadyExistsError,
-  EnvironmentLimitReachedError,
-  EnvironmentNameUsesIdFormatError,
-  InvalidEnvironmentNameError,
+  EnvironmentAlreadyExistsErrorCode,
+  EnvironmentLimitReachedErrorCode,
+  EnvironmentNameUsesIdFormatErrorCode,
+  InvalidEnvironmentNameErrorCode,
 } from '../../../../types/errors/environments'
-import { ProjectContextError } from '../../../../types/errors'
+import { ProjectContextErrorCode } from '../../../../types/errors'
 import { EnvironmentHandlerArgs } from '../../../../types/arguments'
 import { CreateEnvironmentData, CreateEnvironmentResponse } from '../../../../types/environments'
-import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
+import { InvalidEnvironmentIdentifierErrorCode } from '../../../../types/errors/environments'
 
 export type CreateEnvironmentArgs = EnvironmentHandlerArgs<{
   data: CreateEnvironmentData
 }>
 
-type CreateEnvironmentError =
-  | ProjectContextError
-  | EnvironmentAlreadyExistsError
-  | EnvironmentLimitReachedError
-  | InvalidEnvironmentIdentifierError
-  | InvalidEnvironmentNameError
-  | EnvironmentNameUsesIdFormatError
+type CreateEnvironmentErrorCode =
+  | ProjectContextErrorCode
+  | EnvironmentAlreadyExistsErrorCode
+  | EnvironmentLimitReachedErrorCode
+  | InvalidEnvironmentIdentifierErrorCode
+  | InvalidEnvironmentNameErrorCode
+  | EnvironmentNameUsesIdFormatErrorCode
 
 async function createEnvironment(
   args: CreateEnvironmentArgs
-): Promise<ApiResponse<CreateEnvironmentResponse, CreateEnvironmentError>> {
+): Promise<ApiResponse<CreateEnvironmentResponse, CreateEnvironmentErrorCode>> {
   const { client, project } = args
   const path = `/v1/projects/${project}/environments`
 
-  return await client.sendApiRequest<CreateEnvironmentResponse, CreateEnvironmentError>({
+  return await client.sendApiRequest<CreateEnvironmentResponse, CreateEnvironmentErrorCode>({
     method: 'POST',
     path,
     data: args.data,

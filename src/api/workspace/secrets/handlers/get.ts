@@ -5,12 +5,12 @@ import {
   Secret,
   SecretName,
 } from '../../../../types/secrets'
-import { EnvironmentContextError } from '../../../../types/errors'
-import { GetSecretError as SharedGetSecretsError } from '../../../../types/errors/secrets'
+import { EnvironmentContextErrorCode } from '../../../../types/errors'
+import { GetSecretErrorCode as SharedGetSecretsErrorCode } from '../../../../types/errors/secrets'
 import { ProjectEnvHandlerArgs } from '../../../../types/arguments'
 
-type GetSecretError = SharedGetSecretsError | EnvironmentContextError
-type GetSecretResponse = Promise<ApiResponse<Secret, GetSecretError>>
+type GetSecretErrorCode = SharedGetSecretsErrorCode | EnvironmentContextErrorCode
+type GetSecretResponse = Promise<ApiResponse<Secret, GetSecretErrorCode>>
 
 export type GetSecretArgs = ProjectEnvHandlerArgs<{
   name: SecretName
@@ -38,7 +38,7 @@ async function getSecret(args: GetSecretArgs): GetSecretResponse {
     }
   }
 
-  return await client.sendApiRequest<Secret, GetSecretError>({
+  return await client.sendApiRequest<Secret, GetSecretErrorCode>({
     method: 'GET',
     path: `/v1/projects/${project}/environments/${environment}/secrets/${name}`,
     query: Object.keys(query).length > 0 ? query : undefined,

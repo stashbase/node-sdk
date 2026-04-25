@@ -1,14 +1,14 @@
 import { HttpClient } from '../../../http/client'
 import { ApiResponse } from '../../../http/response'
-import { GenericApiError } from '../../../types/errors'
+import { GenericApiErrorCode } from '../../../types/errors'
 import { CurrentAuthResponse } from '../../../types/auth'
 
-type GetCurrentAuthDetailsError = GenericApiError
+type GetCurrentAuthDetailsErrorCode = GenericApiErrorCode
 
 async function getCurrentAuthDetails(
   client: HttpClient
-): Promise<ApiResponse<CurrentAuthResponse, GetCurrentAuthDetailsError>> {
-  return await client.sendApiRequest<CurrentAuthResponse, GetCurrentAuthDetailsError>({
+): Promise<ApiResponse<CurrentAuthResponse, GetCurrentAuthDetailsErrorCode>> {
+  return await client.sendApiRequest<CurrentAuthResponse, GetCurrentAuthDetailsErrorCode>({
     method: 'GET',
     path: '/v1/whoami',
   })
