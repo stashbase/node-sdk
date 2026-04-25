@@ -45,15 +45,16 @@ export const webhookMissingPropertiesToUpdateError: ApiError<WebhookMissingPrope
     },
   })
 
-export const invalidWebhookLogsPageError: ApiError<InvalidWebhookLogsPageErrorCode> = createApiError({
-  code: 'validation.invalid_page',
-  message: 'Page number must a number between 1 and 1000.',
-  details: {
-    min: 1,
-    max: 1000,
-    default: 1,
-  },
-})
+export const invalidWebhookLogsPageError: ApiError<InvalidWebhookLogsPageErrorCode> =
+  createApiError({
+    code: 'validation.invalid_page',
+    message: 'Page number must be a number between 1 and 1000.',
+    details: {
+      min: 1,
+      max: 1000,
+      default: 1,
+    },
+  })
 
 export const invalidWebhookLogsPageSizeError: ApiError<InvalidWebhookLogsPageSizeErrorCode> =
   createApiError({

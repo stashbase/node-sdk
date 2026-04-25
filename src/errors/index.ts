@@ -120,7 +120,7 @@ export const invalidProjectName: ApiError<InvalidProjectNameErrorCode> = createA
 
 export const invalidProjectPageError: ApiError<InvalidProjectPageNumberErrorCode> = createApiError({
   code: 'validation.invalid_page',
-  message: 'Page number must a number between 1 and 1000.',
+  message: 'Page number must be a number between 1 and 1000.',
   details: {
     min: 1,
     max: 1000,
