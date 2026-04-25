@@ -28,7 +28,7 @@ import {
   invalidSecretNamesError,
   noDataProvidedError,
 } from '../../errors/secrets'
-import { ApiResponse, responseFailure } from '../../http/response'
+import { ApiResponse, responseFailure, responseSuccess } from '../../http/response'
 import { LoadEnvironmentOptions } from '../../types/environments'
 import { deleteAllEnvironmentSecrets } from './handlers/secrets/deleteAll'
 import {
@@ -110,7 +110,7 @@ class EnvironmentsClient {
    */
   async load(options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
-      return { ok: null, data: null, error: null }
+      return responseSuccess(null)
     }
 
     return await loadEnvironment(this.httpClient, options)
@@ -125,7 +125,7 @@ class EnvironmentsClient {
    */
   async loadOrThrow(options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
-      return { ok: null, data: null, error: null }
+      return responseSuccess(null)
     }
 
     const { error } = await loadEnvironment(this.httpClient, options)

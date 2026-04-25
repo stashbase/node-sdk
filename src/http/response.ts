@@ -6,15 +6,23 @@ export type ApiError<TCode extends string = string> = {
   details?: unknown
 }
 
-export type ApiResponse<TData, TCode extends string = string> = {
-  ok: boolean
-  data: TData | null
-  error: ApiError<TCode> | null
+export type ResponseSuccess<TData> = {
+  ok: true
+  data: TData
+  error: null
 }
 
-export const responseSuccess = <TData, TCode extends string = string>(
-  data: TData
-): ApiResponse<TData, TCode> => {
+export type ResponseFailure<TCode extends string = string> = {
+  ok: false
+  data: null
+  error: ApiError<TCode>
+}
+
+export type ApiResponse<TData, TCode extends string = string> =
+  | ResponseSuccess<TData>
+  | ResponseFailure<TCode>
+
+export const responseSuccess = <TData>(data: TData): ResponseSuccess<TData> => {
   return {
     ok: true,
     data,
@@ -22,9 +30,9 @@ export const responseSuccess = <TData, TCode extends string = string>(
   }
 }
 
-export const responseFailure = <TData = null, TCode extends string = string>(
+export const responseFailure = <TCode extends string = string>(
   error: ApiError<TCode>
-): ApiResponse<TData, TCode> => {
+): ResponseFailure<TCode> => {
   return {
     ok: false,
     data: null,

@@ -381,10 +381,10 @@ export class HttpClient {
       }
 
       const formattedResponse = toCamelCase(response)
-      return responseSuccess<T, E>(formattedResponse as T)
+      return responseSuccess(formattedResponse as T)
     } catch (error) {
       if (error instanceof HookExecutionError) {
-        return responseFailure<T, E>({
+        return responseFailure<E>({
           code: 'server.connection_failed' as E,
           message: error.message,
           details: error,
@@ -393,7 +393,7 @@ export class HttpClient {
 
       const formattedError = toCamelCase(error)
       const apiError = parseError(formattedError) as ApiError<E>
-      return responseFailure<T, E>(apiError)
+      return responseFailure<E>(apiError)
     }
   }
 

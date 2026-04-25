@@ -21,7 +21,7 @@ import { deleteEnvironment } from './handlers/delete'
 import { getEnvironment } from './handlers/get'
 import { listEnvironments } from './handlers/list'
 import { loadEnvironment } from './handlers/load'
-import { responseFailure } from '../../../http/response'
+import { responseFailure, responseSuccess } from '../../../http/response'
 import {
   CreateEnvironmentData,
   ListEnvironmentOptions,
@@ -90,7 +90,7 @@ export class EnvironmentsAPI {
    */
   async loadOrThrow(envNameOrId: string, options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
-      return { ok: null, data: null, error: null }
+      return responseSuccess(null)
     }
 
     const identifiersError = this.validateProjectIdentifier()
@@ -120,7 +120,7 @@ export class EnvironmentsAPI {
    */
   async load(envNameOrId: string, options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
-      return { ok: null, data: null, error: null }
+      return responseSuccess(null)
     }
 
     const identifiersError = this.validateProjectIdentifier()
