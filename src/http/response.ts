@@ -1,7 +1,6 @@
 export type ApiError<TCode extends string = string> = {
   code: TCode
   message: string
-  hint?: string
   details?: unknown
 }
 

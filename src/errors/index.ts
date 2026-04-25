@@ -24,13 +24,11 @@ import { MissingPropertiesToUpdateErrorCode, SdkErrorCode, GlobalErrorCode } fro
 export const createApiError = <TCode extends string>(args: {
   code: TCode
   message: string
-  hint?: string
   details?: unknown
 }): ApiError<TCode> => {
   return {
     code: args.code,
     message: args.message,
-    hint: args.hint,
     details: args.details,
   }
 }

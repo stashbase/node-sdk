@@ -44,7 +44,8 @@ export class HookExecutionError extends Error {
   public readonly originalError: unknown
 
   constructor(hook: HttpHookName, originalError: unknown) {
-    const causeMessage = originalError instanceof Error ? originalError.message : 'Unknown hook error'
+    const causeMessage =
+      originalError instanceof Error ? originalError.message : 'Unknown hook error'
     super(`Transport hook "${hook}" failed: ${causeMessage}`)
     this.name = 'HookExecutionError'
     this.hook = hook
@@ -76,16 +77,15 @@ const parseError = (res: unknown): ApiError => {
   }
 
   if (typeof res === 'object' && res !== null && 'error' in res) {
-    const response = res as { error?: { code?: unknown; message?: unknown; hint?: unknown; details?: unknown } }
-    const code = typeof response.error?.code === 'string' ? response.error.code : 'server.connection_failed'
+    const response = res as { error?: { code?: unknown; message?: unknown; details?: unknown } }
+    const code =
+      typeof response.error?.code === 'string' ? response.error.code : 'server.connection_failed'
     const message =
       typeof response.error?.message === 'string' ? response.error.message : 'Unknown error'
-    const hint = typeof response.error?.hint === 'string' ? response.error.hint : undefined
 
     return {
       code,
       message,
-      hint,
       details: response.error?.details,
     }
   }
@@ -199,7 +199,12 @@ export class HttpClient {
     return new HookExecutionError(hook, cause)
   }
 
-  private async get<T>(args: { path: string; query?: Query; timeoutMs?: number; signal?: AbortSignal }): Promise<T> {
+  private async get<T>(args: {
+    path: string
+    query?: Query
+    timeoutMs?: number
+    signal?: AbortSignal
+  }): Promise<T> {
     const timeoutMs = args.timeoutMs ?? this.timeoutMs
     const url = this.buildUrl(args.path, args.query)
     const hookContext: HttpRequestHookContext = {
@@ -215,14 +220,18 @@ export class HttpClient {
     try {
       await this.triggerBeforeRequest(hookContext)
 
-      const response = await fetchWithRetry(url, {
-        method: 'GET',
-        headers: this.headers,
-      }, {
-        retries: this.retries,
-        timeoutMs,
-        signal: args.signal,
-      })
+      const response = await fetchWithRetry(
+        url,
+        {
+          method: 'GET',
+          headers: this.headers,
+        },
+        {
+          retries: this.retries,
+          timeoutMs,
+          signal: args.signal,
+        }
+      )
 
       await this.triggerAfterResponse({
         ...hookContext,
@@ -272,14 +281,18 @@ export class HttpClient {
     try {
       await this.triggerBeforeRequest(hookContext)
 
-      const response = await fetchWithRetry(url, {
-        method: 'DELETE',
-        headers: this.headers,
-      }, {
-        retries: this.retries,
-        timeoutMs,
-        signal: args.signal,
-      })
+      const response = await fetchWithRetry(
+        url,
+        {
+          method: 'DELETE',
+          headers: this.headers,
+        },
+        {
+          retries: this.retries,
+          timeoutMs,
+          signal: args.signal,
+        }
+      )
 
       await this.triggerAfterResponse({
         ...hookContext,
@@ -409,15 +422,19 @@ export class HttpClient {
     try {
       await this.triggerBeforeRequest(hookContext)
 
-      const response = await fetchWithRetry(url, {
-        method,
-        headers: this.headers,
-        body: formattedData ? JSON.stringify(formattedData) : undefined,
-      }, {
-        retries: this.retries,
-        timeoutMs,
-        signal,
-      })
+      const response = await fetchWithRetry(
+        url,
+        {
+          method,
+          headers: this.headers,
+          body: formattedData ? JSON.stringify(formattedData) : undefined,
+        },
+        {
+          retries: this.retries,
+          timeoutMs,
+          signal,
+        }
+      )
 
       await this.triggerAfterResponse({
         ...hookContext,
@@ -451,11 +468,13 @@ export class HttpClient {
   }
 }
 
-export function createHttpClient(args: HttpClientConfig & {
-  authorization: {
-    apiKey: string
+export function createHttpClient(
+  args: HttpClientConfig & {
+    authorization: {
+      apiKey: string
+    }
   }
-}): HttpClient {
+): HttpClient {
   return new HttpClient(args)
 }
 
