@@ -110,7 +110,7 @@ class EnvironmentsClient {
    */
   async load(options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
-      return { data: null, error: null }
+      return { ok: null, data: null, error: null }
     }
 
     return await loadEnvironment(this.httpClient, options)
@@ -125,7 +125,7 @@ class EnvironmentsClient {
    */
   async loadOrThrow(options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
-      return { data: null, error: null }
+      return { ok: null, data: null, error: null }
     }
 
     const { error } = await loadEnvironment(this.httpClient, options)

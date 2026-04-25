@@ -90,7 +90,7 @@ export class EnvironmentsAPI {
    */
   async loadOrThrow(envNameOrId: string, options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
-      return { data: null, error: null }
+      return { ok: null, data: null, error: null }
     }
 
     const identifiersError = this.validateProjectIdentifier()
@@ -120,7 +120,7 @@ export class EnvironmentsAPI {
    */
   async load(envNameOrId: string, options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
-      return { data: null, error: null }
+      return { ok: null, data: null, error: null }
     }
 
     const identifiersError = this.validateProjectIdentifier()
