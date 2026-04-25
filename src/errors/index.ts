@@ -25,7 +25,7 @@ export const createApiError = <TCode extends string>(args: {
   code: TCode
   message: string
   hint?: string
-  details?: Record<string, unknown>
+  details?: unknown
 }): ApiError<TCode> => {
   return {
     code: args.code,
