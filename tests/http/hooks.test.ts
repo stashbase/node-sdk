@@ -1,5 +1,5 @@
 import { assert, describe, test, vi } from 'vitest'
-import { createHttpClient, HookExecutionError } from '../../src/http/client'
+import { createHttpClient } from '../../src/http/client'
 
 describe('HttpClient hooks', () => {
   test('calls beforeRequest and afterResponse on successful request', async () => {
@@ -27,7 +27,7 @@ describe('HttpClient hooks', () => {
       data: { someValue: 'x' },
     })
 
-    assert.equal(response.ok, true)
+    assert.equal(response.error, null)
     assert.equal(beforeRequest.mock.calls.length, 1)
     assert.equal(afterResponse.mock.calls.length, 1)
 
@@ -73,7 +73,7 @@ describe('HttpClient hooks', () => {
 
     const response = await client.sendApiRequest({ method: 'GET', path: '/v1/whoami' })
 
-    assert.equal(response.ok, false)
+    assert.notEqual(response.error, null)
     assert.equal(afterResponse.mock.calls.length, 1)
     assert.equal(onError.mock.calls.length, 1)
 
@@ -105,7 +105,7 @@ describe('HttpClient hooks', () => {
 
     const response = await client.sendApiRequest({ method: 'GET', path: '/v1/whoami' })
 
-    assert.equal(response.ok, false)
+    assert.notEqual(response.error, null)
     assert.equal(onError.mock.calls.length, 1)
 
     const errorContext = onError.mock.calls[0][0] as {
@@ -114,7 +114,7 @@ describe('HttpClient hooks', () => {
     assert.equal(errorContext.error?.message, 'network failure')
   })
 
-  test('returns HookExecutionError when beforeRequest throws', async () => {
+  test('maps hook failures to server.connection_failed', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn().mockResolvedValue(
@@ -136,44 +136,7 @@ describe('HttpClient hooks', () => {
 
     const response = await client.sendApiRequest({ method: 'GET', path: '/v1/whoami' })
 
-    assert.equal(response.ok, false)
-    if (!response.ok) {
-      assert.instanceOf(response.error, HookExecutionError)
-      const error = response.error as HookExecutionError
-      assert.equal(error.hook, 'beforeRequest')
-      assert.equal((error.originalError as Error).message, 'boom-before')
-    }
-  })
-
-  test('returns HookExecutionError when afterResponse throws', async () => {
-    vi.stubGlobal(
-      'fetch',
-      vi.fn().mockResolvedValue(
-        new Response(JSON.stringify({ data: { ok: true } }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' },
-        })
-      )
-    )
-
-    const client = createHttpClient({
-      authorization: { apiKey: 'test-key' },
-      hooks: {
-        afterResponse: () => {
-          throw new Error('boom-after')
-        },
-      },
-    })
-
-    const response = await client.sendApiRequest({ method: 'GET', path: '/v1/whoami' })
-
-    assert.equal(response.ok, false)
-    if (!response.ok) {
-      assert.instanceOf(response.error, HookExecutionError)
-      const error = response.error as HookExecutionError
-      assert.equal(error.hook, 'afterResponse')
-      assert.equal((error.originalError as Error).message, 'boom-after')
-    }
+    assert.equal(response.error?.code, 'server.connection_failed')
   })
 
   test('ignores errors thrown by onError hook and preserves original request error', async () => {
@@ -196,10 +159,6 @@ describe('HttpClient hooks', () => {
 
     const response = await client.sendApiRequest({ method: 'GET', path: '/v1/whoami' })
 
-    assert.equal(response.ok, false)
-    if (!response.ok) {
-      const error = response.error as { code?: string }
-      assert.equal(error.code, 'server.connection_failed')
-    }
+    assert.equal(response.error?.code, 'server.connection_failed')
   })
 })

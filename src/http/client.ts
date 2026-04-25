@@ -1,6 +1,5 @@
 import fetchWithRetry from './retry'
-import { createApiErrorFromResponse } from '../errors'
-import { responseFailure, responseSuccess } from './response'
+import { responseFailure, responseSuccess, type ApiError } from './response'
 import { toCamelCase, toSnakeCase } from '../utils/serializer'
 
 declare const __SDK_VERSION__: string
@@ -45,7 +44,8 @@ export class HookExecutionError extends Error {
   public readonly originalError: unknown
 
   constructor(hook: HttpHookName, originalError: unknown) {
-    const causeMessage = originalError instanceof Error ? originalError.message : 'Unknown hook error'
+    const causeMessage =
+      originalError instanceof Error ? originalError.message : 'Unknown hook error'
     super(`Transport hook "${hook}" failed: ${causeMessage}`)
     this.name = 'HookExecutionError'
     this.hook = hook
@@ -66,6 +66,34 @@ type RequestWithData = {
   data?: RequestData
   timeoutMs?: number
   signal?: AbortSignal
+}
+
+const parseError = (res: unknown): ApiError => {
+  if (res instanceof Error && res.name === 'ServerTemporaryUnavailableError') {
+    return {
+      code: 'server.temporary_unavailable',
+      message: 'API service is temporarily unavailable. Please try again later.',
+    }
+  }
+
+  if (typeof res === 'object' && res !== null && 'error' in res) {
+    const response = res as { error?: { code?: unknown; message?: unknown; details?: unknown } }
+    const code =
+      typeof response.error?.code === 'string' ? response.error.code : 'server.connection_failed'
+    const message =
+      typeof response.error?.message === 'string' ? response.error.message : 'Unknown error'
+
+    return {
+      code,
+      message,
+      details: response.error?.details,
+    }
+  }
+
+  return {
+    code: 'server.connection_failed',
+    message: 'Could not connect to the API server. Please try again later.',
+  }
 }
 
 export class HttpClient {
@@ -171,7 +199,12 @@ export class HttpClient {
     return new HookExecutionError(hook, cause)
   }
 
-  private async get<T>(args: { path: string; query?: Query; timeoutMs?: number; signal?: AbortSignal }): Promise<T> {
+  private async get<T>(args: {
+    path: string
+    query?: Query
+    timeoutMs?: number
+    signal?: AbortSignal
+  }): Promise<T> {
     const timeoutMs = args.timeoutMs ?? this.timeoutMs
     const url = this.buildUrl(args.path, args.query)
     const hookContext: HttpRequestHookContext = {
@@ -187,14 +220,18 @@ export class HttpClient {
     try {
       await this.triggerBeforeRequest(hookContext)
 
-      const response = await fetchWithRetry(url, {
-        method: 'GET',
-        headers: this.headers,
-      }, {
-        retries: this.retries,
-        timeoutMs,
-        signal: args.signal,
-      })
+      const response = await fetchWithRetry(
+        url,
+        {
+          method: 'GET',
+          headers: this.headers,
+        },
+        {
+          retries: this.retries,
+          timeoutMs,
+          signal: args.signal,
+        }
+      )
 
       await this.triggerAfterResponse({
         ...hookContext,
@@ -244,14 +281,18 @@ export class HttpClient {
     try {
       await this.triggerBeforeRequest(hookContext)
 
-      const response = await fetchWithRetry(url, {
-        method: 'DELETE',
-        headers: this.headers,
-      }, {
-        retries: this.retries,
-        timeoutMs,
-        signal: args.signal,
-      })
+      const response = await fetchWithRetry(
+        url,
+        {
+          method: 'DELETE',
+          headers: this.headers,
+        },
+        {
+          retries: this.retries,
+          timeoutMs,
+          signal: args.signal,
+        }
+      )
 
       await this.triggerAfterResponse({
         ...hookContext,
@@ -314,14 +355,14 @@ export class HttpClient {
     })
   }
 
-  public async sendApiRequest<T = object, E = object>(args: {
+  public async sendApiRequest<T = object, E extends string = string>(args: {
     method: 'GET' | 'DELETE' | 'POST' | 'PATCH' | 'PUT'
     path: string
     data?: { [key: string]: any } | any[]
     query?: Record<string, string | number | boolean>
     timeoutMs?: number
     signal?: AbortSignal
-  }) {
+  }): Promise<import('./response').ApiResponse<T, E>> {
     const { method, path, data, query, timeoutMs, signal } = args
     try {
       let response: T
@@ -340,15 +381,19 @@ export class HttpClient {
       }
 
       const formattedResponse = toCamelCase(response)
-      return responseSuccess(formattedResponse)
+      return responseSuccess(formattedResponse as T)
     } catch (error) {
       if (error instanceof HookExecutionError) {
-        return responseFailure(error as E)
+        return responseFailure<E>({
+          code: 'server.connection_failed' as E,
+          message: error.message,
+          details: error,
+        })
       }
 
       const formattedError = toCamelCase(error)
-      const apiError = createApiErrorFromResponse<E>(formattedError)
-      return responseFailure(apiError)
+      const apiError = parseError(formattedError) as ApiError<E>
+      return responseFailure<E>(apiError)
     }
   }
 
@@ -377,15 +422,19 @@ export class HttpClient {
     try {
       await this.triggerBeforeRequest(hookContext)
 
-      const response = await fetchWithRetry(url, {
-        method,
-        headers: this.headers,
-        body: formattedData ? JSON.stringify(formattedData) : undefined,
-      }, {
-        retries: this.retries,
-        timeoutMs,
-        signal,
-      })
+      const response = await fetchWithRetry(
+        url,
+        {
+          method,
+          headers: this.headers,
+          body: formattedData ? JSON.stringify(formattedData) : undefined,
+        },
+        {
+          retries: this.retries,
+          timeoutMs,
+          signal,
+        }
+      )
 
       await this.triggerAfterResponse({
         ...hookContext,
@@ -419,11 +468,13 @@ export class HttpClient {
   }
 }
 
-export function createHttpClient(args: HttpClientConfig & {
-  authorization: {
-    apiKey: string
+export function createHttpClient(
+  args: HttpClientConfig & {
+    authorization: {
+      apiKey: string
+    }
   }
-}): HttpClient {
+): HttpClient {
   return new HttpClient(args)
 }
 

@@ -11,6 +11,6 @@ test('Get webhook signing secret', async () => {
     console.log(code)
   } else {
     console.log('Data:\n')
-    console.log(data.signingSecret)
+    console.log(data?.signingSecret)
   }
 })

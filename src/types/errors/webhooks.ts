@@ -1,106 +1,47 @@
-import {
-  ConflictApiError,
-  GenericApiError,
-  QuotaLimitApiError,
-  ResourceApiError,
-  ValidationApiError,
-} from '.'
+import { GlobalErrorCode } from './index'
 
-export type ListWebhooksError = GenericApiError
-export type CreateWebhookError =
-  | GenericApiError
-  | WebhookLimitReachedError
-  | InvalidWebhookUrlError
-  | WebhookDescriptionTooLongError
+export type InvalidWebhookIdErrorCode = 'validation.invalid_webhook_id'
+export type InvalidWebhookUrlErrorCode = 'validation.invalid_webhook_url'
+export type WebhookDescriptionTooLongErrorCode = 'validation.webhook_description_too_long'
+export type WebhookMissingPropertiesToUpdateErrorCode = 'validation.missing_properties_to_update'
+export type WebhookAlreadyEnabledConflictErrorCode = 'conflict.webhook_already_enabled'
+export type WebhookAlreadyDisabledConflictErrorCode = 'conflict.webhook_already_disabled'
+export type InvalidWebhookLogsPageSizeErrorCode = 'validation.invalid_page_size'
+export type InvalidWebhookLogsPageErrorCode = 'validation.invalid_page'
+export type WebhookNotFoundErrorCode = 'resource.webhook_not_found'
+export type WebhookLimitReachedErrorCode = 'quota.webhook_limit_reached'
 
-export type UpdateWebhookError =
-  | SingleWebhookError
-  | InvalidWebhookUrlError
-  | WebhookDescriptionTooLongError
-  | WebhookMissingPropertiesToUpdateError
+export type SingleWebhookErrorCode =
+  | GlobalErrorCode
+  | InvalidWebhookIdErrorCode
+  | WebhookNotFoundErrorCode
 
-export type UpdateWebhookStatusError =
-  | SingleWebhookError
-  | WebhookAlreadyEnabledConflictError
-  | WebhookAlreadyDisabledConflictError
+export type ListWebhooksErrorCode = GlobalErrorCode
 
-export type DeleteWebhookError = SingleWebhookError
-export type GetWebhookError = SingleWebhookError
+export type CreateWebhookErrorCode =
+  | GlobalErrorCode
+  | InvalidWebhookUrlErrorCode
+  | WebhookDescriptionTooLongErrorCode
+  | WebhookLimitReachedErrorCode
 
-export type RotateWebhookSigningSecretError = SingleWebhookError
-export type GetWebhookSigningSecretError = SingleWebhookError
-export type TestWebhookError = SingleWebhookError
+export type UpdateWebhookErrorCode =
+  | SingleWebhookErrorCode
+  | InvalidWebhookUrlErrorCode
+  | WebhookDescriptionTooLongErrorCode
+  | WebhookMissingPropertiesToUpdateErrorCode
 
-export type ListWebhookLogsError =
-  | SingleWebhookError
-  | InvalidWebhookLogsPageSizeError
-  | InvalidWebhookLogsPageError
+export type UpdateWebhookStatusErrorCode =
+  | SingleWebhookErrorCode
+  | WebhookAlreadyEnabledConflictErrorCode
+  | WebhookAlreadyDisabledConflictErrorCode
 
-//
-export type SingleWebhookError = GenericApiError | InvalidWebhookIdError | WebhookNotFoundError
+export type DeleteWebhookErrorCode = SingleWebhookErrorCode
+export type GetWebhookErrorCode = SingleWebhookErrorCode
+export type RotateWebhookSigningSecretErrorCode = SingleWebhookErrorCode
+export type GetWebhookSigningSecretErrorCode = SingleWebhookErrorCode
+export type TestWebhookErrorCode = SingleWebhookErrorCode
 
-export type InvalidWebhookIdError = ValidationApiError<
-  'invalid_webhook_id',
-  {
-    exampleWebhookId: string
-  }
->
-
-export type InvalidWebhookUrlError = ValidationApiError<
-  'invalid_webhook_url',
-  {
-    validUrlExample: string
-  }
->
-
-export type WebhookDescriptionTooLongError = ValidationApiError<
-  'webhook_description_too_long',
-  {
-    maxLength: number
-  }
->
-
-export type WebhookMissingPropertiesToUpdateError = ValidationApiError<
-  'missing_properties_to_update',
-  {
-    possibleProperties: Array<'url' | 'description'>
-  }
->
-
-export type WebhookAlreadyEnabledConflictError = ConflictApiError<
-  'webhook_already_enabled',
-  undefined
->
-
-export type WebhookAlreadyDisabledConflictError = ConflictApiError<
-  'webhook_already_disabled',
-  undefined
->
-
-export type InvalidWebhookLogsPageSizeError = ValidationApiError<
-  'invalid_page_size',
-  {
-    /** Min possbile value for the page size */
-    min: number
-    /** Max possible value for the page size */
-    max: number
-    /** Default value for the page size */
-    default: number
-  }
->
-
-export type InvalidWebhookLogsPageError = ValidationApiError<
-  'invalid_page',
-  {
-    /** Min possbile value for the page */
-    min: number
-    /** Max possible value for the page */
-    max: number
-    /** Default value for the page */
-    default: number
-  }
->
-
-type WebhookNotFoundError = ResourceApiError<'webhook_not_found', undefined>
-
-type WebhookLimitReachedError = QuotaLimitApiError<'webhook_limit_reached', undefined>
+export type ListWebhookLogsErrorCode =
+  | SingleWebhookErrorCode
+  | InvalidWebhookLogsPageSizeErrorCode
+  | InvalidWebhookLogsPageErrorCode

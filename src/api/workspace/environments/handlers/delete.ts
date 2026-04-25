@@ -1,22 +1,22 @@
 import { ApiResponse } from '../../../../http/response'
-import { EnvironmentNotFoundError, ProjectContextError } from '../../../../types/errors'
+import { EnvironmentNotFoundErrorCode, ProjectContextErrorCode } from '../../../../types/errors'
 import { SingleEnvironmentHandlerArgs } from '../../../../types/arguments'
-import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
+import { InvalidEnvironmentIdentifierErrorCode } from '../../../../types/errors/environments'
 
 export type DeleteEnvironmentArgs = SingleEnvironmentHandlerArgs<undefined>
 
-type DeleteEnvironmentError =
-  | ProjectContextError
-  | EnvironmentNotFoundError
-  | InvalidEnvironmentIdentifierError
+type DeleteEnvironmentErrorCode =
+  | ProjectContextErrorCode
+  | EnvironmentNotFoundErrorCode
+  | InvalidEnvironmentIdentifierErrorCode
 
 async function deleteEnvironment(
   args: DeleteEnvironmentArgs
-): Promise<ApiResponse<null, DeleteEnvironmentError>> {
+): Promise<ApiResponse<null, DeleteEnvironmentErrorCode>> {
   const { client, project, environment } = args
   const path = `/v1/projects/${project}/environments/${environment}`
 
-  return await client.sendApiRequest<null, DeleteEnvironmentError>({
+  return await client.sendApiRequest<null, DeleteEnvironmentErrorCode>({
     method: 'DELETE',
     path,
   })

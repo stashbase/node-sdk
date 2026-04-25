@@ -1,10 +1,10 @@
 import { ApiResponse } from '../../../../http/response'
 import { UpdateSecretsItem, UpdateSecretsResponse } from '../../../../types/secrets'
-import { EnvironmentContextError } from '../../../../types/errors'
-import { UpdateSecretsError as SharedUpdateSecretsError } from '../../../../types/errors/secrets'
+import { EnvironmentContextErrorCode } from '../../../../types/errors'
+import { UpdateSecretsErrorCode as SharedUpdateSecretsErrorCode } from '../../../../types/errors/secrets'
 import { ProjectEnvHandlerArgs } from '../../../../types/arguments'
 
-type UpdateSecretsError = SharedUpdateSecretsError | EnvironmentContextError
+type UpdateSecretsErrorCode = SharedUpdateSecretsErrorCode | EnvironmentContextErrorCode
 
 export type UpdateSecretsArgs = ProjectEnvHandlerArgs<{
   data: Array<UpdateSecretsItem>
@@ -12,11 +12,11 @@ export type UpdateSecretsArgs = ProjectEnvHandlerArgs<{
 
 async function updateSecrets(
   args: UpdateSecretsArgs
-): Promise<ApiResponse<UpdateSecretsResponse, UpdateSecretsError>> {
+): Promise<ApiResponse<UpdateSecretsResponse, UpdateSecretsErrorCode>> {
   const { client, project, environment, data } = args
   const path = `/v1/projects/${project}/environments/${environment}/secrets`
 
-  return await client.sendApiRequest<UpdateSecretsResponse, UpdateSecretsError>({
+  return await client.sendApiRequest<UpdateSecretsResponse, UpdateSecretsErrorCode>({
     method: 'PATCH',
     path,
     data,

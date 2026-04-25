@@ -1,8 +1,8 @@
 import { assert, describe, test, vi } from 'vitest'
 import { createHttpClient } from '../../src/http/client'
 
-describe('ApiError requestId passthrough', () => {
-  test('maps requestId from error payload', async () => {
+describe('ApiError passthrough', () => {
+  test('maps error code and message from payload', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn().mockImplementation(async () => {
@@ -12,7 +12,6 @@ describe('ApiError requestId passthrough', () => {
               code: 'auth.unauthorized',
               details: {},
               message: 'Unauthorized',
-              request_id: 'req_123',
             },
           }),
           { status: 401, headers: { 'Content-Type': 'application/json' } }
@@ -20,21 +19,14 @@ describe('ApiError requestId passthrough', () => {
       })
     )
 
-    const client = createHttpClient({
-      authorization: { apiKey: 'test-key' },
-    })
-
+    const client = createHttpClient({ authorization: { apiKey: 'test-key' } })
     const response = await client.sendApiRequest({ method: 'GET', path: '/v1/whoami' })
 
-    assert.equal(response.ok, false)
-
-    if (!response.ok) {
-      assert.equal((response.error as { code?: string }).code, 'auth.unauthorized')
-      assert.equal((response.error as { requestId?: string }).requestId, 'req_123')
-    }
+    assert.equal(response.error?.code, 'auth.unauthorized')
+    assert.equal(response.error?.message, 'Unauthorized')
   })
 
-  test('maps requestId from error details payload', async () => {
+  test('keeps backend error code for server failures', async () => {
     vi.stubGlobal(
       'fetch',
       vi.fn().mockImplementation(async () => {
@@ -53,17 +45,10 @@ describe('ApiError requestId passthrough', () => {
       })
     )
 
-    const client = createHttpClient({
-      authorization: { apiKey: 'test-key' },
-    })
-
+    const client = createHttpClient({ authorization: { apiKey: 'test-key' } })
     const response = await client.sendApiRequest({ method: 'GET', path: '/v1/whoami' })
 
-    assert.equal(response.ok, false)
-
-    if (!response.ok) {
-      assert.equal((response.error as { code?: string }).code, 'server.internal_error')
-      assert.equal((response.error as { requestId?: string }).requestId, 'req_456')
-    }
+    assert.equal(response.error?.code, 'server.internal_error')
+    assert.equal(response.error?.message, 'Internal Server Error')
   })
 })

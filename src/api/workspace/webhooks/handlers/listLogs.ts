@@ -1,7 +1,7 @@
 import { ApiResponse } from '../../../../http/response'
 import { ListWebhookLogsResponse } from '../../../../types/webhooks'
-import { ListWebhookLogsError as SharedListWebhookLogsError } from '../../../../types/errors/webhooks'
-import { EnvironmentContextError } from '../../../../types/errors'
+import { ListWebhookLogsErrorCode as SharedListWebhookLogsErrorCode } from '../../../../types/errors/webhooks'
+import { EnvironmentContextErrorCode } from '../../../../types/errors'
 import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/arguments'
 
 export type ListWebhookLogsOptions = {
@@ -11,11 +11,11 @@ export type ListWebhookLogsOptions = {
   pageSize?: number
 }
 
-export type ListWebhookLogsError = SharedListWebhookLogsError | EnvironmentContextError
+export type ListWebhookLogsErrorCode = SharedListWebhookLogsErrorCode | EnvironmentContextErrorCode
 
 async function listWebhookLogs(
   args: SingleWebhookProjectEnvHandlerArgs<{ options?: ListWebhookLogsOptions }>
-): Promise<ApiResponse<ListWebhookLogsResponse, ListWebhookLogsError>> {
+): Promise<ApiResponse<ListWebhookLogsResponse, ListWebhookLogsErrorCode>> {
   const { client, webhookId, project, environment, options } = args
 
   const query: Record<string, string | number> = {}
@@ -30,7 +30,7 @@ async function listWebhookLogs(
 
   const path = `/v1/projects/${project}/environments/${environment}/webhooks/${webhookId}/logs`
 
-  return await client.sendApiRequest<ListWebhookLogsResponse, ListWebhookLogsError>({
+  return await client.sendApiRequest<ListWebhookLogsResponse, ListWebhookLogsErrorCode>({
     method: 'GET',
     path,
     query,

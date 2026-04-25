@@ -13,15 +13,14 @@ test('Update env secrets', async () => {
   ])
 
   if (error) {
-    const { code } = error
+    const { code, details } = error
     console.log('Error: ', error)
     console.log(code)
   } else {
     console.log('Data:\n')
     console.log(data)
 
-    const { updatedCount, notFoundSecrets } = data
-    console.log('updatedCount: ', updatedCount)
-    console.log('notFoundSecrets: ', notFoundSecrets)
+    console.log('updatedCount: ', data?.updatedCount)
+    console.log('notFoundSecrets: ', data?.notFoundSecrets)
   }
 })

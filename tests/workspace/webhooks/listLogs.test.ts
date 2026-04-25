@@ -8,7 +8,7 @@ test('List webhook logs', async () => {
     .webhooks({ project: 'name', environment: '123' })
     .listLogs('whk_4i1gbnewYBnCTZg3Sbye2c', {
       page: 1,
-      limit: 20,
+      pageSize: 20,
     })
 
   if (error) {

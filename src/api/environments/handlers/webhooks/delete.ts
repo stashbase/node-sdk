@@ -1,12 +1,12 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiResponse } from '../../../../http/response'
-import { GetWebhookError } from '../../../../types/errors/webhooks'
+import { GetWebhookErrorCode } from '../../../../types/errors/webhooks'
 
 async function deleteWebhook(
   envClient: HttpClient,
   webhookId: string
-): Promise<ApiResponse<null, GetWebhookError>> {
-  return await envClient.sendApiRequest<null, GetWebhookError>({
+): Promise<ApiResponse<null, GetWebhookErrorCode>> {
+  return await envClient.sendApiRequest<null, GetWebhookErrorCode>({
     method: 'DELETE',
     path: `/v1/environment/webhooks/${webhookId}`,
   })

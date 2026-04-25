@@ -10,7 +10,7 @@ test('Get get single webhook', async () => {
     const { code } = error
     console.log(code)
 
-    if (error.isResourceError()) {
+    if (error.code === 'resource.webhook_not_found') {
       console.log('Webhook not found')
     }
   } else {

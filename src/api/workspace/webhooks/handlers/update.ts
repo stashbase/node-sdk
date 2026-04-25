@@ -1,22 +1,22 @@
 import { ApiResponse } from '../../../../http/response'
 import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/arguments'
-import { UpdateWebhookError as SharedUpdateWebhookError } from '../../../../types/errors/webhooks'
-import { EnvironmentContextError } from '../../../../types/errors'
+import { UpdateWebhookErrorCode as SharedUpdateWebhookErrorCode } from '../../../../types/errors/webhooks'
+import { EnvironmentContextErrorCode } from '../../../../types/errors'
 import { UpdateWebhookData } from '../../../../types/webhooks'
 
 export type UpdateWebhookArgs = SingleWebhookProjectEnvHandlerArgs<{
   data: UpdateWebhookData
 }>
 
-export type UpdateWebhookError = SharedUpdateWebhookError | EnvironmentContextError
+export type UpdateWebhookErrorCode = SharedUpdateWebhookErrorCode | EnvironmentContextErrorCode
 
 async function updateWebhook(
   args: UpdateWebhookArgs
-): Promise<ApiResponse<null, UpdateWebhookError>> {
+): Promise<ApiResponse<null, UpdateWebhookErrorCode>> {
   const { client, project, environment, webhookId, data } = args
   const path = `/v1/projects/${project}/environments/${environment}/webhooks/${webhookId}`
 
-  return await client.sendApiRequest<null, UpdateWebhookError>({
+  return await client.sendApiRequest<null, UpdateWebhookErrorCode>({
     method: 'PATCH',
     path,
     data,

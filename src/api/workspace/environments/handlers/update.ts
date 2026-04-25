@@ -1,19 +1,19 @@
 import { ApiResponse } from '../../../../http/response'
 import {
-  EnvironmentAlreadyExistsError,
-  NewEnvironmentNameEqualsOriginal,
-  EnvironmentNameUsesIdFormatError,
-  InvalidEnvironmentNameError,
-  EnvironmentDescriptionTooLongError,
+  EnvironmentAlreadyExistsErrorCode,
+  NewEnvironmentNameEqualsOriginalErrorCode,
+  EnvironmentNameUsesIdFormatErrorCode,
+  InvalidEnvironmentNameErrorCode,
+  EnvironmentDescriptionTooLongErrorCode,
 } from '../../../../types/errors/environments'
 import {
-  EnvironmentNotFoundError,
-  MissingPropertiesToUpdateError,
-  ProjectContextError,
+  EnvironmentNotFoundErrorCode,
+  MissingPropertiesToUpdateErrorCode,
+  ProjectContextErrorCode,
 } from '../../../../types/errors'
 import { SingleEnvironmentHandlerArgs } from '../../../../types/arguments'
 import { AtLeastOne } from '../../../../types/util'
-import { InvalidEnvironmentIdentifierError } from '../../../../types/errors/environments'
+import { InvalidEnvironmentIdentifierErrorCode } from '../../../../types/errors/environments'
 
 export type UpdateEnvironmentArgs = SingleEnvironmentHandlerArgs<{
   data: UpdateEnvironmentData
@@ -28,24 +28,24 @@ export type UpdateEnvironmentData = AtLeastOne<{
   description: string
 }>
 
-type UpdateEnvironmentError =
-  | ProjectContextError
-  | EnvironmentNotFoundError
-  | EnvironmentAlreadyExistsError
-  | InvalidEnvironmentIdentifierError
-  | InvalidEnvironmentNameError
-  | EnvironmentNameUsesIdFormatError
-  | NewEnvironmentNameEqualsOriginal
-  | MissingPropertiesToUpdateError
-  | EnvironmentDescriptionTooLongError
+type UpdateEnvironmentErrorCode =
+  | ProjectContextErrorCode
+  | EnvironmentNotFoundErrorCode
+  | EnvironmentAlreadyExistsErrorCode
+  | InvalidEnvironmentIdentifierErrorCode
+  | InvalidEnvironmentNameErrorCode
+  | EnvironmentNameUsesIdFormatErrorCode
+  | NewEnvironmentNameEqualsOriginalErrorCode
+  | MissingPropertiesToUpdateErrorCode
+  | EnvironmentDescriptionTooLongErrorCode
 
 export async function updateEnvironment(
   args: UpdateEnvironmentArgs
-): Promise<ApiResponse<null, UpdateEnvironmentError>> {
+): Promise<ApiResponse<null, UpdateEnvironmentErrorCode>> {
   const { client, project, environment, data } = args
   const path = `/v1/projects/${project}/environments/${environment}`
 
-  return await client.sendApiRequest<null, UpdateEnvironmentError>({
+  return await client.sendApiRequest<null, UpdateEnvironmentErrorCode>({
     method: 'PATCH',
     path,
     data,

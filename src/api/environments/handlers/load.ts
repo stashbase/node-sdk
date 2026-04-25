@@ -2,7 +2,7 @@ import { printSecretsTable } from '../../../utils/table'
 import { expandAndInjectEnv } from '../../../utils/envExpansion'
 import { HttpClient } from '../../../http/client'
 import { ApiResponse, responseFailure, responseSuccess } from '../../../http/response'
-import { GenericApiError } from '../../../types/errors'
+import { GenericApiErrorCode } from '../../../types/errors'
 import {
   LoadEnvironmentOptions,
   LoadEnvironmentQueryParams,
@@ -10,12 +10,12 @@ import {
 } from '../../../types/environments'
 import { SecretName } from '../../../types/secrets'
 
-type LoadEnvironmentError = GenericApiError
+type LoadEnvironmentErrorCode = GenericApiErrorCode
 
 async function loadEnvironment(
   client: HttpClient,
   options?: LoadEnvironmentOptions
-): Promise<ApiResponse<null, LoadEnvironmentError>> {
+): Promise<ApiResponse<null, LoadEnvironmentErrorCode>> {
   const printType = options?.printSecrets
   const verbose = options?.verbose === true
 
@@ -30,7 +30,7 @@ async function loadEnvironment(
 
   const { data, error } = await client.sendApiRequest<
     LoadEnvironmentResponse,
-    LoadEnvironmentError
+    LoadEnvironmentErrorCode
   >({
     method: 'GET',
     path: '/v1/environment/secrets',
@@ -41,6 +41,13 @@ async function loadEnvironment(
     // console.log('\nFailed to load environment')
     // console.log(error)
     return responseFailure(error)
+  }
+
+  if (!data) {
+    return responseFailure({
+      code: 'server.connection_failed',
+      message: 'Could not load environment data.',
+    })
   }
 
   const { environment, secrets } = data

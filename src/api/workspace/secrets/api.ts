@@ -8,11 +8,11 @@ import {
 } from '../../../errors/secrets'
 import { HttpClient } from '../../../http/client'
 import { ApiResponse, responseFailure } from '../../../http/response'
-import { EnvironmentContextError } from '../../../types/errors'
+import { EnvironmentContextErrorCode } from '../../../types/errors'
 import {
-  ListExcludeSecretsError,
-  ListOnlySecretsError,
-  SearchSecretsError,
+  ListExcludeSecretsErrorCode,
+  ListOnlySecretsErrorCode,
+  SearchSecretsErrorCode,
 } from '../../../types/errors/secrets'
 import {
   SecretName,
@@ -122,7 +122,7 @@ export class SecretsAPI {
    */
   async searchSecrets(
     options: SearchSecretsOptions
-  ): Promise<ApiResponse<SearchSecretsResponse, SearchSecretsError | EnvironmentContextError>> {
+  ): Promise<ApiResponse<SearchSecretsResponse, SearchSecretsErrorCode | EnvironmentContextErrorCode>> {
     const validationError = this.validateProjectIdentifier()
     if (validationError) return responseFailure(validationError)
 
@@ -157,7 +157,7 @@ export class SecretsAPI {
   async listOnly(
     only: SecretName[],
     options?: ListSecretsOptions
-  ): Promise<ApiResponse<ListSecretsResponse, ListOnlySecretsError | EnvironmentContextError>> {
+  ): Promise<ApiResponse<ListSecretsResponse, ListOnlySecretsErrorCode | EnvironmentContextErrorCode>> {
     const identifierValidationError = this.validateIdentifiers()
     if (identifierValidationError) return responseFailure(identifierValidationError)
 
@@ -186,7 +186,7 @@ export class SecretsAPI {
   async listExclude(
     exclude: SecretName[],
     options?: ListSecretsOptions
-  ): Promise<ApiResponse<ListSecretsResponse, ListExcludeSecretsError | EnvironmentContextError>> {
+  ): Promise<ApiResponse<ListSecretsResponse, ListExcludeSecretsErrorCode | EnvironmentContextErrorCode>> {
     const validationError = this.validateIdentifiers()
     if (validationError) return responseFailure(validationError)
 

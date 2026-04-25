@@ -28,7 +28,7 @@ import {
   invalidSecretNamesError,
   noDataProvidedError,
 } from '../../errors/secrets'
-import { ApiResponse, responseFailure } from '../../http/response'
+import { ApiResponse, responseFailure, responseSuccess } from '../../http/response'
 import { LoadEnvironmentOptions } from '../../types/environments'
 import { deleteAllEnvironmentSecrets } from './handlers/secrets/deleteAll'
 import {
@@ -56,7 +56,7 @@ import {
 } from '../../errors/webhooks'
 import { CreateWebhookData, UpdateWebhookData } from '../../types/webhooks'
 import { ListWebhookLogsOptions } from '../workspace/webhooks/handlers/listLogs'
-import { ListExcludeSecretsError, ListOnlySecretsError } from '../../types/errors/secrets'
+import { ListExcludeSecretsErrorCode, ListOnlySecretsErrorCode } from '../../types/errors/secrets'
 import { getCurrentAuthDetails } from '../shared/handlers/whoami'
 
 class EnvironmentClient {
@@ -110,7 +110,7 @@ class EnvironmentsClient {
    */
   async load(options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
-      return { data: null, error: null, ok: null }
+      return responseSuccess(null)
     }
 
     return await loadEnvironment(this.httpClient, options)
@@ -121,11 +121,11 @@ class EnvironmentsClient {
    *
    * @param options - Options for loading the environment.
    * @returns A promise that resolves to an object containing the loaded data, error (if any), and success status.
-   * @throws ApiError if the loading process fails.
+   * @throws ApiErrorCode if the loading process fails.
    */
   async loadOrThrow(options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
-      return { data: null, error: null, ok: null }
+      return responseSuccess(null)
     }
 
     const { error } = await loadEnvironment(this.httpClient, options)
@@ -177,7 +177,7 @@ class SecretsAPI {
   async listOnly(
     only: SecretName[],
     options?: ListSecretsOptions
-  ): Promise<ApiResponse<ListSecretsResponse, ListOnlySecretsError>> {
+  ): Promise<ApiResponse<ListSecretsResponse, ListOnlySecretsErrorCode>> {
     if (!Array.isArray(only) || only.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)
@@ -203,7 +203,7 @@ class SecretsAPI {
   async listExclude(
     exclude: SecretName[],
     options?: ListSecretsOptions
-  ): Promise<ApiResponse<ListSecretsResponse, ListExcludeSecretsError>> {
+  ): Promise<ApiResponse<ListSecretsResponse, ListExcludeSecretsErrorCode>> {
     if (!Array.isArray(exclude) || exclude.length === 0) {
       const error = noDataProvidedError()
       return responseFailure(error)

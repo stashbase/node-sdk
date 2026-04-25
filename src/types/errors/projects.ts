@@ -1,77 +1,13 @@
-import { ConflictApiError, ResourceApiError, ValidationApiError } from '.'
-
-export type ProjectNotFoundError = ResourceApiError<'project_not_found', undefined>
-export type ProjectLimitReachedError = ResourceApiError<'project_limit_reached', undefined>
-export type ProjectAlreadyExistsError = ConflictApiError<'project_already_exists', undefined>
-export type ProjectNameUsesIdFormatError = ValidationApiError<
-  'project_name_uses_id_format',
-  {
-    invalidNameExamples: string[]
-    validNameExamples: string[]
-  }
->
-
-export type InvalidProjectIdentifierError = ValidationApiError<
-  'invalid_project_identifier',
-  {
-    nameExamples: string[]
-    idExample: string
-  }
->
-
-export type InvalidProjectNameError = ValidationApiError<
-  'invalid_project_name',
-  {
-    validNameExamples: string[]
-    invalidNameExamples: string[]
-  }
->
-
-export type NewProjectNameEqualsOriginal = ValidationApiError<'new_project_name_equals_original'>
-
-export type ProjectDescriptionTooLongError = ValidationApiError<
-  'project_description_too_long',
-  {
-    maxLength: number
-  }
->
-
-export type InvalidProjectPageNumberError = ValidationApiError<
-  'invalid_page',
-  {
-    min: number
-    max: number
-  }
->
-
-export type InvalidProjectPageSizeError = ValidationApiError<
-  'invalid_page_size',
-  {
-    min: number
-    max: number
-  }
->
-
-export type InvalidProjectSortByError = ValidationApiError<
-  'invalid_sort_by',
-  {
-    allowedValues: Array<string>
-  }
->
-
-export type InvalidProjectOrderError = ValidationApiError<
-  'invalid_order',
-  {
-    allowedValues: Array<string>
-  }
->
-
-export type InvalidProjectSearchError = ValidationApiError<
-  'invalid_search',
-  {
-    // minLength: number
-    // maxLength: number
-    validSearchExamples: string[]
-    invalidSearchExamples: string[]
-  }
->
+export type ProjectNotFoundErrorCode = 'resource.project_not_found'
+export type ProjectLimitReachedErrorCode = 'quota.project_limit_reached'
+export type ProjectAlreadyExistsErrorCode = 'conflict.project_already_exists'
+export type ProjectNameUsesIdFormatErrorCode = 'validation.project_name_uses_id_format'
+export type InvalidProjectIdentifierErrorCode = 'validation.invalid_project_identifier'
+export type InvalidProjectNameErrorCode = 'validation.invalid_project_name'
+export type NewProjectNameEqualsOriginalErrorCode = 'validation.new_project_name_equals_original'
+export type ProjectDescriptionTooLongErrorCode = 'validation.project_description_too_long'
+export type InvalidProjectPageNumberErrorCode = 'validation.invalid_page'
+export type InvalidProjectPageSizeErrorCode = 'validation.invalid_page_size'
+export type InvalidProjectSortByErrorCode = 'validation.invalid_sort_by'
+export type InvalidProjectOrderErrorCode = 'validation.invalid_order'
+export type InvalidProjectSearchErrorCode = 'validation.invalid_search'

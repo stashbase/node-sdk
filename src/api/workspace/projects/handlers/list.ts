@@ -1,12 +1,12 @@
 import { HttpClient } from '../../../../http/client'
 import { ApiResponse } from '../../../../http/response'
-import { GenericApiError } from '../../../../types/errors'
+import { GenericApiErrorCode } from '../../../../types/errors'
 import {
-  InvalidProjectPageSizeError,
-  InvalidProjectOrderError,
-  InvalidProjectPageNumberError,
-  InvalidProjectSearchError,
-  InvalidProjectSortByError,
+  InvalidProjectPageSizeErrorCode,
+  InvalidProjectOrderErrorCode,
+  InvalidProjectPageNumberErrorCode,
+  InvalidProjectSearchErrorCode,
+  InvalidProjectSortByErrorCode,
 } from '../../../../types/errors/projects'
 import { PaginationMetadata } from '../../../../types/pagination'
 import { Project } from '../../../../types/projects'
@@ -30,18 +30,18 @@ type ListProjectsResponse = {
   pagination: PaginationMetadata
 }
 
-type ListProjectsError =
-  | GenericApiError
-  | InvalidProjectPageNumberError
-  | InvalidProjectPageSizeError
-  | InvalidProjectSortByError
-  | InvalidProjectOrderError
-  | InvalidProjectSearchError
+type ListProjectsErrorCode =
+  | GenericApiErrorCode
+  | InvalidProjectPageNumberErrorCode
+  | InvalidProjectPageSizeErrorCode
+  | InvalidProjectSortByErrorCode
+  | InvalidProjectOrderErrorCode
+  | InvalidProjectSearchErrorCode
 
 export async function listProjects(
   client: HttpClient,
   options?: ListProjectsOpts
-): Promise<ApiResponse<ListProjectsResponse, ListProjectsError>> {
+): Promise<ApiResponse<ListProjectsResponse, ListProjectsErrorCode>> {
   const query: Record<string, string | number | boolean> = {}
 
   if (options?.page) {
@@ -64,7 +64,7 @@ export async function listProjects(
     query.order = options.order
   }
 
-  return await client.sendApiRequest<ListProjectsResponse, ListProjectsError>({
+  return await client.sendApiRequest<ListProjectsResponse, ListProjectsErrorCode>({
     method: 'GET',
     path: `/v1/projects`,
     query: Object.keys(query).length > 0 ? query : undefined,
