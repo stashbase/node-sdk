@@ -204,7 +204,7 @@ export class HttpClient {
     query?: Query
     timeoutMs?: number
     signal?: AbortSignal
-  }): Promise<T> {
+  }): Promise<{ data: T; status: number }> {
     const timeoutMs = args.timeoutMs ?? this.timeoutMs
     const url = this.buildUrl(args.path, args.query)
     const hookContext: HttpRequestHookContext = {
@@ -242,15 +242,28 @@ export class HttpClient {
         if (response.status === 503) {
           const error = new Error()
           error.name = 'ServerTemporaryUnavailableError'
+          ;(error as Error & { status: number }).status = response.status
           throw error
         }
 
         const errorData: unknown = await response.json()
-        throw errorData
+        if (typeof errorData === 'object' && errorData !== null) {
+          throw {
+            ...(errorData as Record<string, unknown>),
+            status: response.status,
+          }
+        }
+
+        throw {
+          status: response.status,
+        }
       }
 
       const data: unknown = await response.json()
-      return data as T
+      return {
+        data: data as T,
+        status: response.status,
+      }
     } catch (error) {
       await this.triggerOnError({
         ...hookContext,
@@ -265,7 +278,7 @@ export class HttpClient {
     query?: Query
     timeoutMs?: number
     signal?: AbortSignal
-  }): Promise<T> {
+  }): Promise<{ data: T; status: number }> {
     const timeoutMs = args.timeoutMs ?? this.timeoutMs
     const url = this.buildUrl(args.path, args.query)
     const hookContext: HttpRequestHookContext = {
@@ -303,19 +316,35 @@ export class HttpClient {
         if (response.status === 503) {
           const error = new Error()
           error.name = 'ServerTemporaryUnavailableError'
+          ;(error as Error & { status: number }).status = response.status
           throw error
         }
 
         const errorData: unknown = await response.json()
-        throw errorData
+        if (typeof errorData === 'object' && errorData !== null) {
+          throw {
+            ...(errorData as Record<string, unknown>),
+            status: response.status,
+          }
+        }
+
+        throw {
+          status: response.status,
+        }
       }
 
       if (response.status === 204) {
-        return null as T
+        return {
+          data: null as T,
+          status: response.status,
+        }
       }
 
       const data: unknown = await response.json()
-      return data as T
+      return {
+        data: data as T,
+        status: response.status,
+      }
     } catch (error) {
       await this.triggerOnError({
         ...hookContext,
@@ -325,7 +354,7 @@ export class HttpClient {
     }
   }
 
-  private async put<T>(args: RequestWithData): Promise<T> {
+  private async put<T>(args: RequestWithData): Promise<{ data: T; status: number }> {
     return await this.requestWithData<T>({
       method: 'PUT',
       path: args.path,
@@ -335,7 +364,7 @@ export class HttpClient {
     })
   }
 
-  private async post<T>(args: RequestWithData): Promise<T> {
+  private async post<T>(args: RequestWithData): Promise<{ data: T; status: number }> {
     return await this.requestWithData<T>({
       method: 'POST',
       path: args.path,
@@ -345,7 +374,7 @@ export class HttpClient {
     })
   }
 
-  private async patch<T>(args: RequestWithData): Promise<T> {
+  private async patch<T>(args: RequestWithData): Promise<{ data: T; status: number }> {
     return await this.requestWithData<T>({
       method: 'PATCH',
       path: args.path,
@@ -365,7 +394,7 @@ export class HttpClient {
   }): Promise<import('./response').ApiResponse<T, E>> {
     const { method, path, data, query, timeoutMs, signal } = args
     try {
-      let response: T
+      let response: { data: T; status: number }
 
       if (method === 'GET' || method === 'DELETE') {
         const m = method === 'GET' ? 'get' : 'delete'
@@ -380,20 +409,35 @@ export class HttpClient {
         })
       }
 
-      const formattedResponse = toCamelCase(response)
-      return responseSuccess(formattedResponse as T)
+      const formattedResponse = toCamelCase(response.data)
+      return responseSuccess(formattedResponse as T, response.status)
     } catch (error) {
       if (error instanceof HookExecutionError) {
         return responseFailure<E>({
           code: 'server.connection_failed' as E,
           message: error.message,
           details: error,
-        })
+        }, null)
       }
 
-      const formattedError = toCamelCase(error)
+      let status: number | null = null
+      let parseTarget: unknown = error
+
+      if (error instanceof Error) {
+        const maybeStatus = (error as Error & { status?: unknown }).status
+        if (typeof maybeStatus === 'number') {
+          status = maybeStatus
+        }
+      } else if (typeof error === 'object' && error !== null) {
+        const withStatus = error as { status?: unknown }
+        if (typeof withStatus.status === 'number') {
+          status = withStatus.status
+        }
+      }
+
+      const formattedError = error instanceof Error ? parseTarget : toCamelCase(parseTarget)
       const apiError = parseError(formattedError) as ApiError<E>
-      return responseFailure<E>(apiError)
+      return responseFailure<E>(apiError, status)
     }
   }
 
@@ -403,7 +447,7 @@ export class HttpClient {
     data?: RequestData
     timeoutMs?: number
     signal?: AbortSignal
-  }): Promise<T> {
+  }): Promise<{ data: T; status: number }> {
     const { method, path, data, signal } = args
     const timeoutMs = args.timeoutMs ?? this.timeoutMs
     const url = this.buildUrl(path)
@@ -445,19 +489,35 @@ export class HttpClient {
         if (response.status === 503) {
           const error = new Error()
           error.name = 'ServerTemporaryUnavailableError'
+          ;(error as Error & { status: number }).status = response.status
           throw error
         }
 
         const errorData: unknown = await response.json()
-        throw errorData
+        if (typeof errorData === 'object' && errorData !== null) {
+          throw {
+            ...(errorData as Record<string, unknown>),
+            status: response.status,
+          }
+        }
+
+        throw {
+          status: response.status,
+        }
       }
 
       if (response.status === 204) {
-        return null as T
+        return {
+          data: null as T,
+          status: response.status,
+        }
       }
 
       const responseData: unknown = await response.json()
-      return responseData as T
+      return {
+        data: responseData as T,
+        status: response.status,
+      }
     } catch (error) {
       await this.triggerOnError({
         ...hookContext,

@@ -24,6 +24,7 @@ describe('ApiError passthrough', () => {
 
     assert.equal(response.error?.code, 'auth.unauthorized')
     assert.equal(response.error?.message, 'Unauthorized')
+    assert.equal(response.status, 401)
   })
 
   test('keeps backend error code for server failures', async () => {
@@ -50,5 +51,6 @@ describe('ApiError passthrough', () => {
 
     assert.equal(response.error?.code, 'server.internal_error')
     assert.equal(response.error?.message, 'Internal Server Error')
+    assert.equal(response.status, 500)
   })
 })

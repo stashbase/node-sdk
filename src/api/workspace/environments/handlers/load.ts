@@ -36,7 +36,7 @@ async function loadEnvironment(
     query.expand_refs = true
   }
 
-  const { data, error } = await client.sendApiRequest<
+  const { data, error, status } = await client.sendApiRequest<
     LoadEnvironmentResponse,
     LoadEnvironmentErrorCode
   >({
@@ -46,14 +46,14 @@ async function loadEnvironment(
   })
 
   if (error) {
-    return responseFailure(error)
+    return responseFailure(error, status)
   }
 
   if (!data) {
     return responseFailure({
       code: 'server.connection_failed',
       message: 'Could not load environment data.',
-    })
+    }, status)
   }
 
   const {
@@ -69,7 +69,7 @@ async function loadEnvironment(
       console.log(`No secrets found`)
     }
 
-    return responseSuccess(null)
+    return responseSuccess(null, status)
   }
 
   const secretsObj = (secrets ?? []).reduce(
@@ -94,7 +94,7 @@ async function loadEnvironment(
     printSecretsTable.masked(secrets)
   }
 
-  return responseSuccess(null)
+  return responseSuccess(null, status)
 }
 
 export { loadEnvironment }

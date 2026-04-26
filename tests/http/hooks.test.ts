@@ -28,6 +28,7 @@ describe('HttpClient hooks', () => {
     })
 
     assert.equal(response.error, null)
+    assert.equal(response.status, 200)
     assert.equal(beforeRequest.mock.calls.length, 1)
     assert.equal(afterResponse.mock.calls.length, 1)
 
@@ -74,6 +75,7 @@ describe('HttpClient hooks', () => {
     const response = await client.sendApiRequest({ method: 'GET', path: '/v1/whoami' })
 
     assert.notEqual(response.error, null)
+    assert.equal(response.status, 401)
     assert.equal(afterResponse.mock.calls.length, 1)
     assert.equal(onError.mock.calls.length, 1)
 
@@ -106,6 +108,7 @@ describe('HttpClient hooks', () => {
     const response = await client.sendApiRequest({ method: 'GET', path: '/v1/whoami' })
 
     assert.notEqual(response.error, null)
+    assert.equal(response.status, null)
     assert.equal(onError.mock.calls.length, 1)
 
     const errorContext = onError.mock.calls[0][0] as {
@@ -137,6 +140,7 @@ describe('HttpClient hooks', () => {
     const response = await client.sendApiRequest({ method: 'GET', path: '/v1/whoami' })
 
     assert.equal(response.error?.code, 'server.connection_failed')
+    assert.equal(response.status, null)
   })
 
   test('ignores errors thrown by onError hook and preserves original request error', async () => {
@@ -160,5 +164,6 @@ describe('HttpClient hooks', () => {
     const response = await client.sendApiRequest({ method: 'GET', path: '/v1/whoami' })
 
     assert.equal(response.error?.code, 'server.connection_failed')
+    assert.equal(response.status, null)
   })
 })
