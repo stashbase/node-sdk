@@ -4,6 +4,7 @@ export type GlobalErrorCode =
   | 'rate_limit.too_many_requests'
   | 'server.internal_error'
   | 'server.temporary_unavailable'
+  | 'validation.bad_request'
 
 export type SdkErrorCode = 'server.connection_failed'
 
