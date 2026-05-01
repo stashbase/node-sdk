@@ -9,11 +9,6 @@ export type GetWebhookArgs = SingleWebhookArgs<{
   withSecret: boolean
 }>
 
-// Update the type to use a boolean instead of boolean | undefined
-// type WebhookWithConditionalSecret<T extends boolean> = Omit<Webhook, 'signingSecret'> & {
-//   signingSecret: T extends true ? string : undefined
-// }
-
 // Keep the original type definition
 type WebhookWithConditionalSecret<T extends boolean | undefined> = T extends true
   ? Webhook & { signingSecret: string }
