@@ -23,9 +23,10 @@ describe('printSecretsTable', () => {
 
     const plainOutput = stripAnsi(output)
 
-    assert.include(plainOutput, '│ Name    │')
-    assert.include(plainOutput, '│ API_KEY │')
-    assert.include(plainOutput, '│ DB_URL  │')
+    assert.include(plainOutput, 'Name')
+    assert.include(plainOutput, 'API_KEY')
+    assert.include(plainOutput, 'DB_URL')
+    assert.notInclude(plainOutput, '│')
 
     process.env.NO_COLOR = originalNoColor
   })
@@ -52,9 +53,11 @@ describe('printSecretsTable', () => {
 
     const plainOutput = stripAnsi(output)
 
-    assert.include(plainOutput, '│ Name  │ Value     │')
-    assert.include(plainOutput, '│ SHORT │ ******    │')
-    assert.include(plainOutput, '│ LONG  │ abc****** │')
+    assert.include(plainOutput, 'Name')
+    assert.include(plainOutput, 'Value')
+    assert.include(plainOutput, 'SHORT ******')
+    assert.include(plainOutput, 'LONG  abc******')
+    assert.notInclude(plainOutput, '│')
 
     process.env.NO_COLOR = originalNoColor
   })

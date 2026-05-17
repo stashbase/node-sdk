@@ -13,28 +13,12 @@ const colorHeader = (value: string): string => {
   return shouldUseColor() ? `${ANSI_CYAN}${value}${ANSI_RESET}` : value
 }
 
-const createTopBorder = (columnWidths: number[]): string => {
-  return `┌${columnWidths.map((width) => '─'.repeat(width + 2)).join('┬')}┐`
-}
-
-const createMiddleBorder = (columnWidths: number[]): string => {
-  return `├${columnWidths.map((width) => '─'.repeat(width + 2)).join('┼')}┤`
-}
-
-const createBottomBorder = (columnWidths: number[]): string => {
-  return `└${columnWidths.map((width) => '─'.repeat(width + 2)).join('┴')}┘`
-}
-
 const createRow = (columns: string[], columnWidths: number[]): string => {
-  const cells = columns.map((column, index) => ` ${padRight(column, columnWidths[index])} `).join('│')
-  return `│${cells}│`
+  return columns.map((column, index) => padRight(column, columnWidths[index])).join(' ')
 }
 
 const createHeaderRow = (headers: string[], columnWidths: number[]): string => {
-  const cells = headers
-    .map((header, index) => ` ${colorHeader(padRight(header, columnWidths[index]))} `)
-    .join('│')
-  return `│${cells}│`
+  return headers.map((header, index) => colorHeader(padRight(header, columnWidths[index]))).join(' ')
 }
 
 const renderTable = (headers: string[], rows: string[][]): string => {
@@ -43,17 +27,11 @@ const renderTable = (headers: string[], rows: string[][]): string => {
     return Math.max(header.length, maxRowLength)
   })
 
-  const outputRows = [
-    createTopBorder(columnWidths),
-    createHeaderRow(headers, columnWidths),
-    createMiddleBorder(columnWidths),
-  ]
+  const outputRows = [createHeaderRow(headers, columnWidths)]
 
   for (const row of rows) {
     outputRows.push(createRow(row, columnWidths))
   }
-
-  outputRows.push(createBottomBorder(columnWidths))
 
   return outputRows.join('\n')
 }
