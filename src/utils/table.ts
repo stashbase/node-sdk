@@ -13,12 +13,14 @@ const colorHeader = (value: string): string => {
   return shouldUseColor() ? `${ANSI_CYAN}${value}${ANSI_RESET}` : value
 }
 
+const COLUMN_SEPARATOR = '   '
+
 const createRow = (columns: string[], columnWidths: number[]): string => {
-  return columns.map((column, index) => padRight(column, columnWidths[index])).join(' ')
+  return columns.map((column, index) => padRight(column, columnWidths[index])).join(COLUMN_SEPARATOR)
 }
 
 const createHeaderRow = (headers: string[], columnWidths: number[]): string => {
-  return headers.map((header, index) => colorHeader(padRight(header, columnWidths[index]))).join(' ')
+  return headers.map((header, index) => colorHeader(padRight(header, columnWidths[index]))).join(COLUMN_SEPARATOR)
 }
 
 const renderTable = (headers: string[], rows: string[][]): string => {

@@ -55,8 +55,8 @@ describe('printSecretsTable', () => {
 
     assert.include(plainOutput, 'Name')
     assert.include(plainOutput, 'Value')
-    assert.include(plainOutput, 'SHORT ******')
-    assert.include(plainOutput, 'LONG  abc******')
+    assert.match(plainOutput, /SHORT\s{3,}\*{6}/)
+    assert.match(plainOutput, /LONG\s{3,}abc\*{6}/)
     assert.notInclude(plainOutput, '│')
 
     process.env.NO_COLOR = originalNoColor
