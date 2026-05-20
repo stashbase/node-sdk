@@ -67,8 +67,8 @@ export interface ListSecretsQueryParams {
 export interface SearchSecretsQueryParams {
   name?: string
   value?: string
-  return_values?: true
   with_ids?: true
+  include_values?: true
 }
 
 export interface SearchSecretsEnvironment {

@@ -130,10 +130,10 @@ export class WebhooksAPI {
    * Retrieves a single webhook by its id from a specific project and environment.
    *
    * @param webhookId - The id of the webhook to retrieve.
-   * @param withSecret - Whether to include the webhook secret in the response.
+   * @param includeSecret - Whether to include the webhook secret in the response.
    * @returns A promise that resolves to the webhook object identifiers (id, name) or an error response.
    */
-  async get(webhookId: string, withSecret?: boolean) {
+  async get(webhookId: string, includeSecret?: boolean) {
     const validationError = this.validateIdentifiersWithWebhookId(webhookId)
     if (validationError) return responseFailure(validationError)
 
@@ -144,7 +144,7 @@ export class WebhooksAPI {
 
     return await getWebhook({
       ...this.getSingleWebhookHandlerArgs(webhookId),
-      withSecret,
+      includeSecret,
     })
   }
 

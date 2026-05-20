@@ -6,7 +6,7 @@ import { ApiResponse } from '../../../../http/response'
 
 export type GetWebhookArgs = SingleWebhookArgs<{
   /** Whether to include the webhook's signing secret in the response */
-  withSecret: boolean
+  includeSecret: boolean
 }>
 
 // Keep the original type definition
@@ -17,14 +17,14 @@ type WebhookWithConditionalSecret<T extends boolean | undefined> = T extends tru
 // Make the function generic
 async function getWebhook<T extends boolean>(
   envClient: HttpClient,
-  args: GetWebhookArgs & { withSecret: T }
+  args: GetWebhookArgs & { includeSecret: T }
 ): Promise<ApiResponse<WebhookWithConditionalSecret<T>, GetWebhookErrorCode>> {
-  const { webhookId, withSecret } = args
+  const { webhookId, includeSecret } = args
 
   return envClient.sendApiRequest<WebhookWithConditionalSecret<T>, GetWebhookErrorCode>({
     method: 'GET',
     path: `/v1/environment/webhooks/${webhookId}`,
-    query: withSecret ? { with_secret: true } : undefined,
+    query: includeSecret === true ? { include_secret: true } : undefined,
   })
 }
 

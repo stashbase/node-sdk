@@ -318,17 +318,17 @@ class WebhooksAPI {
    * Retrieves a single webhook associated with the current API key environment.
    *
    * @param webhookId - The ID of the webhook to retrieve.
-   * @param withSecret - Whether to include the signing secret in the response.
+   * @param includeSecret - Whether to include the signing secret in the response.
    * @returns A promise that resolves to the retrieved webhook or an error response.
    */
-  async get(webhookId: string, withSecret?: boolean) {
+  async get(webhookId: string, includeSecret?: boolean) {
     const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
 
     if (invalidWebhookIdError) {
       return invalidWebhookIdError
     }
 
-    return await getWebhook(this.httpClient, { webhookId, withSecret: withSecret ?? false })
+    return await getWebhook(this.httpClient, { webhookId, includeSecret: includeSecret ?? false })
   }
 
   /**

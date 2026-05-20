@@ -11,11 +11,11 @@ async function getWebhook<T extends boolean>(args: {
   project: string
   environment: string
   webhookId: string
-  withSecret?: T
+  includeSecret?: T
 }): Promise<
   ApiResponse<Webhook & { signingSecret: T extends true ? string : undefined }, GetWebhookErrorCode>
 > {
-  const { client, project, environment, webhookId, withSecret } = args
+  const { client, project, environment, webhookId, includeSecret } = args
   const path = `/v1/projects/${project}/environments/${environment}/webhooks/${webhookId}`
 
   return await client.sendApiRequest<
@@ -24,7 +24,7 @@ async function getWebhook<T extends boolean>(args: {
   >({
     method: 'GET',
     path,
-    query: withSecret ? { with_secret: true } : undefined,
+    query: includeSecret === true ? { include_secret: true } : undefined,
   })
 }
 
