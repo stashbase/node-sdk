@@ -21,7 +21,7 @@ async function loadEnvironment(
 
   const query: LoadEnvironmentQueryParams = {
     omit: 'description',
-    with_environment: ['name', 'is_production'].join(','),
+    include_environment: ['name', 'is_production'].join(','),
   }
 
   if (options?.expandRefs) {
@@ -44,10 +44,13 @@ async function loadEnvironment(
   }
 
   if (!data) {
-    return responseFailure({
-      code: 'server.connection_failed',
-      message: 'Could not load environment data.',
-    }, status)
+    return responseFailure(
+      {
+        code: 'server.connection_failed',
+        message: 'Could not load environment data.',
+      },
+      status
+    )
   }
 
   const { environment, secrets } = data

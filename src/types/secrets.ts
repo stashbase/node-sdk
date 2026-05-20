@@ -52,7 +52,7 @@ export interface ListSecretsQueryParams {
   /** If true, expands all referenced secrets to their values */
   expand_refs?: true
   /** A comma-separated list of environment properties to return (id, name, is_production) */
-  with_environment?: string
+  include_environment?: string
   /** A string specifying which properties to omit from the response */
   omit?: string
   /** A string specifying which secrets to include in the response */
@@ -67,7 +67,7 @@ export interface ListSecretsQueryParams {
 export interface SearchSecretsQueryParams {
   name?: string
   value?: string
-  with_ids?: true
+  include_ids?: true
   include_values?: true
 }
 
