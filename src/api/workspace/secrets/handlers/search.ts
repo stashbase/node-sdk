@@ -8,7 +8,10 @@ import {
   SearchSecretsResponse,
 } from '../../../../types/secrets'
 
-type SearchSecretsErrorCode = SharedSearchSecretsErrorCode | GenericApiErrorCode | EnvironmentContextErrorCode
+type SearchSecretsErrorCode =
+  | SharedSearchSecretsErrorCode
+  | GenericApiErrorCode
+  | EnvironmentContextErrorCode
 
 export type SearchSecretsArgs = EnvironmentHandlerArgs<{ options: SearchSecretsOptions }>
 
@@ -21,8 +24,8 @@ async function searchSecrets(
   if (options.name) {
     queryObj.name = options.name
 
-    if (options.returnValues === true) {
-      queryObj.return_values = true
+    if (options.includeValues === true) {
+      queryObj.include_values = true
     }
   } else if (options.value) {
     queryObj.value = options.value

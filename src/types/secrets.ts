@@ -92,8 +92,8 @@ export type SearchSecretsOptions = AtLeastOne<{
   name: SecretName
   value: string
 }> & {
-  /** Return actual secret values, for search by name */
-  returnValues?: boolean
+  /** Include secret values in the response, for search by name */
+  includeValues?: boolean
 }
 
 export type GetSecretQueryParams = Pick<ListSecretsQueryParams, 'omit' | 'expand_refs'>
