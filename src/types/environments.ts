@@ -37,13 +37,15 @@ export type LoadEnvironmentResponse = {
 export interface Environment {
   /** The unique identifier of the environment. */
   id: string
-  /** The creation date of the environment. */
+  /** The datetime when the environment was created. */
   createdAt: string
+  /** The datetime when the environment was last updated. Initially equals `createdAt`. */
+  updatedAt: string
   /** The unique name of the environment. */
   name: string
-  /** Whether the environment is a production environment or not. */
+  /** Whether the environment is a production environment. */
   isProduction: boolean
-  /** The description of the environment. */
+  /** The description of the environment, can be null. */
   description: string | null
   /** The number of secrets in the environment. */
   secretCount: number

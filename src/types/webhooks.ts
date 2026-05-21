@@ -11,8 +11,11 @@ export interface Webhook {
   /** Whether the webhook is enabled  or not*/
   enabled: boolean
 
-  /** The creation datetime of the webhook */
+  /** The datetime when the webhook was created. */
   createdAt: string
+
+  /** The datetime when the webhook was last updated. Initially equals `createdAt`. */
+  updatedAt: string
 
   /** The description of the webhook */
   description: string | null

@@ -1,8 +1,10 @@
 export interface Project {
   /** The unique identifier of the project. */
   id: string
-  /** The creation date of the project. */
+  /** The datetime when the project was created. */
   createdAt: string
+  /** The datetime when the project was last updated. Initially equals `createdAt`. */
+  updatedAt: string
   /** The unique name of the project. */
   name: string
   /** The description of the project, can be null. */
