@@ -68,10 +68,3 @@ export interface CreateEnvironmentData {
   /** Whether the environment is a production environment or not. */
   isProduction?: boolean
 }
-
-export interface CreateEnvironmentResponse {
-  /** The unique identifier of the environment. */
-  id: string
-  /** The unique name of the environment. */
-  name: string
-}
