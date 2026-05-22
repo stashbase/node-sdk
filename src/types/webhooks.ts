@@ -57,9 +57,9 @@ export interface CreateWebhookData {
   description?: string | null
 }
 
-export interface CreateWebhookResponse {
-  /** The unique identifier of the webhook */
-  id: string
+export type WebhookWithSigningSecret = Webhook & {
+  /** The signing secret of the webhook */
+  signingSecret: string
 }
 
 export interface WebhookSigningSecret {
