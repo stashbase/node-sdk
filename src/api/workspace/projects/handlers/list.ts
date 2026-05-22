@@ -18,7 +18,7 @@ export type ListProjectsOpts = {
   /** The number of items per page (min 2, max 30, default 10). */
   pageSize?: number
   /** The field to sort by. */
-  sortBy?: 'name' | 'createdAt' | 'environmentCount'
+  sortBy?: 'name' | 'createdAt' | 'updatedAt' | 'environmentCount'
   /** Whether to sort in ascending or descending order, default: 'asc'. */
   order?: 'asc' | 'desc'
   /** A search query (min 2, max 40 characters). */
