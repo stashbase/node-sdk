@@ -12,10 +12,3 @@ export interface Project {
   /** The number of environments associated with the project. */
   environmentCount: number
 }
-
-export interface CreateProjectResponse {
-  /** The unique identifier of the project. */
-  id: string
-  /** The unique name of the project. */
-  name: string
-}
