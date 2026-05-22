@@ -1,7 +1,7 @@
 import { ApiResponse } from '../../../../http/response'
 import { CreateWebhookErrorCode as SharedCreateWebhookErrorCode } from '../../../../types/errors/webhooks'
 import { CreateWebhookData } from '../../../../types/webhooks'
-import { CreateWebhookResponse } from '../../../../types/webhooks'
+import { WebhookWithSigningSecret } from '../../../../types/webhooks'
 import { ProjectEnvHandlerArgs } from '../../../../types/arguments'
 import { EnvironmentContextErrorCode } from '../../../../types/errors'
 
@@ -13,11 +13,11 @@ type CreateWebhookErrorCode = SharedCreateWebhookErrorCode | EnvironmentContextE
 
 async function createWebhook(
   args: CreateWebhookArgs
-): Promise<ApiResponse<CreateWebhookResponse, CreateWebhookErrorCode>> {
+): Promise<ApiResponse<WebhookWithSigningSecret, CreateWebhookErrorCode>> {
   const { client, project, environment, data } = args
   const path = `/v1/projects/${project}/environments/${environment}/webhooks`
 
-  return await client.sendApiRequest<CreateWebhookResponse, CreateWebhookErrorCode>({
+  return await client.sendApiRequest<WebhookWithSigningSecret, CreateWebhookErrorCode>({
     method: 'POST',
     path,
     data,
