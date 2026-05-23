@@ -11,6 +11,7 @@ import { listSecrets } from './handlers/secrets/list'
 import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
 import { UpdateSecretsData, updateSecrets } from './handlers/secrets/update'
 import { getSecret } from './handlers/secrets/get'
+import { getSecretMetadata } from './handlers/secrets/getMetadata'
 import {
   formatSecretsInputArray,
   isValidSecretName,
@@ -32,11 +33,15 @@ import { ApiResponse, responseFailure, responseSuccess } from '../../http/respon
 import { LoadEnvironmentOptions } from '../../types/environments'
 import { deleteAllEnvironmentSecrets } from './handlers/secrets/deleteAll'
 import {
+  GetSecretMetadataResponse,
   GetSecretOptions,
   ListSecretsOptions,
+  ListSecretsMetadataResponse,
   ListSecretsResponse,
   SecretName,
 } from '../../types/secrets'
+import { GetSecretErrorCode, ListSecretsErrorCode } from '../../types/errors/secrets'
+import { listSecretsMetadata } from './handlers/secrets/listMetadata'
 import { listWebhooks } from './handlers/webhooks/list'
 import { getWebhook } from './handlers/webhooks/get'
 import { listWebhookLogs } from './handlers/webhooks/listLogs'
@@ -165,6 +170,23 @@ class SecretsAPI {
   }
 
   /**
+   * Retrieves operational metadata for a single secret by its name.
+   *
+   * @param name - The name of the secret to retrieve metadata for.
+   * @returns A promise that resolves to secret metadata or an error response.
+   */
+  async getMetadata(
+    name: string
+  ): Promise<ApiResponse<GetSecretMetadataResponse, GetSecretErrorCode>> {
+    if (!isValidSecretName(name)) {
+      const error = invalidSecretNameError()
+      return responseFailure(error)
+    }
+
+    return getSecretMetadata(this.httpClient, name)
+  }
+
+  /**
    * Retrieves all secrets.
    *
    * @param options - Options for listing secrets.
@@ -172,6 +194,15 @@ class SecretsAPI {
    */
   async list(options?: ListSecretsOptions) {
     return await listSecrets(this.httpClient, options)
+  }
+
+  /**
+   * Retrieves operational metadata for all visible secrets in the environment.
+   *
+   * @returns A promise that resolves to an array wrapper with secret metadata or an error response.
+   */
+  async listMetadata(): Promise<ApiResponse<ListSecretsMetadataResponse, ListSecretsErrorCode>> {
+    return await listSecretsMetadata(this.httpClient)
   }
 
   async listOnly(

@@ -10,7 +10,9 @@ import { HttpClient } from '../../../http/client'
 import { ApiResponse, responseFailure } from '../../../http/response'
 import { EnvironmentContextErrorCode } from '../../../types/errors'
 import {
+  GetSecretErrorCode,
   ListExcludeSecretsErrorCode,
+  ListSecretsErrorCode,
   ListOnlySecretsErrorCode,
   SearchSecretsErrorCode,
 } from '../../../types/errors/secrets'
@@ -18,7 +20,9 @@ import {
   SecretName,
   CreateSecretsItem,
   GetSecretOptions,
+  GetSecretMetadataResponse,
   ListSecretsOptions,
+  ListSecretsMetadataResponse,
   SearchSecretsOptions,
   SearchSecretsResponse,
   SetSecretsItem,
@@ -39,7 +43,9 @@ import { createSecrets } from './handlers/create'
 import { deleteSecrets } from './handlers/delete'
 import { deleteAllSecrets } from './handlers/deleteAll'
 import { getSecret } from './handlers/get'
+import { getSecretMetadata } from './handlers/getMetadata'
 import { listSecrets } from './handlers/list'
+import { listSecretsMetadata } from './handlers/listMetadata'
 import { searchSecrets } from './handlers/search'
 import { setSecrets } from './handlers/set'
 import { updateSecrets } from './handlers/update'
@@ -99,6 +105,40 @@ export class SecretsAPI {
     }
 
     return await getSecret({ name, options, ...this.getHandlerArgs() })
+  }
+
+  /**
+   * Retrieves operational metadata for a single secret.
+   *
+   * @param name - The name of the secret.
+   * @returns A promise that resolves to secret metadata or an error response.
+   */
+  async getMetadata(
+    name: SecretName
+  ): Promise<ApiResponse<GetSecretMetadataResponse, GetSecretErrorCode | EnvironmentContextErrorCode>> {
+    const validationError = this.validateIdentifiers()
+    if (validationError) return responseFailure(validationError)
+
+    if (!isValidSecretName(name)) {
+      const error = invalidSecretNameError()
+      return responseFailure(error)
+    }
+
+    return await getSecretMetadata({ name, ...this.getHandlerArgs() })
+  }
+
+  /**
+   * Lists operational metadata for all visible secrets in a project environment.
+   *
+   * @returns A promise that resolves to a metadata list or an error response.
+   */
+  async listMetadata(): Promise<
+    ApiResponse<ListSecretsMetadataResponse, ListSecretsErrorCode | EnvironmentContextErrorCode>
+  > {
+    const validationError = this.validateIdentifiers()
+    if (validationError) return responseFailure(validationError)
+
+    return await listSecretsMetadata({ ...this.getHandlerArgs() })
   }
 
   /**

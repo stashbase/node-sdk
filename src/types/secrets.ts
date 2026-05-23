@@ -11,8 +11,22 @@ export interface Secret {
   comment: string | null
 }
 
+export interface SecretMetadata {
+  name: Uppercase<string>
+  comment: string | null
+  version: number
+  hasValue: boolean
+  createdAt: string
+  updatedAt: string
+  lastAccessedAt: string | null
+}
+
 export type GetSecretResponse = Secret
 export type ListSecretsResponse = Array<Secret>
+export type GetSecretMetadataResponse = SecretMetadata
+export type ListSecretsMetadataResponse = {
+  secrets: Array<SecretMetadata>
+}
 export type ListSecretsOptions = GetSecretOptions
 
 export interface CreateSecretsResponse {
