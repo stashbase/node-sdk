@@ -82,7 +82,7 @@ export class EnvironmentsAPI {
   }
 
   /**
-   * Loads an environment and injects its secrets into the process, throwing an error if it fails.
+   * Loads the environment secrets and injects them into the process, throwing an error if it fails.
    * @param envNameOrId - The name or id of the environment to load.
    * @param options - Additional options for loading the environment.
    * @throws ApiErrorCode when loading fails.
@@ -113,7 +113,7 @@ export class EnvironmentsAPI {
   }
 
   /**
-   * Loads an environment and injects its secrets into the process.
+   * Loads the environment secrets and injects them into the process.
    * @param envNameOrId - The name or id of the environment to load.
    * @param options - Additional options for loading the environment.
    * @returns A promise that resolves to null if successful or and error response.

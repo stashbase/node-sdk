@@ -108,7 +108,7 @@ class EnvironmentsClient {
   constructor(private httpClient: HttpClient) {}
 
   /**
-   * Loads the environment and injects the secrets into the process.
+   * Loads the environment secrets and injects them into the process.
    *
    * @param options - Options for loading the environment.
    * @returns A promise that resolves to a null, error (if any), and success status.
@@ -122,7 +122,7 @@ class EnvironmentsClient {
   }
 
   /**
-   * Loads the environment and injects the secrets into the process, throwing an error if it fails.
+   * Loads the environment secrets and injects them into the process, throwing an error if it fails.
    *
    * @param options - Options for loading the environment.
    * @returns A promise that resolves to an object containing the loaded data, error (if any), and success status.
