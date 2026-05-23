@@ -11,4 +11,6 @@ export interface Project {
   description: string | null
   /** The number of environments associated with the project. */
   environmentCount: number
+  /** User project access level, only for personal authentication. */
+  accessLevel?: 'full' | 'granted'
 }
