@@ -33,7 +33,7 @@ export interface CreateSecretsResponse {
   /** The number of secrets successfully created */
   createdCount: number
   /** An array of secret names that were duplicates and not created */
-  duplicateSecrets: Array<SecretName>
+  existingSecrets: Array<SecretName>
 }
 
 export interface DeleteSecretsResponse {
