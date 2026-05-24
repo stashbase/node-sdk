@@ -99,6 +99,28 @@ const ctx = client.withContext({
 const { data, error } = await ctx.secrets.list()
 ```
 
+#### Get workspace secret metadata
+
+```js
+const ctx = client.withContext({
+  project: 'project-name',
+  environment: 'dev',
+})
+
+const { data, error } = await ctx.secrets.getMetadata('HOST')
+```
+
+#### List workspace secrets metadata
+
+```js
+const ctx = client.withContext({
+  project: 'project-name',
+  environment: 'dev',
+})
+
+const { data, error } = await ctx.secrets.listMetadata()
+```
+
 #### Load environment
 
 This method will load the environment and inject the secrets into the process.
@@ -168,6 +190,18 @@ const { error } = await client.environment.load()
 
 ```js
 const { data, error } = await client.secrets.list()
+```
+
+#### Get environment secret metadata
+
+```js
+const { data, error } = await client.secrets.getMetadata('HOST')
+```
+
+#### List environment secrets metadata
+
+```js
+const { data, error } = await client.secrets.listMetadata()
 ```
 
 ### Type imports
