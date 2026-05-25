@@ -212,6 +212,13 @@ All public SDK types are exported from the package root.
 import type { Secret, ListSecretsResponse, GenericApiError, SecretErrors } from '@stashbase/node-sdk'
 ```
 
+## Contributing
+
+Bug fixes, documentation improvements, and library improvements are always welcome.
+
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
+
+
 ## License
 
 Stashbase Node SDK is licensed under the [MIT License](https://opensource.org/licenses/MIT).
