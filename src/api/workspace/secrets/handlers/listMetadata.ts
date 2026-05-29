@@ -5,7 +5,7 @@ import { ListSecretsMetadataResponse } from '../../../../types/secrets'
 
 type ListSecretsMetadataErrorCode = GenericApiErrorCode | EnvironmentContextErrorCode
 
-export type ListSecretsMetadataArgs = ProjectEnvHandlerArgs
+export type ListSecretsMetadataArgs = ProjectEnvHandlerArgs<undefined>
 
 async function listSecretsMetadata(
   args: ListSecretsMetadataArgs
