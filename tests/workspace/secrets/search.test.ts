@@ -8,7 +8,7 @@ describe('Search secrets', () => {
     const { data, error } = await client.searchSecrets({
       project: 'project',
       name: 'TEST',
-      returnValues: true,
+      includeValues: true,
     })
 
     console.log(data)
