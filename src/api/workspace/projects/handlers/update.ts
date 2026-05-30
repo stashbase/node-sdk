@@ -32,12 +32,12 @@ export type UpdateProjectData = AtLeastOne<{
 
 export async function updateProject(
   envClient: HttpClient,
-  projectNameOrId: string,
+  projectIdentifier: string,
   data: UpdateProjectData
 ): Promise<ApiResponse<null, UpdateProjectErrorCode>> {
   return await envClient.sendApiRequest<null, UpdateProjectErrorCode>({
     method: 'PATCH',
-    path: `/v1/projects/${projectNameOrId}`,
+    path: `/v1/projects/${projectIdentifier}`,
     data,
   })
 }

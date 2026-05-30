@@ -32,17 +32,17 @@ export class ProjectsAPI {
   }
 
   /**
-   * Retrieves a single project by its name or id.
-   * @param projectNameOrId - The name or id of the project to retrieve.
+   * Retrieves a single project by its name or ID.
+   * @param projectIdentifier - The name or ID of the project to retrieve.
    * @returns A promise that resolves to the project object or an error response.
    */
-  async get(projectNameOrId: string) {
-    if (!isValidProjectIdentifier(projectNameOrId)) {
+  async get(projectIdentifier: string) {
+    if (!isValidProjectIdentifier(projectIdentifier)) {
       const error = invalidProjectIdentifierError
       return responseFailure(error)
     }
 
-    return await getProject(this.httpClient, projectNameOrId)
+    return await getProject(this.httpClient, projectIdentifier)
   }
 
   /**
@@ -131,11 +131,11 @@ export class ProjectsAPI {
   }
 
   /**
-   * Updates a project by its name or id.
-   * @param args - The arguments for updating a project, including the project name or id.
+   * Updates a project by its name or ID.
+   * @param args - The arguments for updating a project, including the project name or ID.
    * @returns A promise that resolves to null on successful update or an error response.
    */
-  async update(projectNameOrId: string, data: UpdateProjectData) {
+  async update(projectIdentifier: string, data: UpdateProjectData) {
     const { name, description } = data
 
     if (data.name === undefined && data.description === undefined) {
@@ -143,7 +143,7 @@ export class ProjectsAPI {
       return responseFailure(error)
     }
 
-    const invaliIdentifier = !isValidProjectIdentifier(projectNameOrId)
+    const invaliIdentifier = !isValidProjectIdentifier(projectIdentifier)
 
     if (invaliIdentifier) {
       const error = invalidProjectIdentifierError
@@ -163,7 +163,7 @@ export class ProjectsAPI {
         return responseFailure(error)
       }
 
-      if (!newNameHasIdFormat && name === projectNameOrId) {
+      if (!newNameHasIdFormat && name === projectIdentifier) {
         const error = newProjectNameEqualsOriginal
         return responseFailure(error)
       }
@@ -174,22 +174,22 @@ export class ProjectsAPI {
       return responseFailure(error)
     }
 
-    return await updateProject(this.httpClient, projectNameOrId, data)
+    return await updateProject(this.httpClient, projectIdentifier, data)
   }
 
   /**
-   * Deletes a project by its name or id.
-   * @param projectNameOrId - The name or id of the project to remove.
+   * Deletes a project by its name or ID.
+   * @param projectIdentifier - The name or ID of the project to remove.
    * @returns A promise that resolves to null on successful deletion or an error response.
    */
-  async delete(projectNameOrId: string) {
-    const invaliIdentifier = !isValidProjectIdentifier(projectNameOrId)
+  async delete(projectIdentifier: string) {
+    const invaliIdentifier = !isValidProjectIdentifier(projectIdentifier)
 
     if (invaliIdentifier) {
       const error = invalidProjectIdentifierError
       return responseFailure(error)
     }
 
-    return await deleteProject(this.httpClient, projectNameOrId)
+    return await deleteProject(this.httpClient, projectIdentifier)
   }
 }

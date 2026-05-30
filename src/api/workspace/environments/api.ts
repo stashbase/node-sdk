@@ -66,29 +66,29 @@ export class EnvironmentsAPI {
 
   /**
    * Retrieves an environment by its name within a project.
-   * @param envNameOrId - The name or id of the environment to retrieve.
+   * @param environmentIdentifier - The name or ID of the environment to retrieve.
    * @returns A promise that resolves to the environment data or an error response.
    */
-  async get(envNameOrId: string) {
+  async get(environmentIdentifier: string) {
     const identifiersError = this.validateProjectIdentifier()
     if (identifiersError) return responseFailure(identifiersError)
 
-    if (!isValidEnvironmentIdentifier(envNameOrId)) {
+    if (!isValidEnvironmentIdentifier(environmentIdentifier)) {
       const error = invalidEnvironmentIdentifierError
       return responseFailure(error)
     }
 
-    return await getEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId })
+    return await getEnvironment({ ...this.getHandlerArgs(), environment: environmentIdentifier })
   }
 
   /**
    * Loads the environment secrets and injects them into the process, throwing an error if it fails.
-   * @param envNameOrId - The name or id of the environment to load.
+   * @param environmentIdentifier - The name or ID of the environment to load.
    * @param options - Additional options for loading the environment.
    * @throws ApiErrorCode when loading fails.
    * @returns A promise that resolves to null if successful.
    */
-  async loadOrThrow(envNameOrId: string, options?: LoadEnvironmentOptions) {
+  async loadOrThrow(environmentIdentifier: string, options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
       return responseSuccess(null)
     }
@@ -96,14 +96,14 @@ export class EnvironmentsAPI {
     const identifiersError = this.validateProjectIdentifier()
     if (identifiersError) throw identifiersError
 
-    if (!isValidEnvironmentIdentifier(envNameOrId)) {
+    if (!isValidEnvironmentIdentifier(environmentIdentifier)) {
       const error = invalidEnvironmentIdentifierError
       throw error
     }
 
     const { error } = await loadEnvironment({
       ...this.getHandlerArgs(),
-      environment: envNameOrId,
+      environment: environmentIdentifier,
       options,
     })
 
@@ -114,11 +114,11 @@ export class EnvironmentsAPI {
 
   /**
    * Loads the environment secrets and injects them into the process.
-   * @param envNameOrId - The name or id of the environment to load.
+   * @param environmentIdentifier - The name or ID of the environment to load.
    * @param options - Additional options for loading the environment.
    * @returns A promise that resolves to null if successful or and error response.
    */
-  async load(envNameOrId: string, options?: LoadEnvironmentOptions) {
+  async load(environmentIdentifier: string, options?: LoadEnvironmentOptions) {
     if (options?.enabled === false) {
       return responseSuccess(null)
     }
@@ -126,12 +126,16 @@ export class EnvironmentsAPI {
     const identifiersError = this.validateProjectIdentifier()
     if (identifiersError) return responseFailure(identifiersError)
 
-    if (!isValidEnvironmentIdentifier(envNameOrId)) {
+    if (!isValidEnvironmentIdentifier(environmentIdentifier)) {
       const error = invalidEnvironmentIdentifierError
       return responseFailure(error)
     }
 
-    return await loadEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId, options })
+    return await loadEnvironment({
+      ...this.getHandlerArgs(),
+      environment: environmentIdentifier,
+      options,
+    })
   }
 
   /**
@@ -197,32 +201,35 @@ export class EnvironmentsAPI {
 
   /**
    * Deletes an environment from a project.
-   * @param envNameOrId - The name or id of the environment to remove.
+   * @param environmentIdentifier - The name or ID of the environment to remove.
    * @returns A promise that resolves to the removal result or an error response.
    */
-  async delete(envNameOrId: string) {
+  async delete(environmentIdentifier: string) {
     const identifiersError = this.validateProjectIdentifier()
     if (identifiersError) return responseFailure(identifiersError)
 
-    if (!isValidEnvironmentIdentifier(envNameOrId)) {
+    if (!isValidEnvironmentIdentifier(environmentIdentifier)) {
       const error = invalidEnvironmentIdentifierError
       return responseFailure(error)
     }
 
-    return await deleteEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId })
+    return await deleteEnvironment({
+      ...this.getHandlerArgs(),
+      environment: environmentIdentifier,
+    })
   }
 
   /**
    * Updates an environment within a project.
-   * @param envNameOrId - The name or id of the environment to update.
+   * @param environmentIdentifier - The name or ID of the environment to update.
    * @param data - The data for updating the environment.
    * @returns A promise that resolves to the update result or an error response.
    */
-  async update(envNameOrId: string, data: UpdateEnvironmentData) {
+  async update(environmentIdentifier: string, data: UpdateEnvironmentData) {
     const identifiersError = this.validateProjectIdentifier()
     if (identifiersError) return responseFailure(identifiersError)
 
-    if (!isValidEnvironmentIdentifier(envNameOrId)) {
+    if (!isValidEnvironmentIdentifier(environmentIdentifier)) {
       const error = invalidEnvironmentIdentifierError
       return responseFailure(error)
     }
@@ -245,7 +252,7 @@ export class EnvironmentsAPI {
         return responseFailure(error)
       }
 
-      if (!newNameHasIdFormat && data.name === envNameOrId) {
+      if (!newNameHasIdFormat && data.name === environmentIdentifier) {
         const error = newEnvironmentNameEqualsOriginal
         return responseFailure(error)
       }
@@ -256,6 +263,10 @@ export class EnvironmentsAPI {
       return responseFailure(error)
     }
 
-    return await updateEnvironment({ ...this.getHandlerArgs(), environment: envNameOrId, data })
+    return await updateEnvironment({
+      ...this.getHandlerArgs(),
+      environment: environmentIdentifier,
+      data,
+    })
   }
 }
