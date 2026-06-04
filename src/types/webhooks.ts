@@ -76,6 +76,9 @@ export interface TestWebhookResponse {
 
   /** The error code of failed webhook delivery attempt */
   error: string | null
+
+  /** The response body of the webhook delivery attempt */
+  responseBody: string | null
 }
 
 // request
