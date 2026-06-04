@@ -28,6 +28,9 @@ export type WebhookListItem = Pick<Webhook, 'id' | 'url' | 'enabled'>
 export type ListWebhooksResponse = WebhookListItem[]
 
 export interface WebhookLog {
+  /** The unique identifier of the webhook log */
+  id: string
+
   /** The HTTP response status code */
   status: number
 
