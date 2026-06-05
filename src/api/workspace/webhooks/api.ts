@@ -1,6 +1,7 @@
 import { invalidEnvironmentIdentifierError, invalidProjectIdentifierError } from '../../../errors'
 import {
   invalidWebhookIdError,
+  invalidWebhookLogIdError,
   invalidWebhookLogsPageError,
   invalidWebhookUrlError,
   webhookDescriptionTooLongError,
@@ -14,12 +15,14 @@ import {
   isValidEnvironmentIdentifier,
   isValidWebhookDescription,
   isValidWebhookId,
+  isValidWebhookLogId,
   isValidWebhookUrl,
   isValidProjectIdentifier,
 } from '../../../utils/inputValidation'
 import { createWebhook } from './handlers/create'
 import { deleteWebhook } from './handlers/delete'
 import { getWebhook } from './handlers/get'
+import { getWebhookLog } from './handlers/getLog'
 import { getWebhookSigningSecret } from './handlers/getSecret'
 import { listWebhooks } from './handlers/list'
 import { listWebhookLogs, ListWebhookLogsOptions } from './handlers/listLogs'
@@ -123,6 +126,28 @@ export class WebhooksAPI {
       ...this.getHandlerArgs(),
       webhookId,
       options,
+    })
+  }
+
+  /**
+   * Retrieves a single log for a specific webhook.
+   *
+   * @param webhookId - The id of the webhook.
+   * @param webhookLogId - The id of the webhook log to retrieve.
+   * @returns A promise that resolves to the webhook log details or an error response.
+   */
+  async getLog(webhookId: string, webhookLogId: string) {
+    const validationError = this.validateIdentifiersWithWebhookId(webhookId)
+    if (validationError) return responseFailure(validationError)
+
+    if (!isValidWebhookLogId(webhookLogId)) {
+      const error = invalidWebhookLogIdError
+      return responseFailure(error)
+    }
+
+    return await getWebhookLog({
+      ...this.getSingleWebhookHandlerArgs(webhookId),
+      webhookLogId,
     })
   }
 

@@ -44,6 +44,11 @@ export interface WebhookLog {
   error: string | null
 }
 
+export interface WebhookLogDetails extends WebhookLog {
+  /** The response body of the webhook delivery attempt */
+  responseBody: string | null
+}
+
 export interface ListWebhookLogsResponse {
   /** The list of webhook logs */
   data: Array<WebhookLog>

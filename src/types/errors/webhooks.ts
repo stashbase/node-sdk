@@ -1,6 +1,7 @@
 import { GlobalErrorCode } from './index'
 
 export type InvalidWebhookIdErrorCode = 'validation.invalid_webhook_id'
+export type InvalidWebhookLogIdErrorCode = 'validation.invalid_webhook_log_id'
 export type InvalidWebhookUrlErrorCode = 'validation.invalid_webhook_url'
 export type WebhookDescriptionTooLongErrorCode = 'validation.webhook_description_too_long'
 export type WebhookMissingPropertiesToUpdateErrorCode = 'validation.missing_properties_to_update'
@@ -15,6 +16,8 @@ export type SingleWebhookErrorCode =
   | GlobalErrorCode
   | InvalidWebhookIdErrorCode
   | WebhookNotFoundErrorCode
+
+export type SingleWebhookLogErrorCode = SingleWebhookErrorCode | InvalidWebhookLogIdErrorCode
 
 export type ListWebhooksErrorCode = GlobalErrorCode
 
@@ -37,6 +40,7 @@ export type UpdateWebhookStatusErrorCode =
 
 export type DeleteWebhookErrorCode = SingleWebhookErrorCode
 export type GetWebhookErrorCode = SingleWebhookErrorCode
+export type GetWebhookLogErrorCode = SingleWebhookLogErrorCode
 export type RotateWebhookSigningSecretErrorCode = SingleWebhookErrorCode
 export type GetWebhookSigningSecretErrorCode = SingleWebhookErrorCode
 export type TestWebhookErrorCode = SingleWebhookErrorCode

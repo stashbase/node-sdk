@@ -11,7 +11,7 @@ import {
   secretCommentsTooLongError,
   secretValuesTooLongError,
 } from '../errors/secrets'
-import { invalidWebhookIdError } from '../errors/webhooks'
+import { invalidWebhookIdError, invalidWebhookLogIdError } from '../errors/webhooks'
 import { responseFailure } from '../http/response'
 import {
   DuplicateNewSecretNamesErrorCode,
@@ -73,11 +73,12 @@ function isAlphanumericUppercaseWithUnderscore(inputString: string): boolean {
   return !pattern.test(inputString)
 }
 
-type Resource = 'project' | 'environment' | 'webhook'
+type Resource = 'project' | 'environment' | 'webhook' | 'webhookLog'
 
 const resourcePrefixes = {
   project: 'proj_',
   webhook: 'whk_',
+  webhookLog: 'whlog_',
   environment: 'env_',
 }
 
@@ -98,6 +99,8 @@ export const isResourceIdFormat = (resource: Resource, input: string) => {
 }
 
 export const isValidWebhookId = (webhookId: string) => isResourceIdFormat('webhook', webhookId)
+export const isValidWebhookLogId = (webhookLogId: string) =>
+  isResourceIdFormat('webhookLog', webhookLogId)
 
 export const isValidWebhookDescription = (description: string): boolean => {
   const maxLength = 255
@@ -109,6 +112,15 @@ export const validateWebhookIdForMethod = (webhookId: string) => {
 
   if (!isValid) {
     const error = invalidWebhookIdError
+    return responseFailure(error)
+  }
+}
+
+export const validateWebhookLogIdForMethod = (webhookLogId: string) => {
+  const isValid = isValidWebhookLogId(webhookLogId)
+
+  if (!isValid) {
+    const error = invalidWebhookLogIdError
     return responseFailure(error)
   }
 }

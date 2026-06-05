@@ -2,6 +2,7 @@ import { createApiError } from '.'
 import { ApiError } from '../http/response'
 import {
   InvalidWebhookIdErrorCode,
+  InvalidWebhookLogIdErrorCode,
   InvalidWebhookLogsPageErrorCode,
   InvalidWebhookLogsPageSizeErrorCode,
   InvalidWebhookUrlErrorCode,
@@ -15,6 +16,15 @@ export const invalidWebhookIdError: ApiError<InvalidWebhookIdErrorCode> = create
     "Provided webhook Id is is not valid. Webhook Ids have prefix 'whk_' followed by 22 alphanumeric characters.",
   details: {
     exampleWebhookId: 'whk_m1DAScGeaJfFLSFUzTjiq8',
+  },
+})
+
+export const invalidWebhookLogIdError: ApiError<InvalidWebhookLogIdErrorCode> = createApiError({
+  code: 'validation.invalid_webhook_log_id',
+  message:
+    "Provided webhook log Id is not valid. Webhook log Ids have prefix 'whlog_' followed by 22 alphanumeric characters.",
+  details: {
+    exampleWebhookLogId: 'whlog_m1DAScGeaJfFLSFUzTjiq8',
   },
 })
 

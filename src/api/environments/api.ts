@@ -22,6 +22,7 @@ import {
   validateSetSecretsInput,
   validateUpdateSecretsInput,
   validateWebhookIdForMethod,
+  validateWebhookLogIdForMethod,
 } from '../../utils/inputValidation'
 import { SetSecretsData, setSecrets } from './handlers/secrets/set'
 import {
@@ -44,6 +45,7 @@ import { GetSecretErrorCode, ListSecretsErrorCode } from '../../types/errors/sec
 import { listSecretsMetadata } from './handlers/secrets/listMetadata'
 import { listWebhooks } from './handlers/webhooks/list'
 import { getWebhook } from './handlers/webhooks/get'
+import { getWebhookLog } from './handlers/webhooks/getLog'
 import { listWebhookLogs } from './handlers/webhooks/listLogs'
 import { deleteWebhook } from './handlers/webhooks/delete'
 import { createWebhook } from './handlers/webhooks/create'
@@ -396,6 +398,29 @@ class WebhooksAPI {
 
     const opts = options ?? {}
     return await listWebhookLogs(this.httpClient, { webhookId, ...opts })
+  }
+
+  /**
+   * Retrieves a single log for a specific webhook.
+   *
+   * @param webhookId - The ID of the webhook.
+   * @param webhookLogId - The ID of the webhook log to retrieve.
+   * @returns A promise that resolves to the webhook log details or an error response.
+   */
+  async getLog(webhookId: string, webhookLogId: string) {
+    const invalidWebhookIdError = validateWebhookIdForMethod(webhookId)
+
+    if (invalidWebhookIdError) {
+      return invalidWebhookIdError
+    }
+
+    const invalidWebhookLogIdError = validateWebhookLogIdForMethod(webhookLogId)
+
+    if (invalidWebhookLogIdError) {
+      return invalidWebhookLogIdError
+    }
+
+    return await getWebhookLog(this.httpClient, { webhookId, webhookLogId })
   }
 
   /**
