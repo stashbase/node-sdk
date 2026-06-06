@@ -29,7 +29,7 @@ async function loadEnvironment(
 
   const query: LoadEnvironmentQueryParams = {
     omit: 'comment',
-    include_environment: ['name,is-production'].join(','),
+    include_environment: ['name,is_production'].join(','),
   }
 
   if (args?.options?.expandRefs) {
