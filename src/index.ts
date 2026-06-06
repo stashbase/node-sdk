@@ -17,6 +17,13 @@ export * from './types/secrets'
 export * from './types/webhooks'
 export * from './types/errors/index'
 export * from './errors/helpers'
+export {
+  DEFAULT_API_BASE_URL,
+  DEFAULT_API_TIMEOUT_MS,
+  MAX_API_TIMEOUT_MS,
+  DEFAULT_API_RETRIES,
+  MAX_API_RETRIES,
+} from './http/client'
 export type * as EnvironmentErrors from './types/errors/environments'
 export type * as ProjectErrors from './types/errors/projects'
 export type * as SecretErrors from './types/errors/secrets'

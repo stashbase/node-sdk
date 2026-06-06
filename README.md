@@ -151,6 +151,25 @@ const client = createEnvironmentClient(process.env.STASHBASE_ENV_API_KEY, {
 })
 ```
 
+### Timeouts and retries
+
+- Default request timeout is `5000` ms.
+- Maximum request timeout is `10000` ms.
+- Default retry count is `3`.
+- Maximum retry count is `10`.
+- `timeoutMs` is applied per request attempt, not as a total wall-clock budget across all retries.
+
+The transport defaults are also exported from the package root:
+
+```ts
+import {
+  DEFAULT_API_TIMEOUT_MS,
+  MAX_API_TIMEOUT_MS,
+  DEFAULT_API_RETRIES,
+  MAX_API_RETRIES,
+} from '@stashbase/node-sdk'
+```
+
 ### Transport hooks
 
 Hooks can be configured at creation time and updated later at runtime through `client.options.hooks`.
@@ -171,6 +190,40 @@ Hook behavior contract:
 - `onError`: runs when request processing throws.
 - If `beforeRequest` or `afterResponse` throws, request fails with `HookExecutionError` in `response.error`.
 - If `onError` throws, that error is ignored and the original request error is preserved.
+
+### Error handling
+
+Every SDK method returns an `ApiResponse` shape:
+
+```ts
+const response = await client.projects.get('project-name')
+
+if (!response.ok) {
+  console.error(response.error.code, response.error.message, response.status)
+  return
+}
+
+console.log(response.data)
+```
+
+You can also branch on stable error codes:
+
+```ts
+const response = await client.projects.get('project-name')
+
+if (!response.ok) {
+  switch (response.error.code) {
+    case 'resource.project_not_found':
+      console.log('Project does not exist')
+      break
+    case 'auth.unauthorized':
+      console.log('API key is invalid or missing permissions')
+      break
+    default:
+      console.log(response.error.message)
+  }
+}
+```
 
 #### Get environment details
 

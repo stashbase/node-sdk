@@ -2,6 +2,9 @@ import { spawnSync } from 'node:child_process'
 import { resolve } from 'node:path'
 import { config } from 'dotenv'
 
+const DEFAULT_API_BASE_URL = 'https://api.stashbase.dev'
+const SERVER_PROBE_TIMEOUT_MS = 2000
+
 const env = {
   ...config({ path: './.env' }).parsed,
   ...config({ path: './env' }).parsed,
@@ -19,6 +22,33 @@ if (missingEnvVars.length > 0) {
     `Skipping integration tests: missing required env vars: ${missingEnvVars.join(', ')}`
   )
   process.exit(0)
+}
+
+const baseUrl =
+  typeof env.STASHBASE_SDK_DEV_API_URL === 'string' && env.STASHBASE_SDK_DEV_API_URL.length > 0
+    ? env.STASHBASE_SDK_DEV_API_URL
+    : DEFAULT_API_BASE_URL
+
+const controller = new AbortController()
+const timeout = setTimeout(() => controller.abort(), SERVER_PROBE_TIMEOUT_MS)
+
+try {
+  const response = await fetch(baseUrl, {
+    method: 'HEAD',
+    signal: controller.signal,
+  })
+
+  if (!response.ok && response.status >= 500) {
+    console.log(
+      `Skipping integration tests: backend is reachable but unhealthy at ${baseUrl} (status ${response.status})`
+    )
+    process.exit(0)
+  }
+} catch (_error) {
+  console.log(`Skipping integration tests: backend is unreachable at ${baseUrl}`)
+  process.exit(0)
+} finally {
+  clearTimeout(timeout)
 }
 
 const vitestEntrypoint = resolve('node_modules/vitest/vitest.mjs')
