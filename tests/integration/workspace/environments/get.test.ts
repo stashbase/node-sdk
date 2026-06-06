@@ -8,10 +8,6 @@ test('gets environment', async () => {
     .environments({ project: workspaceTestConfig.project })
     .get(workspaceTestConfig.environment)
 
-  if (error?.code === 'rate_limit.too_many_requests') {
-    console.log(true)
-  }
-
   console.log(data)
   console.log(error)
 })
