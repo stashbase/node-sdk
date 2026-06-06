@@ -218,8 +218,6 @@ export class HttpClient {
     }
 
     try {
-      await this.triggerBeforeRequest(hookContext)
-
       const response = await fetchWithRetry(
         url,
         {
@@ -230,13 +228,17 @@ export class HttpClient {
           retries: this.retries,
           timeoutMs,
           signal: args.signal,
+          beforeAttempt: async () => {
+            await this.triggerBeforeRequest(hookContext)
+          },
+          afterAttemptResponse: async (response) => {
+            await this.triggerAfterResponse({
+              ...hookContext,
+              response,
+            })
+          },
         }
       )
-
-      await this.triggerAfterResponse({
-        ...hookContext,
-        response,
-      })
 
       if (!response.ok) {
         if (response.status === 503) {
@@ -292,8 +294,6 @@ export class HttpClient {
     }
 
     try {
-      await this.triggerBeforeRequest(hookContext)
-
       const response = await fetchWithRetry(
         url,
         {
@@ -304,13 +304,17 @@ export class HttpClient {
           retries: this.retries,
           timeoutMs,
           signal: args.signal,
+          beforeAttempt: async () => {
+            await this.triggerBeforeRequest(hookContext)
+          },
+          afterAttemptResponse: async (response) => {
+            await this.triggerAfterResponse({
+              ...hookContext,
+              response,
+            })
+          },
         }
       )
-
-      await this.triggerAfterResponse({
-        ...hookContext,
-        response,
-      })
 
       if (!response.ok) {
         if (response.status === 503) {
@@ -464,8 +468,6 @@ export class HttpClient {
     }
 
     try {
-      await this.triggerBeforeRequest(hookContext)
-
       const response = await fetchWithRetry(
         url,
         {
@@ -477,13 +479,17 @@ export class HttpClient {
           retries: this.retries,
           timeoutMs,
           signal,
+          beforeAttempt: async () => {
+            await this.triggerBeforeRequest(hookContext)
+          },
+          afterAttemptResponse: async (response) => {
+            await this.triggerAfterResponse({
+              ...hookContext,
+              response,
+            })
+          },
         }
       )
-
-      await this.triggerAfterResponse({
-        ...hookContext,
-        response,
-      })
 
       if (!response.ok) {
         if (response.status === 503) {

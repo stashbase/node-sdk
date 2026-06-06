@@ -8,6 +8,8 @@ type RetryOptions = {
   signal?: AbortSignal
   baseBackoffMs?: number
   maxBackoffMs?: number
+  beforeAttempt?: (attempt: number) => void | Promise<void>
+  afterAttemptResponse?: (response: Response, attempt: number) => void | Promise<void>
 }
 
 const createAbortError = (): Error => {
@@ -105,12 +107,15 @@ const fetchWithRetry = async (
     const { signal, cleanup } = createAttemptSignal(retryOptions?.signal, retryOptions?.timeoutMs)
 
     try {
+      await retryOptions?.beforeAttempt?.(attempt)
+
       const response = await fetch(url, {
         ...options,
         signal,
       })
 
       cleanup()
+      await retryOptions?.afterAttemptResponse?.(response, attempt)
 
       if (shouldRetryStatusCode(response.status)) {
         if (attemptsRemaining === 1) {

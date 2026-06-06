@@ -166,4 +166,50 @@ describe('HttpClient hooks', () => {
     assert.equal(response.error?.code, 'server.connection_failed')
     assert.equal(response.status, null)
   })
+
+  test('calls beforeRequest and afterResponse for each retry attempt', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi
+        .fn()
+        .mockResolvedValueOnce(
+          new Response(
+            JSON.stringify({
+              error: {
+                code: 'server.internal_error',
+                message: 'Internal Server Error',
+              },
+            }),
+            {
+              status: 500,
+              headers: { 'Content-Type': 'application/json' },
+            }
+          )
+        )
+        .mockResolvedValueOnce(
+          new Response(JSON.stringify({ data: { ok: true } }), {
+            status: 200,
+            headers: { 'Content-Type': 'application/json' },
+          })
+        )
+    )
+
+    const beforeRequest = vi.fn()
+    const afterResponse = vi.fn()
+
+    const client = createHttpClient({
+      authorization: { apiKey: 'test-key' },
+      hooks: { beforeRequest, afterResponse },
+      retries: 2,
+    })
+
+    const response = await client.sendApiRequest({ method: 'GET', path: '/v1/whoami' })
+
+    assert.equal(response.error, null)
+    assert.equal(response.status, 200)
+    assert.equal(beforeRequest.mock.calls.length, 2)
+    assert.equal(afterResponse.mock.calls.length, 2)
+    assert.equal(afterResponse.mock.calls[0][0].response.status, 500)
+    assert.equal(afterResponse.mock.calls[1][0].response.status, 200)
+  })
 })
