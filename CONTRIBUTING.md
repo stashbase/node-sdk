@@ -20,7 +20,7 @@ For larger changes, consider opening an issue first.
 ## Tests
 
 - `bun run test` runs the hermetic unit test suite.
-- `bun run test:integration` runs live API integration tests and requires local test credentials/env setup.
+- `bun run test:integration` runs live API integration tests from `tests/integration/` and skips cleanly when required test credentials are not configured.
 
 ## Commit messages
 

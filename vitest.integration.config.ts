@@ -13,7 +13,7 @@ export default defineConfig({
   },
   test: {
     dir: 'tests',
-    include: ['env/**/*.test.ts', 'workspace/**/*.test.ts'],
+    include: ['integration/env/**/*.test.ts', 'integration/workspace/**/*.test.ts'],
     testTimeout: 10000,
     env,
   },
