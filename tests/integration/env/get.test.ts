@@ -2,7 +2,7 @@
 import { assert, test } from 'vitest'
 import { createEnvironmentClient } from '../../../src'
 
-test('Get specific env with env token and return variables with name', async () => {
+test('Get specific env with env api key and return variables with name', async () => {
   const client = createEnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
   const { data, error } = await client.environment.get()
