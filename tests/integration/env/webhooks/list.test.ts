@@ -1,5 +1,6 @@
 import { test } from 'vitest'
 import { createEnvironmentClient } from '../../../../src'
+import { environmentTestConfig } from '../environmentTestConfig'
 
 test('List webhooks', async () => {
   const client = createEnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)

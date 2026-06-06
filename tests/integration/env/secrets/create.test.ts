@@ -1,8 +1,8 @@
 import { test } from 'vitest'
-import { createEnvironmentClient, EnvironmentClient } from '../../../../src'
+import { createEnvironmentClient } from '../../../../src'
 
 test('Create new secrets (add them to environment)', async () => {
-  const client = new EnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)
+  const client = createEnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
   const { data, error } = await client.secrets.create([
     {

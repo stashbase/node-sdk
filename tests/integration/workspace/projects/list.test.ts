@@ -1,6 +1,7 @@
 // tests/projects.test.ts
 import { assert, describe, test } from 'vitest'
 import { createWorkspaceClient } from '../../../../src'
+import { workspaceTestConfig } from '../workspaceTestConfig'
 
 describe('List projects', () => {
   test('OK', async () => {
@@ -24,7 +25,7 @@ describe('List projects', () => {
   //   test('invalid token', async () => {
   //     const envEase = createEnvEase('1234')
   //
-  //     const { data, error } = await envEase.projects.get('hero-hub')
+  //     const { data, error } = await envEase.projects.get(workspaceTestConfig.project)
   //     console.log(error)
   //
   //     assert.equal(data, null)

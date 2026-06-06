@@ -1,5 +1,6 @@
 import { assert, test } from 'vitest'
 import { createWorkspaceClient } from '../../../../src'
+import { workspaceTestConfig } from '../workspaceTestConfig'
 
 test('Should load environment or throw an error', async () => {
   const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
@@ -7,7 +8,9 @@ test('Should load environment or throw an error', async () => {
   let caught: unknown
 
   try {
-    await client.environments({ project: 'stashbase' }).loadOrThrow('webhooks-testing')
+    await client
+      .environments({ project: workspaceTestConfig.project })
+      .loadOrThrow(workspaceTestConfig.environment)
   } catch (error) {
     caught = error
   }

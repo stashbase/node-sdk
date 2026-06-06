@@ -1,8 +1,9 @@
 import { assert, test } from 'vitest'
 import { createEnvironmentClient } from '../../../../src'
+import { environmentTestConfig } from '../environmentTestConfig'
 
 test('Returns exipred token error', async () => {
-  const client = createEnvironmentClient('5D0sqWbu8BzauYK76bFQ4hrIstkQKeqr')
+  const client = createEnvironmentClient(environmentTestConfig.invalidApiKey)
 
   const { error } = await client.environment.load({
     printSecrets: 'name',

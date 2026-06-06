@@ -1,10 +1,11 @@
 import { test } from 'vitest'
 import { createEnvironmentClient } from '../../../../src'
+import { environmentTestConfig } from '../environmentTestConfig'
 
 test('Get get single webhook', async () => {
   const client = createEnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
-  const { error } = await client.webhooks.delete('whk_52chU9rxhMQqBjift4zhF4')
+  const { error } = await client.webhooks.delete(environmentTestConfig.webhookId)
 
   if (error) {
     const { code } = error

@@ -1,13 +1,14 @@
 import { test } from 'vitest'
 import { createWorkspaceClient } from '../../../../src'
+import { workspaceTestConfig } from '../workspaceTestConfig'
 
 test('Create environment', async () => {
   const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
   const { data, error } = await client
-    .environments({ project: 'proj_nVpZPsL5nQTUP9yXU2GKYJ' })
+    .environments({ project: workspaceTestConfig.project })
     .create({
-      name: 'app-dev',
+      name: workspaceTestConfig.environment,
       isProduction: false,
     })
 

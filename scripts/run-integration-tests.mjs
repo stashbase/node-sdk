@@ -11,7 +11,21 @@ const env = {
   ...process.env,
 }
 
-const requiredEnvVars = ['VITE_TEST_ENV_API_KEY', 'VITE_TEST_WORKSPACE_API_KEY']
+const requiredEnvVars = [
+  'VITE_TEST_ENV_API_KEY',
+  'VITE_TEST_ENV_INVALID_API_KEY',
+  'VITE_TEST_ENV_WEBHOOK_ID',
+  'VITE_TEST_ENV_WEBHOOK_LOG_ID',
+  'VITE_TEST_ENV_WEBHOOK_URL',
+  'VITE_TEST_ENV_WEBHOOK_DESCRIPTION',
+  'VITE_TEST_WORKSPACE_API_KEY',
+  'VITE_TEST_WORKSPACE_PROJECT',
+  'VITE_TEST_WORKSPACE_MISSING_PROJECT',
+  'VITE_TEST_WORKSPACE_ENVIRONMENT',
+  'VITE_TEST_WORKSPACE_MISSING_ENVIRONMENT',
+  'VITE_TEST_WORKSPACE_WEBHOOK_ID',
+  'VITE_TEST_WORKSPACE_WEBHOOK_LOG_ID',
+]
 const missingEnvVars = requiredEnvVars.filter((name) => {
   const value = env[name]
   return typeof value !== 'string' || value.length === 0

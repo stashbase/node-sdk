@@ -1,13 +1,14 @@
 import { test } from 'vitest'
 import { createWorkspaceClient } from '../../../../src'
+import { workspaceTestConfig } from '../workspaceTestConfig'
 
 test('Delete secrets', async () => {
   const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
   const { data, error } = await client
     .secrets({
-      project: 'proj_iBgCx5tegfVaKzjywTg2ck',
-      environment: 'env_3NCdY7kmbLJpZcpMg4W6wk',
+      project: workspaceTestConfig.project,
+      environment: workspaceTestConfig.environment,
     })
     .delete(['DATABASE_URL'])
 

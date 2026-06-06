@@ -1,12 +1,13 @@
 import { test } from 'vitest'
 import { createEnvironmentClient } from '../../../../src'
+import { environmentTestConfig } from '../environmentTestConfig'
 
 test('Update webhook', async () => {
   const client = createEnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
-  const { data, error } = await client.webhooks.update('whk_mtGrLXUhsUvA6rEhUJjrcd', {
-    url: 'https://new-url.com',
-    description: 'new description',
+  const { data, error } = await client.webhooks.update(environmentTestConfig.webhookId, {
+    url: environmentTestConfig.webhookUrl,
+    description: environmentTestConfig.webhookDescription,
   })
 
   if (error) {

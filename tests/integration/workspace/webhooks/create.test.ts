@@ -1,10 +1,11 @@
 import { test } from 'vitest'
 import { createWorkspaceClient } from '../../../../src'
+import { workspaceTestConfig } from '../workspaceTestConfig'
 
 test('Create webhook', async () => {
   const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-  const { data, error } = await client.webhooks({ project: 'name', environment: '123' }).create({
+  const { data, error } = await client.webhooks({ project: workspaceTestConfig.project, environment: workspaceTestConfig.environment }).create({
     enabled: true,
     url: 'https://very-last-url.com',
     description: 'Very last description',

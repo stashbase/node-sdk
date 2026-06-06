@@ -1,5 +1,6 @@
 import { assert, describe, test } from 'vitest'
 import { createWorkspaceClient } from '../../../../src'
+import { workspaceTestConfig } from '../workspaceTestConfig'
 
 describe('Set secrets', () => {
   test('', async () => {
@@ -9,8 +10,8 @@ describe('Set secrets', () => {
 
     const { data, error } = await client
       .secrets({
-        project: 'proj_iBgCx5tegfVaKzjywTg2ck',
-        environment: 'env_3NCdY7kmbLJpZcpMg4W6wk',
+        project: workspaceTestConfig.project,
+        environment: workspaceTestConfig.environment,
       })
       .set([
         {

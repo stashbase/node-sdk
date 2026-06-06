@@ -1,11 +1,12 @@
 import { test } from 'vitest'
 import { createWorkspaceClient } from '../../../../src'
+import { workspaceTestConfig } from '../workspaceTestConfig'
 
 test('Get workspace secret metadata', async () => {
   const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
   const { data, error } = await client
-    .secrets({ project: 'test', environment: 'dev' })
+    .secrets({ project: workspaceTestConfig.project, environment: workspaceTestConfig.environment })
     .getMetadata('HOST')
 
   if (error) {
@@ -21,7 +22,7 @@ test('List workspace secrets metadata', async () => {
   const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
   const { data, error } = await client
-    .secrets({ project: 'name', environment: '123' })
+    .secrets({ project: workspaceTestConfig.project, environment: workspaceTestConfig.environment })
     .listMetadata()
 
   if (error) {

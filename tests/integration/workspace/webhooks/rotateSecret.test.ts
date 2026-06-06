@@ -1,12 +1,13 @@
 import { test } from 'vitest'
 import { createWorkspaceClient } from '../../../../src'
+import { workspaceTestConfig } from '../workspaceTestConfig'
 
 test('Rotate webhook signing secret', async () => {
   const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
   const { data, error } = await client
-    .webhooks({ project: 'name', environment: '123' })
-    .getSigningSecret('whk_4i1gbnewYBnCTZg3Sbye2c')
+    .webhooks({ project: workspaceTestConfig.project, environment: workspaceTestConfig.environment })
+    .getSigningSecret(workspaceTestConfig.webhookId)
 
   if (error) {
     const { code } = error

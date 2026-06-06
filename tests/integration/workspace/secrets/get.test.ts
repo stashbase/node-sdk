@@ -1,12 +1,13 @@
 import { assert, describe, test } from 'vitest'
 import { createWorkspaceClient } from '../../../../src'
+import { workspaceTestConfig } from '../workspaceTestConfig'
 
 describe('Get secret', () => {
   test('OK', async () => {
     const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
     const { data, error } = await client
-      .secrets({ project: 'hero-hub', environment: 'vercel' })
+      .secrets({ project: workspaceTestConfig.project, environment: workspaceTestConfig.environment })
       .get('SOME_KEY')
 
     console.log(data)

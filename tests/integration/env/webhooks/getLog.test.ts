@@ -1,12 +1,13 @@
 import { test } from 'vitest'
 import { createEnvironmentClient } from '../../../../src'
+import { environmentTestConfig } from '../environmentTestConfig'
 
 test('Get webhook log', async () => {
   const client = createEnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
   const { data, error } = await client.webhooks.getLog(
-    'whk_mtGrLXUhsUvA6rEhUJjrcd',
-    'whlog_m1DAScGeaJfFLSFUzTjiq8'
+    environmentTestConfig.webhookId,
+    environmentTestConfig.webhookLogId
   )
 
   if (error) {
