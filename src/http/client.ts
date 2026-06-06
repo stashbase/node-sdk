@@ -6,7 +6,7 @@ declare const __SDK_VERSION__: string
 declare const __SDK_DEV_API_URL__: string
 
 export const DEFAULT_API_BASE_URL = 'https://api.stashbase.dev'
-export const DEFAULT_API_TIMEOUT_MS = 10000
+export const DEFAULT_API_TIMEOUT_MS = 5000
 export const MAX_API_TIMEOUT_MS = 10000
 export const DEFAULT_API_RETRIES = 3
 export const MAX_API_RETRIES = 10

@@ -1,5 +1,7 @@
 import { assert, describe, test, vi } from 'vitest'
-import { createHttpClient } from '../../src/http/client'
+import { createHttpClient, DEFAULT_API_BASE_URL } from '../../src/http/client'
+
+const expectedBaseUrl = process.env.STASHBASE_SDK_DEV_API_URL ?? DEFAULT_API_BASE_URL
 
 describe('HttpClient hooks', () => {
   test('calls beforeRequest and afterResponse on successful request', async () => {
@@ -40,7 +42,7 @@ describe('HttpClient hooks', () => {
     }
     assert.equal(beforeContext.method, 'POST')
     assert.equal(beforeContext.path, '/v1/test')
-    assert.equal(beforeContext.url, 'https://api.stashbase.dev/v1/test')
+    assert.equal(beforeContext.url, `${expectedBaseUrl}/v1/test`)
     assert.deepEqual(beforeContext.data, { some_value: 'x' })
   })
 

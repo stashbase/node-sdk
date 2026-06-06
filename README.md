@@ -41,7 +41,7 @@ import { createClient } from '@stashbase/node-sdk'
 const client = createClient({
   apiKey: process.env.STASHBASE_API_KEY,
   scope: 'workspace', // or "environment"
-  timeoutMs: 15000, // optional, hard capped at 120000
+  timeoutMs: 5000, // optional, hard capped at 10000
   retries: 3, // optional, hard capped at 10
   hooks: {
     beforeRequest: ({ method, url }) => console.log('[request]', method, url),
@@ -65,7 +65,7 @@ console.log(client.scope) // "workspace"
 
 ```js
 const client = createWorkspaceClient(process.env.STASHBASE_API_KEY, {
-  timeoutMs: 15000, // optional, hard capped at 120000
+  timeoutMs: 5000, // optional, hard capped at 10000
   retries: 3, // optional, hard capped at 10
   hooks: {
     beforeRequest: ({ method, url }) => console.log('[request]', method, url),
@@ -143,7 +143,7 @@ console.log(client.scope) // "environment"
 
 ```js
 const client = createEnvironmentClient(process.env.STASHBASE_ENV_API_KEY, {
-  timeoutMs: 15000, // optional, hard capped at 120000
+  timeoutMs: 5000, // optional, hard capped at 10000
   retries: 3, // optional, hard capped at 10
   hooks: {
     beforeRequest: ({ method, url }) => console.log('[request]', method, url),

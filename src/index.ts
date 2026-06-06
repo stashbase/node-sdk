@@ -33,7 +33,7 @@ export type {
 
 export type ClientScope = 'workspace' | 'environment'
 export type ClientTransportOptions = {
-  /** Request timeout in milliseconds. Hard capped by SDK. */
+  /** Request timeout in milliseconds. Defaults to 5000 and is hard capped at 10000. */
   timeoutMs?: number
   /** Number of request attempts before failing. Hard capped by SDK. */
   retries?: number

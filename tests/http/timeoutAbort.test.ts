@@ -2,6 +2,51 @@ import { assert, describe, test, vi } from 'vitest'
 import { createHttpClient } from '../../src/http/client'
 
 describe('HttpClient timeout/abort support', () => {
+  test('uses the SDK default timeout when none is configured', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ data: { ok: true } }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      )
+    )
+
+    const beforeRequest = vi.fn()
+    const client = createHttpClient({
+      authorization: { apiKey: 'test-key' },
+      hooks: { beforeRequest },
+    })
+
+    await client.sendApiRequest({ method: 'GET', path: '/v1/default-timeout' })
+
+    assert.equal(beforeRequest.mock.calls[0][0].timeoutMs, 5000)
+  })
+
+  test('caps configured timeout at the SDK maximum', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response(JSON.stringify({ data: { ok: true } }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      )
+    )
+
+    const beforeRequest = vi.fn()
+    const client = createHttpClient({
+      authorization: { apiKey: 'test-key' },
+      timeoutMs: 15000,
+      hooks: { beforeRequest },
+    })
+
+    await client.sendApiRequest({ method: 'GET', path: '/v1/timeout-cap' })
+
+    assert.equal(beforeRequest.mock.calls[0][0].timeoutMs, 10000)
+  })
+
   test('aborts request when timeout is reached', async () => {
     const fetchMock = vi.fn().mockImplementation((_url: string, init?: RequestInit) => {
       return new Promise((_resolve, reject) => {
