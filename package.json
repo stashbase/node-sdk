@@ -29,8 +29,9 @@
     "LICENSE.txt"
   ],
   "scripts": {
-    "test": "vitest --run",
-    "coverage": "vitest run --coverage",
+    "test": "vitest --config vitest.config.ts --run",
+    "test:integration": "vitest --config vitest.integration.config.ts --run",
+    "coverage": "vitest --config vitest.config.ts run --coverage",
     "build": "tsup --config tsup.config.ts",
     "prepack": "npm run build"
   },
