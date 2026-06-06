@@ -15,7 +15,7 @@ describe('Delete environment', () => {
   })
 
   test('Project not found', async () => {
-    const client = createWorkspaceClient('xPKDa2Xq0zWmfES1nLDoG45qZtR1z2qL')
+    const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
     const { data, error } = await client
       .environments({ project: workspaceTestConfig.missingProject })
       .delete(workspaceTestConfig.missingEnvironment)
