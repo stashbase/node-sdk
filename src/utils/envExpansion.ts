@@ -5,6 +5,10 @@ const resolveEscapeSequences = (value: string): string => {
   return value.replace(/\\\$/g, '$')
 }
 
+const isDefined = (value: string | undefined): value is string => {
+  return value !== undefined
+}
+
 const expandValue = (value: string, processEnv: ProcessEnv, runningParsed: ParsedEnv): string => {
   const env: ProcessEnv = { ...runningParsed, ...processEnv }
   const regex = /(?<!\\)\${([^{}]+)}|(?<!\\)\$([A-Za-z_][A-Za-z0-9_]*)/g
@@ -28,14 +32,19 @@ const expandValue = (value: string, processEnv: ProcessEnv, runningParsed: Parse
     const defaultValue = splitter ? parts.join(splitter) : ''
 
     const resolvedValue = env[key]
+    const isSet = isDefined(resolvedValue)
+    const isNonEmpty = isSet && resolvedValue.length > 0
     const useAltDefault = splitter === ':+'
     const useAltEmptyDefault = splitter === '+'
+    const useDefaultWhenEmpty = splitter === ':-'
 
     let replacement: string
 
-    if (useAltDefault || useAltEmptyDefault) {
-      replacement = resolvedValue ? defaultValue : ''
-    } else if (resolvedValue) {
+    if (useAltDefault) {
+      replacement = isNonEmpty ? defaultValue : ''
+    } else if (useAltEmptyDefault) {
+      replacement = isSet ? defaultValue : ''
+    } else if (isSet && (!useDefaultWhenEmpty || isNonEmpty)) {
       replacement = seen.has(resolvedValue) ? defaultValue : resolvedValue
     } else {
       replacement = defaultValue
@@ -61,7 +70,7 @@ export const expandAndInjectEnv = (parsed: ParsedEnv, processEnv: ProcessEnv = p
     const processValue = processEnv[key]
 
     const value =
-      processValue && processValue !== currentValue
+      processValue !== undefined && processValue !== currentValue
         ? processValue
         : expandValue(currentValue, processEnv, runningParsed)
 
