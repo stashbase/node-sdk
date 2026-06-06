@@ -6,13 +6,9 @@ test('Set secrets (add new or update existing)', async () => {
 
   const { error } = await client.secrets.set([
     {
-      name: 'SECRET',
-      value: 'VALUE_123',
+      name: 'NAME',
+      value: 'VALUE',
       comment: null,
-    },
-    {
-      name: 'APPP_URL',
-      value: 'https://sss',
     },
   ])
   if (error) {
