@@ -162,7 +162,7 @@ class SecretsAPI {
    * @param options - Additional options for retrieving the secret.
    * @returns A promise that resolves to the retrieved secret or an error response.
    */
-  async get(name: string, options?: GetSecretOptions) {
+  async get(name: SecretName, options?: GetSecretOptions) {
     if (!isValidSecretName(name)) {
       const error = invalidSecretNameError()
       return responseFailure(error)
