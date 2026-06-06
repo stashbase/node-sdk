@@ -3,9 +3,7 @@ import { createWorkspaceClient } from '../../../../src'
 import { workspaceTestConfig } from '../workspaceTestConfig'
 
 test('deletes all secrets', async () => {
-  const client = createWorkspaceClient(
-    'sbs_ElRbXgfhk0Y55sSrQkjHwsBOpRaK7DdsfFBVpqxW8a8KxAbMbEvmLHFY'
-  )
+  const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
   const { data, error } = await client
     .secrets({ project: workspaceTestConfig.project, environment: workspaceTestConfig.environment })
