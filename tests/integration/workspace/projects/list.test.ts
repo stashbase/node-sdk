@@ -1,34 +1,12 @@
 // tests/projects.test.ts
-import { assert, describe, test } from 'vitest'
+import { test } from 'vitest'
 import { createWorkspaceClient } from '../../../../src'
-import { workspaceTestConfig } from '../workspaceTestConfig'
 
-describe('List projects', () => {
-  test('lists workspace projects', async () => {
-    const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
+test('list projects', async () => {
+  const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await client.projects.list()
+  const { data, error } = await client.projects.list()
 
-    console.log(data)
-    console.log(error)
-  })
-
-  //   test('not found', async () => {
-  //     const envEase = createEnvEase('xPKDa2Xq0zWmfES1nLDoG45qZtR1z2qL')
-  //
-  //     const { data, error } = await envEase.projects.get('hero-hub33')
-  //
-  //     assert.equal(data, null)
-  //     assert.equal(error?.code, 'project_not_found')
-  //   })
-  //
-  //   test('invalid token', async () => {
-  //     const envEase = createEnvEase('1234')
-  //
-  //     const { data, error } = await envEase.projects.get(workspaceTestConfig.project)
-  //     console.log(error)
-  //
-  //     assert.equal(data, null)
-  //     assert.equal(error?.code, 'invalid_token')
-  //   })
+  console.log(data)
+  console.log(error)
 })

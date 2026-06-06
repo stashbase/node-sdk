@@ -1,18 +1,15 @@
 // tests/projects.test.ts
-import { assert, describe, test } from 'vitest'
+import { test } from 'vitest'
 import { createWorkspaceClient } from '../../../../src'
 import { workspaceTestConfig } from '../workspaceTestConfig'
 
-describe('Create project', () => {
-  test('creates project', async () => {
-    const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
+test('creates project', async () => {
+  const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
-    const { data, error } = await client.projects.create({
-      name: workspaceTestConfig.project,
-      description: 'this is a description',
-    })
-
-    console.log(data)
-    console.log(error)
+  const { data, error } = await client.projects.create({
+    name: workspaceTestConfig.project,
   })
+
+  console.log(data)
+  console.log(error)
 })
