@@ -17,11 +17,6 @@ Contributions are welcome, including:
 
 For larger changes, consider opening an issue first.
 
-## Tests
-
-- `bun run test` runs the hermetic unit test suite.
-- `bun run test:integration` runs live API integration tests from `tests/integration/` and skips cleanly when required test credentials are not configured or the backend is unreachable.
-
 ## Commit messages
 
 This project follows Conventional Commits.
