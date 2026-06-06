@@ -2,7 +2,7 @@
 import { assert, test } from 'vitest'
 import { createEnvironmentClient } from '../../../src'
 
-test('Get current authed entity details', async () => {
+test('returns current authenticated entity details', async () => {
   const client = createEnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
   const { data, error } = await client.whoami()

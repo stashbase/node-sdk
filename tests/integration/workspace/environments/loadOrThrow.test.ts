@@ -2,7 +2,7 @@ import { assert, test } from 'vitest'
 import { createWorkspaceClient } from '../../../../src'
 import { workspaceTestConfig } from '../workspaceTestConfig'
 
-test('Should load environment or throw an error', async () => {
+test('throws api error when environment load fails', async () => {
   const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
   let caught: unknown

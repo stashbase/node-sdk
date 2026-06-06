@@ -4,7 +4,7 @@ import { createWorkspaceClient } from '../../../../src'
 import { workspaceTestConfig } from '../workspaceTestConfig'
 
 describe('Update project', () => {
-  test('OK', async () => {
+  test('updates project', async () => {
     const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
     const { data, error } = await client.projects.update(workspaceTestConfig.project, {

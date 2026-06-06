@@ -2,7 +2,7 @@ import { test } from 'vitest'
 import { createEnvironmentClient } from '../../../../src'
 import { environmentTestConfig } from '../environmentTestConfig'
 
-test('Get webhook signing secret', async () => {
+test('rotates environment webhook signing secret', async () => {
   const client = createEnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
   const { data, error } = await client.webhooks.rotateSigningSecret(environmentTestConfig.webhookId)

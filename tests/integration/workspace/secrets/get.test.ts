@@ -3,7 +3,7 @@ import { createWorkspaceClient } from '../../../../src'
 import { workspaceTestConfig } from '../workspaceTestConfig'
 
 describe('Get secret', () => {
-  test('OK', async () => {
+  test('gets secret', async () => {
     const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
     const { data, error } = await client

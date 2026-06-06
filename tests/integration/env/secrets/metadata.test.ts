@@ -1,7 +1,7 @@
 import { test } from 'vitest'
 import { createEnvironmentClient } from '../../../../src'
 
-test('Get environment secret metadata', async () => {
+test('gets environment secret metadata', async () => {
   const client = createEnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
   const { data, error } = await client.secrets.getMetadata('NAME')
@@ -15,7 +15,7 @@ test('Get environment secret metadata', async () => {
   }
 })
 
-test('List environment secrets metadata', async () => {
+test('lists environment secret metadata', async () => {
   const client = createEnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
   const { data, error } = await client.secrets.listMetadata()

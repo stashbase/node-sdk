@@ -2,7 +2,7 @@ import { test } from 'vitest'
 import { createEnvironmentClient } from '../../../../src'
 import { environmentTestConfig } from '../environmentTestConfig'
 
-test('Update env secrets', async () => {
+test('updates environment secrets', async () => {
   const client = createEnvironmentClient(environmentTestConfig.invalidApiKey)
 
   const { data, error } = await client.secrets.update([

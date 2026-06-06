@@ -3,7 +3,7 @@ import { createWorkspaceClient } from '../../../../src'
 import { workspaceTestConfig } from '../workspaceTestConfig'
 
 describe('Delete environment', () => {
-  test('Invalid token', async () => {
+  test('returns unauthorized for invalid workspace api key', async () => {
     const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
     const { data, error } = await client
@@ -14,7 +14,7 @@ describe('Delete environment', () => {
     console.log(error)
   })
 
-  test('Project not found', async () => {
+  test('returns project not found for missing project', async () => {
     const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
     const { data, error } = await client
       .environments({ project: workspaceTestConfig.missingProject })

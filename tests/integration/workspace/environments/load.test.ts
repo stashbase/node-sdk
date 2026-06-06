@@ -2,7 +2,7 @@ import { describe, test } from 'vitest'
 import { createWorkspaceClient } from '../../../../src'
 import { workspaceTestConfig } from '../workspaceTestConfig'
 
-test('Should load environment', async () => {
+test('loads environment secrets into process.env', async () => {
   const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
   const { error } = await client

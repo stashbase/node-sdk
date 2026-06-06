@@ -4,7 +4,7 @@ import { createWorkspaceClient } from '../../../../src'
 import { workspaceTestConfig } from '../workspaceTestConfig'
 
 describe('Delete project', () => {
-  test('OK', async () => {
+  test('deletes project', async () => {
     const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
     const { data, error } = await client.projects.delete(workspaceTestConfig.project)

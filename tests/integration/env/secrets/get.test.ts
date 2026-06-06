@@ -1,7 +1,7 @@
 import { test } from 'vitest'
 import { createEnvironmentClient } from '../../../../src'
 
-test('Get signgle secret by key', async () => {
+test('gets environment secret by name', async () => {
   const client = createEnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
   const { data, error } = await client.secrets.get('NAME')

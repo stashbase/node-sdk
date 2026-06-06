@@ -1,7 +1,7 @@
 import { test } from 'vitest'
 import { createEnvironmentClient } from '../../../../src'
 
-test('Delete specific secret from env - grant must be write or read/write', async () => {
+test('deletes environment secret by name', async () => {
   const client = createEnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
   const { data, error } = await client.secrets.delete(['NAME'])

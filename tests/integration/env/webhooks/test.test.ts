@@ -2,7 +2,7 @@ import { test } from 'vitest'
 import { createEnvironmentClient } from '../../../../src'
 import { environmentTestConfig } from '../environmentTestConfig'
 
-test('Get get single webhook', async () => {
+test('tests environment webhook delivery', async () => {
   const client = createEnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
   const { data, error } = await client.webhooks.test(environmentTestConfig.webhookId)
