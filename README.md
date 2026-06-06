@@ -209,7 +209,7 @@ const { data, error } = await client.secrets.listMetadata()
 All public SDK types are exported from the package root.
 
 ```ts
-import type { Secret, ListSecretsResponse, GenericApiError, SecretErrors } from '@stashbase/node-sdk'
+import type { Secret, ListSecretsResponse, GenericApiErrorCode, SecretErrors } from '@stashbase/node-sdk'
 ```
 
 ## Contributing
