@@ -8,7 +8,7 @@ describe('Search secrets', () => {
 
     const { data, error } = await client.searchSecrets({
       project: workspaceTestConfig.project,
-      name: 'TEST',
+      name: 'NAME',
       includeValues: true,
     })
 

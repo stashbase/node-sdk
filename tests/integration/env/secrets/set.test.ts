@@ -7,7 +7,7 @@ test('Set secrets (add new or update existing)', async () => {
   const { error } = await client.secrets.set([
     {
       name: 'NAME',
-      value: 'VALUE',
+      value: 'value',
       comment: null,
     },
   ])

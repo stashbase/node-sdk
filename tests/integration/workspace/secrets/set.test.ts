@@ -15,12 +15,8 @@ describe('Set secrets', () => {
       })
       .set([
         {
-          name: 'KEYS',
-          value: '123',
-        },
-        {
-          name: 'SECRET_234',
-          value: 'SECRET_234',
+          name: 'NAME',
+          value: 'value',
         },
       ])
 

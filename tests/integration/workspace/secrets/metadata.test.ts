@@ -7,7 +7,7 @@ test('Get workspace secret metadata', async () => {
 
   const { data, error } = await client
     .secrets({ project: workspaceTestConfig.project, environment: workspaceTestConfig.environment })
-    .getMetadata('HOST')
+    .getMetadata('NAME')
 
   if (error) {
     const { code } = error

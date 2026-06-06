@@ -7,11 +7,14 @@ describe('Create secrets', () => {
     const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
     const { data, error } = await client
-      .secrets({ project: workspaceTestConfig.project, environment: workspaceTestConfig.environment })
+      .secrets({
+        project: workspaceTestConfig.project,
+        environment: workspaceTestConfig.environment,
+      })
       .create([
         {
-          name: 'SOME_KEY',
-          value: 'SOME_VALUE',
+          name: 'NAME',
+          value: 'value',
         },
       ])
 

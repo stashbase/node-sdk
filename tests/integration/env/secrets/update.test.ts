@@ -7,9 +7,8 @@ test('Update env secrets', async () => {
 
   const { data, error } = await client.secrets.update([
     {
-      name: 'NEW_APP_URL',
-      newName: 'APP_URL',
-      comment: 'THidhoihsdofhais',
+      name: 'NAME',
+      newName: 'NEW_NAME',
     },
   ])
 

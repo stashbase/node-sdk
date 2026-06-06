@@ -10,7 +10,7 @@ test('Delete secrets', async () => {
       project: workspaceTestConfig.project,
       environment: workspaceTestConfig.environment,
     })
-    .delete(['DATABASE_URL'])
+    .delete(['NAME'])
 
   if (error) {
     const { code } = error

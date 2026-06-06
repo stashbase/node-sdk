@@ -12,7 +12,7 @@ test('Update secrets', async () => {
     })
     .update([
       {
-        name: 'KEYS',
+        name: 'NAME',
         comment: null,
       },
     ])
