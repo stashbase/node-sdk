@@ -1,5 +1,5 @@
 import { assert, describe, test, vi } from 'vitest'
-import { createClient } from '../../src'
+import { createClient } from '../../../src'
 
 describe('createClient', () => {
   test('returns environment client for environment scope', () => {

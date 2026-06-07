@@ -1,5 +1,5 @@
 import { assert, describe, test, vi } from 'vitest'
-import { printSecretsTable } from '../../src/utils/table'
+import { printSecretsTable } from '../../../src/utils/table'
 
 const stripAnsi = (value: string) => value.replace(/\x1b\[[0-9;]*m/g, '')
 

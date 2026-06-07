@@ -7,13 +7,7 @@ export default defineConfig({
   },
   test: {
     dir: 'tests',
-    include: [
-      'clients/**/*.test.ts',
-      'http/**/*.test.ts',
-      'utils/**/*.test.ts',
-      'webhooks/**/*.test.ts',
-      'generate.test.ts',
-    ],
+    include: ['unit/**/*.test.ts'],
     testTimeout: 10000,
   },
   server: {

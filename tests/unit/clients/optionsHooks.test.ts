@@ -1,5 +1,5 @@
 import { assert, describe, test, vi } from 'vitest'
-import { createEnvironmentClient, createWorkspaceClient } from '../../src'
+import { createEnvironmentClient, createWorkspaceClient } from '../../../src'
 
 describe('client.options.hooks', () => {
   test('workspace client exposes hooks in options and allows runtime update', async () => {

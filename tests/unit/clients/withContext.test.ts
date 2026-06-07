@@ -1,5 +1,5 @@
 import { assert, describe, test } from 'vitest'
-import { createWorkspaceClient } from '../../src'
+import { createWorkspaceClient } from '../../../src'
 
 describe('WorkspaceClient.withContext', () => {
   test('creates a project-scoped context', () => {

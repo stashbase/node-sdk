@@ -1,5 +1,5 @@
 import { assert, test } from 'vitest'
-import { createEnvironmentClient, createWorkspaceClient } from '../../src'
+import { createEnvironmentClient, createWorkspaceClient } from '../../../src'
 
 test('Workspace client exposes workspace scope', () => {
   const client = createWorkspaceClient('test-api-key')

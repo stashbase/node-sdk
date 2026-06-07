@@ -1,5 +1,5 @@
 import { assert, describe, test } from 'vitest'
-import { expandAndInjectEnv } from '../../src/utils/envExpansion'
+import { expandAndInjectEnv } from '../../../src/utils/envExpansion'
 
 describe('expandAndInjectEnv', () => {
   test('expands references from parsed values', () => {

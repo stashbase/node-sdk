@@ -1,5 +1,5 @@
 import { assert, describe, test, vi } from 'vitest'
-import { createHttpClient } from '../../src/http/client'
+import { createHttpClient } from '../../../src/http/client'
 
 describe('HttpClient timeout/abort support', () => {
   test('uses the SDK default timeout when none is configured', async () => {

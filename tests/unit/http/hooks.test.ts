@@ -1,5 +1,5 @@
 import { assert, describe, test, vi } from 'vitest'
-import { createHttpClient, DEFAULT_API_BASE_URL } from '../../src/http/client'
+import { createHttpClient, DEFAULT_API_BASE_URL } from '../../../src/http/client'
 
 const expectedBaseUrl = process.env.STASHBASE_SDK_DEV_API_URL ?? DEFAULT_API_BASE_URL
 

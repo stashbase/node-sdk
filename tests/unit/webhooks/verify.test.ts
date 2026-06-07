@@ -1,6 +1,6 @@
 import { assert, describe, test } from 'vitest'
 import crypto from 'crypto'
-import { verifyWebhook } from '../../src'
+import { verifyWebhook } from '../../../src'
 
 const createSignature = (rawPayload: string, timestamp: number, secret: string) => {
   const hash = crypto

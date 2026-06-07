@@ -1,5 +1,5 @@
 import { assert, describe, test, vi } from 'vitest'
-import { createHttpClient } from '../../src/http/client'
+import { createHttpClient } from '../../../src/http/client'
 
 describe('ApiError passthrough', () => {
   test('maps error code and message from payload', async () => {
