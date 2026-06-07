@@ -7,6 +7,4 @@ test('loads authenticated environment secrets into process.env', async () => {
   await client.environment.load({
     printSecrets: 'masked',
   })
-
-  console.log(process.env.DB_URL)
 })
