@@ -19,9 +19,4 @@ test('creates secrets', async () => {
 
   console.log(data)
   console.log(error)
-
-  if (error?.code === 'rate_limit.too_many_requests') {
-    const details = error.details as { retryAfter?: { seconds?: number } } | undefined
-    console.log(details?.retryAfter?.seconds)
-  }
 })

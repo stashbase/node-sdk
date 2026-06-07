@@ -10,6 +10,6 @@ test('returns expired token error for invalid environment api key', async () => 
   })
 
   if (error) {
-    const { code } = error
+    console.log(error)
   }
 })

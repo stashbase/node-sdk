@@ -10,10 +10,6 @@ test('deletes environment webhook by id', async () => {
   if (error) {
     const { code } = error
     console.log(code)
-
-    if (error.code === 'resource.webhook_not_found') {
-      console.log('Webhook not found')
-    }
   } else {
     console.log('Data:\n')
   }

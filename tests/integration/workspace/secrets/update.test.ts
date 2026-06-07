@@ -21,10 +21,6 @@ test('updates secrets', async () => {
     const { code } = error
     console.log('Error: ', error)
     console.log(code)
-
-    if (error.code === 'validation.no_data_provided') {
-      console.log(error.details)
-    }
   } else {
     console.log('Data:\n')
     console.log(data)

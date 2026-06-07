@@ -11,10 +11,10 @@ test('searches secrets', async () => {
     includeValues: true,
   })
 
-  console.log(data)
-  console.log(error)
-
-  if (data) {
+  if (error) {
+    const { code } = error
+    console.log(code)
+  } else if (data) {
     for (const item of data) {
       if ('secretValue' in item) {
         console.log(

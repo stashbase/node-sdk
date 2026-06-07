@@ -19,8 +19,4 @@ test('sets secrets', async () => {
 
   console.log(data)
   console.log(error)
-
-  if (error?.code?.startsWith('validation')) {
-    console.log(`Validation error: `, error.message)
-  }
 })

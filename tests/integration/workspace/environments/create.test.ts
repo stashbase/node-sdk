@@ -14,8 +14,4 @@ test('creates environment in project', async () => {
 
   console.log(data)
   console.log(error)
-
-  if (error?.code === 'conflict.environment_already_exists') {
-    console.log('Is conflictError')
-  }
 })
