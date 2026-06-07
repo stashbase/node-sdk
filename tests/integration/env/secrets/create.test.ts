@@ -7,8 +7,8 @@ test('creates environment secrets', async () => {
   const { data, error } = await client.secrets.create([
     {
       name: 'KEY',
-      value: 'Some value',
-      comment: 'This is comment for this and this',
+      value: 'value',
+      comment: 'comment',
     },
   ])
   if (error) {
