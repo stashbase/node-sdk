@@ -24,8 +24,8 @@ async function searchSecrets(
   if (options.name) {
     queryObj.name = options.name
 
-    if (options.includeValues === true) {
-      queryObj.include_values = true
+    if (options.includeValue === true) {
+      queryObj.include_value = true
     }
   } else if (options.value) {
     queryObj.value = options.value

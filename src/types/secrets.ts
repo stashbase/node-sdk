@@ -81,7 +81,7 @@ export interface ListSecretsQueryParams {
 export interface SearchSecretsQueryParams {
   name?: string
   value?: string
-  include_values?: true
+  include_value?: true
 }
 
 export interface SearchSecretsEnvironment {
@@ -105,8 +105,8 @@ export type SearchSecretsOptions = AtLeastOne<{
   name: SecretName
   value: string
 }> & {
-  /** Include secret values in the response, for search by name */
-  includeValues?: boolean
+  /** Include secret value in the response, for search by name */
+  includeValue?: boolean
 }
 
 export type GetSecretQueryParams = Pick<ListSecretsQueryParams, 'omit' | 'expand_refs'>

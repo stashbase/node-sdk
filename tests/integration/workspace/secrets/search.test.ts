@@ -8,7 +8,7 @@ test('searches secrets', async () => {
   const { data, error } = await client.searchSecrets({
     project: workspaceTestConfig.project,
     name: 'NAME',
-    includeValues: true,
+    includeValue: true,
   })
 
   if (error) {
