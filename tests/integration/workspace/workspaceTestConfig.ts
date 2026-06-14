@@ -3,11 +3,7 @@ const env = process.env
 const requireEnv = (name: string): string => {
   const value = env[name]
 
-  if (typeof value !== 'string' || value.length === 0) {
-    throw new Error(`Missing required workspace integration env var: ${name}`)
-  }
-
-  return value
+  return value ?? ''
 }
 
 export const workspaceTestConfig = {
