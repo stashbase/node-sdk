@@ -119,7 +119,7 @@ export interface GetSecretOptions {
   /**
    * Omit selected secret properties
    */
-  omit?: Array<'value' | 'comment'>
+  omit?: Array<'comment'>
 }
 
 export type CreateSecretsData = Array<CreateSecretsItem>

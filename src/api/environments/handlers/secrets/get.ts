@@ -18,13 +18,11 @@ async function getSecret(
   const query: GetSecretQueryParams = {}
 
   if (expandRefs) {
-    if (!omit?.includes('value')) {
-      query.expand_refs = true
-    }
+    query.expand_refs = true
   }
 
   if (omit && omit.length > 0) {
-    const omitStr = omit.filter((o) => o === 'value' || o === 'comment').join(',')
+    const omitStr = omit.filter((o) => o === 'comment').join(',')
 
     if (omitStr.length > 0) {
       query.omit = omitStr
