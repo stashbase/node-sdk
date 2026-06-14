@@ -63,6 +63,8 @@ export interface UpdateSecretsResponse {
 }
 
 export interface ListSecretsQueryParams {
+  /** If true, includes the secret value in the response, default is true */
+  include_value?: boolean
   /** If true, expands all referenced secrets to their values */
   expand_refs?: true
   /** A comma-separated list of environment properties to return (id, created_at, name, description, is_production) or boolean for all properties */

@@ -16,7 +16,9 @@ async function listSecrets(
 ): Promise<ApiResponse<ListSecretsResponse, ListSecretsErrorCode>> {
   const { omit, expandRefs, only, exclude } = options || {}
 
-  const queryObj: ListSecretsQueryParams = {}
+  const queryObj: ListSecretsQueryParams = {
+    include_value: true,
+  }
 
   if (expandRefs) {
     queryObj.expand_refs = true
