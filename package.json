@@ -33,7 +33,8 @@
     "test:integration": "node scripts/run-integration-tests.mjs",
     "coverage": "vitest --config vitest.config.ts run --coverage",
     "build": "tsup --config tsup.config.ts",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "version": "tsc --version"
   },
   "keywords": [],
   "author": "Stashbase",
