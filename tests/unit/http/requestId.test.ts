@@ -5,7 +5,7 @@ describe('ApiError passthrough', () => {
   test('maps error code and message from payload', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockImplementation(async () => {
+      vi.fn().mockImplementation(() => {
         return new Response(
           JSON.stringify({
             error: {
@@ -30,7 +30,7 @@ describe('ApiError passthrough', () => {
   test('keeps backend error code for server failures', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockImplementation(async () => {
+      vi.fn().mockImplementation(() => {
         return new Response(
           JSON.stringify({
             error: {

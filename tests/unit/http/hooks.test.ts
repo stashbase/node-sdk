@@ -94,7 +94,7 @@ describe('HttpClient hooks', () => {
   test('calls onError when fetch throws', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockImplementation(async () => {
+      vi.fn().mockImplementation(() => {
         throw new Error('network failure')
       })
     )
@@ -148,7 +148,7 @@ describe('HttpClient hooks', () => {
   test('ignores errors thrown by onError hook and preserves original request error', async () => {
     vi.stubGlobal(
       'fetch',
-      vi.fn().mockImplementation(async () => {
+      vi.fn().mockImplementation(() => {
         throw new Error('network failure')
       })
     )
