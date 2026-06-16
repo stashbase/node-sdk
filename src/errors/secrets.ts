@@ -13,7 +13,7 @@ import {
   SecretValuesTooLongErrorCode,
   InvalidSecretNamesErrorCode,
 } from '../types/errors/secrets'
-import { SECRET_COMMENT_MAX_LENGTH, SECRET_VALUE_MAX_LENGTH } from '../utils/inputValidation'
+import { SECRET_COMMENT_MAX_LENGTH, SECRET_VALUE_MAX_BYTES } from '../utils/inputValidation'
 
 const createSecretsError = <TCode extends string>(args: {
   code: TCode
@@ -117,7 +117,7 @@ export const secretValuesTooLongError = (
 ): ApiError<SecretValuesTooLongErrorCode> =>
   createSecretsError({
     code: 'validation.secret_values_too_long',
-    message: `One or more secret values are too long. Secret value cannot be longer than ${SECRET_VALUE_MAX_LENGTH} characters.`,
+    message: `One or more secret values are too long. Secret value must not exceed ${SECRET_VALUE_MAX_BYTES / 1024} KB.`,
     details: {
       secretNames,
     },

@@ -26,7 +26,7 @@ import {
 } from '../types/errors/secrets'
 
 export const SECRET_COMMENT_MAX_LENGTH = 512
-export const SECRET_VALUE_MAX_LENGTH = 4096
+export const SECRET_VALUE_MAX_BYTES = 16 * 1024
 
 const alphanumericRegex = /[a-zA-Z0-9]/
 
@@ -155,6 +155,9 @@ type ValidateSetSecretsInputRes =
   | ApiError<SecretValuesTooLongErrorCode>
   | null
 
+const exceedsSecretValueMaxBytes = (value: string) =>
+  Buffer.byteLength(value, 'utf8') > SECRET_VALUE_MAX_BYTES
+
 // return api error
 export const validateSetSecretsInput = (
   data: Array<SetSecretsItem>
@@ -174,7 +177,7 @@ export const validateSetSecretsInput = (
 
     nameOccurrences.set(name, (nameOccurrences.get(name) || 0) + 1)
 
-    if (value.length > SECRET_VALUE_MAX_LENGTH) {
+    if (exceedsSecretValueMaxBytes(value)) {
       valueTooLongSecretNames.add(name)
     }
 
@@ -273,7 +276,7 @@ export const validateUpdateSecretsInput = (
       }
     }
 
-    if (value && value.length > SECRET_VALUE_MAX_LENGTH) {
+    if (value !== undefined && exceedsSecretValueMaxBytes(value)) {
       valueTooLongSecretNames.add(name)
     }
 
