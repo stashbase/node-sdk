@@ -13,6 +13,9 @@
   "publishConfig": {
     "access": "public"
   },
+  "engines": {
+    "node": ">=18"
+  },
   "main": "./dist/index.js",
   "module": "./dist/index.mjs",
   "types": "./dist/index.d.ts",
@@ -29,12 +32,14 @@
     "LICENSE.txt"
   ],
   "scripts": {
+    "lint": "eslint src tests scripts --ext .ts,.mjs",
     "test": "vitest --config vitest.config.ts --run",
     "test:integration": "node scripts/run-integration-tests.mjs",
     "coverage": "vitest --config vitest.config.ts run --coverage",
     "build": "tsup --config tsup.config.ts",
+    "release:check": "npm run lint && npm test && CI=1 npm run test:integration && npm run build",
     "prepack": "npm run build",
-    "version": "tsc --version"
+    "version": "npm run release:check"
   },
   "keywords": [],
   "author": "Stashbase",
