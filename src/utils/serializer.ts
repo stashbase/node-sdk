@@ -1,58 +1,64 @@
+type PlainObject = Record<string, unknown>
+
+const isPlainObject = (value: unknown): value is PlainObject => {
+  return typeof value === 'object' && value !== null && value.constructor === Object
+}
+
 /**
- * Convert camelCase to snake_case recursively
+ * Convert camelCase to snake_case recursively.
  */
-export const toSnakeCase = <T = any>(obj: T): any => {
+export const toSnakeCase = <T>(obj: T): T => {
   if (obj === null || obj === undefined) {
     return obj
   }
 
   if (Array.isArray(obj)) {
-    return obj.map(toSnakeCase)
+    const mapped = (obj as unknown[]).map((value) => toSnakeCase(value))
+    return mapped as T
   }
 
   if (obj instanceof Date || obj instanceof RegExp) {
     return obj
   }
 
-  if (typeof obj === 'object' && obj.constructor === Object) {
+  if (isPlainObject(obj)) {
     return Object.fromEntries(
       Object.entries(obj).map(([key, value]) => [
-        // Avoid leading underscore by checking if first char is uppercase
-        key.replace(/([A-Z])/g, (match, letter, offset) =>
+        key.replace(/([A-Z])/g, (_match, letter: string, offset: number) =>
           offset === 0 ? letter.toLowerCase() : `_${letter.toLowerCase()}`
         ),
         toSnakeCase(value),
       ])
-    )
+    ) as T
   }
 
   return obj
 }
 
 /**
- * Convert snake_case to camelCase recursively
+ * Convert snake_case to camelCase recursively.
  */
-export const toCamelCase = <T = any>(obj: T): any => {
+export const toCamelCase = <T>(obj: T): T => {
   if (obj === null || obj === undefined) {
     return obj
   }
 
   if (Array.isArray(obj)) {
-    return obj.map(toCamelCase)
+    const mapped = (obj as unknown[]).map((value) => toCamelCase(value))
+    return mapped as T
   }
 
   if (obj instanceof Date || obj instanceof RegExp) {
     return obj
   }
 
-  if (typeof obj === 'object' && obj.constructor === Object) {
+  if (isPlainObject(obj)) {
     return Object.fromEntries(
       Object.entries(obj).map(([key, value]) => [
-        // Handle both lowercase and uppercase letters after underscore
-        key.replace(/_([a-z])/gi, (_, letter) => letter.toUpperCase()),
+        key.replace(/_([a-z])/gi, (_match, letter: string) => letter.toUpperCase()),
         toCamelCase(value),
       ])
-    )
+    ) as T
   }
 
   return obj
