@@ -4,6 +4,7 @@ import { config } from 'dotenv'
 
 const DEFAULT_API_BASE_URL = 'https://api.stashbase.dev'
 const SERVER_PROBE_TIMEOUT_MS = 2000
+const isStrictMode = process.env.CI === '1' || process.env.CI === 'true'
 
 const env = {
   ...config({ path: './.env' }).parsed,
@@ -32,10 +33,9 @@ const missingEnvVars = requiredEnvVars.filter((name) => {
 })
 
 if (missingEnvVars.length > 0) {
-  console.log(
-    `Skipping integration tests: missing required env vars: ${missingEnvVars.join(', ')}`
-  )
-  process.exit(0)
+  const message = `Integration tests cannot run: missing required env vars: ${missingEnvVars.join(', ')}`
+  console.log(isStrictMode ? message : `Skipping integration tests: ${message}`)
+  process.exit(isStrictMode ? 1 : 0)
 }
 
 const baseUrl =
@@ -53,14 +53,14 @@ try {
   })
 
   if (!response.ok && response.status >= 500) {
-    console.log(
-      `Skipping integration tests: backend is reachable but unhealthy at ${baseUrl} (status ${response.status})`
-    )
-    process.exit(0)
+    const message = `Backend is reachable but unhealthy at ${baseUrl} (status ${response.status})`
+    console.log(isStrictMode ? message : `Skipping integration tests: ${message}`)
+    process.exit(isStrictMode ? 1 : 0)
   }
 } catch (_error) {
-  console.log(`Skipping integration tests: backend is unreachable at ${baseUrl}`)
-  process.exit(0)
+  const message = `Backend is unreachable at ${baseUrl}`
+  console.log(isStrictMode ? message : `Skipping integration tests: ${message}`)
+  process.exit(isStrictMode ? 1 : 0)
 } finally {
   clearTimeout(timeout)
 }
