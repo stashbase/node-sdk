@@ -21,6 +21,8 @@ The official SDK for [Stashbase](https://stashbase.dev), a secrets management pl
 Install with npm or npm compatible package manager (bun, pnpm, etc.).
 We recommend using bun for the best experience.
 
+Supported runtime: Node.js `18+`.
+
 ```bash
 npm install @stashbase/node-sdk
 ```
