@@ -14,7 +14,7 @@ const VERSION = __SDK_VERSION__
 
 export type HttpRequestMethod = 'GET' | 'DELETE' | 'POST' | 'PATCH' | 'PUT'
 type Query = Record<string, string | number | boolean>
-type RequestData = { [key: string]: any } | any[]
+type RequestData = Record<string, unknown> | unknown[]
 
 export type HttpRequestHookContext = {
   method: HttpRequestMethod
@@ -391,7 +391,7 @@ export class HttpClient {
   public async sendApiRequest<T = object, E extends string = string>(args: {
     method: 'GET' | 'DELETE' | 'POST' | 'PATCH' | 'PUT'
     path: string
-    data?: { [key: string]: any } | any[]
+    data?: RequestData
     query?: Record<string, string | number | boolean>
     timeoutMs?: number
     signal?: AbortSignal
@@ -413,8 +413,7 @@ export class HttpClient {
         })
       }
 
-      const formattedResponse = toCamelCase(response.data)
-      return responseSuccess(formattedResponse as T, response.status)
+      return responseSuccess(toCamelCase(response.data), response.status)
     } catch (error) {
       if (error instanceof HookExecutionError) {
         return responseFailure<E>({
@@ -425,7 +424,6 @@ export class HttpClient {
       }
 
       let status: number | null = null
-      let parseTarget: unknown = error
 
       if (error instanceof Error) {
         const maybeStatus = (error as Error & { status?: unknown }).status
@@ -439,7 +437,7 @@ export class HttpClient {
         }
       }
 
-      const formattedError = error instanceof Error ? parseTarget : toCamelCase(parseTarget)
+      const formattedError = error instanceof Error ? error : toCamelCase(error)
       const apiError = parseError(formattedError) as ApiError<E>
       return responseFailure<E>(apiError, status)
     }
