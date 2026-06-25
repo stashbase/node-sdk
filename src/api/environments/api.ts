@@ -30,7 +30,7 @@ import {
   invalidSecretNamesError,
   noDataProvidedError,
 } from '../../errors/secrets'
-import { ApiResponse, responseFailure, responseSuccess } from '../../http/response'
+import { ApiResponse, responseFailure } from '../../http/response'
 import { LoadEnvironmentOptions } from '../../types/environments'
 import { deleteAllEnvironmentSecrets } from './handlers/secrets/deleteAll'
 import {
@@ -116,10 +116,6 @@ class EnvironmentsClient {
    * @returns A promise that resolves to a null, error (if any), and success status.
    */
   async load(options?: LoadEnvironmentOptions) {
-    if (options?.enabled === false) {
-      return responseSuccess(null)
-    }
-
     return await loadEnvironment(this.httpClient, options)
   }
 
@@ -131,10 +127,6 @@ class EnvironmentsClient {
    * @throws ApiErrorCode if the loading process fails.
    */
   async loadOrThrow(options?: LoadEnvironmentOptions) {
-    if (options?.enabled === false) {
-      return responseSuccess(null)
-    }
-
     const { error } = await loadEnvironment(this.httpClient, options)
 
     if (error) {
