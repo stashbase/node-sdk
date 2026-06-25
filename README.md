@@ -33,6 +33,8 @@ For full documentation, please visit [Stashbase Node SDK](https://docs.stashbase
 
 Here are some common usage examples for the Stashbase Node SDK:
 
+Secret values are validated by UTF-8 byte length. Maximum secret value size: `16 KB`.
+
 ### Auto client
 
 Use `createClient` to create a client with explicit scope selection.
