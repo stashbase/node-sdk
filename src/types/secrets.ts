@@ -49,10 +49,10 @@ export interface DeleteAllSecretsResponse {
 }
 
 export interface SetSecretsResponse {
-  /** The number of new secrets created */
-  createdCount: number
-  /** The number of existing secrets updated */
-  updatedCount: number
+  /** Secrets that were created */
+  createdSecrets: Array<SecretName>
+  /** Secrets that were updated */
+  updatedSecrets: Array<SecretName>
 }
 
 export interface UpdateSecretsResponse {
