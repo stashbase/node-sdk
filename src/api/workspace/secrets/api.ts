@@ -25,7 +25,7 @@ import {
   ListSecretsMetadataResponse,
   SearchSecretsOptions,
   SearchSecretsResponse,
-  SetSecretsItem,
+  UpsertSecretsItem,
   UpdateSecretsItem,
   ListSecretsResponse,
 } from '../../../types/secrets'
@@ -264,12 +264,12 @@ export class SecretsAPI {
   }
 
   /**
-   * Sets secrets in a specific project and environment, overwriting existing ones with the same names.
+   * Upserts secrets in a specific project and environment, creating missing ones and overwriting existing ones with the same names.
    *
-   * @param data - The secret data to set.
+   * @param data - The secret data to upsert.
    * @returns A promise that resolves to null on success or an error response.
    */
-  async set(data: SetSecretsItem[]) {
+  async upsert(data: UpsertSecretsItem[]) {
     const identifierValidationError = this.validateIdentifiers()
     if (identifierValidationError) return responseFailure(identifierValidationError)
 

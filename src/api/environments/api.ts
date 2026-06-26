@@ -24,7 +24,7 @@ import {
   validateWebhookIdForMethod,
   validateWebhookLogIdForMethod,
 } from '../../utils/inputValidation'
-import { SetSecretsData, setSecrets } from './handlers/secrets/set'
+import { UpsertSecretsData, setSecrets } from './handlers/secrets/set'
 import {
   invalidSecretNameError,
   invalidSecretNamesError,
@@ -262,12 +262,12 @@ class SecretsAPI {
   }
 
   /**
-   * Sets secrets, overwriting existing ones if they exist.
+   * Upserts secrets, creating missing ones and overwriting existing ones.
    *
-   * @param data - An array of secrets to set.
+   * @param data - An array of secrets to upsert.
    * @returns A promise that resolves to null on success or an error response.
    */
-  async set(data: SetSecretsData) {
+  async upsert(data: UpsertSecretsData) {
     const formattedData = formatSecretsInputArray(data)
     const validationError = validateSetSecretsInput(formattedData)
 

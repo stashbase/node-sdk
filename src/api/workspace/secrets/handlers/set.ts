@@ -1,22 +1,22 @@
 import { ApiResponse } from '../../../../http/response'
-import { SetSecretsItem, SetSecretsResponse } from '../../../../types/secrets'
+import { UpsertSecretsItem, UpsertSecretsResponse } from '../../../../types/secrets'
 import { EnvironmentContextErrorCode } from '../../../../types/errors'
-import { SetSecretsErrorCode as SharedSetSecretsErrorCode } from '../../../../types/errors/secrets'
+import { UpsertSecretsErrorCode as SharedUpsertSecretsErrorCode } from '../../../../types/errors/secrets'
 import { ProjectEnvHandlerArgs } from '../../../../types/arguments'
 
-type SetSecretsErrorCode = SharedSetSecretsErrorCode | EnvironmentContextErrorCode
+type UpsertSecretsErrorCode = SharedUpsertSecretsErrorCode | EnvironmentContextErrorCode
 
-export type SetSecretsArgs = ProjectEnvHandlerArgs<{
-  data: Array<SetSecretsItem>
+export type UpsertSecretsArgs = ProjectEnvHandlerArgs<{
+  data: Array<UpsertSecretsItem>
 }>
 
 async function setSecrets(
-  args: SetSecretsArgs
-): Promise<ApiResponse<SetSecretsResponse, SetSecretsErrorCode>> {
+  args: UpsertSecretsArgs
+): Promise<ApiResponse<UpsertSecretsResponse, UpsertSecretsErrorCode>> {
   const { client, project, environment, data } = args
   const path = `/v1/projects/${project}/environments/${environment}/secrets`
 
-  return await client.sendApiRequest<SetSecretsResponse, SetSecretsErrorCode>({
+  return await client.sendApiRequest<UpsertSecretsResponse, UpsertSecretsErrorCode>({
     method: 'PUT',
     path,
     data,

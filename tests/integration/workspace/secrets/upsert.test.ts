@@ -2,7 +2,7 @@ import { test } from 'vitest'
 import { createWorkspaceClient } from '../../../../src'
 import { workspaceTestConfig } from '../workspaceTestConfig'
 
-test('sets secrets', async () => {
+test('upserts secrets', async () => {
   const client = createWorkspaceClient(process.env.VITE_TEST_WORKSPACE_API_KEY as string)
 
   const { data, error } = await client
@@ -10,7 +10,7 @@ test('sets secrets', async () => {
       project: workspaceTestConfig.project,
       environment: workspaceTestConfig.environment,
     })
-    .set([
+    .upsert([
       {
         name: 'NAME',
         value: 'value',

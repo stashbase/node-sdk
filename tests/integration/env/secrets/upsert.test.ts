@@ -1,10 +1,10 @@
 import { test } from 'vitest'
 import { createEnvironmentClient } from '../../../../src'
 
-test('sets environment secrets', async () => {
+test('upserts environment secrets', async () => {
   const client = createEnvironmentClient(process.env.VITE_TEST_ENV_API_KEY as string)
 
-  const { error } = await client.secrets.set([
+  const { error } = await client.secrets.upsert([
     {
       name: 'NAME',
       value: 'value',

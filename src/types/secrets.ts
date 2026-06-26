@@ -48,7 +48,7 @@ export interface DeleteAllSecretsResponse {
   deletedCount: number
 }
 
-export interface SetSecretsResponse {
+export interface UpsertSecretsResponse {
   /** Secrets that were created */
   createdSecrets: Array<SecretName>
   /** Secrets that were updated */
@@ -135,7 +135,7 @@ export type CreateSecretsItem = {
   comment?: string | null
 }
 
-export type SetSecretsItem = CreateSecretsItem
+export type UpsertSecretsItem = CreateSecretsItem
 
 export type UpdateSecretsItem = {
   name: SecretName

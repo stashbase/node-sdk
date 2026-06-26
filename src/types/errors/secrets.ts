@@ -49,7 +49,7 @@ export type ListExcludeSecretsErrorCode =
   | NoDataProvidedErrorCode
   | InvalidSecretNamesErrorCode
 
-export type SetSecretsErrorCode =
+export type UpsertSecretsErrorCode =
   | GlobalErrorCode
   | NoDataProvidedErrorCode
   | InvalidSecretNamesErrorCode
