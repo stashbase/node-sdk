@@ -55,13 +55,15 @@ import { updateWebhookStatus } from './handlers/webhooks/updateStatus'
 import { updateWebhook } from './handlers/webhooks/update'
 import { testWebhook } from './handlers/webhooks/test'
 import {
+  invalidWebhookOrderError,
   invalidWebhookLogsPageError,
   invalidWebhookUrlError,
+  invalidWebhookSortByError,
   webhookMissingPropertiesToUpdateError,
   webhookDescriptionTooLongError,
   invalidWebhookLogsPageSizeError,
 } from '../../errors/webhooks'
-import { CreateWebhookData, UpdateWebhookData } from '../../types/webhooks'
+import { CreateWebhookData, ListWebhooksOptions, UpdateWebhookData } from '../../types/webhooks'
 import { ListWebhookLogsOptions } from '../workspace/webhooks/handlers/listLogs'
 import { ListExcludeSecretsErrorCode, ListOnlySecretsErrorCode } from '../../types/errors/secrets'
 import { getCurrentAuthDetails } from '../shared/handlers/whoami'
@@ -333,10 +335,27 @@ class WebhooksAPI {
   /**
    * Retrieves a list of webhooks associated with the current API key environment.
    *
+   * @param options - Optional sort parameters for the list request.
    * @returns A promise that resolves to an array of webhooks or an error response.
    */
-  async list() {
-    return await listWebhooks(this.httpClient)
+  async list(options?: ListWebhooksOptions) {
+    if (options?.sortBy) {
+      const sortBy = options.sortBy
+
+      if (sortBy !== 'createdAt' && sortBy !== 'updatedAt' && sortBy !== 'url' && sortBy !== 'enabled') {
+        return responseFailure(invalidWebhookSortByError)
+      }
+    }
+
+    if (options?.order) {
+      const order = options.order
+
+      if (order !== 'asc' && order !== 'desc') {
+        return responseFailure(invalidWebhookOrderError)
+      }
+    }
+
+    return await listWebhooks(this.httpClient, options)
   }
 
   /**

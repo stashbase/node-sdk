@@ -27,6 +27,13 @@ export interface Webhook {
 export type WebhookListItem = Pick<Webhook, 'id' | 'url' | 'enabled'>
 export type ListWebhooksResponse = WebhookListItem[]
 
+export interface ListWebhooksOptions {
+  /** The field to sort by */
+  sortBy?: 'createdAt' | 'updatedAt' | 'url' | 'enabled'
+  /** Whether to sort in ascending or descending order */
+  order?: 'asc' | 'desc'
+}
+
 export interface WebhookLog {
   /** The unique identifier of the webhook log */
   id: string

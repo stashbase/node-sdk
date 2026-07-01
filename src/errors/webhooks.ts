@@ -3,8 +3,10 @@ import { ApiError } from '../http/response'
 import {
   InvalidWebhookIdErrorCode,
   InvalidWebhookLogIdErrorCode,
+  InvalidWebhookOrderErrorCode,
   InvalidWebhookLogsPageErrorCode,
   InvalidWebhookLogsPageSizeErrorCode,
+  InvalidWebhookSortByErrorCode,
   InvalidWebhookUrlErrorCode,
   WebhookDescriptionTooLongErrorCode,
   WebhookMissingPropertiesToUpdateErrorCode,
@@ -76,3 +78,19 @@ export const invalidWebhookLogsPageSizeError: ApiError<InvalidWebhookLogsPageSiz
       default: 10,
     },
   })
+
+export const invalidWebhookSortByError: ApiError<InvalidWebhookSortByErrorCode> = createApiError({
+  code: 'validation.invalid_sort_by',
+  message: 'Sort by field must be one of: createdAt, updatedAt, url, or enabled.',
+  details: {
+    allowedValues: ['createdAt', 'updatedAt', 'url', 'enabled'],
+  },
+})
+
+export const invalidWebhookOrderError: ApiError<InvalidWebhookOrderErrorCode> = createApiError({
+  code: 'validation.invalid_order',
+  message: 'Order must be either "asc" or "desc".',
+  details: {
+    allowedValues: ['asc', 'desc'],
+  },
+})

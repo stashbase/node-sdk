@@ -1,16 +1,18 @@
 import { invalidEnvironmentIdentifierError, invalidProjectIdentifierError } from '../../../errors'
 import {
+  invalidWebhookOrderError,
   invalidWebhookIdError,
   invalidWebhookLogIdError,
   invalidWebhookLogsPageError,
   invalidWebhookUrlError,
+  invalidWebhookSortByError,
   webhookDescriptionTooLongError,
   webhookMissingPropertiesToUpdateError,
   invalidWebhookLogsPageSizeError,
 } from '../../../errors/webhooks'
 import { HttpClient } from '../../../http/client'
 import { responseFailure } from '../../../http/response'
-import { CreateWebhookData, UpdateWebhookData } from '../../../types/webhooks'
+import { CreateWebhookData, ListWebhooksOptions, UpdateWebhookData } from '../../../types/webhooks'
 import {
   isValidEnvironmentIdentifier,
   isValidWebhookDescription,
@@ -82,13 +84,30 @@ export class WebhooksAPI {
   /**
    * Lists all webhooks for a specific project and environment.
    *
+   * @param options - Optional sort parameters for the list request.
    * @returns A promise that resolves to an array of webhook objects or an error response.
    */
-  public async list() {
+  public async list(options?: ListWebhooksOptions) {
     const validationError = this.validateIdentifiers()
     if (validationError) return responseFailure(validationError)
 
-    return await listWebhooks(this.getHandlerArgs())
+    if (options?.sortBy) {
+      const sortBy = options.sortBy
+
+      if (sortBy !== 'createdAt' && sortBy !== 'updatedAt' && sortBy !== 'url' && sortBy !== 'enabled') {
+        return responseFailure(invalidWebhookSortByError)
+      }
+    }
+
+    if (options?.order) {
+      const order = options.order
+
+      if (order !== 'asc' && order !== 'desc') {
+        return responseFailure(invalidWebhookOrderError)
+      }
+    }
+
+    return await listWebhooks({ ...this.getHandlerArgs(), options })
   }
 
   /**

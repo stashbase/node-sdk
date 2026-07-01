@@ -9,6 +9,8 @@ export type WebhookAlreadyEnabledConflictErrorCode = 'conflict.webhook_already_e
 export type WebhookAlreadyDisabledConflictErrorCode = 'conflict.webhook_already_disabled'
 export type InvalidWebhookLogsPageSizeErrorCode = 'validation.invalid_page_size'
 export type InvalidWebhookLogsPageErrorCode = 'validation.invalid_page'
+export type InvalidWebhookSortByErrorCode = 'validation.invalid_sort_by'
+export type InvalidWebhookOrderErrorCode = 'validation.invalid_order'
 export type WebhookNotFoundErrorCode = 'resource.webhook_not_found'
 export type WebhookLimitReachedErrorCode = 'quota.webhook_limit_reached'
 
@@ -19,7 +21,10 @@ export type SingleWebhookErrorCode =
 
 export type SingleWebhookLogErrorCode = SingleWebhookErrorCode | InvalidWebhookLogIdErrorCode
 
-export type ListWebhooksErrorCode = GlobalErrorCode
+export type ListWebhooksErrorCode =
+  | GlobalErrorCode
+  | InvalidWebhookSortByErrorCode
+  | InvalidWebhookOrderErrorCode
 
 export type CreateWebhookErrorCode =
   | GlobalErrorCode
