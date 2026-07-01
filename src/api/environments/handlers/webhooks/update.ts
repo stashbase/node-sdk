@@ -5,7 +5,7 @@ import { UpdateWebhookErrorCode } from '../../../../types/errors/webhooks'
 import { UpdateWebhookData } from '../../../../types/webhooks'
 
 export type UpdateWebhookArgs = SingleWebhookArgs<{
-  /** The data to update the webhook with */
+  /** The data to update the webhook with. */
   data: UpdateWebhookData
 }>
 

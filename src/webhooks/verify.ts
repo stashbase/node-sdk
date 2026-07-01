@@ -60,12 +60,12 @@ const verifyPayloadAndTimestamp = (args: {
 }
 
 /**
- * @summary Verify webhook
- * @description Verify received webhook
- * @param payload Received JSON payload
- * @param signature Received signature (header 'stashbase-signature')
- * @param signingSecret Signing secret of the webhook
- * @returns WebhookVerificationResult object
+ * @summary Verify webhook.
+ * @description Verify received webhook.
+ * @param payload Received JSON payload.
+ * @param signature Received signature (header 'stashbase-signature').
+ * @param signingSecret Signing secret of the webhook.
+ * @returns WebhookVerificationResult object.
  * */
 const verifyWebhook = (
   payload: VerifyWebhookPayload,

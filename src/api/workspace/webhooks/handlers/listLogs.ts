@@ -5,9 +5,9 @@ import { EnvironmentContextErrorCode } from '../../../../types/errors'
 import { SingleWebhookProjectEnvHandlerArgs } from '../../../../types/arguments'
 
 export type ListWebhookLogsOptions = {
-  /** The page number */
+  /** The page number. */
   page?: number
-  /** The number of items per page */
+  /** The number of items per page. */
   pageSize?: number
 }
 

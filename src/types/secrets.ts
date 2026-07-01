@@ -3,11 +3,11 @@ import { AtLeastOne } from './util'
 export type SecretName = Uppercase<string>
 
 export interface Secret {
-  /** The name of the secret, always in uppercase */
+  /** The name of the secret, always in uppercase. */
   name: Uppercase<string>
-  /** The value of the secret */
+  /** The value of the secret. */
   value: string
-  /** The comment of the secret, can be null */
+  /** The comment of the secret, can be null. */
   comment: string | null
 }
 
@@ -30,50 +30,50 @@ export type ListSecretsMetadataResponse = {
 export type ListSecretsOptions = GetSecretOptions
 
 export interface CreateSecretsResponse {
-  /** The number of secrets successfully created */
+  /** The number of secrets successfully created. */
   createdCount: number
-  /** An array of secret names that were duplicates and not created */
+  /** An array of secret names that were duplicates and not created. */
   existingSecrets: Array<SecretName>
 }
 
 export interface DeleteSecretsResponse {
-  /** The number of secrets successfully deleted */
+  /** The number of secrets successfully deleted. */
   deletedCount: number
-  /** An array of secret names that were not found and thus not deleted */
+  /** An array of secret names that were not found and thus not deleted. */
   notFoundSecrets: Array<SecretName>
 }
 
 export interface DeleteAllSecretsResponse {
-  /** The total number of secrets deleted */
+  /** The total number of secrets deleted. */
   deletedCount: number
 }
 
 export interface UpsertSecretsResponse {
-  /** Secrets that were created */
+  /** Secrets that were created. */
   createdSecrets: Array<SecretName>
-  /** Secrets that were updated */
+  /** Secrets that were updated. */
   updatedSecrets: Array<SecretName>
 }
 
 export interface UpdateSecretsResponse {
-  /** The number of secrets successfully updated */
+  /** The number of secrets successfully updated. */
   updatedCount: number
-  /** An array of secret names that were not found and thus not updated */
+  /** An array of secret names that were not found and thus not updated. */
   notFoundSecrets: Array<SecretName>
 }
 
 export interface ListSecretsQueryParams {
-  /** If true, includes the secret value in the response, default is true */
+  /** If true, includes the secret value in the response, default is true. */
   include_value?: boolean
-  /** If true, expands all referenced secrets to their values */
+  /** If true, expands all referenced secrets to their values. */
   expand_refs?: true
-  /** A comma-separated list of environment properties to return (id, created_at, name, description, is_production) or boolean for all properties */
+  /** A comma-separated list of environment properties to return (id, created_at, name, description, is_production) or boolean for all properties. */
   include_environment?: string
-  /** A string specifying which properties to omit from the response */
+  /** A string specifying which properties to omit from the response. */
   omit?: string
-  /** A string specifying which secrets to include in the response */
+  /** A string specifying which secrets to include in the response. */
   only?: string
-  /** A string specifying which secrets to exclude from the response */
+  /** A string specifying which secrets to exclude from the response. */
   exclude?: string
 
   // only?: Array<SecretName>
@@ -107,7 +107,7 @@ export type SearchSecretsOptions = AtLeastOne<{
   name: SecretName
   value: string
 }> & {
-  /** Include secret value in the response, for search by name */
+  /** Include secret value in the response, for search by name. */
   includeValue?: boolean
 }
 
@@ -127,11 +127,11 @@ export interface GetSecretOptions {
 export type CreateSecretsData = Array<CreateSecretsItem>
 
 export type CreateSecretsItem = {
-  /** The name of the secret */
+  /** The name of the secret. */
   name: SecretName
-  /** The value of the secret */
+  /** The value of the secret. */
   value: string
-  /** The comment of the secret (optional) */
+  /** The comment of the secret (optional). */
   comment?: string | null
 }
 

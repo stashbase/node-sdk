@@ -20,11 +20,11 @@ export type UpdateEnvironmentArgs = SingleEnvironmentHandlerArgs<{
 }>
 
 export type UpdateEnvironmentData = AtLeastOne<{
-  /** The new name of the project */
+  /** The new name of the project. */
   name: string
-  /** Whether the environment is production */
+  /** Whether the environment is production. */
   isProduction: boolean
-  /** The new description of the environment */
+  /** The new description of the environment. */
   description: string
 }>
 

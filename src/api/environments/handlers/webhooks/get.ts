@@ -5,7 +5,7 @@ import { GetWebhookErrorCode } from '../../../../types/errors/webhooks'
 import { ApiResponse } from '../../../../http/response'
 
 export type GetWebhookArgs = SingleWebhookArgs<{
-  /** Whether to include the webhook's signing secret in the response */
+  /** Whether to include the webhook's signing secret in the response. */
   includeSecret: boolean
 }>
 

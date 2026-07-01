@@ -2,13 +2,13 @@ import { PaginationMetadata } from './pagination'
 import { AtLeastOne } from './util'
 
 export interface Webhook {
-  /** The unique identifier of the webhook */
+  /** The unique identifier of the webhook. */
   id: string
 
-  /** The target URL of the webhook */
+  /** The target URL of the webhook. */
   url: string
 
-  /** Whether the webhook is enabled  or not*/
+  /** Whether the webhook is enabled or not. */
   enabled: boolean
 
   /** The datetime when the webhook was created. */
@@ -17,10 +17,10 @@ export interface Webhook {
   /** The datetime when the webhook was last updated. Initially equals `createdAt`. */
   updatedAt: string
 
-  /** The description of the webhook */
+  /** The description of the webhook. */
   description: string | null
 
-  // /** The signing secret of the webhook */
+  // /** The signing secret of the webhook. */
   // signingSecret?: string
 }
 
@@ -28,78 +28,78 @@ export type WebhookListItem = Pick<Webhook, 'id' | 'url' | 'enabled'>
 export type ListWebhooksResponse = WebhookListItem[]
 
 export interface ListWebhooksOptions {
-  /** The field to sort by */
+  /** The field to sort by. */
   sortBy?: 'createdAt' | 'updatedAt' | 'url' | 'enabled'
-  /** Whether to sort in ascending or descending order */
+  /** Whether to sort in ascending or descending order. */
   order?: 'asc' | 'desc'
 }
 
 export interface WebhookLog {
-  /** The unique identifier of the webhook log */
+  /** The unique identifier of the webhook log. */
   id: string
 
-  /** The HTTP response status code */
+  /** The HTTP response status code. */
   status: number
 
-  /** Datetime of when the webhook was processed */
+  /** Datetime of when the webhook was processed. */
   processedAt: string
 
-  /** The number of the webook delivery attempt */
+  /** The number of the webook delivery attempt. */
   attempt: number
 
-  /** The error code the webhook failed to be delivered */
+  /** The error code the webhook failed to be delivered. */
   error: string | null
 }
 
 export interface WebhookLogDetails extends WebhookLog {
-  /** The response body of the webhook delivery attempt */
+  /** The response body of the webhook delivery attempt. */
   responseBody: string | null
 }
 
 export interface ListWebhookLogsResponse {
-  /** The list of webhook logs */
+  /** The list of webhook logs. */
   data: Array<WebhookLog>
-  /** The pagination metadata */
+  /** The pagination metadata. */
   pagination: PaginationMetadata
 }
 
 export interface CreateWebhookData {
-  /** The target URL of the webhook (must use HTTPS) */
+  /** The target URL of the webhook (must use HTTPS). */
   url: string
-  /** Whether the webhook is enabled  or not (default: false) */
+  /** Whether the webhook is enabled or not (default: false). */
   enabled?: boolean
-  /** The description of the webhook */
+  /** The description of the webhook. */
   description?: string | null
 }
 
 export type WebhookWithSigningSecret = Webhook & {
-  /** The signing secret of the webhook */
+  /** The signing secret of the webhook. */
   signingSecret: string
 }
 
 export interface WebhookSigningSecret {
-  /** The singing secret of the webhook */
+  /** The singing secret of the webhook. */
   signingSecret: string
 }
 
 export interface TestWebhookResponse {
-  /** The target URL of the webhook */
+  /** The target URL of the webhook. */
   url: string
 
-  /** The HTTP response status code of the webhook delivery attempt */
+  /** The HTTP response status code of the webhook delivery attempt. */
   status: number
 
-  /** The error code of failed webhook delivery attempt */
+  /** The error code of failed webhook delivery attempt. */
   error: string | null
 
-  /** The response body of the webhook delivery attempt */
+  /** The response body of the webhook delivery attempt. */
   responseBody: string | null
 }
 
 // request
 export type UpdateWebhookData = AtLeastOne<{
-  /** The target URL of the webhook (must use HTTPS) */
+  /** The target URL of the webhook (must use HTTPS). */
   url: string
-  /** The description of the webhook */
+  /** The description of the webhook. */
   description: string | null
 }>

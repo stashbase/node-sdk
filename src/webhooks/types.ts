@@ -1,87 +1,87 @@
 type EventType = 'secrets.updated'
 
 /**
- * @interface WebhookPayload
+ * @interface WebhookPayload.
  * @description This is a sample interface with annotated properties.
  */
 export type Event = {
   /**
-   * @summary Unique identifier of the event
+   * @summary Unique identifier of the event.
    */
   id: string
 
   /**
-   * @summary Event type
+   * @summary Event type.
    */
   type: EventType
 
   /**
-   * @summary Unix timestamp of the event
-   * @description Timestamp of when the event was processed (not the individual attempt)
+   * @summary Unix timestamp of the event.
+   * @description Timestamp of when the event was processed (not the individual attempt).
    */
   created_at: number
 
   /**
-   * @summary Live mode
-   * @description Whether the event was triggered in live mode
+   * @summary Live mode.
+   * @description Whether the event was triggered in live mode.
    */
   live_mode: boolean
 
   /**
-   * @summary Event Data
+   * @summary Event Data.
    */
   data: {
     /**
-     * @summary Workspace Data
+     * @summary Workspace Data.
      */
     workspace: {
       /**
-       * @summary Unique Workspace ID
+       * @summary Unique Workspace ID.
        */
       id: string
 
       /**
-       * @summary Workspace Name
+       * @summary Workspace Name.
        */
       name: string
 
       /**
-       * @summary Unique Workspace Slug
+       * @summary Unique Workspace Slug.
        */
       slug: string
     }
 
     /**
-     * @summary Project Data
+     * @summary Project Data.
      */
     project: {
       /**
-       * @summary Unique Project ID
+       * @summary Unique Project ID.
        */
       id: string
 
       /**
-       * @summary Project Name
+       * @summary Project Name.
        */
       name: string
     }
 
     /**
-     * @summary Environment Data
+     * @summary Environment Data.
      */
     environment: {
       /**
-       * @summary Unique Environment ID
+       * @summary Unique Environment ID.
        */
       id: string
 
       /**
-       * @summary Environment Name
+       * @summary Environment Name.
        */
       name: string
 
       /**
-       * @summary Whether the environment is production
+       * @summary Whether the environment is production.
        */
       is_production: boolean
     }

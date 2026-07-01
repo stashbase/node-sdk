@@ -24,11 +24,11 @@ export type ProjectEnvHandlerArgs<T extends Record<string, unknown> | undefined>
 
 export type SingleWebhookProjectEnvHandlerArgs<T extends Record<string, unknown> | undefined> = {
   client: HttpClient
-  /** The ID of the webhook */
+  /** The ID of the webhook. */
   webhookId: string
 } & ProjectEnvHandlerArgs<T>
 
 export type SingleWebhookArgs<T extends Record<string, unknown> | undefined> = {
-  /** The ID of the webhook */
+  /** The ID of the webhook. */
   webhookId: string
 } & T

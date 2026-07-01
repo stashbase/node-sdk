@@ -5,9 +5,9 @@ import { ListWebhookLogsResponse } from '../../../../types/webhooks'
 import { ListWebhookLogsErrorCode } from '../../../../types/errors/webhooks'
 
 export type ListWebhookLogsArgs = SingleWebhookArgs<{
-  /** The page number to retrieve */
+  /** The page number to retrieve. */
   page?: number
-  /** The number of logs to retrieve per page */
+  /** The number of logs to retrieve per page. */
   pageSize?: number
 }>
 

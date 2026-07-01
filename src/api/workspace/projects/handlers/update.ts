@@ -24,9 +24,9 @@ type UpdateProjectErrorCode =
   | ProjectDescriptionTooLongErrorCode
 
 export type UpdateProjectData = AtLeastOne<{
-  /** The new name of the project */
+  /** The new name of the project. */
   name: string
-  /** The new description of the project */
+  /** The new description of the project. */
   description: string | null
 }>
 
