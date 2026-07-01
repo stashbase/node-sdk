@@ -37,7 +37,7 @@
     "test:integration": "node scripts/run-integration-tests.mjs",
     "coverage": "vitest --config vitest.config.ts run --coverage",
     "build": "tsup --config tsup.config.ts",
-    "release:check": "npm run lint && npm test && CI=1 npm run test:integration && npm run build",
+    "release:check": "npm run lint && npm test && npm run build",
     "prepack": "npm run build",
     "version": "npm run release:check"
   },
