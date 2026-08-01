@@ -28,7 +28,7 @@ import {
 export const SECRET_COMMENT_MAX_LENGTH = 512
 export const SECRET_VALUE_MAX_BYTES = 16 * 1024
 
-const alphanumericRegex = /[a-zA-Z0-9]/
+const alphanumericRegex = /^[a-zA-Z0-9]+$/
 
 export function containsMaxOneDash(str: string) {
   // return /^(?!-$)(?!.*--)[^-]*(?:-(?!$)[^-]*)?$/.test(str);
@@ -91,11 +91,7 @@ export const isResourceIdFormat = (resource: Resource, input: string) => {
 
   const idWithoutPrefix = input.slice(prefix.length)
 
-  if (idWithoutPrefix.length === 22 && alphanumericRegex.test(idWithoutPrefix)) {
-    return true
-  } else {
-    return false
-  }
+  return idWithoutPrefix.length === 22 && alphanumericRegex.test(idWithoutPrefix)
 }
 
 export const isValidWebhookId = (webhookId: string) => isResourceIdFormat('webhook', webhookId)
