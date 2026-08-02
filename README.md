@@ -162,6 +162,7 @@ const client = createEnvironmentClient(process.env.STASHBASE_ENV_API_KEY, {
 - Default retry count is `3`.
 - Maximum retry count is `10`.
 - `timeoutMs` is applied per request attempt, not as a total wall-clock budget across all retries.
+- Retries are automatic for idempotent requests (`GET`, `PUT`, and `DELETE`) and include rate-limited (`429`) responses. Mutating `POST` and `PATCH` requests are not retried automatically to avoid duplicate side effects.
 
 The transport defaults are also exported from the package root:
 
