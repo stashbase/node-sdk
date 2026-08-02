@@ -96,6 +96,22 @@ const parseError = (res: unknown): ApiError => {
   }
 }
 
+const createResponseError = async (response: Response): Promise<Record<string, unknown>> => {
+  try {
+    const errorData: unknown = await response.json()
+    if (typeof errorData === 'object' && errorData !== null) {
+      return {
+        ...(errorData as Record<string, unknown>),
+        status: response.status,
+      }
+    }
+  } catch (_error) {
+    // Proxies and gateways often return empty or HTML error responses.
+  }
+
+  return { status: response.status }
+}
+
 export class HttpClient {
   private headers: Record<string, string>
   private baseUrl: string
@@ -248,17 +264,7 @@ export class HttpClient {
           throw error
         }
 
-        const errorData: unknown = await response.json()
-        if (typeof errorData === 'object' && errorData !== null) {
-          throw {
-            ...(errorData as Record<string, unknown>),
-            status: response.status,
-          }
-        }
-
-        throw {
-          status: response.status,
-        }
+        throw await createResponseError(response)
       }
 
       const data: unknown = await response.json()
@@ -324,17 +330,7 @@ export class HttpClient {
           throw error
         }
 
-        const errorData: unknown = await response.json()
-        if (typeof errorData === 'object' && errorData !== null) {
-          throw {
-            ...(errorData as Record<string, unknown>),
-            status: response.status,
-          }
-        }
-
-        throw {
-          status: response.status,
-        }
+        throw await createResponseError(response)
       }
 
       if (response.status === 204) {
@@ -497,17 +493,7 @@ export class HttpClient {
           throw error
         }
 
-        const errorData: unknown = await response.json()
-        if (typeof errorData === 'object' && errorData !== null) {
-          throw {
-            ...(errorData as Record<string, unknown>),
-            status: response.status,
-          }
-        }
-
-        throw {
-          status: response.status,
-        }
+        throw await createResponseError(response)
       }
 
       if (response.status === 204) {
