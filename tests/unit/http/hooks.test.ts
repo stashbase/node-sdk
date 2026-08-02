@@ -214,4 +214,48 @@ describe('HttpClient hooks', () => {
     assert.equal(afterResponse.mock.calls[0][0].response.status, 500)
     assert.equal(afterResponse.mock.calls[1][0].response.status, 200)
   })
+
+  test('preserves the status of a non-JSON error response', async () => {
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue(
+        new Response('<html>Bad Gateway</html>', { status: 502 })
+      )
+    )
+
+    const client = createHttpClient({ authorization: { apiKey: 'test-key' }, retries: 1 })
+    const response = await client.sendApiRequest({ method: 'GET', path: '/v1/whoami' })
+
+    assert.equal(response.status, 502)
+    assert.equal(response.error?.code, 'server.connection_failed')
+  })
+
+  test('does not retry unsafe POST requests after a transport failure', async () => {
+    const fetchMock = vi.fn().mockRejectedValue(new Error('network failure'))
+    vi.stubGlobal('fetch', fetchMock)
+
+    const client = createHttpClient({ authorization: { apiKey: 'test-key' }, retries: 3 })
+    await client.sendApiRequest({ method: 'POST', path: '/v1/projects', data: { name: 'demo' } })
+
+    assert.equal(fetchMock.mock.calls.length, 1)
+  })
+
+  test('retries a rate-limited GET request using Retry-After', async () => {
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(new Response('', { status: 429, headers: { 'Retry-After': '0' } }))
+      .mockResolvedValueOnce(
+        new Response(JSON.stringify({ data: { ok: true } }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json' },
+        })
+      )
+    vi.stubGlobal('fetch', fetchMock)
+
+    const client = createHttpClient({ authorization: { apiKey: 'test-key' }, retries: 2 })
+    const response = await client.sendApiRequest({ method: 'GET', path: '/v1/whoami' })
+
+    assert.equal(response.status, 200)
+    assert.equal(fetchMock.mock.calls.length, 2)
+  })
 })
