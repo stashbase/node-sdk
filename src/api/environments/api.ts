@@ -6,6 +6,7 @@ import {
   HttpClient,
   type HttpClientConfig,
   type HttpClientHooks,
+  type HttpRequestOptions,
 } from '../../http/client'
 import { listSecrets } from './handlers/secrets/list'
 import { CreateSecretsData, createSecrets } from './handlers/secrets/create'
@@ -77,11 +78,17 @@ class EnvironmentClient {
   public readonly webhooks: WebhooksAPI
   public readonly environment: EnvironmentsClient
 
-  constructor(apiKey: string, options?: Pick<HttpClientConfig, 'timeoutMs' | 'retries' | 'hooks'>) {
-    const httpClient = createHttpClient({
-      authorization: { apiKey },
-      ...options,
-    })
+  constructor(
+    apiKey: string,
+    options?: Pick<HttpClientConfig, 'timeoutMs' | 'retries' | 'hooks'>,
+    httpClientOverride?: HttpClient
+  ) {
+    const httpClient =
+      httpClientOverride ??
+      createHttpClient({
+        authorization: { apiKey },
+        ...options,
+      })
 
     this.httpClient = httpClient
     this.options = {}
@@ -96,6 +103,16 @@ class EnvironmentClient {
     this.secrets = new SecretsAPI(this.httpClient)
     this.webhooks = new WebhooksAPI(this.httpClient)
     this.environment = new EnvironmentsClient(this.httpClient)
+  }
+
+  /**
+   * Returns a client that applies request options to its operations without mutating this client.
+   *
+   * @example
+   * const response = await client.withRequestOptions({ signal, timeoutMs: 2000 }).environment.get()
+   */
+  public withRequestOptions(options: HttpRequestOptions): EnvironmentClient {
+    return new EnvironmentClient('', undefined, this.httpClient.withRequestOptions(options))
   }
 
   /**

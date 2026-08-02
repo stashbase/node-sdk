@@ -61,6 +61,13 @@ export type HttpClientConfig = {
   hooks?: HttpClientHooks
 }
 
+export type HttpRequestOptions = {
+  /** Request timeout in milliseconds. Values are capped at the SDK maximum. */
+  timeoutMs?: number
+  /** Signal used to cancel the request and any pending retry delay. */
+  signal?: AbortSignal
+}
+
 type RequestWithData = {
   path: string
   data?: RequestData
@@ -69,6 +76,20 @@ type RequestWithData = {
 }
 
 const parseError = (res: unknown): ApiError => {
+  if (res instanceof Error && res.name === 'AbortError') {
+    return {
+      code: 'request.aborted',
+      message: 'The request was aborted.',
+    }
+  }
+
+  if (res instanceof Error && res.name === 'RequestTimeoutError') {
+    return {
+      code: 'request.timed_out',
+      message: 'The request timed out.',
+    }
+  }
+
   if (res instanceof Error && res.name === 'ServerTemporaryUnavailableError') {
     return {
       code: 'server.temporary_unavailable',
@@ -96,12 +117,31 @@ const parseError = (res: unknown): ApiError => {
   }
 }
 
+const createResponseError = async (response: Response): Promise<Record<string, unknown>> => {
+  try {
+    const errorData: unknown = await response.json()
+    if (typeof errorData === 'object' && errorData !== null) {
+      return {
+        ...(errorData as Record<string, unknown>),
+        status: response.status,
+      }
+    }
+  } catch (_error) {
+    // Proxies and gateways often return empty or HTML error responses.
+  }
+
+  return { status: response.status }
+}
+
+const shouldRetryRequestError = (error: unknown) => !(error instanceof HookExecutionError)
+
 export class HttpClient {
   private headers: Record<string, string>
   private baseUrl: string
   private timeoutMs?: number
   private retries: number
   private hooks?: HttpClientHooks
+  private signal?: AbortSignal
 
   constructor(args: {
     baseUrl?: string
@@ -144,6 +184,18 @@ export class HttpClient {
 
   public setHooks(hooks?: HttpClientHooks): void {
     this.hooks = hooks
+  }
+
+  public withRequestOptions(options: HttpRequestOptions): HttpClient {
+    const client = Object.create(HttpClient.prototype) as HttpClient
+    client.headers = this.headers
+    client.baseUrl = this.baseUrl
+    client.timeoutMs =
+      options.timeoutMs === undefined ? this.timeoutMs : normalizeTimeoutMs(options.timeoutMs)
+    client.retries = this.retries
+    client.hooks = this.hooks
+    client.signal = options.signal ?? this.signal
+    return client
   }
 
   private buildUrl(path: string, query?: Query): string {
@@ -206,6 +258,7 @@ export class HttpClient {
     signal?: AbortSignal
   }): Promise<{ data: T; status: number }> {
     const timeoutMs = args.timeoutMs ?? this.timeoutMs
+    const signal = args.signal ?? this.signal
     const url = this.buildUrl(args.path, args.query)
     const hookContext: HttpRequestHookContext = {
       method: 'GET',
@@ -214,7 +267,7 @@ export class HttpClient {
       headers: { ...this.headers },
       query: args.query,
       timeoutMs,
-      signal: args.signal,
+      signal,
     }
 
     try {
@@ -227,7 +280,7 @@ export class HttpClient {
         {
           retries: this.retries,
           timeoutMs,
-          signal: args.signal,
+          signal,
           beforeAttempt: async () => {
             await this.triggerBeforeRequest(hookContext)
           },
@@ -237,6 +290,7 @@ export class HttpClient {
               response,
             })
           },
+          shouldRetryError: shouldRetryRequestError,
         }
       )
 
@@ -248,15 +302,12 @@ export class HttpClient {
           throw error
         }
 
-        const errorData: unknown = await response.json()
-        if (typeof errorData === 'object' && errorData !== null) {
-          throw {
-            ...(errorData as Record<string, unknown>),
-            status: response.status,
-          }
-        }
+        throw await createResponseError(response)
+      }
 
-        throw {
+      if (response.status === 204) {
+        return {
+          data: null as T,
           status: response.status,
         }
       }
@@ -282,6 +333,7 @@ export class HttpClient {
     signal?: AbortSignal
   }): Promise<{ data: T; status: number }> {
     const timeoutMs = args.timeoutMs ?? this.timeoutMs
+    const signal = args.signal ?? this.signal
     const url = this.buildUrl(args.path, args.query)
     const hookContext: HttpRequestHookContext = {
       method: 'DELETE',
@@ -290,7 +342,7 @@ export class HttpClient {
       headers: { ...this.headers },
       query: args.query,
       timeoutMs,
-      signal: args.signal,
+      signal,
     }
 
     try {
@@ -303,7 +355,7 @@ export class HttpClient {
         {
           retries: this.retries,
           timeoutMs,
-          signal: args.signal,
+          signal,
           beforeAttempt: async () => {
             await this.triggerBeforeRequest(hookContext)
           },
@@ -313,6 +365,7 @@ export class HttpClient {
               response,
             })
           },
+          shouldRetryError: shouldRetryRequestError,
         }
       )
 
@@ -324,17 +377,7 @@ export class HttpClient {
           throw error
         }
 
-        const errorData: unknown = await response.json()
-        if (typeof errorData === 'object' && errorData !== null) {
-          throw {
-            ...(errorData as Record<string, unknown>),
-            status: response.status,
-          }
-        }
-
-        throw {
-          status: response.status,
-        }
+        throw await createResponseError(response)
       }
 
       if (response.status === 204) {
@@ -450,8 +493,9 @@ export class HttpClient {
     timeoutMs?: number
     signal?: AbortSignal
   }): Promise<{ data: T; status: number }> {
-    const { method, path, data, signal } = args
+    const { method, path, data } = args
     const timeoutMs = args.timeoutMs ?? this.timeoutMs
+    const signal = args.signal ?? this.signal
     const url = this.buildUrl(path)
 
     const formattedData = data ? toSnakeCase(data) : undefined
@@ -486,6 +530,7 @@ export class HttpClient {
               response,
             })
           },
+          shouldRetryError: shouldRetryRequestError,
         }
       )
 
@@ -497,17 +542,7 @@ export class HttpClient {
           throw error
         }
 
-        const errorData: unknown = await response.json()
-        if (typeof errorData === 'object' && errorData !== null) {
-          throw {
-            ...(errorData as Record<string, unknown>),
-            status: response.status,
-          }
-        }
-
-        throw {
-          status: response.status,
-        }
+        throw await createResponseError(response)
       }
 
       if (response.status === 204) {

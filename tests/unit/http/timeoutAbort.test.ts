@@ -68,7 +68,7 @@ describe('HttpClient timeout/abort support', () => {
 
     const response = await client.sendApiRequest({ method: 'GET', path: '/v1/timeout' })
 
-    assert.equal(response.error?.code, 'server.connection_failed')
+    assert.equal(response.error?.code, 'request.timed_out')
     assert.equal(response.status, null)
     assert.equal(fetchMock.mock.calls.length, 1)
   })
@@ -101,7 +101,7 @@ describe('HttpClient timeout/abort support', () => {
       signal: controller.signal,
     })
 
-    assert.equal(response.error?.code, 'server.connection_failed')
+    assert.equal(response.error?.code, 'request.aborted')
     assert.equal(response.status, null)
     assert.equal(fetchMock.mock.calls.length, 1)
   })

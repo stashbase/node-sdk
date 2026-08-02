@@ -1,9 +1,18 @@
 import { assert, describe, test } from 'vitest'
 import {
   SECRET_VALUE_MAX_BYTES,
+  isResourceIdFormat,
   validateSetSecretsInput,
   validateUpdateSecretsInput,
 } from '../../../src/utils/inputValidation'
+
+describe('resource ID validation', () => {
+  test('requires every character in an ID suffix to be alphanumeric', () => {
+    assert.isTrue(isResourceIdFormat('webhook', `whk_${'a'.repeat(22)}`))
+    assert.isFalse(isResourceIdFormat('webhook', `whk_${'!'.repeat(21)}a`))
+    assert.isFalse(isResourceIdFormat('project', `proj_${'a'.repeat(21)}`))
+  })
+})
 
 describe('secret value validation', () => {
   test('accepts a secret value exactly at the 16 KB UTF-8 byte limit', () => {

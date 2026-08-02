@@ -2,7 +2,7 @@ import EnvironmentClient from './api/environments/api'
 import { ProjectsAPI } from './api/workspace/projects/api'
 import { SecretsAPI } from './api/workspace/secrets/api'
 import { createHttpClient, HttpClient } from './http/client'
-import type { HttpClientHooks } from './http/client'
+import type { HttpClientHooks, HttpRequestOptions } from './http/client'
 import verifyWebhook from './webhooks/verify'
 import { WebhooksAPI as WsWebhooksAPI } from './api/workspace/webhooks/api'
 import { EnvironmentsAPI as WsEnvironmentsAPI } from './api/workspace/environments/api'
@@ -36,6 +36,7 @@ export type {
   HttpBeforeRequestHookContext,
   HttpAfterResponseHookContext,
   HttpErrorHookContext,
+  HttpRequestOptions,
 } from './http/client'
 
 export type ClientScope = 'workspace' | 'environment'
@@ -51,6 +52,7 @@ export type ClientTransportOptions = {
 export type ClientRuntimeOptions = {
   hooks?: HttpClientHooks
 }
+export type ClientRequestOptions = HttpRequestOptions
 export type CreateClientOptions =
   | ({ apiKey: string; scope: 'workspace' } & ClientTransportOptions)
   | ({ apiKey: string; scope: 'environment' } & ClientTransportOptions)
@@ -86,11 +88,13 @@ class WorkspaceClient {
   public readonly scope: ClientScope = 'workspace'
   public readonly options: ClientRuntimeOptions
 
-  constructor(apiKey: string, options?: ClientTransportOptions) {
-    const client = createHttpClient({
-      authorization: { apiKey },
-      ...options,
-    })
+  constructor(apiKey: string, options?: ClientTransportOptions, httpClient?: HttpClient) {
+    const client =
+      httpClient ??
+      createHttpClient({
+        authorization: { apiKey },
+        ...options,
+      })
 
     this.client = client
     this.projects = new ProjectsAPI(this.client)
@@ -106,6 +110,16 @@ class WorkspaceClient {
 
   /** API for interacting with projects. */
   public readonly projects: ProjectsAPI
+
+  /**
+   * Returns a client that applies request options to its operations without mutating this client.
+   *
+   * @example
+   * const response = await client.withRequestOptions({ signal, timeoutMs: 2000 }).projects.list()
+   */
+  public withRequestOptions(options: ClientRequestOptions): WorkspaceClient {
+    return new WorkspaceClient('', undefined, this.client.withRequestOptions(options))
+  }
 
   /**
    * Provides access to the Environments API for a specific project.
