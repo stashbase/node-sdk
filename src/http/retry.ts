@@ -20,6 +20,12 @@ const createAbortError = (): Error => {
   return error
 }
 
+const createTimeoutError = (): Error => {
+  const error = new Error('The request timed out.')
+  error.name = 'RequestTimeoutError'
+  return error
+}
+
 const isAbortError = (error: unknown): boolean =>
   error instanceof Error && error.name === 'AbortError'
 
@@ -53,6 +59,7 @@ const createAttemptSignal = (signal?: AbortSignal, timeoutMs?: number) => {
 
   let timeoutId: ReturnType<typeof setTimeout> | undefined
   let onAbort: (() => void) | undefined
+  let timedOut = false
 
   if (signal) {
     if (signal.aborted) {
@@ -65,6 +72,7 @@ const createAttemptSignal = (signal?: AbortSignal, timeoutMs?: number) => {
 
   if (typeof timeoutMs === 'number' && timeoutMs > 0) {
     timeoutId = setTimeout(() => {
+      timedOut = true
       controller.abort()
     }, timeoutMs)
   }
@@ -79,7 +87,7 @@ const createAttemptSignal = (signal?: AbortSignal, timeoutMs?: number) => {
     }
   }
 
-  return { signal: controller.signal, cleanup }
+  return { signal: controller.signal, cleanup, timedOut: () => timedOut }
 }
 
 const shouldRetryStatusCode = (statusCode: number) => RETRYABLE_STATUS_CODES.has(statusCode)
@@ -124,7 +132,10 @@ const fetchWithRetry = async (
   const maxBackoffMs = retryOptions?.maxBackoffMs ?? DEFAULT_MAX_BACKOFF_MS
 
   const fetchRetry = async (attemptsRemaining: number, attempt: number): Promise<Response> => {
-    const { signal, cleanup } = createAttemptSignal(retryOptions?.signal, retryOptions?.timeoutMs)
+    const { signal, cleanup, timedOut } = createAttemptSignal(
+      retryOptions?.signal,
+      retryOptions?.timeoutMs
+    )
 
     try {
       await retryOptions?.beforeAttempt?.(attempt)
@@ -157,6 +168,10 @@ const fetchWithRetry = async (
       cleanup()
 
       if (isAbortError(error)) {
+        if (timedOut()) {
+          throw createTimeoutError()
+        }
+
         throw error
       }
 

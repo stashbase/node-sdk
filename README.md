@@ -208,6 +208,8 @@ const response = await client
   .projects.list()
 ```
 
+Cancelled and timed-out requests return the stable SDK error codes `request.aborted` and `request.timed_out`, respectively.
+
 ### Error handling
 
 Every SDK method returns an `ApiResponse` shape:

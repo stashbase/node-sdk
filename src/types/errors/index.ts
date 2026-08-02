@@ -6,7 +6,7 @@ export type GlobalErrorCode =
   | 'server.temporary_unavailable'
   | 'validation.bad_request'
 
-export type SdkErrorCode = 'server.connection_failed'
+export type SdkErrorCode = 'server.connection_failed' | 'request.aborted' | 'request.timed_out'
 
 export type GenericApiErrorCode = GlobalErrorCode | SdkErrorCode
 

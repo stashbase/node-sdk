@@ -76,6 +76,20 @@ type RequestWithData = {
 }
 
 const parseError = (res: unknown): ApiError => {
+  if (res instanceof Error && res.name === 'AbortError') {
+    return {
+      code: 'request.aborted',
+      message: 'The request was aborted.',
+    }
+  }
+
+  if (res instanceof Error && res.name === 'RequestTimeoutError') {
+    return {
+      code: 'request.timed_out',
+      message: 'The request timed out.',
+    }
+  }
+
   if (res instanceof Error && res.name === 'ServerTemporaryUnavailableError') {
     return {
       code: 'server.temporary_unavailable',
