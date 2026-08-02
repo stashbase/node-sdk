@@ -1,6 +1,7 @@
 const DEFAULT_BASE_BACKOFF_MS = 300
 const DEFAULT_MAX_BACKOFF_MS = 3000
-const RETRYABLE_STATUS_CODES = new Set([500, 502, 503, 504])
+const RETRYABLE_STATUS_CODES = new Set([429, 500, 502, 503, 504])
+const IDEMPOTENT_METHODS = new Set(['GET', 'HEAD', 'OPTIONS', 'PUT', 'DELETE'])
 
 type RetryOptions = {
   retries?: number
@@ -82,6 +83,24 @@ const createAttemptSignal = (signal?: AbortSignal, timeoutMs?: number) => {
 
 const shouldRetryStatusCode = (statusCode: number) => RETRYABLE_STATUS_CODES.has(statusCode)
 
+const shouldRetryMethod = (method?: string) =>
+  IDEMPOTENT_METHODS.has((method ?? 'GET').toUpperCase())
+
+const getRetryAfterMs = (response: Response): number | null => {
+  const retryAfter = response.headers.get('retry-after')
+  if (!retryAfter) return null
+
+  const seconds = Number(retryAfter)
+  if (Number.isFinite(seconds) && seconds >= 0) {
+    return seconds * 1000
+  }
+
+  const retryAt = Date.parse(retryAfter)
+  if (Number.isNaN(retryAt)) return null
+
+  return Math.max(0, retryAt - Date.now())
+}
+
 const getBackoffDelayMs = (args: {
   attempt: number
   baseBackoffMs: number
@@ -117,12 +136,12 @@ const fetchWithRetry = async (
       cleanup()
       await retryOptions?.afterAttemptResponse?.(response, attempt)
 
-      if (shouldRetryStatusCode(response.status)) {
+      if (shouldRetryStatusCode(response.status) && shouldRetryMethod(options.method)) {
         if (attemptsRemaining === 1) {
           return response
         }
 
-        const delayMs = getBackoffDelayMs({
+        const delayMs = getRetryAfterMs(response) ?? getBackoffDelayMs({
           attempt,
           baseBackoffMs,
           maxBackoffMs,
@@ -140,7 +159,7 @@ const fetchWithRetry = async (
         throw error
       }
 
-      if (attemptsRemaining === 1) {
+      if (attemptsRemaining === 1 || !shouldRetryMethod(options.method)) {
         throw error
       }
 
