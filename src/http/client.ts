@@ -61,6 +61,13 @@ export type HttpClientConfig = {
   hooks?: HttpClientHooks
 }
 
+export type HttpRequestOptions = {
+  /** Request timeout in milliseconds. Values are capped at the SDK maximum. */
+  timeoutMs?: number
+  /** Signal used to cancel the request and any pending retry delay. */
+  signal?: AbortSignal
+}
+
 type RequestWithData = {
   path: string
   data?: RequestData
@@ -120,6 +127,7 @@ export class HttpClient {
   private timeoutMs?: number
   private retries: number
   private hooks?: HttpClientHooks
+  private signal?: AbortSignal
 
   constructor(args: {
     baseUrl?: string
@@ -162,6 +170,18 @@ export class HttpClient {
 
   public setHooks(hooks?: HttpClientHooks): void {
     this.hooks = hooks
+  }
+
+  public withRequestOptions(options: HttpRequestOptions): HttpClient {
+    const client = Object.create(HttpClient.prototype) as HttpClient
+    client.headers = this.headers
+    client.baseUrl = this.baseUrl
+    client.timeoutMs =
+      options.timeoutMs === undefined ? this.timeoutMs : normalizeTimeoutMs(options.timeoutMs)
+    client.retries = this.retries
+    client.hooks = this.hooks
+    client.signal = options.signal ?? this.signal
+    return client
   }
 
   private buildUrl(path: string, query?: Query): string {
@@ -224,6 +244,7 @@ export class HttpClient {
     signal?: AbortSignal
   }): Promise<{ data: T; status: number }> {
     const timeoutMs = args.timeoutMs ?? this.timeoutMs
+    const signal = args.signal ?? this.signal
     const url = this.buildUrl(args.path, args.query)
     const hookContext: HttpRequestHookContext = {
       method: 'GET',
@@ -232,7 +253,7 @@ export class HttpClient {
       headers: { ...this.headers },
       query: args.query,
       timeoutMs,
-      signal: args.signal,
+      signal,
     }
 
     try {
@@ -245,7 +266,7 @@ export class HttpClient {
         {
           retries: this.retries,
           timeoutMs,
-          signal: args.signal,
+          signal,
           beforeAttempt: async () => {
             await this.triggerBeforeRequest(hookContext)
           },
@@ -291,6 +312,7 @@ export class HttpClient {
     signal?: AbortSignal
   }): Promise<{ data: T; status: number }> {
     const timeoutMs = args.timeoutMs ?? this.timeoutMs
+    const signal = args.signal ?? this.signal
     const url = this.buildUrl(args.path, args.query)
     const hookContext: HttpRequestHookContext = {
       method: 'DELETE',
@@ -299,7 +321,7 @@ export class HttpClient {
       headers: { ...this.headers },
       query: args.query,
       timeoutMs,
-      signal: args.signal,
+      signal,
     }
 
     try {
@@ -312,7 +334,7 @@ export class HttpClient {
         {
           retries: this.retries,
           timeoutMs,
-          signal: args.signal,
+          signal,
           beforeAttempt: async () => {
             await this.triggerBeforeRequest(hookContext)
           },
@@ -450,8 +472,9 @@ export class HttpClient {
     timeoutMs?: number
     signal?: AbortSignal
   }): Promise<{ data: T; status: number }> {
-    const { method, path, data, signal } = args
+    const { method, path, data } = args
     const timeoutMs = args.timeoutMs ?? this.timeoutMs
+    const signal = args.signal ?? this.signal
     const url = this.buildUrl(path)
 
     const formattedData = data ? toSnakeCase(data) : undefined

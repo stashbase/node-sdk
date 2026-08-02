@@ -196,6 +196,18 @@ Hook behavior contract:
 - If `beforeRequest` or `afterResponse` throws, request fails with `HookExecutionError` in `response.error`.
 - If `onError` throws, that error is ignored and the original request error is preserved.
 
+### Per-request options
+
+Use `withRequestOptions` to apply a timeout or cancellation signal to one operation without changing the client defaults.
+
+```ts
+const controller = new AbortController()
+
+const response = await client
+  .withRequestOptions({ signal: controller.signal, timeoutMs: 2000 })
+  .projects.list()
+```
+
 ### Error handling
 
 Every SDK method returns an `ApiResponse` shape:
