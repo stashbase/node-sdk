@@ -230,6 +230,17 @@ describe('HttpClient hooks', () => {
     assert.equal(response.error?.code, 'server.connection_failed')
   })
 
+  test('returns null data for a successful GET response with no content', async () => {
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(null, { status: 204 })))
+
+    const client = createHttpClient({ authorization: { apiKey: 'test-key' } })
+    const response = await client.sendApiRequest<null>({ method: 'GET', path: '/v1/empty' })
+
+    assert.equal(response.status, 204)
+    assert.equal(response.data, null)
+    assert.equal(response.error, null)
+  })
+
   test('does not retry unsafe POST requests after a transport failure', async () => {
     const fetchMock = vi.fn().mockRejectedValue(new Error('network failure'))
     vi.stubGlobal('fetch', fetchMock)

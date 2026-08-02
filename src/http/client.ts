@@ -291,6 +291,13 @@ export class HttpClient {
         throw await createResponseError(response)
       }
 
+      if (response.status === 204) {
+        return {
+          data: null as T,
+          status: response.status,
+        }
+      }
+
       const data: unknown = await response.json()
       return {
         data: data as T,
