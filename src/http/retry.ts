@@ -11,6 +11,7 @@ type RetryOptions = {
   maxBackoffMs?: number
   beforeAttempt?: (attempt: number) => void | Promise<void>
   afterAttemptResponse?: (response: Response, attempt: number) => void | Promise<void>
+  shouldRetryError?: (error: unknown) => boolean
 }
 
 const createAbortError = (): Error => {
@@ -159,7 +160,11 @@ const fetchWithRetry = async (
         throw error
       }
 
-      if (attemptsRemaining === 1 || !shouldRetryMethod(options.method)) {
+      if (
+        attemptsRemaining === 1 ||
+        !shouldRetryMethod(options.method) ||
+        retryOptions?.shouldRetryError?.(error) === false
+      ) {
         throw error
       }
 

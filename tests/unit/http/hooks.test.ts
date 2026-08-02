@@ -240,6 +240,30 @@ describe('HttpClient hooks', () => {
     assert.equal(fetchMock.mock.calls.length, 1)
   })
 
+  test('does not retry a request when an afterResponse hook fails', async () => {
+    const fetchMock = vi.fn().mockResolvedValue(
+      new Response(JSON.stringify({ data: { ok: true } }), {
+        status: 200,
+        headers: { 'Content-Type': 'application/json' },
+      })
+    )
+    vi.stubGlobal('fetch', fetchMock)
+
+    const client = createHttpClient({
+      authorization: { apiKey: 'test-key' },
+      retries: 3,
+      hooks: {
+        afterResponse: () => {
+          throw new Error('hook failed')
+        },
+      },
+    })
+    const response = await client.sendApiRequest({ method: 'GET', path: '/v1/whoami' })
+
+    assert.equal(fetchMock.mock.calls.length, 1)
+    assert.match(response.error?.message ?? '', /Transport hook "afterResponse" failed/)
+  })
+
   test('retries a rate-limited GET request using Retry-After', async () => {
     const fetchMock = vi
       .fn()

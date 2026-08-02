@@ -112,6 +112,8 @@ const createResponseError = async (response: Response): Promise<Record<string, u
   return { status: response.status }
 }
 
+const shouldRetryRequestError = (error: unknown) => !(error instanceof HookExecutionError)
+
 export class HttpClient {
   private headers: Record<string, string>
   private baseUrl: string
@@ -253,6 +255,7 @@ export class HttpClient {
               response,
             })
           },
+          shouldRetryError: shouldRetryRequestError,
         }
       )
 
@@ -319,6 +322,7 @@ export class HttpClient {
               response,
             })
           },
+          shouldRetryError: shouldRetryRequestError,
         }
       )
 
@@ -482,6 +486,7 @@ export class HttpClient {
               response,
             })
           },
+          shouldRetryError: shouldRetryRequestError,
         }
       )
 

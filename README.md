@@ -46,7 +46,7 @@ const client = createClient({
   apiKey: process.env.STASHBASE_API_KEY,
   scope: 'workspace', // or "environment"
   timeoutMs: 5000, // optional, hard capped at 10000
-  retries: 3, // optional, hard capped at 10
+  retries: 3, // optional, at most 3 total attempts (hard capped at 10)
   hooks: {
     beforeRequest: ({ method, url }) => console.log('[request]', method, url),
     afterResponse: ({ response }) => console.log('[response]', response.status),
@@ -70,7 +70,7 @@ console.log(client.scope) // "workspace"
 ```js
 const client = createWorkspaceClient(process.env.STASHBASE_API_KEY, {
   timeoutMs: 5000, // optional, hard capped at 10000
-  retries: 3, // optional, hard capped at 10
+  retries: 3, // optional, at most 3 total attempts (hard capped at 10)
   hooks: {
     beforeRequest: ({ method, url }) => console.log('[request]', method, url),
   }, // optional
@@ -148,7 +148,7 @@ console.log(client.scope) // "environment"
 ```js
 const client = createEnvironmentClient(process.env.STASHBASE_ENV_API_KEY, {
   timeoutMs: 5000, // optional, hard capped at 10000
-  retries: 3, // optional, hard capped at 10
+  retries: 3, // optional, at most 3 total attempts (hard capped at 10)
   hooks: {
     beforeRequest: ({ method, url }) => console.log('[request]', method, url),
   }, // optional
@@ -159,8 +159,8 @@ const client = createEnvironmentClient(process.env.STASHBASE_ENV_API_KEY, {
 
 - Default request timeout is `5000` ms.
 - Maximum request timeout is `10000` ms.
-- Default retry count is `3`.
-- Maximum retry count is `10`.
+- Default maximum attempt count is `3`.
+- Maximum attempt count is `10`.
 - `timeoutMs` is applied per request attempt, not as a total wall-clock budget across all retries.
 - Retries are automatic for idempotent requests (`GET`, `PUT`, and `DELETE`) and include rate-limited (`429`) responses. Mutating `POST` and `PATCH` requests are not retried automatically to avoid duplicate side effects.
 
