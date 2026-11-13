@@ -1,7 +1,7 @@
 {
   "name": "@stashbase/node-sdk",
   "version": "0.7.0",
-  "description": "Stashbase Node SDK",
+  "description": "Official Node.js SDK for integrating Stashbase into your application.",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/stashbase/node-sdk.git"

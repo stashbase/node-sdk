@@ -1,6 +1,6 @@
 # Stashbase Node SDK
 
-The official SDK for [Stashbase](https://stashbase.dev), a secrets management platform for developers.
+The official Node.js SDK for integrating [Stashbase](https://stashbase.dev) into your application.
 
 **Features:**
 
