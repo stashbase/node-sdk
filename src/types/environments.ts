@@ -24,8 +24,6 @@ export type LoadEnvironmentResponse = {
   environment: {
     /** The name of the environment. */
     name: string
-    /** Whether the environment is a production environment or not. */
-    isProduction: boolean
   }
 
   /** An array of secrets associated with the environment. */
@@ -41,8 +39,6 @@ export interface Environment {
   updatedAt: string
   /** The unique name of the environment. */
   name: string
-  /** Whether the environment is a production environment. */
-  isProduction: boolean
   /** The description of the environment, can be null. */
   description: string | null
   /** The number of secrets in the environment. */
@@ -63,6 +59,4 @@ export interface CreateEnvironmentData {
   name: string
   /** The description of the environment, can be null. */
   description?: string | null
-  /** Whether the environment is a production environment or not. */
-  isProduction?: boolean
 }

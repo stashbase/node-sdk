@@ -88,7 +88,6 @@ const { data, error } = await client.projects.list()
 ```js
 const { data, error } = await client.environments({ project: 'project-name' }).create({
   name: 'api-dev',
-  isProduction: false,
 })
 ```
 

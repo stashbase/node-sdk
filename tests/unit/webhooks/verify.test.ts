@@ -15,7 +15,7 @@ describe('verifyWebhook', () => {
 
   test('verifies a raw JSON string payload', () => {
     const payload =
-      '{"id":"evt_1","type":"secrets.updated","created_at":1710000000,"live_mode":false,"data":{"workspace":{"id":"w1","name":"n","slug":"s"},"project":{"id":"p1","name":"proj"},"environment":{"id":"e1","name":"dev","is_production":false}}}'
+      '{"id":"evt_1","type":"secrets.updated","created_at":1710000000,"live_mode":false,"data":{"workspace":{"id":"w1","name":"n","slug":"s"},"project":{"id":"p1","name":"proj"},"environment":{"id":"e1","name":"dev"}}}'
     const signature = createSignature(payload, Math.floor(Date.now() / 1000), secret)
 
     const result = verifyWebhook(payload, signature, secret)
@@ -28,7 +28,7 @@ describe('verifyWebhook', () => {
 
   test('verifies a Buffer payload', () => {
     const payload =
-      '{"id":"evt_2","type":"secrets.updated","created_at":1710000000,"live_mode":false,"data":{"workspace":{"id":"w1","name":"n","slug":"s"},"project":{"id":"p1","name":"proj"},"environment":{"id":"e1","name":"dev","is_production":false}}}'
+      '{"id":"evt_2","type":"secrets.updated","created_at":1710000000,"live_mode":false,"data":{"workspace":{"id":"w1","name":"n","slug":"s"},"project":{"id":"p1","name":"proj"},"environment":{"id":"e1","name":"dev"}}}'
     const signature = createSignature(payload, Math.floor(Date.now() / 1000), secret)
 
     const result = verifyWebhook(Buffer.from(payload, 'utf8'), signature, secret)
@@ -38,7 +38,7 @@ describe('verifyWebhook', () => {
 
   test('raw payload succeeds when parsed-object fallback fails due to byte differences', () => {
     const payloadWithWhitespace =
-      '{  "id": "evt_3", "type":"secrets.updated", "created_at":1710000000, "live_mode":false, "data": {"workspace":{"id":"w1","name":"n","slug":"s"},"project":{"id":"p1","name":"proj"},"environment":{"id":"e1","name":"dev","is_production":false}} }'
+      '{  "id": "evt_3", "type":"secrets.updated", "created_at":1710000000, "live_mode":false, "data": {"workspace":{"id":"w1","name":"n","slug":"s"},"project":{"id":"p1","name":"proj"},"environment":{"id":"e1","name":"dev"}} }'
 
     const signature = createSignature(payloadWithWhitespace, Math.floor(Date.now() / 1000), secret)
 

@@ -67,7 +67,7 @@ export interface ListSecretsQueryParams {
   include_value?: boolean
   /** If true, expands all referenced secrets to their values. */
   expand_refs?: true
-  /** A comma-separated list of environment properties to return (id, created_at, name, description, is_production) or boolean for all properties. */
+  /** A comma-separated list of environment properties to return (id, created_at, name, description) or boolean for all properties. */
   include_environment?: string
   /** A string specifying which properties to omit from the response. */
   omit?: string

@@ -21,7 +21,7 @@ async function loadEnvironment(
 
   const query: LoadEnvironmentQueryParams = {
     omit: 'description',
-    include_environment: ['name', 'is_production'].join(','),
+    include_environment: 'name',
   }
 
   if (options?.expandRefs) {
@@ -55,11 +55,9 @@ async function loadEnvironment(
 
   const { environment, secrets } = data
 
-  const envType = environment.isProduction ? 'production' : 'non-production'
-
   if (secrets.length === 0) {
     if (verbose) {
-      console.log(`\nLoaded environment: ${environment.name} (${envType})`)
+      console.log(`\nLoaded environment: ${environment.name}`)
       console.log(`No secrets found`)
     }
 
@@ -77,7 +75,7 @@ async function loadEnvironment(
   expandAndInjectEnv(secretsObj)
 
   if (verbose) {
-    console.log(`\nLoaded environment: ${environment.name} (${envType})`)
+    console.log(`\nLoaded environment: ${environment.name}`)
   }
 
   if (printType === 'name') {
