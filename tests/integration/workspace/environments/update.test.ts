@@ -7,9 +7,7 @@ test('updates environment', async () => {
 
   const { data, error } = await client
     .environments({ project: workspaceTestConfig.project })
-    .update(workspaceTestConfig.environment, {
-      isProduction: false,
-    })
+    .update(workspaceTestConfig.environment, { description: 'Updated description' })
 
   console.log(data)
   console.log(error)

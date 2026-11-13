@@ -226,7 +226,7 @@ export class EnvironmentsAPI {
       return responseFailure(error)
     }
 
-    if (data.name === undefined && data.isProduction === undefined) {
+    if (data.name === undefined && data.description === undefined) {
       const error = missingPropertiesToUpdateError
       return responseFailure(error)
     }

@@ -7,10 +7,7 @@ test('creates environment in project', async () => {
 
   const { data, error } = await client
     .environments({ project: workspaceTestConfig.project })
-    .create({
-      name: workspaceTestConfig.environment,
-      isProduction: false,
-    })
+    .create({ name: workspaceTestConfig.environment })
 
   console.log(data)
   console.log(error)
