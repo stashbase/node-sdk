@@ -51,7 +51,7 @@ export const invalidEnvironmentIdentifierError: ApiError<InvalidEnvironmentIdent
       idExample: 'env_2vKmcBluEENNfFKtXzrHBS',
     },
     message:
-      "Invalid environment identifier. Either a name or Id can be used. The name must be alphanumeric, may include underscores (_) and one hyphen (-) as a separator, and must be between 2 and 40 characters long. The Id must start with the prefix 'env_' followed by 22 alphanumeric characters.",
+      "Invalid environment identifier. Either a name or Id can be used. The name must be alphanumeric, may include underscores (_) and hyphens (-), and must be between 2 and 40 characters long. The Id must start with the prefix 'env_' followed by 22 alphanumeric characters.",
   })
 
 export const invalidProjectIdentifierError: ApiError<InvalidProjectIdentifierErrorCode> =
@@ -85,7 +85,7 @@ export const environmentNameUsesIdFormatError: ApiError<EnvironmentNameUsesIdFor
   createApiError({
     code: 'validation.environment_name_uses_id_format',
     message:
-      "The provided environment name appears to be in Id format. Please use a valid name format: alphanumeric, with optional underscores (_) and a single hyphen (-) as a separator, between 2 and 40 characters long. Environment names must not start with the prefix 'env_' followed by 22 alphanumeric characters.",
+      "The provided environment name appears to be in Id format. Please use a valid name format: alphanumeric, with optional underscores (_) and hyphens (-), between 2 and 40 characters long. Environment names must not start with the prefix 'env_' followed by 22 alphanumeric characters.",
     details: {
       validNameExamples: ['staging', 'dev_copy', 'api-prod'],
       invalidNameExamples: ['env_pTFmJBTuEENNfFKtXzrMQG', 'env_9Ve7ijuUMuwh9fb1j7CyBq'],
@@ -95,10 +95,10 @@ export const environmentNameUsesIdFormatError: ApiError<EnvironmentNameUsesIdFor
 export const invalidEnvironmentName: ApiError<InvalidEnvironmentNameErrorCode> = createApiError({
   code: 'validation.invalid_environment_name',
   message:
-    'Environment name must be alphanumeric and may include underscores (_) and a single hyphen (-) as a separator, with a minimum of 2 and a maximum of 40 characters.',
+    'Environment name must be alphanumeric and may include underscores (_) and hyphens (-), with a minimum of 2 and a maximum of 40 characters.',
   details: {
     validNameExamples: ['staging', 'dev_copy', 'api-prod'],
-    invalidNameExamples: ['#dev', 'api-dev-1', 'service--dev'],
+    invalidNameExamples: ['#dev', 'api dev', `dev's`],
   },
 })
 
@@ -187,10 +187,10 @@ export const invalidEnvironmentSearchError: ApiError<InvalidEnvironmentSearchErr
   createApiError({
     code: 'validation.invalid_search',
     message:
-      'Search value must be alphanumeric and may include underscores (_) and a single hyphen (-) as a separator, with a minimum of 2 and a maximum of 40 characters.',
+      'Search value must be alphanumeric and may include underscores (_) and hyphens (-), with a minimum of 2 and a maximum of 40 characters.',
     details: {
       validSearchExamples: ['staging', 'dev_copy', 'api-prod'],
-      invalidSearchExamples: ['#dev', 'api-dev-1', 'service--dev'],
+      invalidSearchExamples: ['#dev', 'api dev', `dev's`],
     },
   })
 
