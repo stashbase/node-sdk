@@ -30,11 +30,6 @@ export const SECRET_VALUE_MAX_BYTES = 16 * 1024
 
 const alphanumericRegex = /^[a-zA-Z0-9]+$/
 
-export function containsMaxOneDash(str: string) {
-  // return /^(?!-$)(?!.*--)[^-]*(?:-(?!$)[^-]*)?$/.test(str);
-  return /^(?!-)(?!.*--)[^-]*(?:-(?!$)[^-]*)?$/.test(str)
-}
-
 export const startsWithNumber = (str: string) => {
   if (/^[0-9]/.test(str)) {
     return true
@@ -58,11 +53,7 @@ const isValidProjectName = (projectName: string) =>
 
 const isValidProjectIdentifier = isValidProjectName
 
-const isValidEnvironmentName = (environmentName: string) =>
-  environmentName.length >= 2 &&
-  environmentName.length <= 40 &&
-  containsMaxOneDash(environmentName) &&
-  isAlphanumericWithHyphensAndUnderscores(environmentName)
+const isValidEnvironmentName = isValidProjectName
 
 export const isValidEnvironmentIdentifier = isValidEnvironmentName
 

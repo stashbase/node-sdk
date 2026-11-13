@@ -2,6 +2,7 @@ import { assert, describe, test } from 'vitest'
 import {
   SECRET_VALUE_MAX_BYTES,
   isResourceIdFormat,
+  isValidEnvironmentName,
   validateSetSecretsInput,
   validateUpdateSecretsInput,
 } from '../../../src/utils/inputValidation'
@@ -11,6 +12,12 @@ describe('resource ID validation', () => {
     assert.isTrue(isResourceIdFormat('webhook', `whk_${'a'.repeat(22)}`))
     assert.isFalse(isResourceIdFormat('webhook', `whk_${'!'.repeat(21)}a`))
     assert.isFalse(isResourceIdFormat('project', `proj_${'a'.repeat(21)}`))
+  })
+})
+
+describe('environment name validation', () => {
+  test('accepts environment names containing multiple hyphens', () => {
+    assert.isTrue(isValidEnvironmentName('api-preview-blue'))
   })
 })
 
