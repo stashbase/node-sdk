@@ -163,7 +163,6 @@ export class HttpClient {
     } = args
 
     const headers = {
-      'Content-Type': 'application/json',
       'User-Agent': `stashbase/node-sdk/${version ?? VERSION}`,
     } as Record<string, string>
 
@@ -459,11 +458,14 @@ export class HttpClient {
       return responseSuccess(toCamelCase(response.data), response.status)
     } catch (error) {
       if (error instanceof HookExecutionError) {
-        return responseFailure<E>({
-          code: 'server.connection_failed' as E,
-          message: error.message,
-          details: error,
-        }, null)
+        return responseFailure<E>(
+          {
+            code: 'server.connection_failed' as E,
+            message: error.message,
+            details: error,
+          },
+          null
+        )
       }
 
       let status: number | null = null
@@ -499,11 +501,15 @@ export class HttpClient {
     const url = this.buildUrl(path)
 
     const formattedData = data ? toSnakeCase(data) : undefined
+    // Only declare a JSON body when one is sent; an empty body with this header is rejected by the API
+    const headers = formattedData
+      ? { ...this.headers, 'Content-Type': 'application/json' }
+      : this.headers
     const hookContext: HttpRequestHookContext = {
       method,
       path,
       url,
-      headers: { ...this.headers },
+      headers: { ...headers },
       timeoutMs,
       signal,
       data: formattedData,
@@ -514,7 +520,7 @@ export class HttpClient {
         url,
         {
           method,
-          headers: this.headers,
+          headers,
           body: formattedData ? JSON.stringify(formattedData) : undefined,
         },
         {
